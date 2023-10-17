@@ -1,0 +1,59 @@
+{
+ "游戏名称": "原神",
+ "游戏启动路径": "D:\\Program Files\\Genshin Impact\\Genshin Impact Game\\YuanShen.exe",
+ "服务器": 0,
+ "启动游戏": true,
+ "切换标准队伍": true,
+ "探索派遣": true,
+ "使用参量质变仪": true,
+ "捕捉晶蝶": false,
+ "合成浓缩树脂": true,
+ "领取尘歌壶": true,
+ "采集木材": false,
+ "完成后关闭游戏": true,
+ "派遣区域1": 0,
+ "派遣材料1": 0,
+ "使用材料1": "resource\\genshin\\picture\\develop_tools\\bugle1.png",
+ "派遣区域2": 0,
+ "派遣材料2": 1,
+ "使用材料2": "resource\\genshin\\picture\\develop_tools\\bugle2.png",
+ "派遣区域3": 1,
+ "派遣材料3": 1,
+ "使用材料3": "resource\\genshin\\picture\\develop_tools\\bugle3.png",
+ "派遣区域4": 2,
+ "派遣材料4": 0,
+ "使用材料4": "",
+ "派遣区域5": 3,
+ "派遣材料5": 0,
+ "使用材料5": "",
+ "晶蝶": [
+  false,
+  false,
+  false,
+  false,
+  false,
+  false
+ ],
+ "砍树1": [
+  false,
+  false,
+  false,
+  false,
+  false
+ ],
+ "砍树2": [
+  false,
+  false,
+  false,
+  false
+ ],
+ "砍树3": [
+  false,
+  false
+ ],
+ "砍树循环": "",
+ "关闭游戏": true,
+ "关闭SGA": false,
+ "电脑睡眠": false,
+ "继续执行": "MAA-自动"
+}

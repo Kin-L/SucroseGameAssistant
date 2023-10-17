@@ -1,0 +1,5 @@
+<RCC>
+ <qresource prefix="/">
+ <file>SAG.ico</file>
+ </qresource>
+ </RCC>
