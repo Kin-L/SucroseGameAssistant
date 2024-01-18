@@ -50,6 +50,7 @@ class OCR:
             self.logger.debug("OCR早已关闭")
         else:
             self.running.exit()
+            self.running = None
             self.logger.debug("OCR关闭")
 
     @staticmethod
