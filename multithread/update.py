@@ -26,12 +26,12 @@ class Update(QThread):
         try:
             cur_ver = self.version
             new_ver, data = self.check_update(cur_ver)
-            if new_ver == "100":
+            if new_ver == 100:
                 self.indicate(f"已为最新版本: {cur_ver}", 3)
                 return 1
-            elif new_ver == "101":
+            elif new_ver == 101:
                 raise ConnectionError("新版本信息获取失败")
-            elif new_ver == "101":
+            elif new_ver == 102:
                 raise ConnectionError("下载直链获取失败")
             else:
                 self.indicate(f"发现新版本: {cur_ver} -> {new_ver}")
