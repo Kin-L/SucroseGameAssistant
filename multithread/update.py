@@ -35,7 +35,8 @@ class Update(QThread):
                 raise ConnectionError("下载直链获取失败")
             else:
                 self.indicate(f"发现新版本: {cur_ver} -> {new_ver}")
-                self.indicate(f"可通过此链接进行手动更新:{url}")
+                lanzou = data["lanzou"]
+                self.indicate(f"可通过此链接进行手动更新:{lanzou}")
         except Exception:
             self.indicate("检查更新异常", 3)
             logger.error("检查更新异常:\n%s\n" % traceback.format_exc())
@@ -109,6 +110,7 @@ class Update(QThread):
             response = requests.get(_url, timeout=10)
             if response.status_code == 200:
                 data = json.loads(response.text)
+                data["lanzou"] = new_url
                 return new_ver, data
             elif i < 2:
                 time.sleep(2)
