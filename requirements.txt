@@ -1,0 +1,19 @@
+--index https://mirrors.aliyun.com/pypi/simple
+opencv-python
+PyQt5
+PyQt5-tools
+PyQt-Fluent-Widgets
+Pillow
+pywin32
+keyboard
+pyautogui
+pyyaml
+psutil
+win10toast
+comtypes
+pycaw
+openpyxl
+pyuac
+colorama
+requests
+cpufeature

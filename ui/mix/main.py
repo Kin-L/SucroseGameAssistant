@@ -1,0 +1,103 @@
+# -*- coding:gbk -*-
+from ui.element.control import *
+from .list import MixList
+from .stack import MixStack
+
+
+# ‘≠…Òƒ£◊È…Ë÷√¥∞ø⁄
+class Mix:
+    def __init__(self, stack, icon, main):
+        # ¡¨–¯»ŒŒÒ
+        self.widget_mix = Widget()
+        stack.addWidget(self.widget_mix)
+        self.button_mix = PicButton(icon, (0, 0, 50, 50),
+                                    r"assets\main_window\ui\mix-icon.png", (50, 50))
+        self.list = None
+        self.set = None
+
+    def load_window(self):
+        self.list = MixList(self.widget_mix, (0, 0, 215, 515))
+        self.set = MixStack(self.widget_mix, (225, 0, 395, 515))
+        Line(self.widget_mix, (215, 5, 3, 505), False)
+
+    def load_single(self, single):
+        # ‘À––¡–±Ì≈‰÷√º”‘ÿ
+        self.list.combobox_mix_config0.addItems(["<Œ¥—°‘Ò>"] + single)
+        self.list.combobox_mix_config1.addItems(["<Œ¥—°‘Ò>"] + single)
+        self.list.combobox_mix_config2.addItems(["<Œ¥—°‘Ò>"] + single)
+        self.list.combobox_mix_config3.addItems(["<Œ¥—°‘Ò>"] + single)
+        self.list.combobox_mix_config4.addItems(["<Œ¥—°‘Ò>"] + single)
+
+    def add_item(self, name):
+        self.list.combobox_mix_config0.addItem(name)
+        self.list.combobox_mix_config1.addItem(name)
+        self.list.combobox_mix_config2.addItem(name)
+        self.list.combobox_mix_config3.addItem(name)
+        self.list.combobox_mix_config4.addItem(name)
+
+    def remove_item(self, name):
+        self.list.combobox_mix_config0.removeItem(self.list.combobox_mix_config0.findText(name))
+        self.list.combobox_mix_config1.removeItem(self.list.combobox_mix_config0.findText(name))
+        self.list.combobox_mix_config2.removeItem(self.list.combobox_mix_config0.findText(name))
+        self.list.combobox_mix_config3.removeItem(self.list.combobox_mix_config0.findText(name))
+        self.list.combobox_mix_config4.removeItem(self.list.combobox_mix_config0.findText(name))
+
+    def rename_item(self, old_name, new_name):
+        self.list.combobox_mix_config0.rename(old_name, new_name)
+        self.list.combobox_mix_config1.rename(old_name, new_name)
+        self.list.combobox_mix_config2.rename(old_name, new_name)
+        self.list.combobox_mix_config3.rename(old_name, new_name)
+        self.list.combobox_mix_config4.rename(old_name, new_name)
+
+    def input_config(self, _dir):
+        config = {
+            "ƒ£øÈ": 0,
+            "≈‰÷√0": {
+                "name": "<Œ¥—°‘Ò>"
+            },
+            "≈‰÷√1": {
+                "name": "<Œ¥—°‘Ò>"
+            },
+            "≈‰÷√2": {
+                "name": "<Œ¥—°‘Ò>"
+            },
+            "≈‰÷√3": {
+                "name": "<Œ¥—°‘Ò>"
+            },
+            "≈‰÷√4": {
+                "name": "<Œ¥—°‘Ò>"
+            },
+            "æ≤“Ù": False,
+            "πÿ±’»Ìº˛": True,
+            "ÕÍ≥…∫Û": 0,
+            "SGAπÿ±’": False,
+        }
+        config.update(_dir)
+        self.list.combobox_mix_config0.setCurrentText(config["≈‰÷√0"]["name"])
+        self.list.combobox_mix_config1.setCurrentText(config["≈‰÷√1"]["name"])
+        self.list.combobox_mix_config2.setCurrentText(config["≈‰÷√2"]["name"])
+        self.list.combobox_mix_config3.setCurrentText(config["≈‰÷√3"]["name"])
+        self.list.combobox_mix_config4.setCurrentText(config["≈‰÷√4"]["name"])
+
+        self.set.independent.check_mute.setChecked(config["æ≤“Ù"])
+        self.set.independent.combo_after.setCurrentIndex(config["ÕÍ≥…∫Û"])
+        self.set.independent.check_kill_sga.setChecked(config["SGAπÿ±’"])
+
+    def output_config(self):
+        config = dict()
+        config["ƒ£øÈ"] = 0
+        config["≈‰÷√0"] = dict()
+        config["≈‰÷√1"] = dict()
+        config["≈‰÷√2"] = dict()
+        config["≈‰÷√3"] = dict()
+        config["≈‰÷√4"] = dict()
+        config["≈‰÷√0"]["name"] = self.list.combobox_mix_config0.currentText()
+        config["≈‰÷√1"]["name"] = self.list.combobox_mix_config1.currentText()
+        config["≈‰÷√2"]["name"] = self.list.combobox_mix_config2.currentText()
+        config["≈‰÷√3"]["name"] = self.list.combobox_mix_config3.currentText()
+        config["≈‰÷√4"]["name"] = self.list.combobox_mix_config4.currentText()
+        config["æ≤“Ù"] = self.set.independent.check_mute.isChecked()
+        config["πÿ±’»Ìº˛"] = True
+        config["ÕÍ≥…∫Û"] = self.set.independent.combo_after.currentIndex()
+        config["SGAπÿ±’"] = self.set.independent.check_kill_sga.isChecked()
+        return config
