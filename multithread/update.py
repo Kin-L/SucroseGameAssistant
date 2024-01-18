@@ -3,6 +3,9 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from tools.environment import *
 import traceback
 import os
+import requests
+import json
+import time
 
 
 class Update(QThread):
@@ -12,9 +15,6 @@ class Update(QThread):
         super(Update, self).__init__()
         self.ui = ui
         self.version = ui.state["version"]
-        self._url = ("https://github.moeyy.xyz/"
-                     "https://github.com/Kin-L/SGA-Sucrose_Game_Assistant/"
-                     "releases/download/%s/%s.zip")
 
     def run(self):
         wait(500)
@@ -25,13 +25,17 @@ class Update(QThread):
         # noinspection PyBroadException
         try:
             cur_ver = self.version
-            cur_ver_num = cur_ver.split(" ")[-1]
-            new_ver_num = self.check_update(cur_ver_num)
-            if new_ver_num:
-                self.indicate(f"发现新版本: {cur_ver_num} -> {new_ver_num}")
-            else:
-                self.indicate(f"已为最新版本: {cur_ver_num}", 3)
+            new_ver, data = self.check_update(cur_ver)
+            if new_ver == "100":
+                self.indicate(f"已为最新版本: {cur_ver}", 3)
                 return 1
+            elif new_ver == "101":
+                raise ConnectionError("新版本信息获取失败")
+            elif new_ver == "101":
+                raise ConnectionError("下载直链获取失败")
+            else:
+                self.indicate(f"发现新版本: {cur_ver} -> {new_ver}")
+                self.indicate(f"可通过此链接进行手动更新:{url}")
         except Exception:
             self.indicate("检查更新异常", 3)
             logger.error("检查更新异常:\n%s\n" % traceback.format_exc())
@@ -42,10 +46,8 @@ class Update(QThread):
             from urllib.request import urlretrieve
             import tempfile
             temp_path = tempfile.gettempdir()
-            temp_name = os.path.basename(new_ver_num + "_replace.zip")
-            load_path = os.path.join(temp_path, temp_name)
-
-            urlretrieve(self._url % (new_ver_num, new_ver_num + "_replace"), load_path)
+            load_path = os.path.join(temp_path, data["name"])
+            urlretrieve(data["down"], load_path)
             self.indicate("下载完成,开始替换文件")
         except Exception:
             self.indicate("下载异常", 3)
@@ -86,43 +88,30 @@ class Update(QThread):
         self.send.emit(msg, mode, his, log)
 
     def check_update(self, cur_ver, timeout=5):
-        import requests # cur_ver = "2.0.0"   ver_lit = [2, 0, 0]
-        _list = []
-        for i in cur_ver.split("."):
-            _list += [int(i)]
-        _cur = _list.copy()
-
-        def int_to_str(int_lit):
-            a = []
-            for s in int_lit:
-                a += [str(s)]
-            return '.'.join(a)
-        while 1:
-            _l = _list.copy()
-            _l[-1] = _l[-1] + 1
-            _str = int_to_str(_l)
-            r = requests.get(self._url % (_str, _str + "_replace"), timeout=timeout)
-            if r.status_code == 200:
-                print(_l, _str, 2)
-                _list = _l
-                continue
-            _l = _list.copy()
-            _l[-2] = _l[-2] + 1
-            _l = _l[:-1]
-            _str = int_to_str(_l)
-            r = requests.get(self._url % (_str, _str + "_replace"), timeout=timeout)
-            if r.status_code == 200:
-                _list = _l
-                continue
-            _l = _list.copy()
-            _l += [1]
-            _str = int_to_str(_l)
-            r = requests.get(self._url % (_str, _str + "_replace"), timeout=timeout)
-            if r.status_code == 200:
-                _list = _l
-                continue
-            print(_cur, _list)
-            if _cur == _list:
-                return False
+         # cur_ver = "2.0.0"   ver_lit = [2, 0, 0]
+        url = "https://gitee.com/huixinghen/sga_sucrose_game_assistant/raw/master/version.json"
+        
+        for i in range(3):
+            response = requests.get(url, timeout=10)
+            if response.status_code == 200:
+                data = json.loads(response.text)
+                new_ver, new_url = data["version"], data["url"]
+                if cur_ver == new_ver:
+                    return 100, None
+                else:
+                    break
+            elif i < 2:
+                time.sleep(2)
             else:
-                return int_to_str(_list)
+                return 101, None
+        _url = f"https://api.7585.net.cn/lanzou/api.php?url={new_url}"
+        for i in range(3):
+            response = requests.get(_url, timeout=10)
+            if response.status_code == 200:
+                data = json.loads(response.text)
+                return new_ver, data
+            elif i < 2:
+                time.sleep(2)
+            else:
+                return 102, None
+            

@@ -1,5 +1,6 @@
 from .timer.main import Timer
 from ui.element.control import *
+import json
 
 
 class Overall:
@@ -17,5 +18,6 @@ class Overall:
 
     @staticmethod
     def get_ver():
-        t = open("assets/main_window/version.txt", 'r', encoding='utf-8')
-        return t.readline().rstrip("\n")
+        with open("version.json", 'r', encoding='utf-8') as m:
+            _dir = json.load(m)
+            return _dir["version"]

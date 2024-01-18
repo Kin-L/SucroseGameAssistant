@@ -29,8 +29,9 @@ class MainDown(MainBottom):
         }
         self.state["version"] = self.overall.version
         self.state["hwnd"] = find_hwnd((True, "Qt5152QWindowIcon", "砂糖代理"))
-        with open("personal/main_config.json", 'r', encoding='utf-8') as c:
-            config = json.load(c)
+        if os.path.exists("personal/main_config.json"):
+            with open("personal/main_config.json", 'r', encoding='utf-8') as c:
+                config = json.load(c)
             self.config.update(config)
         # 获取设置及分类
         for file in os.listdir("personal/config"):
@@ -56,12 +57,15 @@ class MainDown(MainBottom):
         self.state["stack"] = 1
         _text = self.config["config"]
         # noinspection PyBroadException
-        try:
+        _num = self.box_config_change.count()
+        config_list = []
+        for i in range(1, _num):
+            config_list += [self.box_config_change.itemText(i)]
+        if _text in config_list:
             self.box_config_change.setCurrentText(_text)
             self.state["text"] = _text
             self.state["index"] = self.box_config_change.currentIndex()
-        except Exception:
-            self.indicate(f"配置不存在: {_text}")
+        else:
             self.box_config_change.setCurrentIndex(1)
             self.state["index"] = 1
             self.state["text"] = self.box_config_change.currentText()
