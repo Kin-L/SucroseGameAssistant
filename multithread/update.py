@@ -6,6 +6,7 @@ import os
 import requests
 import json
 import time
+import sys
 
 
 class Update(QThread):
@@ -15,33 +16,75 @@ class Update(QThread):
         super(Update, self).__init__()
         self.ui = ui
         self.version = ui.state["version"]
+        self.mode = None
+
+    def indicate(self, msg: str, mode=2, his=True, log=True):
+            self.send.emit(msg, mode, his, log)
 
     def run(self):
-        wait(500)
-        self.check()
-        self.ui.overall.button_update.setEnabled(True)
+        if self.mode == 0:
+            self.check()
+        elif self.mode == 1:
+            self.load_add_update()
+        elif self.mode == 2:  # 自动检查并更新
+            wait(500)
+            if self.check():
+                self.load_add_update()
+            self.ui.overall.button_check.setEnabled(True)
+            
 
     def check(self):
         # noinspection PyBroadException
         try:
-            cur_ver = self.version
-            new_ver, data = self.check_update(cur_ver)
-            if new_ver == 100:
-                self.indicate(f"已为最新版本: {cur_ver}", 3)
-                return 1
-            elif new_ver == 101:
-                raise ConnectionError("新版本信息获取失败")
-            elif new_ver == 102:
-                raise ConnectionError("下载直链获取失败")
-            else:
-                self.indicate(f"发现新版本: {cur_ver} -> {new_ver}")
-                lanzou = data["lanzou"]
-                self.indicate(f"可通过此链接进行手动更新:{lanzou}")
+             # cur_ver = "2.0.0"   ver_lit = [2, 0, 0]
+            url = "https://gitee.com/huixinghen/sga_sucrose_game_assistant/raw/master/version.json"
+        
+            for i in range(3):
+                response = requests.get(url, timeout=10)
+                if response.status_code == 200:
+                    data = json.loads(response.text)
+                    new_ver, self.url, intro = data["version"], data["url"], data["introduce"]
+                    if not self.mode:
+                            self.ui.overall.button_check.hide()
+                            self.ui.overall.button_update.show()
+                            self.ui.overall.button_update.setEnabled(True)
+                    if self.version == data["version"]:
+                        self.indicate(f"已为最新版本: {self.version}", 3)
+                        return 0
+                    else:
+                        self.indicate(f"发现新版本: {self.version} -> {new_ver}")
+                        self.indicate(f"可通过此链接进行手动更新:{self.url}")
+                        self.indicate(intro, 3)
+                        
+                        return 1
+                elif i < 2:
+                    time.sleep(2)
+                else:
+                    raise ConnectionError("检查更新异常")
         except Exception:
             self.indicate("检查更新异常", 3)
             logger.error("检查更新异常:\n%s\n" % traceback.format_exc())
             return 0
+
+    
+
+    def load_add_update(self):
         self.indicate("开始更新,更新完成后将自动重启SGA")
+        # noinspection PyBroadException
+        try:
+            _url = f"https://api.7585.net.cn/lanzou/api.php?url={self.url}"
+            for i in range(3):
+                response = requests.get(_url, timeout=10)
+                if response.status_code == 200:
+                    data = json.loads(response.text)
+                elif i < 2:
+                    time.sleep(2)
+                else:
+                    raise ConnectionError("直链获取异常")
+        except Exception:
+            self.indicate("直链获取异常", 3)
+            logger.error("直链获取异常:\n%s\n" % traceback.format_exc())
+            return 0
         # noinspection PyBroadException
         try:
             from urllib.request import urlretrieve
@@ -49,7 +92,7 @@ class Update(QThread):
             temp_path = tempfile.gettempdir()
             load_path = os.path.join(temp_path, data["name"])
             urlretrieve(data["down"], load_path)
-            self.indicate("下载完成,开始替换文件")
+            self.indicate("下载完成")
         except Exception:
             self.indicate("下载异常", 3)
             logger.error("下载异常:\n%s\n" % traceback.format_exc())
@@ -82,38 +125,12 @@ class Update(QThread):
             logger.error("删除临时文件异常:\n%s\n" % traceback.format_exc())
             return 0
         # 弹窗重启
-        self.indicate("更新成功", 3)
-        self.ui.panel_restart.widget.show()
-
-    def indicate(self, msg: str, mode=2, his=True, log=True):
-        self.send.emit(msg, mode, his, log)
-
-    def check_update(self, cur_ver, timeout=5):
-         # cur_ver = "2.0.0"   ver_lit = [2, 0, 0]
-        url = "https://gitee.com/huixinghen/sga_sucrose_game_assistant/raw/master/version.json"
+        self.indicate("更新成功,进行重启", 3)
+        if self.mode == 1:
+            self.ui.overall.button_check.show()
+            self.ui.overall.button_check.setEnabled(True)
+            self.ui.overall.button_update.hide()
+        cmd_run("start "" /d \"personal/bat\" restart.vbs")
+        sys.exit(0)
         
-        for i in range(3):
-            response = requests.get(url, timeout=10)
-            if response.status_code == 200:
-                data = json.loads(response.text)
-                new_ver, new_url = data["version"], data["url"]
-                if cur_ver == new_ver:
-                    return 100, None
-                else:
-                    break
-            elif i < 2:
-                time.sleep(2)
-            else:
-                return 101, None
-        _url = f"https://api.7585.net.cn/lanzou/api.php?url={new_url}"
-        for i in range(3):
-            response = requests.get(_url, timeout=10)
-            if response.status_code == 200:
-                data = json.loads(response.text)
-                data["lanzou"] = new_url
-                return new_ver, data
-            elif i < 2:
-                time.sleep(2)
-            else:
-                return 102, None
             

@@ -36,10 +36,10 @@ class OCR:
                 self.running = GetOcrApi(self.exe_path)
                 self.logger.debug("初始化OCR完成")
             except Exception as e:
-                self.logger.error("初始化OCR失败：{e}".format(e=e))
+                self.logger.error(f"初始化OCR失败:{e}")
                 self.running = None
                 self.logger.info("请尝试重新下载或解压")
-                self.logger.info("若 Win7 报错计算机中丢失 VCOMP140.DLL，请安装 VC运行库")
+                self.logger.info("若 Win7 报错计算机中丢失 VCOMP140.DLL,请安装 VC运行库")
                 self.logger.info("https://aka.ms/vs/17/release/vc_redist.x64.exe")
                 sys.exit(1)
         else:
@@ -56,8 +56,6 @@ class OCR:
     @staticmethod
     def convert_format(result):
         if result['code'] != 100:
-            self.logger.debug("222")
-            self.logger.debug(result)
             return False
         converted_result = []
 

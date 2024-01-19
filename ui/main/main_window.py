@@ -22,8 +22,6 @@ class MainWindow:  # FramelessWindow
                                     r"assets\main_window\ui\ico\0.png")
         self.box_info = InfoBox(self.main_window)  # 指示信息窗口
         self.stack_setting = Stack(self.main_window, (5, 0, 620, 570))
-        self.panel_restart = ReStart(self.main_window, (5, 545, 250, 40))
-        self.panel_restart.widget.hide()
         self.state = \
             {"name": ["mix", "kleins", "genshin", "maa", "m7a"],
              "prefix": ["00", "01", "02", "03", "04"],

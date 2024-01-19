@@ -34,10 +34,25 @@ class Recruit(Task):
                         break
                     else:
                         self.indicate("普通访募")
-                        sc = screenshot()
-                        _fund = int(ocr((1272, 56, 1406, 90), sc)[0].strip(" "))
-                        _token = int(ocr((1507, 57, 1616, 90), sc, 0)[0].strip(" "))
-                        _expedite = int(ocr((1746, 54, 1846, 90), sc, 0)[0].strip(" "))
+                        for i in range(3):
+                            sc = screenshot()
+                            try:
+                                _fund = int(ocr((1272, 56, 1406, 90), sc)[0].strip(" "))
+                                _token = int(ocr((1507, 57, 1616, 90), sc)[0].strip(" "))
+                                _expedite = int(ocr((1746, 54, 1846, 90), sc, 0, 0)[0].strip(" "))
+                                _f = False
+                                break
+                            except:
+                                os.remove(sc)
+                                if i < 2:
+                                    self.indicate("识别错误,更换区域")
+                                    click(954, 261)
+                                    wait(500)
+                                else:
+                                    self.indicate("识别错误,跳过该招募")
+                                    _f = True
+                        if _f:
+                            break
                         if _token == 0:
                             self.indicate("招募终止:缺少外显记录,")
                             click(296, 75)

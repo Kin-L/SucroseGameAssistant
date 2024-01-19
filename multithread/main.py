@@ -41,8 +41,8 @@ try:
     import atexit
     atexit.register(sga_ui.exit_save)
     if sga_ui.config["update"]:
-        sga_ui.update.start()
-    a = sga_ui.cycle.start()
+        sga_ui.check_update(2)
+    sga_ui.cycle.start()
 except Exception as err:
     MessageBox(0, "线程开启失败(7/7):\n%s\n" % err, "砂糖代理", MB_OK)
     logger.critical("线程开启失败(7/7):\n%s\n" % traceback.format_exc())

@@ -75,11 +75,4 @@ class Independent:
         self.combo_after = Combobox(self.widget, (60, 40, 100, 30))
         self.combo_after.addItems(["无操作", "熄屏", "电脑睡眠"])
         self.check_kill_sga = Check(self.widget, (205, 40, 220, 27), "完成后关闭SGA")
-
-
-class ReStart:
-    def __init__(self, widget=None, location=None):
-        self.widget = Widget(widget, location)
-        self.label = Label(self.widget, (0, 0, 218, 30), "更新完成，SGA              后生效")
-        self.label.setEnabled(False)
-        self.restart = Button(self.widget, (112, 0, 54, 30), "重启")
+        

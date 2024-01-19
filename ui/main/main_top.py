@@ -30,10 +30,10 @@ class MainTop(MainUp):
         self.button_statement.clicked.connect(self.show_statement)
         self.button_instructions.clicked.connect(lambda: cmd_run("start "" SGA使用说明.docx"))
         self.button_history.clicked.connect(lambda: cmd_run("start /d \"personal\" history.txt"))
-        self.panel_restart.restart.clicked.connect(self.restart)
         # 全局设置操作
         self.overall.timer.apply.clicked.connect(self.apply_timer)
-        self.overall.button_update.clicked.connect(self.check_update)
+        self.overall.button_check.clicked.connect(self.check_update)
+        self.overall.button_update.clicked.connect(self.load_update)
         self.overall.timer.delete.clicked.connect(self.timer_delete)
         # 配置操作
         self.button_config_delete.clicked.connect(self.delete_plan)
@@ -55,15 +55,16 @@ class MainTop(MainUp):
         self.cycle.send.connect(self.indicate)
         self.update.send.connect(self.indicate)
 
-    def check_update(self):
-        self.overall.button_update.setEnabled(False)
+    def check_update(self, mode=0):
+        self.overall.button_check.setEnabled(False)
         self.indicate("检查更新中...")
+        self.update.mode = mode
         self.update.start()
 
-    def restart(self):
-        self.panel_restart.widget.hide()
-        cmd_run("start "" /d \"personal/bat\" restart.vbs")
-        sys.exit(0)
+    def load_update(self):
+        self.ui.overall.button_update.setEnabled(False)
+        self.update.mode = 1
+        self.update.start()
 
     def start(self):
         # noinspection PyBroadException
