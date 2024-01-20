@@ -119,7 +119,7 @@ class MainDown(MainBottom):
                 f = open(_path, 'r', encoding='ansi')
                 bat_list = f.readlines()
                 f.close()
-                bat_list[1] = f" cd. > {env.workdir}/cache/maa_complete.txt"
+                bat_list[1] = f" cd. > \"{env.workdir}/cache/maa_complete.txt\""
                 f = open(_path, 'w', encoding='ansi')
                 f.writelines(bat_list)
                 f.close()
