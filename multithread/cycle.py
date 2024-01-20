@@ -40,7 +40,7 @@ class Cycle(QThread, TaskRun):
         papress("numlock")
         wait(100)
         papress("numlock")
-        self.save_main_data()
+        self.ui.save_main_data()
         self.indicate("", 0)
         self.ui.task = self.ui.get_config_run(mode)
         self.ui.task["name"] = mode
