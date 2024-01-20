@@ -62,7 +62,7 @@ class MainTop(MainUp):
         self.update.start()
 
     def load_update(self):
-        self.ui.overall.button_update.setEnabled(False)
+        self.overall.button_update.setEnabled(False)
         self.update.mode = 1
         self.update.start()
 
