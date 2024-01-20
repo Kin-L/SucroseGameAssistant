@@ -130,8 +130,7 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
         for i in range(second):
             sc = screenshot()
             if server == 0:
-                if find_pic("assets/kleins/picture/startgame1.png",
-                            (835, 582, 1093, 695), sc)[1] >= 0.6:
+                if "开始游戏" in ocr((870, 611, 1050, 655), sc)[0].replace(" ", ""):
                     wait(300)
                     click(930, 630)
                     self.indicate("登录游戏")
@@ -139,8 +138,7 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
                     os.remove(sc)
                     sc = screenshot()
             elif server == 1:
-                if find_pic("assets/kleins/picture/startgame2.png",
-                            (830, 582, 1093, 695), sc)[1] >= 0.6:
+                if "登录账号" in ocr((870, 611, 1050, 655), sc)[0].replace(" ", ""):
                     wait(300)
                     click(960, 633)
                     self.indicate("登录账号")
@@ -154,7 +152,7 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
                     wait(5000)
                     os.remove(sc)
                     sc = screenshot()
-            if ocr((832, 211, 1090, 313), sc)[0] == "签到奖励":  # 签到奖励
+            if "签到奖励" in ocr((832, 211, 1090, 313), sc)[0].replace(" ", ""):  # 签到奖励
                 click(1469, 551)
                 wait(1500)
                 click(1789, 120)
@@ -182,7 +180,7 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
                 os.remove(sc)
                 self.indicate("加载到主界面")
                 return 0
-            if "网络连接超时" in ocr((748, 448, 1183, 524), sc)[0]:
+            if "网络连接超时" in ocr((748, 448, 1183, 524), sc)[0].replace(" ", ""):
                 self.indicate(f"error: 网络连接超时({net}次)")
                 if net < 4:
                     net += 1

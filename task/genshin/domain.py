@@ -27,11 +27,6 @@ class Domain(Genshin):
         # 检查树脂
         if self.task["resin"] is None:
             self.home()
-            self.open_sub("地图")
-            wait(3000)
-            ori = int(ocr((1407, 30, 1501, 67))[0].split("/")[0])
-            click(1843, 46)
-            wait(1500)
             self.open_sub("背包")
             wait(2000)
             self.check_overdue()
@@ -45,25 +40,29 @@ class Domain(Genshin):
             else:
                 cond = 0
             os.remove(sc)
-            self.task["resin"] = [ori, cond]
-
-        [ori, cond] = self.task["resin"]
+            click(1843, 46)
+            wait(1500)
+        self.open_sub("冒险之证")
+        click(300, 440)
+        wait(800)
+        if self.task["resin"] is None:
+            ori = int((ocr((1368, 200, 1462, 236))[0].split("/")[0]).strip(" "))
+        else:
+            [ori, cond] = self.task["resin"]
         self.indicate(f"当前树脂：\n"
                       f"  原粹树脂: {ori} / 160\n"
                       f"  浓缩树脂: {cond} 个")
         if (ori > 19) or (cond > 0):
             self.indicate("树脂足够,开始自动秘境")
+            click(537, 296)
+            wait(800)
         else:
             self.indicate("树脂不足,自动秘境停止")
+            click(1673, 235)
+            wait(1500)
             return 0
         # 传送至秘境
         _domain = self.task["秘境"]
-        self.home()
-        self.open_sub("冒险之证")
-        click(300, 440)
-        wait(800)
-        click(537, 296)
-        wait(800)
         self.tp_domain(_domain[1])
         click(1690, 1008)
         wait(500)

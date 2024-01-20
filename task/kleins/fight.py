@@ -20,12 +20,12 @@ class Fight(Task):
             wait(2500)
             while 1:
                 sc = screenshot()
-                if ocr((827, 134, 1088, 262), sc)[0] == "向导等级":
+                if "向导等级" in ocr((827, 134, 1088, 262), sc)[0].replace(" ", ""):
                     self.indicate("等级提升！")
                     click(1282, 690)
                     os.remove(sc)
                     sc = screenshot()
-                if ocr((1703, 50, 1832, 97), sc)[0] == "再次重游":
+                if "再次重游" in ocr((1703, 50, 1832, 97), sc)[0].replace(" ", ""):
                     wait(500)
                     os.remove(sc)
                     if self.task["再次重游"]:
@@ -41,10 +41,13 @@ class Fight(Task):
                             wait(1000)
                             click(x2, y2)
                             wait(1500)
-                            if ocr((710, 756, 801, 806))[0] == "取消":
+                            if "取消" in ocr((710, 756, 801, 806))[0].replace(" ", ""):
                                 self.indicate("能源不足。")
                                 click(761, 781)
                                 wait(1000)
+                                click(288, 78)
+                                wait(1500)
+                                return False
                             else:
                                 self.indicate("开始重复上次作战。")
                                 click(288, 78)
@@ -79,7 +82,7 @@ class Fight(Task):
         wait(500)
         click(1458, 816)
         wait(1500)
-        if ocr((710, 756, 801, 806))[0] == "取消":
+        if "取消" in ocr((710, 756, 801, 806))[0].replace(" ", ""):
             self.indicate("能源不足。")
             click(761, 781)
             wait(1000)

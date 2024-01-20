@@ -23,8 +23,7 @@ class Kill(QThread):
             self.ui.sga_run.terminate()
             pixmap = QPixmap(r"assets/main_window/ui/ico/2.png")
             self.indicate("手动终止", 3)
-            if env.OCR:
-                env.OCR.disable()
+            env.OCR.disable()
             self.ui.button_pause.hide()
             self.ui.button_start.show()
             self.ui.label_status.setPixmap(pixmap)
@@ -71,10 +70,9 @@ class SGARun(QThread, TaskRun):
         # noinspection PyBroadException
         try:
             from urllib.request import urlretrieve
-            import tempfile
             import requests
             import json
-            temp_path = tempfile.gettempdir()
+            temp_path = os.path.join(env.workdir, "cache")
             temp_name = os.path.basename(env.OCR.exe_name + ".zip")
             load_path = os.path.join(temp_path, temp_name)
             load = ("https://api.7585.net.cn/lanzou/api.php?url=" +

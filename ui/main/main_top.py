@@ -96,10 +96,9 @@ class MainTop(MainUp):
             self.state["wait_time"] = 5
             SetForegroundWindow(self.state["hwnd"])
             self.sga_run.terminate()
-            pixmap = QPixmap(r"../assets/main_window/ui/ico/2.png")
+            pixmap = QPixmap(r"assets/main_window/ui/ico/2.png")
             self.indicate("手动终止", 3)
-            if env.OCR:
-                env.OCR.disable()
+            env.OCR.disable()
             self.button_pause.hide()
             self.button_start.show()
             self.label_status.setPixmap(pixmap)

@@ -20,8 +20,19 @@ class Roll(Task):
                 self.indicate("error:\n  获取抽卡记录,等待超时")
                 raise RuntimeError("环行旅舍:获取抽卡记录,等待超时")
         wait(1200)
-        with open("personal/kleins/roll/history.json", 'r', encoding='utf-8') as m:
-            current = json.load(m)
+        _path = "personal/kleins/roll/history.json"
+        current = {
+            "定向联络": [
+            ],
+            "常态联络": [
+            ],
+            "初始联络": [
+            ]
+        }
+        if os.path.exists(_path):
+            with open(_path, 'r', encoding='utf-8') as m:
+                _dir = json.load(m)
+            current.update(_dir)
         _list = [360, 407, 452, 498, 543, 589, 634, 680, 725, 771]
         for i in ["定向联络", "常态联络", "初始联络"]:
             self.indicate("开始识别:"+i)

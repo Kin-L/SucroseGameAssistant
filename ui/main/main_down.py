@@ -18,10 +18,21 @@ class MainDown(MainBottom):
             "lock": True,
             "config": "",
             "run": {
-                "genshin": {},
-                "kleins": {},
-                "maa": {},
-                "m7a": {}
+                "genshin": {
+                    "server": 0,
+                    "game": "",
+                    "BGI": ""
+                },
+                "kleins": {
+                    "server": 0,
+                    "game": ""
+                },
+                "maa": {
+                    "maa_path": ""
+                },
+                "m7a": {
+                    "m7a_path": ""
+                }
             },
             "update": False,
             "timer": {},

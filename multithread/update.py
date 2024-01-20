@@ -44,18 +44,20 @@ class Update(QThread):
                 if response.status_code == 200:
                     data = json.loads(response.text)
                     new_ver, self.url, intro = data["version"], data["url"], data["introduce"]
-                    if not self.mode:
-                            self.ui.overall.button_check.hide()
-                            self.ui.overall.button_update.show()
-                            self.ui.overall.button_update.setEnabled(True)
+                    
                     if self.version == data["version"]:
                         self.indicate(f"已为最新版本: {self.version}", 3)
+                        if not self.mode:
+                            self.ui.overall.button_check.setEnabled(True)
                         return 0
                     else:
                         self.indicate(f"发现新版本: {self.version} -> {new_ver}")
                         self.indicate(f"可通过此链接进行手动更新:{self.url}")
                         self.indicate(intro, 3)
-                        
+                        if not self.mode:
+                            self.ui.overall.button_check.hide()
+                            self.ui.overall.button_update.show()
+                            self.ui.overall.button_update.setEnabled(True)
                         return 1
                 elif i < 2:
                     time.sleep(2)
@@ -88,8 +90,7 @@ class Update(QThread):
         # noinspection PyBroadException
         try:
             from urllib.request import urlretrieve
-            import tempfile
-            temp_path = tempfile.gettempdir()
+            temp_path = os.path.join(env.workdir, "cache")
             load_path = os.path.join(temp_path, data["name"])
             urlretrieve(data["down"], load_path)
             self.indicate("下载完成")

@@ -136,7 +136,7 @@ class TaskGenshin(Team, Dispatch, Transformer,
         for i in range(second):
             sc = screenshot()
             if server == 0:
-                if "点击进入" in ocr((897, 989, 1027, 1048))[0]:
+                if "点击进入" in ocr((897, 989, 1027, 1048))[0].replace(" ", ""):
                     server = 2
                     click(930, 630)
                     self.indicate("开门")
@@ -150,7 +150,7 @@ class TaskGenshin(Team, Dispatch, Transformer,
                     wait(4000)
                     os.remove(sc)
                     sc = screenshot()
-                if "点击进入" in ocr((897, 989, 1027, 1048))[0]:
+                if "点击进入" in ocr((897, 989, 1027, 1048))[0].replace(" ", ""):
                     server = 2
                     click(930, 630)
                     self.indicate("开门")
