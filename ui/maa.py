@@ -4,6 +4,7 @@ import json
 from ui.element.control import *
 from ui.element.ui_part import Independent
 import webbrowser
+from tools.system import check_path
 
 
 class MAAList:
@@ -67,6 +68,7 @@ class MAA:
         self.set.button_turns.clicked.connect(self.open_turns)
 
     def refresh(self):
+        self.main.indicate("", 1)
         _path = self.set.line_start.text().strip("\"")
         if os.path.isfile(_path):
             gui_path = os.path.split(_path)[0] + "/config/gui.json"
@@ -77,19 +79,22 @@ class MAA:
                 _list.remove("SGA-cache")
             self.list.combox.clear()
             self.list.combox.addItems(_list)
-        self.main.indicate("MAA配置列表已刷新", 1)
+        self.main.indicate("MAA配置列表已刷新", 3)
 
     def open_wiki(self):
+        self.main.indicate("", 1)
         webbrowser.open("https://wiki.biligame.com/arknights/%E9%A6%96%E9%A1%B5")
-        self.main.indicate("打开网页: 明日方舟 BWIKI", 1)
+        self.main.indicate("打开网页: 明日方舟 BWIKI", 3)
 
     def open_yituliu(self):
-        webbrowser.open("https://yituliu.site/")
-        self.main.indicate("打开网页: 一图流", 1)
+        self.main.indicate("", 1)
+        webbrowser.open("https://ytl.viktorlab.cn/")
+        self.main.indicate("打开网页: 一图流", 3)
 
     def open_turns(self):
-        webbrowser.open("https://yituliu.site/tools/maa")
-        self.main.indicate("打开网页: 排班生成器", 1)
+        self.main.indicate("", 1)
+        webbrowser.open("https://ytl.viktorlab.cn/tools/schedule")
+        self.main.indicate("打开网页: 排班生成器", 3)
 
     def load_run(self, run):
         _dir = {
@@ -100,7 +105,7 @@ class MAA:
         self.set.line_start.setSelection(0, 0)
 
     def get_run(self):
-        return {"maa_path": self.set.line_start.text()}
+        return {"maa_path": check_path(self.set.line_start.text())}
 
     def input_config(self, _dir):
         config = {

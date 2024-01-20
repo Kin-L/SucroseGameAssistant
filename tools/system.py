@@ -64,6 +64,8 @@ def get_resolution_zoom():
     ori_hig = user32.GetSystemMetrics(1)
     return (ori_wid, ori_hig), (now_wid, now_hig), round(ori_wid / now_wid, 2)
 
+def check_path(str):
+    return str.encode("unicode_escape").decode().replace("\\", "/").replace("//", "/").strip("\"")
 
 class System:
     def __init__(self):

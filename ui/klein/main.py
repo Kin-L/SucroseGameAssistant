@@ -5,6 +5,7 @@ from .list import KleinList
 from .stack import KleinStack
 from ui.element.control import *
 from tools.environment import env
+from tools.system import check_path
 
 
 # 原神模组设置窗口
@@ -54,7 +55,7 @@ class Klein:
     def get_run(self):
         _dir = {
             "server": self.set.combo_server.currentIndex(),
-            "game": self.set.line_start.text()}
+            "game": check_path(self.set.line_start.text())}
         return _dir
 
     def input_config(self, _dir):
@@ -179,29 +180,39 @@ class Klein:
         return config
 
     def open_roll(self):
+        self.main.indicate("", 1)
         os.startfile(env.workdir + "/personal/kleins/roll")
-        self.main.indicate("打开文件夹: 联络记录", 1)
+        self.main.indicate("打开文件夹: 联络记录", 3)
 
     def open_recruit_directory(self):
+        self.main.indicate("", 1)
         os.startfile(env.workdir + "/personal/kleins/recruit")
-        self.main.indicate("打开文件: 访募历史", 1)
+        self.main.indicate("打开文件: 访募历史", 3)
 
     def open_recruit_history(self):
+        self.main.indicate("", 1)
         os.startfile(env.workdir + "/personal/kleins/recruit/history.txt")
-        self.main.indicate("打开文件夹: 访募截图", 1)
+        self.main.indicate("打开文件夹: 访募截图", 3)
 
     def gift_inquiry(self):
+        self.main.indicate("", 1)
         webbrowser.open("https://www.bilibili.com/read/cv24639360/?from=search&spm_id_from=333.337.0.0")
-        self.main.indicate("打开网页: 礼物认可度对照表", 1)
+        self.main.indicate("打开网页: 礼物认可度对照表", 3)
 
     def open_wiki(self):
+        self.main.indicate("", 1)
         webbrowser.open("https://wiki.biligame.com/kelaiyinshe/%E8%88%8D%E5%8F%8B%E5%9B%BE%E9%89%B4")
-        self.main.indicate("打开网页: 环行旅舍 BWIKI", 1)
+        self.main.indicate("打开网页: 环行旅舍 BWIKI", 3)
 
     def arrange_roll(self):
         import json
-        with open("personal/kleins/roll/history.json", 'r', encoding='utf-8') as m:
-            _dir = json.load(m)
+        self.main.indicate("", 1)
+        his_path = "personal/kleins/roll/history.json"
+        if os.path.exists(his_path):
+            with open(his_path, 'r', encoding='utf-8') as m:
+                _dir = json.load(m)
+        else:
+            self.main.indicate("尚无已识别的联络记录", 3)
         from openpyxl import Workbook
         from openpyxl.styles import Font, Alignment
         _excel = Workbook()
@@ -487,4 +498,4 @@ class Klein:
         now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
         _path = f"personal/kleins/roll/环行旅舍联络记录 - {now}.xlsx"
         _excel.save(_path)
-        self.main.indicate("联络记录已导出")
+        self.main.indicate("联络记录已导出", 3)

@@ -1,6 +1,7 @@
 # -*- coding:gbk -*-
 from ui.element.control import *
 from ui.element.ui_part import Independent
+from tools.system import check_path
 
 
 class M7AList:
@@ -54,7 +55,7 @@ class M7A:
         self.set.line_start.setSelection(0, 0)
 
     def get_run(self):
-        return {"m7a_path": self.set.line_start.text()}
+        return {"m7a_path": check_path(self.set.line_start.text())}
 
     def input_config(self, _dir):
         config = {

@@ -70,6 +70,7 @@ class MainTop(MainUp):
         # noinspection PyBroadException
         try:
             self.cycle.terminate()
+            self.save_main_data()
             self.indicate("", 0)
             self.task = self.get_config_run()
             self.task["name"] = ""

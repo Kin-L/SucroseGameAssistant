@@ -2,6 +2,7 @@
 from .list import GenshinList
 from .stack import GenshinStack
 from ui.element.control import Line, Widget, PicButton
+from tools.system import check_path
 
 
 class Genshin:
@@ -44,8 +45,8 @@ class Genshin:
     def get_run(self):
         _dir = {
             "server": self.set.combo_server.currentIndex(),
-            "game": self.set.line_start.text(),
-            "BGI": self.set.line_bgi.text()
+            "game": check_path(self.set.line_start.text()),
+            "BGI": check_path(self.set.line_bgi.text())
         }
         return _dir
 
