@@ -11,7 +11,7 @@ class Fight(Task):
         text = ocr((1675, 397, 1802, 439))[0]
         if (":" in text) or ("：" in text):
             self.indicate("重游进行中，不能再次开启作战。")
-            return 0
+            return False
         elif text == "完成重游":
             click(1739, 420)
             self.indicate("重游完成，领取重游奖励。")
