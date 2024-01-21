@@ -3,10 +3,11 @@ import os
 from time import sleep
 from win32con import PROCESS_ALL_ACCESS, SW_RESTORE
 from win32gui import (FindWindow, EnumWindows, GetClassName, GetWindowText,
-                      GetWindowRect, IsIconic, ShowWindow, SetForegroundWindow)
+                      GetWindowRect, IsIconic, ShowWindow)
 from psutil import process_iter
 from signal import SIGTERM
 from subprocess import run
+from tools.system import foreground as tryforeground
 
 
 # 从exe名称获取pid
@@ -159,4 +160,4 @@ class Software:
         if IsIconic(self.hwnd):
             ShowWindow(self.hwnd, SW_RESTORE)
         else:
-            SetForegroundWindow(self.hwnd)
+            tryforeground(self.hwnd)

@@ -10,6 +10,7 @@ from win10toast import ToastNotifier
 from subprocess import run
 from win32api import MessageBox
 from win32con import MB_OK
+from win32gui import SetForegroundWindow, SetWindowPos
 # pyuic5 -o SGA_demo.py SGA_demo.ui
 import win32com
 
@@ -67,6 +68,17 @@ def get_resolution_zoom():
 def check_path(str):
     return str.encode("unicode_escape").decode().replace("\\", "/").replace("//", "/").strip("\"")
 
+def foreground(hwnd):
+    try:
+        SetForegroundWindow(hwnd)
+        return True
+    except:
+        try:
+            SetWindowPos(hwnd)
+            return True
+        except:
+            return False
+        
 class System:
     def __init__(self):
         # ∆Ù”√»’÷æ

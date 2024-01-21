@@ -24,7 +24,7 @@ class Kill(QThread):
             import keyboard
             keyboard.wait("ctrl+/")
             self.ui.state["wait_time"] = 5
-            SetForegroundWindow(self.ui.state["hwnd"])
+            foreground(self.ui.state["hwnd"])
             self.ui.sga_run.terminate()
             pixmap = QPixmap(r"../assets/main_window/ui/ico/2.png")
             self.indicate("手动终止", 3)
@@ -120,7 +120,7 @@ class SGARun(QThread, TaskRun):
 
     def kill(self, mode):
         self.ui.state["wait_time"] = 5
-        SetForegroundWindow(self.ui.state["hwnd"])
+        foreground(self.ui.state["hwnd"])
         if mode:
             _str0 = "异常"
             pixmap = QPixmap(r"../assets/main_window/ui/ico/3.png")
