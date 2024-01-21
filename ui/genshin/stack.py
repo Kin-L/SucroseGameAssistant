@@ -2,6 +2,7 @@
 from qfluentwidgets import CompactSpinBox
 from ui.element.ui_part import Independent
 from ui.element.control import *
+import webbrowser
 
 
 class Local:
@@ -226,12 +227,17 @@ class Domain:
         self.domain.addItems(domain_dir[" •“≈ŒÔ"])
 
         self.domain_type.currentIndexChanged.connect(lambda: self.domain_change(self.domain_type, self.domain))
+        self.button_BGI = Button(self.page_domain, (0, 220, 80, 30), "BGIœ¬‘ÿ")
+        self.button_BGI.clicked.connect(self.open_BGI)
 
     @staticmethod
     def domain_change(fa, fm):
         fm.clear()
         fm.addItems(domain_dir[fa.currentText()])
-
+        
+    @staticmethod
+    def open_BGI(self):
+        webbrowser.open("https://bgi.huiyadan.com/")
 
 class GenshinStack(Local, Team, Disp, Trans, Fly, Concentrate, Pot, Mail, Tree, Domain):
     def __init__(self, widget, location):

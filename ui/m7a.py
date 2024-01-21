@@ -2,6 +2,7 @@
 from ui.element.control import *
 from ui.element.ui_part import Independent
 from tools.system import check_path
+import webbrowser
 
 
 class M7AList:
@@ -28,6 +29,12 @@ class M7AStack:
 
         self.label_team_tip = Label(self.stack, (0, 160, 220, 27), "独立运行设置：")
         self.independent = Independent(self.stack, (0, 200, 350, 70), False)
+        self.button_m7a = Button(self.stack, (0, 280, 125, 30), "三月七助手下载")
+        self.button_m7a.clicked.connect(self.open_m7a)
+
+    @staticmethod
+    def open_m7a(self):
+        webbrowser.open("https://moesnow.github.io/March7thAssistant")
 
 
 class M7A:

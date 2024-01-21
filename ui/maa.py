@@ -44,6 +44,7 @@ class MAAStack:
         self.button_wiki = Button(self.stack, (0, 320, 70, 30), "BWIKI")
         self.button_mat = Button(self.stack, (80, 320, 70, 30), "一图流")
         self.button_turns = Button(self.stack, (160, 320, 100, 30), "排班生成器")
+        self.button_maa = Button(self.stack, (270, 320, 90, 30), "MAA下载")
 
 
 class MAA:
@@ -66,6 +67,7 @@ class MAA:
         self.set.button_wiki.clicked.connect(self.open_wiki)
         self.set.button_mat.clicked.connect(self.open_yituliu)
         self.set.button_turns.clicked.connect(self.open_turns)
+        self.set.button_maa.clicked.connect(self.open_maa)
 
     def refresh(self):
         self.main.indicate("", 1)
@@ -95,6 +97,11 @@ class MAA:
         self.main.indicate("", 1)
         webbrowser.open("https://ytl.viktorlab.cn/tools/schedule")
         self.main.indicate("打开网页: 排班生成器", 3)
+
+    def open_maa(self):
+        self.main.indicate("", 1)
+        webbrowser.open("https://maa.plus/")
+        self.main.indicate("打开网页: MAA官网", 3)
 
     def load_run(self, run):
         _dir = {

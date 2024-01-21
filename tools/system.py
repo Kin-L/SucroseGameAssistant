@@ -66,7 +66,7 @@ def get_resolution_zoom():
     return (ori_wid, ori_hig), (now_wid, now_hig), round(ori_wid / now_wid, 2)
 
 def check_path(str):
-    return str.encode("unicode_escape").decode().replace("\\", "/").replace("//", "/").strip("\"")
+    return str.replace("\\", "/").replace("//", "/").strip("\"")
 
 def foreground(hwnd):
     try:
