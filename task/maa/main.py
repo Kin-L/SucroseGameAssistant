@@ -2,7 +2,7 @@
 import json
 from ..default_task import Task
 from tools.environment import *
-from tools.software import get_pid, close
+from tools.software import get_pid, close, find_hwnd
 import os
 import traceback
 
@@ -53,11 +53,38 @@ class TaskMAA(Task):
             maa["Current"] = "SGA-cache"
             with open(gui_path, 'w', encoding='utf-8') as g:
                 json.dump(maa, g, ensure_ascii=False, indent=1)
+            # def st():
+            #     from win32process import CreateProcess, CREATE_NEW_CONSOLE, STARTUPINFO
+            #     from win32event import WaitForSingleObject
+            #     ifexistexe=os.system('tasklist|findstr "MAA.exe"')
+            #     if ifexistexe==0:
+            #         os.system('taskkill /f /im "MAA.exe"')
+            #         wait(1000)
+            #     handle=CreateProcess(_path, '', None , None , 0 ,CREATE_NEW_CONSOLE , None , os.path.split(_path)[0] ,STARTUPINFO())
+            #     WaitForSingleObject(handle[0],2)
+            #     self.indicate("MAA运行中...")
             _f = env.workdir + "/cache/maa_complete.txt"
             if os.path.exists(_f):
                 os.remove(_f)
-            env.soft.run()
-            self.indicate("MAA运行中...")
+            def maa_run():
+                [_dir, name] = os.path.split(_path)
+                cmd = f"start /d \"{_dir}\" {name}"
+                f = open("cache/MAA_start.bat", 'w', encoding='utf-8')
+                f.writelines(cmd)
+                f.close()
+                _p = os.path.join(env.workdir, "assets/main_window/bat_scr/PsExec64.exe")
+                for n in range(2):
+                    cmd_run(f"start \"\" \"{_p}\" -i -s -d \"{_path}\"")
+                    for i in range(30):
+                        wait(1000)
+                        self.hwnd = find_hwnd((False, "HwndWrapper[MAA.exe", "MAA"))
+                        if self.hwnd:
+                            self.indicate("MAA运行中...")
+                            return False
+                return True
+            if maa_run():
+                raise RuntimeError("MAA启动超时")
+            # st()
             # 运行-结束
             while 1:
                 wait(10000)

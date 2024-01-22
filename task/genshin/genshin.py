@@ -44,7 +44,7 @@ class Genshin(Task):
             if val >= 0.6:
                 i = 0
                 self.indicate("加载到世界")
-            elif i == 15:
+            elif i == 30:
                 self.indicate("error:加载世界超时\n")
                 raise RuntimeError("原神:加载世界超时")
 
