@@ -37,7 +37,7 @@ class Update(QThread):
         # noinspection PyBroadException
         try:
              # cur_ver = "2.0.0"   ver_lit = [2, 0, 0]
-            url = "https://gitee.com/huixinghen/sga_sucrose_game_assistant/raw/master/version.json"
+            url = "https://gitee.com/huixinghen/SucroseGameAssistant/raw/master/version.json"
         
             for i in range(3):
                 response = requests.get(url, timeout=10)

@@ -6,7 +6,7 @@
 SGA视频演示/介绍，SGA使用说明，项目说明文档完善中。
 目前SGA2.0项目开源免费，源代码将同时更新于:
 github(https://github.com/Kin-L/SucroseGameAssistant)
-gitee(https://gitee.com/huixinghen/sga_sucrose_game_assistant)
+gitee(https://gitee.com/huixinghen/SucroseGameAssistant)
 完整版下载链接，手动更新包链接：
 完整版：https://wwrv.lanzn.com/b033h9z0d 密码:bm32
 更新包：https://wwrv.lanzn.com/b033h9z2f 密码:diao
