@@ -3,15 +3,15 @@
 #### 介绍
     砂糖代理（SGA），用于游戏等软件，SGA主体的功能是设置定时唤醒电脑，并定时执行各模块的相关功能，完成后睡眠，从而完成任务循环。  
     目前已有 环行旅舍 原神 MAA（明日方舟） 三月七助手（崩坏：星穹铁道）的功能模块。后续计划增加尘白禁区的功能模块  
-    SGA视频演示/介绍，SGA使用说明，项目说明文档完善中。  
-    
+    SGA视频演示/介绍，SGA使用说明，项目说明文档完善中。
+
     SGA2.0项目开源免费，源代码将同时更新于:  
-github(https://github.com/Kin-L/SucroseGameAssistant)  
-gitee(https://gitee.com/huixinghen/SucroseGameAssistant)  
+    github(https://github.com/Kin-L/SucroseGameAssistant)  
+    gitee(https://gitee.com/huixinghen/SucroseGameAssistant)  
 
     完整版下载链接，手动更新包链接：  
-完整版：https://wwrv.lanzn.com/b033h9z0d 密码:bm32  
-更新包：https://wwrv.lanzn.com/b033h9z2f 密码:diao  
+    完整版：https://wwrv.lanzn.com/b033h9z0d 密码:bm32  
+    更新包：https://wwrv.lanzn.com/b033h9z2f 密码:diao  
     手动更新方法：下载替换更新包，解压后将SGA文件夹与原SGA文件夹中同名文件夹进行合并并替换。  
 
 邮箱: 2805137028@qq.com  
