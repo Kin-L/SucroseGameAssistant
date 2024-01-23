@@ -1,19 +1,19 @@
 # SGA-SucroseGameAssistant
 
 #### 介绍
-砂糖代理（SGA），用于游戏等软件，SGA主体的功能是设置定时唤醒电脑，并定时执行各模块的相关功能，完成后睡眠，从而完成任务循环。
-目前已有 环行旅舍 原神 MAA（明日方舟） 三月七助手（崩坏：星穹铁道）的功能模块。后续计划增加尘白禁区的功能模块
-SGA视频演示/介绍，SGA使用说明，项目说明文档完善中。
-目前SGA2.0项目开源免费，源代码将同时更新于:
-github(https://github.com/Kin-L/SucroseGameAssistant)
-gitee(https://gitee.com/huixinghen/SucroseGameAssistant)
-完整版下载链接，手动更新包链接：
-完整版：https://wwrv.lanzn.com/b033h9z0d 密码:bm32
-更新包：https://wwrv.lanzn.com/b033h9z2f 密码:diao
-手动更新方法：下载替换更新包，解压后将SGA文件夹与原SGA文件夹中同名文件夹进行合并并替换。
-邮箱: 2805137028@qq.com
-bilibili站账号: 绘星痕
-https://space.bilibili.com/406315493
+砂糖代理（SGA），用于游戏等软件，SGA主体的功能是设置定时唤醒电脑，并定时执行各模块的相关功能，完成后睡眠，从而完成任务循环。  
+目前已有 环行旅舍 原神 MAA（明日方舟） 三月七助手（崩坏：星穹铁道）的功能模块。后续计划增加尘白禁区的功能模块  
+SGA视频演示/介绍，SGA使用说明，项目说明文档完善中。  
+目前SGA2.0项目开源免费，源代码将同时更新于:  
+github(https://github.com/Kin-L/SucroseGameAssistant)  
+gitee(https://gitee.com/huixinghen/SucroseGameAssistant)  
+完整版下载链接，手动更新包链接：  
+完整版：https://wwrv.lanzn.com/b033h9z0d 密码:bm32  
+更新包：https://wwrv.lanzn.com/b033h9z2f 密码:diao  
+手动更新方法：下载替换更新包，解压后将SGA文件夹与原SGA文件夹中同名文件夹进行合并并替换。  
+邮箱: 2805137028@qq.com  
+bilibili站账号: 绘星痕  
+https://space.bilibili.com/406315493  
 
 #### 安装教程
 
@@ -31,11 +31,11 @@ https://space.bilibili.com/406315493
 8、SGA为绿色免安装版，无联网功能，运行需要管理员权限，用于软件启动、设置定时等。若出现报毒和添加信任事件，信则用，本人没有心情也没有能力写病毒和盗号功能。添加信任可参考：https://zhuanlan.zhihu.com/p/645089615
 #### 特别感谢
 
-1.  SGA用户界面使用了PyQt-Fluent-Widgets
+1.  SGA用户界面使用了PyQt-Fluent-Widgets  
 https://github.com/zhiyiYo/PyQt-Fluent-Widgets
-2.  SGA部分代码和学习过程中参考了三月七助手，并组合使用了三月七助手
+2.  SGA部分代码和学习过程中参考了三月七助手，并组合使用了三月七助手  
 https://moesnow.github.io/March7thAssistant
-3.  SGA原神模块的自动秘境功能组合使用了BGI的自动秘境功能
+3.  SGA原神模块的自动秘境功能组合使用了BGI的自动秘境功能  
 https://github.com/babalae/better-genshin-impact
-4.  SGA组合使用了MAA的功能
+4.  SGA组合使用了MAA的功能  
 https://github.com/MaaAssistantArknights/MaaAssistantArknights
