@@ -38,7 +38,7 @@ class Overall:
     
     @staticmethod
     def open_gitee():
-        webbrowser.open("https://gitee.com/huixinghen/sga_sucrose_game_assistant")
+        webbrowser.open("https://gitee.com/huixinghen/SucroseGameAssistant")
     
     @staticmethod
     def open_bilibili():
