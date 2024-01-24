@@ -26,8 +26,8 @@ class Condensed(Genshin):
         wait(500)
         click(1339, 408)
         wait(600)
-        if ocr((739, 178, 882, 227))[0] == "浓缩树脂":
-            num = int(ocr((995, 886, 1029, 924))[0][-1])
+        if "浓缩树脂" in ocr((739, 178, 882, 227))[0]:
+            num = int(ocr((996, 887, 1028, 924))[0].strip(" "))
             click(1618, 497)
             wait(600)
             fly = int(ocr((1025, 917, 1134, 941))[0].split("/")[0])

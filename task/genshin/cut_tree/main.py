@@ -8,17 +8,11 @@ from .fontaine import Fontaine
 
 class CutTree(Mondstadt, LiYue, Inazuma, Sumeru, Fontaine):
     def genshin_cut_tree(self):
-        _freq, _list = self.task["砍树"]
+        _freq = self.task["砍树次数"]
         if not _freq:
             self.indicate("循环次数应大于0")
             return True
         _num = 0
-        for i in _list:
-            if i:
-                _num += 1
-        if not _num >= 5:
-            self.indicate("为保证砍树完整循环，所选砍树任务种类应>=5")
-            return True
         self.home()
         self.indicate("检查王树瑞佑。")
         self.open_sub("背包")
@@ -47,42 +41,42 @@ class CutTree(Mondstadt, LiYue, Inazuma, Sumeru, Fontaine):
                       f"  点位{_num}个\n"
                       f"  循环次数：{_freq}")
         for f in range(_freq):
-            if _list[0]:
+            if self.task["砍树0"]:
                 self.birch()
-            if _list[1]:
+            if self.task["砍树1"]:
                 self.cuihua()
-            if _list[2]:
+            if self.task["砍树2"]:
                 self.pine()
-            if _list[3]:
+            if self.task["砍树3"]:
                 self.sand_bearer()
-            if _list[4]:
+            if self.task["砍树4"]:
                 self.bamboo()
-            if _list[5]:
+            if self.task["砍树5"]:
                 self.fragrant()
-            if _list[6]:
+            if self.task["砍树6"]:
                 self.fir()
-            if _list[7]:
+            if self.task["砍树7"]:
                 self.yumemiru()
-            if _list[8]:
+            if self.task["砍树8"]:
                 self.maple()
-            if _list[9]:
+            if self.task["砍树9"]:
                 self.aralia_otogi()
-            if _list[10]:
+            if self.task["砍树10"]:
                 self.otogi()
-            if _list[11]:
+            if self.task["砍树11"]:
                 self.karmaphala_bright()
-            if _list[12]:
+            if self.task["砍树12"]:
                 self.adhigama()
-            if _list[13]:
+            if self.task["砍树13"]:
                 self.mountain_date()
-            if _list[14]:
+            if self.task["砍树14"]:
                 self.mallow()
-            if _list[15]:
+            if self.task["砍树15"]:
                 self.linden()
-            if _list[16]:
+            if self.task["砍树16"]:
                 self.ash()
-            if _list[17]:
+            if self.task["砍树17"]:
                 self.cypress()
-            if _list[18]:
+            if self.task["砍树18"]:
                 self.torch()
         return False

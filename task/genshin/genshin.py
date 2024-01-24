@@ -86,10 +86,15 @@ class Genshin(Task):
 
     # 选择确认传送锚点图标并开始传送，最后判断传送成功
     def tp_point(self, num=0):
-        (x, y), val = find_pic(r"assets\genshin\picture\maps\%s.png" % num, (1245, 621, 1528, 1023))
-        if val >= 0.75:
-            click(x, y)
-            wait(800)
+        if "传送" in ocr((1638, 983, 1749, 1035))[0]:
+            pass
+        else:
+            (x, y), val = find_pic(r"assets\genshin\picture\maps\%s.png" % num, (1270, 649, 1327, 961))
+            if val >= 0.75:
+                click(x, y)
+                wait(800)
+            else:
+                raise RuntimeError("原神:传送识别异常")
         click(1634, 1003)
         wait(3000)
         self.world()
