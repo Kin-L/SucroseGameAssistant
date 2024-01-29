@@ -28,7 +28,7 @@ class MainTop(MainUp):
         self.button_set_home.toggled.connect(self.change_interface)
         self.button_sponsor.clicked.connect(self.window_support.show)
         self.button_statement.clicked.connect(self.show_statement)
-        self.button_instructions.clicked.connect(lambda: cmd_run("start "" SGA使用说明.docx"))
+        self.button_instructions.clicked.connect(lambda: cmd_run("start "" Instructions.docx"))
         self.button_history.clicked.connect(lambda: cmd_run("start /d \"personal\" history.txt"))
         # 全局设置操作
         self.overall.timer.apply.clicked.connect(self.apply_timer)
