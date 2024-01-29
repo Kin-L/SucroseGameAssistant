@@ -44,7 +44,7 @@ class Genshin(Task):
             if val >= 0.6:
                 i = 0
                 self.indicate("加载到世界")
-            elif i == 30:
+            elif i == 90:
                 self.indicate("error:加载世界超时\n")
                 raise RuntimeError("原神:加载世界超时")
 
@@ -71,14 +71,14 @@ class Genshin(Task):
             "忘却之峡": "forsaken", "太山府": "taishan", "堇色之庭": "violet_court",
             "昏识塔": "ignorance", "苍白的遗荣": "pale_glory"}
         self.indicate("尝试传送到秘境:\n  " + domain)
-        for num in range(15):
+        for num in range(18):
             wait(300)
             (x, y), val = find_pic(f"assets/genshin/picture/domain/{tdir[domain]}.png", (738, 249, 1033, 886))
-            if val >= 0.8:
+            if val >= 0.7:
                 click(1555, y)
                 wait(2000)
                 break
-            elif num <= 13:
+            elif num <= 16:
                 roll(1116, 296, -24)
             else:
                 self.indicate("error:\n  未识别到秘境 " + domain)
@@ -104,3 +104,18 @@ class Genshin(Task):
             self.indicate("识别到物品过期")
             click(971, 758)
             wait(2000)
+
+    def team_ready(self):
+        for i in range(15):
+            sc = screenshot()
+            t0 = ocr((1289, 993, 1428, 1046))[0]
+            t1 = ocr((1637, 995, 1776, 1045))[0].strip(" ")
+            os.remove(sc)
+            if "编队" not in t0:
+                return False
+            elif t1 == "出战":
+                click(1557, 1020)
+                wait(500)
+            else:
+                return True
+        raise RuntimeError("队伍加载超时")

@@ -98,9 +98,22 @@ class Domain(Genshin):
         press("1")
         wait(300)
         self.indicate("切换至战斗队伍")
-        keydown("W")
-        wait(4000)
-        keyup("W")
+        if _domain[1] == "太府山":
+            pass
+        elif _domain[1] == "无妄引咎密宫":
+            keydown("W")
+            wait(500)
+            keyup("W")
+            wait(500)
+            keydown("A")
+            wait(1000)
+            keyup("A")
+        elif _domain[1] == "芬德尼尔之顶":
+            pass
+        else:
+            keydown("W")
+            wait(4000)
+            keyup("W")
         # 读取快捷键
         _c = os.path.split(_path)[0] + "/User/config.json"
         with open(_c, 'r', encoding='utf-8') as c:
@@ -136,6 +149,8 @@ class Domain(Genshin):
                 press(key)
         dopress(_s)
         wait(1500)
+        env.soft.foreground()
+        wait(500)
         dopress(_d)
         wait(1000)
         self.indicate("BGI自动秘境运行中...")

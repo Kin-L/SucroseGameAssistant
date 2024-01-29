@@ -41,8 +41,15 @@ class MainDown(MainBottom):
         self.state["version"] = self.overall.version
         self.state["hwnd"] = find_hwnd((True, "Qt5152QWindowIcon", "砂糖代理"))
         if os.path.exists("personal/main_config.json"):
-            with open("personal/main_config.json", 'r', encoding='utf-8') as c:
-                config = json.load(c)
+            try:
+                with open("personal/main_config.json", 'r', encoding='utf-8') as c:
+                    config = json.load(c)
+            except:
+                with open("personal/main_config_bak.json", 'r', encoding='utf-8') as c:
+                    config = json.load(c)
+                with open("personal/main_config.json", 'w', encoding='utf-8') as c:
+                    json.dump(config, c, ensure_ascii=False, indent=1)
+                self.indicate("主配置文件损坏,从备份中恢复")
             self.config.update(config)
         # 获取设置及分类
         for file in os.listdir("personal/config"):
@@ -136,6 +143,8 @@ class MainDown(MainBottom):
                 module = eval(f"self.{text}")
                 self.config["run"][text] = module.get_run()
         with open("personal/main_config.json", 'w', encoding='utf-8') as c:
+            json.dump(self.config, c, ensure_ascii=False, indent=1)
+        with open("personal/main_config_bak.json", 'w', encoding='utf-8') as c:
             json.dump(self.config, c, ensure_ascii=False, indent=1)
 
     def exit_save(self):

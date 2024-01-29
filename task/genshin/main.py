@@ -81,7 +81,7 @@ class TaskGenshin(Team, Dispatch, Transformer,
             if env.soft.kill(s, n):
                 self.indicate("游戏已关闭")
             else:
-                self.indicate(f"error：游戏关闭超时（{s * n}s）")
+                self.indicate(f"error:游戏关闭超时({s * n}s)")
                 raise RuntimeError("genshin exit error")
         self.indicate("完成任务:原神")
         return _k
@@ -185,6 +185,14 @@ class TaskGenshin(Team, Dispatch, Transformer,
                 click(509, 313)
                 wait(300)
                 break
+            (x, y), val0 = find_pic(r"assets\genshin\picture\close0.png", (1683, 0, 1919, 236), sc)
+            if val0 >= 0.6:
+                click(x, y)
+                wait(2500)
+            (x, y), val1 = find_pic(r"assets\genshin\picture\close1.png", (1609, 178, 1737, 293), sc)
+            if val1 >= 0.6:
+                click(x, y)
+                wait(2500)
             os.remove(sc)
             if i == second - 1:
                 self.indicate(f"登录超时（{second * 2}s）")
