@@ -98,7 +98,7 @@ class Domain(Genshin):
         press("1")
         wait(300)
         self.indicate("切换至战斗队伍")
-        if _domain[1] == "太府山":
+        if _domain[1] == "太山府":
             pass
         elif _domain[1] == "无妄引咎密宫":
             keydown("W")
