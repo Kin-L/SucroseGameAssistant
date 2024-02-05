@@ -26,7 +26,7 @@ class Image(System):
         return int((x1+x2)/2), int((y1+y2)/2)
 
     def screenshot(self, zone: list = "WINDOW"):
-        SetCursorPos((0, 0))
+        SetCursorPos((1, 1))
         time.sleep(0.01)
         if zone == "WINDOW":
             shot = ImageGrab.grab(self.frame)

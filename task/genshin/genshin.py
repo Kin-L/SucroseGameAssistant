@@ -26,8 +26,7 @@ class Genshin(Task):
         while m >= 0:
             m += 1
             wait(1500)
-            val = find_pic(r"assets\genshin\picture\home\home.png", (0, 0, 97, 88))[1]
-            if val >= 0.6:
+            if "好友" in ocr((480, 442, 540, 481))[0]:
                 m = -1
             else:
                 press("esc")

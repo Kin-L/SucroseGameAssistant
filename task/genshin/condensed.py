@@ -1,23 +1,31 @@
+# -*- coding:gbk -*-
 from tools.environment import *
 from .genshin import Genshin
 
 
 class Condensed(Genshin):
     def genshin_make_condensed(self):
-        self.tp_fontaine1()
-        keydown("W")
-        wait(4300)
-        keyup("W")
-        wait(300)
-        keydown("D")
-        wait(500)
-        keyup("D")
-        wait(300)
-        keydown("W")
-        wait(1000)
-        keyup("W")
-        self.indicate("åˆ°è¾¾åˆæˆå°")
-        wait(300)
+        for i in range(3):
+            self.tp_fontaine1()
+            keydown("W")
+            wait(4300)
+            keyup("W")
+            wait(300)
+            keydown("D")
+            wait(500)
+            keyup("D")
+            wait(300)
+            keydown("W")
+            wait(1000)
+            keyup("W")
+            wait(300)
+            if "ºÏ³É" in ocr((1205, 502, 1315, 578))[0]:
+                self.indicate("µ½´ïºÏ³ÉÌ¨")
+            elif i == 2:
+                self.indicate("ºÏ³ÉÊ÷Ö¬Î´Öª´íÎó,ÖØÊÔ¶à´Î")
+                return True
+            else:
+                self.indicate(f"error:ºÏ³ÉÊ÷Ö¬Î´Öª´íÎó,¿ªÊ¼ÖØÊÔµÚ{i+1}/2´Î")
         press("F")
         wait(1000)
         click(960, 950)
@@ -26,36 +34,37 @@ class Condensed(Genshin):
         wait(500)
         click(1339, 408)
         wait(600)
-        if "æµ“ç¼©æ ‘è„‚" in ocr((739, 178, 882, 227))[0]:
+        if "Å¨ËõÊ÷Ö¬" in ocr((739, 178, 882, 227))[0]:
             num = int(ocr((996, 887, 1028, 924))[0].strip(" "))
             click(1618, 497)
             wait(600)
             fly = int(ocr((1025, 917, 1134, 941))[0].split("/")[0])
             cons = int(ocr((1162, 917, 1269, 941))[0].split("/")[0])
-            self.indicate(f"å½“å‰å·²æœ‰:\n"
-                          f"  æ™¶æ ¸:{fly}ä¸ª\n"
-                          f"  åŸç²¹æ ‘è„‚:{cons}/160\n"
-                          f"  æµ“ç¼©æ ‘è„‚:{num}ä¸ª")
+            self.indicate(f"µ±Ç°ÒÑÓĞ:\n"
+                          f"  ¾§ºË:{fly}¸ö\n"
+                          f"  Ô­´âÊ÷Ö¬:{cons}/160\n"
+                          f"  Å¨ËõÊ÷Ö¬:{num}¸ö")
             _n = min(int(cons/40), fly, 5-num)
             if _n:
-                for i in range(_n):
+                for i in range(_n-1):
                     click(1611, 671)
                     wait(400)
                 ori = cons-_n*40
                 cond = num+_n
                 self.task["resin"] = [ori, cond]
-                self.indicate(f"æœ¬æ¬¡åˆæˆæµ“ç¼©æ ‘è„‚{_n}ä¸ª\n"
-                              f"  åŸç²¹æ ‘è„‚: {cons} -> {ori}\n"
-                              f"  æµ“ç¼©æ ‘è„‚: {num} -> {cond}")
+                self.indicate(f"±¾´ÎºÏ³ÉÅ¨ËõÊ÷Ö¬{_n}¸ö\n"
+                              f"  Ô­´âÊ÷Ö¬: {cons} -> {ori}\n"
+                              f"  Å¨ËõÊ÷Ö¬: {num} -> {cond}")
                 click(1727, 1019)
                 wait(800)
                 click(1173, 786)
                 wait(200)
             else:
-                self.indicate("æµ“ç¼©æ ‘è„‚æ•°é‡è¾¾åˆ°ä¸Šé™")
+                self.indicate("Å¨ËõÊ÷Ö¬ÊıÁ¿´ïµ½ÉÏÏŞ")
         else:
             click(1618, 497)
             wait(600)
-            self.indicate("æ— æ³•åˆæˆæµ“ç¼©æ ‘è„‚:ç¼ºå°‘æ ‘è„‚æˆ–æ™¶æ ¸")
+            self.indicate("ÎŞ·¨ºÏ³ÉÅ¨ËõÊ÷Ö¬:È±ÉÙÊ÷Ö¬»ò¾§ºË")
         click(1836, 48)
         wait(2200)
+        return False

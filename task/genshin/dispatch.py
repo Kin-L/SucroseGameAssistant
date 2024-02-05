@@ -59,7 +59,7 @@ class Dispatch(Genshin):
                 click(x + 30, y)
                 wait(2000)
                 break
-        if ocr((108, 992, 252, 1045))[0] == "全部领取":
+        if "全部领取" in ocr((108, 992, 252, 1045))[0]:
             self.indicate("存在可领取派遣")
             click(169, 1020)
             wait(2000)

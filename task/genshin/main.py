@@ -50,7 +50,8 @@ class TaskGenshin(Team, Dispatch, Transformer,
                 self.indicate("完成:自动晶蝶")
             if self.task["功能4"]:
                 self.indicate("开始:浓缩树脂")
-                self.genshin_make_condensed()
+                if self.genshin_make_condensed():
+                    _k = True
                 self.indicate("完成:浓缩树脂")
             if self.task["功能5"]:
                 self.indicate("开始:尘歌壶")
@@ -177,7 +178,7 @@ class TaskGenshin(Team, Dispatch, Transformer,
                 click(509, 313)
                 wait(300)
                 break
-            if find_pic(r"assets\genshin\picture\home\home.png", (0, 0, 97, 88), sc)[1] >= 0.6:
+            if "好友" in ocr((480, 442, 540, 481))[0]:
                 self.indicate("加载到主界面")
                 os.remove(sc)
                 click(509, 313)

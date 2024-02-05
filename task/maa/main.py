@@ -77,7 +77,7 @@ class TaskMAA(Task):
                     cmd_run(f"start \"\" \"{_p}\" -i -s -d \"{_path}\"")
                     for i in range(30):
                         wait(1000)
-                        self.hwnd = find_hwnd((False, "HwndWrapper[MAA.exe", "MAA"))
+                        self.hwnd = find_hwnd((False, "HwndWrapper[MAA", "MAA"))
                         if self.hwnd:
                             self.indicate("MAA‘À––÷–...")
                             return False

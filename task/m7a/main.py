@@ -55,7 +55,7 @@ class TaskM7A(Task):
                 while 1:
                     wait(10000)
                     f = open(_path, encoding='utf-8')
-                    if "游戏退出成功" in f.readlines()[-1]:
+                    if "游戏退出成功" in f.readlines()[-2]:
                         break
                 # env.soft.kill()
                 self.indicate("三月七助手运行完成")
