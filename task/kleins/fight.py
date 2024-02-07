@@ -29,16 +29,20 @@ class Fight(Task):
                     if self.task["再次重游"]:
                         click(1744, 80)
                         wait(1800)
-                        sc = screenshot()
-                        ((x1, y1), sim1) = find_pic(r"assets\kleins\picture\fight\add.png",
-                                                    (1100, 335, 1900, 983), sc, 2)
-                        ((x2, y2), sim2) = find_pic(r"assets\kleins\picture\fight\start.png",
-                                                    (960, 540, 1920, 1080), sc, 0)
-                        if sim1 >= 0.6 and sim2 >= 0.6:
-                            click(x1 + 120, y1)
-                            wait(1000)
-                            click(x2, y2)
-                            wait(1500)
+                        _t = ocr((979, 290, 1855, 1051), mode=1)
+                        for i in _t:
+                            if "开始重游" in i[0]:
+                                click(1533,546)
+                                wait(1000)
+                                click(1445,819)
+                                wait(1500)
+                            elif "追忆" in i[0]:
+                                click(1687,602)
+                                wait(1000)
+                                click(1606,892)
+                                wait(1500)
+                            else:
+                                continue
                             if "取消" in ocr((710, 756, 801, 806))[0].replace(" ", ""):
                                 self.indicate("能源不足。")
                                 click(761, 781)
@@ -51,11 +55,10 @@ class Fight(Task):
                                 click(288, 78)
                                 wait(1500)
                                 return False
-                        else:
-                            self.indicate("error:不能识别的界面")
-                            click(288, 78)
-                            wait(1500)
-                            return True
+                        self.indicate("error:不能识别的界面")
+                        click(288, 78)
+                        wait(1500)
+                        return True
                     else:
                         click(971, 930)
                         wait(800)
