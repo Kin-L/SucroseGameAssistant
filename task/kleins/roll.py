@@ -27,6 +27,8 @@ class Roll(Task):
             "常态联络": [
             ],
             "初始联络": [
+            ],
+            "限定联络": [
             ]
         }
         if os.path.exists(_path):
@@ -34,11 +36,11 @@ class Roll(Task):
                 _dir = json.load(m)
             current.update(_dir)
         _list = [360, 407, 452, 498, 543, 589, 634, 680, 725, 771]
-        for i in ["定向联络", "常态联络", "初始联络"]:
+        for i in ["定向联络", "常态联络", "初始联络", "限定联络"]:
             self.indicate("开始识别:"+i)
             click(1385, 219)
             wait(500)
-            if click_text(i, (1200, 182, 1346, 321)):
+            if click_text(i, (1212, 199, 1330, 357)):
                 wait(500)
             else:
                 self.indicate("error:\n  获取抽卡记录,界面识别异常")
@@ -55,8 +57,8 @@ class Roll(Task):
                     if ["", "", "", ""] == [time, banner, rare, name]:
                         print(time, banner, rare, name)
                         break
-                    _line = [time.strip(" "), banner.rstrip(r"\u3000").strip(" "),
-                             rare.strip(" "), name.rstrip(r"\u3000").strip(" ")]
+                    _line = [time.strip(" "), banner.strip(" ").rstrip("\u3000"),
+                             rare.strip(" "), name.strip(" ").rstrip("\u3000")]
                     if _line not in _l:
                         _nl = [_line] + _nl
                 _text = ocr((903, 839, 1018, 884), sc)[0]

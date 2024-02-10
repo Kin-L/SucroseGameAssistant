@@ -245,6 +245,15 @@ class Klein:
         sheet0["G8"] = "卡池水位"
         sheet0["A9"] = "计数"
 
+        sheet0["A11"] = "限定联络"
+        sheet0["B11"] = "N"
+        sheet0["C11"] = "R"
+        sheet0["D11"] = "SR"
+        sheet0["E11"] = "SRR"
+        sheet0["F11"] = "总抽数"
+        sheet0["G11"] = "卡池水位"
+        sheet0["A12"] = "计数"
+
         fon1 = Font(name='等线', size=14, bold=True)
         fon2 = Font(name='宋体', size=12)
         fon_n = Font(name='宋体', size=12, color="6C6C6C")
@@ -298,6 +307,21 @@ class Klein:
         sheet0["E9"].font = fon_srr
         sheet0["F9"].font = fon2
         sheet0["G9"].font = fon2
+        
+        sheet0["A11"].font = fon1
+        sheet0["B11"].font = fon1
+        sheet0["C11"].font = fon1
+        sheet0["D11"].font = fon1
+        sheet0["E11"].font = fon1
+        sheet0["F11"].font = fon1
+        sheet0["G11"].font = fon1
+        sheet0["A12"].font = fon1
+        sheet0["B12"].font = fon_n
+        sheet0["C12"].font = fon_r
+        sheet0["D12"].font = fon_sr
+        sheet0["E12"].font = fon_srr
+        sheet0["F12"].font = fon2
+        sheet0["G12"].font = fon2
         sheet0.column_dimensions['A'].width = 15
         sheet0.column_dimensions['B'].width = 10
         sheet0.column_dimensions['C'].width = 10
@@ -349,6 +373,21 @@ class Klein:
         sheet0["E9"].alignment = al
         sheet0["F9"].alignment = al
         sheet0["G9"].alignment = al
+        
+        sheet0["A11"].alignment = al
+        sheet0["B11"].alignment = al
+        sheet0["C11"].alignment = al
+        sheet0["D11"].alignment = al
+        sheet0["E11"].alignment = al
+        sheet0["F11"].alignment = al
+        sheet0["G11"].alignment = al
+        sheet0["A12"].alignment = al
+        sheet0["B12"].alignment = al
+        sheet0["C12"].alignment = al
+        sheet0["D12"].alignment = al
+        sheet0["E12"].alignment = al
+        sheet0["F12"].alignment = al
+        sheet0["G12"].alignment = al
         sheet0.row_dimensions[1].height = 18
         sheet0.row_dimensions[2].height = 18
         sheet0.row_dimensions[3].height = 18
@@ -356,8 +395,10 @@ class Klein:
         sheet0.row_dimensions[6].height = 18
         sheet0.row_dimensions[8].height = 18
         sheet0.row_dimensions[9].height = 18
+        sheet0.row_dimensions[11].height = 18
+        sheet0.row_dimensions[12].height = 18
         _count = []
-        for i in ["定向联络", "常态联络", "初始联络"]:
+        for i in ["定向联络", "常态联络", "初始联络", "限定联络"]:
             _sheet = _excel.create_sheet(i)
             _sheet["A1"] = "时间"
             _sheet["B1"] = "卡池"
@@ -476,6 +517,7 @@ class Klein:
         for i in _list:
             _str += i + " "
         sheet0["I6"] = _str
+
         sheet0["B9"] = _count[2][0]
         sheet0["C9"] = _count[2][1]
         sheet0["D9"] = _count[2][2]
@@ -493,6 +535,24 @@ class Klein:
         for i in _list:
             _str += i + " "
         sheet0["I9"] = _str
+
+        sheet0["B12"] = _count[3][0]
+        sheet0["C12"] = _count[3][1]
+        sheet0["D12"] = _count[3][2]
+        sheet0["E12"] = _count[3][3]
+        sheet0["F12"] = _count[3][4]
+        sheet0["G12"] = _count[3][5]
+        _list = _count[3][6]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I11"] = _str
+
+        _list = _count[3][7]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I12"] = _str
         _excel.remove(_excel['Sheet'])
         import time
         now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
