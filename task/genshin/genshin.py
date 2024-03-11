@@ -49,35 +49,35 @@ class Genshin(Task):
 
     # 从主界面打开子界面
     def open_sub(self, cho):
-        sub_dir = {"地图": (358, 697), "背包": (663, 556), "冒险之证": (659, 698), "队伍配置": (352, 416)}
-        x, y = sub_dir[cho]
-        click(x, y)
-        self.indicate("打开" + cho)
-        wait(2000)
+        if click_text(cho, (117, 346, 742, 1052)):
+            self.indicate("打开" + cho)
+            wait(2500)
+            return True
+        else:
+            return False
 
     # 从秘境传送
     def tp_domain(self, domain):
-        tdir = {
-            "仲夏庭园": "midsummer", "铭记之谷": "remembrance", "孤云凌霄之处": "guyun",
-            "无妄引咎密宫": "hidden", "华池岩岫": "pool_cavern", "芬德尼尔之顶": "vindagnyr",
-            "山脊守望": "ridge", "椛染之庭": "momiji", "沉眠之庭": "slumbering_court",
-            "岩中幽谷": "the_lost_valley", "缘觉塔": "enlightenment", "赤金的废墟": "city_of_gold",
-            "熔铁的孤塞": "fortress", "罪祸的终末": "denouement", "临瀑之城": "waterfall",
-
-            "塞西莉亚苗圃": "cecilia_garden", "震雷连山密宫": "lianshan", "砂流之庭": "flow_sand",
-            "有顶塔": "abject", "深潮的余响": "deep_tides",
-
-            "忘却之峡": "forsaken", "太山府": "taishan", "堇色之庭": "violet_court",
-            "昏识塔": "ignorance", "苍白的遗荣": "pale_glory"}
         self.indicate("尝试传送到秘境:\n  " + domain)
+        if domain == "椛染之庭":
+            _t = "染之庭"
+        elif domain == "菫色之庭":
+            _t = "色之庭"
+        elif domain == "无妄引咎密宫":
+            _t = "无妄引"
+        else:
+            _t = domain
         for num in range(18):
             wait(300)
-            (x, y), val = find_pic(f"assets/genshin/picture/domain/{tdir[domain]}.png", (738, 249, 1033, 886))
-            if val >= 0.7:
-                click(1555, y)
-                wait(2000)
-                break
-            elif num <= 16:
+            _list = ocr((764, 243, 1058, 847), mode=1)
+
+            for i in _list:
+                if _t in i[0]:
+                    wait(800)
+                    click(1555, int((i[1][1]+i[1][3])/2+40))
+                    wait(2000)
+                    return True
+            if num <= 16:
                 roll(1116, 296, -24)
             else:
                 self.indicate("error:\n  未识别到秘境 " + domain)
@@ -118,3 +118,17 @@ class Genshin(Task):
             else:
                 return True
         raise RuntimeError("队伍加载超时")
+
+    def turn_world(self):
+        m = 0
+        while m >= 0:
+            m += 1
+            wait(1500)
+            pos, val = find_pic(r"assets\genshin\picture\world.png", (57, 998, 179, 1075))
+            if val >= 0.6:
+                m = -1
+            else:
+                press("esc")
+            if m == 15:
+                self.indicate("error:打开主界面超时\n")
+                raise RuntimeError("原神:打开主界面超时")

@@ -75,17 +75,14 @@ class SGARun(QThread, TaskRun):
             temp_path = os.path.join(env.workdir, "cache")
             temp_name = os.path.basename(env.OCR.exe_name + ".zip")
             load_path = os.path.join(temp_path, temp_name)
-            load = ("https://api.7585.net.cn/lanzou/api.php?url=" +
-                    env.OCR.load_url)
+            load = "https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/releases?page=1&per_page=20"
             response = requests.get(load, timeout=10)
             if response.status_code == 200:
-                data = json.loads(response.text)
-                direct = data['down']
-                urlretrieve(direct, load_path)
+                urlretrieve(env.OCR.load_url, load_path)
                 self.indicate("下载完成,开始安装")
             else:
-                self.indicate("直链获取异常")
-                raise ValueError(f"直链获取异常(code{response.status_code})")
+                self.indicate(f"连接错误(code {response.status_code})")
+                raise ValueError(f"连接错误(code {response.status_code})")
         except Exception:
             self.indicate("下载异常")
             logger.error("下载异常:\n%s\n" % traceback.format_exc())

@@ -40,6 +40,8 @@ class Cycle(QThread, TaskRun):
         papress("numlock")
         wait(100)
         papress("numlock")
+        notify("SGA 定时任务", f"10秒后开始 任务名:{mode}")
+        wait(10000)
         self.ui.save_main_data()
         self.indicate("", 0)
         self.ui.task = self.ui.get_config_run(mode)

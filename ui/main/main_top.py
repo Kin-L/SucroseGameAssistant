@@ -49,6 +49,7 @@ class MainTop(MainUp):
         self.genshin.button_genshin.clicked.connect(lambda: self.change_module(2))
         self.maa.button_maa.clicked.connect(lambda: self.change_module(3))
         self.m7a.button_m7a.clicked.connect(lambda: self.change_module(4))
+        self.snow.button_snow.clicked.connect(lambda: self.change_module(5))
         # 信息输出
         self.kill.send.connect(self.indicate)
         self.sga_run.send.connect(self.indicate)

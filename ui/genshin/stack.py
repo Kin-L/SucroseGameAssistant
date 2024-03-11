@@ -20,6 +20,7 @@ class Local:
         self.combo_server.addItems(["官服", "B服"])
         self.label_start = Label(self.page_local, (0, 130, 80, 27), "启动路径")
         self.line_start = Lineedit(self.page_local, (0, 160, 385, 33))
+
         self.line_local1 = Line(self.page_local, (0, 202, 395, 3))
 
         self.label_single = Label(self.page_local, (0, 210, 220, 27), "独立运行设置：")
@@ -197,10 +198,10 @@ domain_dir = {
         ["仲夏庭园", "铭记之谷", "孤云凌霄之处",
             "无妄引咎密宫", "华池岩岫", "芬德尼尔之顶",
             "山脊守望", "椛染之庭", "沉眠之庭",
-            "岩中幽谷", "缘觉塔", "赤金的废墟",
+            "岩中幽谷", "缘觉塔", "赤金的城墟",
             "熔铁的孤塞", "罪祸的终末", "临瀑之城"],
     "天赋培养素材":
-        ["忘却之峡", "太山府", "堇色之庭",
+        ["忘却之峡", "太山府", "菫色之庭",
             "昏识塔", "苍白的遗荣"],
     "武器突破素材":
         ["塞西莉亚苗圃", "震雷连山密宫", "砂流之庭",
@@ -236,10 +237,21 @@ class Domain:
         fm.addItems(domain_dir[fa.currentText()])
         
     @staticmethod
-    def open_BGI(self):
+    def open_BGI():
         webbrowser.open("https://bgi.huiyadan.com/")
 
-class GenshinStack(Local, Team, Disp, Trans, Fly, Concentrate, Pot, Mail, Tree, Domain):
+
+class Pass:
+    def __init__(self, stack):
+        # 初始化窗口
+        self.page_pass = Widget(stack)
+        stack.addWidget(self.page_pass)
+        # 添加控件
+        self.label_pass = Label(self.page_pass, (0, 12, 180, 18), "设置页面：领取纪行")
+        self.label_pass_tip = Label(self.page_pass, (90, 80, 220, 27), "领取纪行 暂无配置项目。")
+
+
+class GenshinStack(Local, Team, Disp, Trans, Fly, Concentrate, Pot, Mail, Tree, Domain, Pass):
     def __init__(self, widget, location):
         # 功能堆叠窗口
         self.stack = Stack(widget, location)
@@ -253,4 +265,4 @@ class GenshinStack(Local, Team, Disp, Trans, Fly, Concentrate, Pot, Mail, Tree, 
         Mail.__init__(self, self.stack)
         Tree.__init__(self, self.stack)
         Domain.__init__(self, self.stack)
-        
+        Pass.__init__(self, self.stack)

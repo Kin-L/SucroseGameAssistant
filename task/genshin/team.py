@@ -34,16 +34,14 @@ class Team(Genshin):
         click(328, 1016)
         wait(800)
         if self.team_ready():
-            click(1843, 47)
-            self.world()
+            press("esc")
+            wait(1500)
+            self.turn_world()
             wait(300)
             press("1")
             wait(300)
             press("1")
             wait(300)
         else:
-            click(1843, 47)
-            self.world()
-            wait(300)
             raise RuntimeError("处于联机模式,请退出联机后再试")
 

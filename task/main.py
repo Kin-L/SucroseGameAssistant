@@ -1,20 +1,22 @@
+# -*- coding:gbk -*-
 from task.maa.main import TaskMAA
 from task.genshin.main import TaskGenshin
 from task.kleins.main import TaskKleins
 from task.m7a.main import TaskM7A
+from task.snow.main import TaskSnow
 
 
-class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A):
+class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow):
     def task_start(self, task):
         _k = False
-        # è¿è¡Œ
-        if task["æ¨¡å—"] == 0:
+        # ÔËĞĞ
+        if task["Ä£¿é"] == 0:
             for i in range(5):
-                single_task = task["é…ç½®%s" % i]
-                if single_task["name"] == "<æœªé€‰æ‹©>":
-                    self.indicate(f"è®¡åˆ’{i+1}æœªé€‰æ‹©ã€‚")
+                single_task = task["ÅäÖÃ%s" % i]
+                if single_task["name"] == "<Î´Ñ¡Ôñ>":
+                    self.indicate(f"¼Æ»®{i+1}Î´Ñ¡Ôñ¡£")
                 else:
-                    single_task["å…³é—­è½¯ä»¶"] = True
+                    single_task["¹Ø±ÕÈí¼ş"] = True
                     if self.single_run(single_task):
                         _k = True
         else:
@@ -24,24 +26,28 @@ class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A):
 
     def single_run(self, task):
         _k = False
-        if task["æ¨¡å—"] == 1:
+        if task["Ä£¿é"] == 1:
             TaskKleins.__init__(self)
             if self.kleins_start(task):
                 _k = True
-        elif task["æ¨¡å—"] == 2:
+        elif task["Ä£¿é"] == 2:
             TaskGenshin.__init__(self)
             if self.genshin_start(task):
                 _k = True
-        elif task["æ¨¡å—"] == 3:
+        elif task["Ä£¿é"] == 3:
             TaskMAA.__init__(self)
             if self.maa_start(task):
                 _k = True
-        elif task["æ¨¡å—"] == 4:
+        elif task["Ä£¿é"] == 4:
             TaskM7A.__init__(self)
             if self.m7a_start(task):
                 _k = True
+        elif task["Ä£¿é"] == 5:
+            TaskSnow.__init__(self)
+            if self.snow_start(task):
+                _k = True
         else:
-            self.indicate("error:æœªçŸ¥æ¨¡å—ã€‚")
+            self.indicate("error:Î´ÖªÄ£¿é¡£")
             _k = True
         return _k
 

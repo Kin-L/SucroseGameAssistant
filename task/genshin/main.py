@@ -1,5 +1,6 @@
 # -*- coding:gbk -*-
 from tools.environment import *
+from tools.software import find_hwnd
 import traceback
 import os
 from .team import Team
@@ -11,11 +12,12 @@ from .rambler import Rambler
 from .cut_tree.main import CutTree
 from .domain import Domain
 from .mail import Mail
+from .gpass import Pass
 
 
 class TaskGenshin(Team, Dispatch, Transformer,
                   CatchFly, Condensed, Rambler,
-                  Mail, CutTree, Domain):
+                  Mail, CutTree, Domain, Pass):
     def __init__(self):
         super().__init__()
 
@@ -71,6 +73,10 @@ class TaskGenshin(Team, Dispatch, Transformer,
                 if self.genshin_domain():
                     _k = True
                 self.indicate("完成:自动秘境")
+            if self.task["功能9"]:
+                self.indicate("开始:领取纪行")
+                self.genshin_pass()
+                self.indicate("完成:领取纪行")
         except Exception:
             self.indicate("任务执行异常:原神", log=False)
             logger.error("任务执行异常:原神\n%s" % traceback.format_exc())
@@ -110,6 +116,7 @@ class TaskGenshin(Team, Dispatch, Transformer,
             self.indicate("原神,无效启动路径")
             raise ValueError("原神:无效启动路径")
         # 启动游戏
+        env.soft.hwnd = find_hwnd(env.soft.mode_cls_tit)
         cond = env.soft.run()
         if cond == 1:
             self.indicate("游戏早已启动")

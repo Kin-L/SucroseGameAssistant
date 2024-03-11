@@ -28,7 +28,7 @@ class Overall:
 
     @staticmethod
     def get_ver():
-        with open("version.json", 'r', encoding='utf-8') as m:
+        with open(r"assets\main_window\version.json", 'r', encoding='utf-8') as m:
             _dir = json.load(m)
             return _dir["version"]
         

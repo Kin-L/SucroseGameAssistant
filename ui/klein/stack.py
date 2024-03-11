@@ -121,8 +121,14 @@ class Market:
         self.page_market = Widget(stack)
         stack.addWidget(self.page_market)
         # 添加控件
-        self.label_market = Label(self.page_market, (0, 12, 180, 18), "设置页面：领取集市")
-        self.label_market_tip = Label(self.page_market, (90, 80, 220, 27), "领取集市 暂无配置项目。")
+        self.label_recruit = Label(self.page_market, (0, 12, 180, 18), "设置页面：集市领取")
+        self.check_mconvert = Check(self.page_market, (0, 85, 100, 22), "援外兑换")
+        self.box_mconvert = Combobox(self.page_market, (105, 80, 180, 32))
+        self.box_mconvert.addItems(["须臾", "原液", "燧石矿物", "磁片",
+                                    "翼片", "古语石", "固醇粒", "异态水",
+                                    "甜品自助餐劵", "游戏机", "毛毯", "遮阳伞",
+                                    "小哑铃", "爱之歌", "手握式小风扇", "演唱会门票",
+                                    "相机", "灯塔胶囊"])
 
 
 class Recruit:
@@ -152,8 +158,16 @@ class Reward:
         self.page_reward = Widget(stack)
         stack.addWidget(self.page_reward)
         # 添加控件
-        self.label_reward = Label(self.page_reward, (0, 12, 180, 18), "设置页面：每日工作")
-        self.label_reward_tip = Label(self.page_reward, (90, 80, 220, 27), "每日工作 暂无配置项目。")
+        self.label_recruit = Label(self.page_reward, (0, 12, 180, 18), "设置页面：今日工作")
+        self.check_weekly = Check(self.page_reward, (0, 85, 120, 22), "兑换每周补给")
+        self.box_weekly1 = Combobox(self.page_reward, (0, 115, 180, 32))
+        self.box_weekly1.addItems(["甜品自助餐劵", "游戏机", "毛毯", "遮阳伞",
+                                   "小哑铃", "爱之歌", "手握式小风扇", "演唱会门票",
+                                   "相机", "灯塔胶囊"])
+        self.box_weekly2 = Combobox(self.page_reward, (0, 160, 180, 32))
+        self.box_weekly2.addItems(["甜品自助餐劵", "游戏机", "毛毯", "遮阳伞",
+                                   "小哑铃", "爱之歌", "手握式小风扇", "演唱会门票",
+                                   "相机", "灯塔胶囊"])
 
 
 class Network:

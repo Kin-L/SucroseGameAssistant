@@ -43,7 +43,7 @@ class Transformer(Genshin):
             wait(800)
             click(537, 296)
             wait(800)
-            self.tp_domain("堇色之庭")
+            self.tp_domain("菫色之庭")
             click(1669, 1009)
             wait(500)
             self.world()

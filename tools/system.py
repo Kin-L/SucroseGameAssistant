@@ -10,9 +10,10 @@ from win10toast import ToastNotifier
 from subprocess import run
 from win32api import MessageBox
 from win32con import MB_OK
-from win32gui import SetForegroundWindow, SetWindowPos
 # pyuic5 -o SGA_demo.py SGA_demo.ui
-import win32com
+from time import sleep
+from win32gui import (IsIconic, ShowWindow, GetForegroundWindow, SetForegroundWindow)
+from win32con import SW_RESTORE
 
 
 # windows提示
@@ -65,20 +66,25 @@ def get_resolution_zoom():
     ori_hig = user32.GetSystemMetrics(1)
     return (ori_wid, ori_hig), (now_wid, now_hig), round(ori_wid / now_wid, 2)
 
-def check_path(str):
-    return str.replace("\\", "/").replace("//", "/").strip("\"")
+
+def check_path(_str):
+    return _str.replace("\\", "/").replace("//", "/").strip("\"")
+
 
 def foreground(hwnd):
-    try:
-        SetForegroundWindow(hwnd)
-        return True
-    except:
-        try:
-            SetWindowPos(hwnd)
+    for i in range(10):
+        current_hwnd = GetForegroundWindow()
+        if current_hwnd == hwnd:
             return True
-        except:
-            return False
-        
+        if IsIconic(hwnd):
+            ShowWindow(hwnd, SW_RESTORE)
+            sleep(0.2)
+        if current_hwnd != hwnd:
+            SetForegroundWindow(hwnd)
+            sleep(0.2)
+    return False
+
+
 class System:
     def __init__(self):
         # 启用日志

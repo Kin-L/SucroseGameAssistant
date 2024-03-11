@@ -10,8 +10,10 @@ github(https://github.com/Kin-L/SucroseGameAssistant)
 gitee(https://gitee.com/huixinghen/SucroseGameAssistant)  
 
 5.  完整版下载链接，手动更新包链接：  
-完整版：https://wwrv.lanzn.com/b033h9z0d 密码:bm32  
-更新包：https://wwrv.lanzn.com/b033h9z2f 密码:diao  
+完整版：  
+蓝奏云： https://wwrv.lanzn.com/b033h9z0d 密码:bm32  
+gitee： https://gitee.com/huixinghen/SucroseGameAssistant/releases  
+更新包：https://gitee.com/huixinghen/SucroseGameAssistant/releases  
 手动更新方法：下载替换更新包，解压后将SGA文件夹与原SGA文件夹中同名文件夹进行合并并替换。  
 
     邮箱: 2805137028@qq.com  
@@ -31,7 +33,7 @@ gitee(https://gitee.com/huixinghen/SucroseGameAssistant)
 5.  SGA功能中使用了三月七助手/BGI/MAA的功能，需要自行安装对应项目并设置，之后对SGA进行设置，才能正常使用。
 6.  反馈bug建议附上自己的环境（win10/win11/win7, 官服/B服）,触发bug的流程/停留的界面/bug触发的录屏、截图，附加SGA的“personal”文件夹压缩发给我。以上条件越完善，越能帮助我定位问题所在，修复bug，请根据自己的情况尽量提供给我比较完善的信息。
 7.  SGA卸载删除前请 清除定时 ，否则您的电脑可能遇到仍在您原来设定过的时间 睡眠中自行唤醒 的情况。如果您已经卸载删除且遇到该情况，可在按照百度教程找到 任务计划程序 ,找到 SGA-awake 的条目，禁用/删除即可解决该问题。
-8、SGA为绿色免安装版，无联网功能，运行需要管理员权限，用于软件启动、设置定时等。若出现报毒和添加信任事件，信则用，本人没有心情也没有能力写病毒和盗号功能。添加信任可参考：https://zhuanlan.zhihu.com/p/645089615
+8.  SGA为绿色免安装版，无联网功能，运行需要管理员权限，用于软件启动、设置定时等。若出现报毒和添加信任事件，信则用，本人没有心情也没有能力写病毒和盗号功能。添加信任可参考：https://zhuanlan.zhihu.com/p/645089615
 #### 特别感谢
 
 1.  SGA用户界面使用了PyQt-Fluent-Widgets  

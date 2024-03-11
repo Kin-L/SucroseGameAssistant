@@ -5,6 +5,10 @@ from ui.element.control import *
 from ui.element.ui_part import *
 import traceback
 from pyautogui import press as papress
+_hwnd = find_hwnd((1, "Qt5152QWindowIcon", "砂糖代理"))
+if _hwnd:
+    foreground(_hwnd)
+    sys.exit(1)
 # 初始化窗口
 papress("numlock")
 wait(100)

@@ -42,6 +42,8 @@ class Domain(Genshin):
             os.remove(sc)
             click(1843, 46)
             wait(1500)
+        else:
+            cond = None
         self.open_sub("冒险之证")
         click(300, 440)
         wait(800)
@@ -68,6 +70,7 @@ class Domain(Genshin):
         wait(500)
         self.world()
         self.indicate(f"到达秘境:{_domain[0]} {_domain[1]}")
+
         # 切换战斗队伍
         def open_team():
             self.home()
@@ -98,8 +101,9 @@ class Domain(Genshin):
         click(328, 1016)
         wait(800)
         if self.team_ready():
-            click(1843, 47)
-            self.world()
+            press("esc")
+            wait(1500)
+            self.turn_world()
             wait(300)
             press("1")
             wait(300)

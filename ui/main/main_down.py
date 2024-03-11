@@ -17,22 +17,24 @@ class MainDown(MainBottom):
             "work_path": "",
             "lock": True,
             "config": "",
-            "run": {
-                "genshin": {
-                    "server": 0,
-                    "game": "",
-                    "BGI": ""
-                },
-                "kleins": {
-                    "server": 0,
-                    "game": ""
-                },
-                "maa": {
-                    "maa_path": ""
-                },
-                "m7a": {
-                    "m7a_path": ""
-                }
+            "genshin": {
+                "server": 0,
+                "game": "",
+                "BGI": ""
+            },
+            "kleins": {
+                "server": 0,
+                "game": ""
+            },
+            "maa": {
+                "maa_path": ""
+            },
+            "m7a": {
+                "m7a_path": ""
+            },
+            "snow": {
+                "server": 0,
+                "snow_path": ""
             },
             "update": False,
             "timer": {},
@@ -141,7 +143,7 @@ class MainDown(MainBottom):
         for text in self.state["name"][1:]:
             if self.state[text]["load"]:
                 module = eval(f"self.{text}")
-                self.config["run"][text] = module.get_run()
+                self.config[text] = module.get_run()
         with open("personal/main_config.json", 'w', encoding='utf-8') as c:
             json.dump(self.config, c, ensure_ascii=False, indent=1)
         with open("personal/main_config_bak.json", 'w', encoding='utf-8') as c:
@@ -152,7 +154,7 @@ class MainDown(MainBottom):
 
     def add_path(self, config_dir):
         _name = self.state["name"][config_dir["模块"]]
-        config_dir["启动"] = self.config["run"][_name]
+        config_dir["启动"] = self.config[_name]
         return config_dir
 
     # 获取运行信息

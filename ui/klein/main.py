@@ -84,8 +84,10 @@ class Klein:
             "采购4": [4, 0, 0],
             "采购5": [5, 0, 0],
             "回顾": 35.0,
+            "援外兑换": [False, "须臾"],
             "使用加速": False,
-            "访募金额": 0
+            "访募金额": 0,
+            "每周补给": [False, "甜品自助餐劵", "甜品自助餐劵"],
             }
         config.update(_dir)
         self.set.independent.check_mute.setChecked(config["静音"])
@@ -130,8 +132,15 @@ class Klein:
 
         self.set.num_box_review.setValue(config["回顾"])
 
+        self.set.check_mconvert.setChecked(config["援外兑换"][0])
+        self.set.box_mconvert.setCurrentText(config["援外兑换"][1])
+
         self.set.check_accelerate.setChecked(config["使用加速"])
         self.set.recruit_plan.setCurrentIndex(config["访募金额"])
+
+        self.set.check_weekly.setChecked(config["每周补给"][0])
+        self.set.box_weekly1.setCurrentText(config["每周补给"][1])
+        self.set.box_weekly2.setCurrentText(config["每周补给"][2])
 
     def output_config(self):
         config = dict()
@@ -175,8 +184,22 @@ class Klein:
                          self.set.plan5.currentIndex()]
 
         config["回顾"] = self.set.num_box_review.value()
+
+        config["援外兑换"] = [
+            self.set.check_mconvert.isChecked(),
+            self.set.box_mconvert.currentText()]
+
         config["使用加速"] = self.set.check_accelerate.isChecked()
         config["访募金额"] = self.set.recruit_plan.currentIndex()
+
+        config["每周补给"] = [
+            self.set.check_weekly.isChecked(),
+            self.set.box_weekly1.currentText(),
+            self.set.box_weekly2.currentText()
+        ]
+        self.set.check_weekly.setChecked(config["每周补给"][0])
+        self.set.box_weekly1.setCurrentText(config["每周补给"][1])
+        self.set.box_weekly2.setCurrentText(config["每周补给"][2])
         return config
 
     def open_roll(self):

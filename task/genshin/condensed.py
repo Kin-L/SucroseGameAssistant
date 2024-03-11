@@ -65,6 +65,5 @@ class Condensed(Genshin):
             click(1618, 497)
             wait(600)
             self.indicate("无法合成浓缩树脂:缺少树脂或晶核")
-        click(1836, 48)
-        wait(2200)
+        self.turn_world()
         return False

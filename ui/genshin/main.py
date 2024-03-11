@@ -28,6 +28,7 @@ class Genshin:
         self.list.set_mail.clicked.connect(lambda: self.set.stack.setCurrentIndex(7))
         self.list.set_tree.clicked.connect(lambda: self.set.stack.setCurrentIndex(8))
         self.list.set_domain.clicked.connect(lambda: self.set.stack.setCurrentIndex(9))
+        self.list.set_pass.clicked.connect(lambda: self.set.stack.setCurrentIndex(10))
         Line(self.widget_genshin, (215, 5, 3, 505), False)
 
     def load_run(self, run):
@@ -41,6 +42,7 @@ class Genshin:
         self.set.line_start.setText(_dir["game"])
         self.set.line_start.setSelection(0, 0)
         self.set.line_bgi.setText(_dir["BGI"])
+        self.set.line_bgi.setSelection(0, 0)
 
     def get_run(self):
         _dir = {
@@ -66,6 +68,7 @@ class Genshin:
             "功能6": False,
             "功能7": False,
             "功能8": False,
+            "功能9": False,
             "派遣0": [0, 0],
             "派遣1": [0, 0],
             "派遣2": [0, 0],
@@ -118,6 +121,7 @@ class Genshin:
         self.list.check_mail.setChecked(config["功能6"])
         self.list.check_tree.setChecked(config["功能7"])
         self.list.check_domain.setChecked(config["功能8"])
+        self.list.check_pass.setChecked(config["功能9"])
 
         self.set.area0.setCurrentIndex(config["派遣0"][0])
         self.set.area1.setCurrentIndex(config["派遣1"][0])
@@ -134,6 +138,7 @@ class Genshin:
         self.set.mat2.setCurrentIndex(config["派遣2"][1])
         self.set.mat3.setCurrentIndex(config["派遣3"][1])
         self.set.mat4.setCurrentIndex(config["派遣4"][1])
+        self.set.redisp.setChecked(config["再次派遣"])
 
         self.set.LineEdit0.setText(config["参量质变仪0"])
         self.set.LineEdit1.setText(config["参量质变仪1"])
@@ -188,6 +193,7 @@ class Genshin:
         config["功能6"] = self.list.check_mail.isChecked()
         config["功能7"] = self.list.check_tree.isChecked()
         config["功能8"] = self.list.check_domain.isChecked()
+        config["功能9"] = self.list.check_pass.isChecked()
 
         config["派遣0"] = [self.set.area0.currentIndex(), self.set.mat0.currentIndex()]
         config["派遣1"] = [self.set.area1.currentIndex(), self.set.mat1.currentIndex()]

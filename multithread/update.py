@@ -17,9 +17,10 @@ class Update(QThread):
         self.ui = ui
         self.version = ui.state["version"]
         self.mode = None
+        self.download = None
 
     def indicate(self, msg: str, mode=2, his=True, log=True):
-            self.send.emit(msg, mode, his, log)
+        self.send.emit(msg, mode, his, log)
 
     def run(self):
         if self.mode == 0:
@@ -31,29 +32,32 @@ class Update(QThread):
             if self.check():
                 self.load_add_update()
             self.ui.overall.button_check.setEnabled(True)
-            
 
     def check(self):
         # noinspection PyBroadException
         try:
              # cur_ver = "2.0.0"   ver_lit = [2, 0, 0]
-            url = "https://gitee.com/huixinghen/SucroseGameAssistant/raw/master/version.json"
+            url = "https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/releases/latest"
         
             for i in range(3):
                 response = requests.get(url, timeout=10)
                 if response.status_code == 200:
                     data = json.loads(response.text)
-                    new_ver, self.url, intro = data["version"], data["url"], data["introduce"]
-                    
-                    if self.version == data["version"]:
+                    new_version = data["tag_name"]
+                    if self.version == new_version:
                         self.indicate(f"已为最新版本: {self.version}", 3)
                         if not self.mode:
                             self.ui.overall.button_check.setEnabled(True)
                         return 0
                     else:
-                        self.indicate(f"发现新版本: {self.version} -> {new_ver}")
-                        self.indicate(f"可通过此链接进行手动更新:{self.url}")
-                        self.indicate(intro, 3)
+                        self.indicate(f"发现新版本: {self.version} -> {new_version}")
+                        self.indicate(f"可通过此链接进行手动更新: https://gitee.com/huixinghen/SucroseGameAssistant/releases")
+                        self.indicate(data["body"], 3)
+                        assets = data["assets"]
+                        for d in assets:
+                            if "replace" in d["name"]:
+                                self.download = d
+
                         if not self.mode:
                             self.ui.overall.button_check.hide()
                             self.ui.overall.button_update.show()
@@ -68,31 +72,14 @@ class Update(QThread):
             logger.error("检查更新异常:\n%s\n" % traceback.format_exc())
             return 0
 
-    
-
     def load_add_update(self):
         self.indicate("开始更新,更新完成后将自动重启SGA")
         # noinspection PyBroadException
         try:
-            _url = f"https://api.7585.net.cn/lanzou/api.php?url={self.url}"
-            for i in range(3):
-                response = requests.get(_url, timeout=10)
-                if response.status_code == 200:
-                    data = json.loads(response.text)
-                elif i < 2:
-                    time.sleep(2)
-                else:
-                    raise ConnectionError("直链获取异常")
-        except Exception:
-            self.indicate("直链获取异常", 3)
-            logger.error("直链获取异常:\n%s\n" % traceback.format_exc())
-            return 0
-        # noinspection PyBroadException
-        try:
             from urllib.request import urlretrieve
             temp_path = os.path.join(env.workdir, "cache")
-            load_path = os.path.join(temp_path, data["name"])
-            urlretrieve(data["down"], load_path)
+            load_path = os.path.join(temp_path, self.download["name"])
+            urlretrieve(self.download["browser_download_url"], load_path)
             self.indicate("下载完成")
         except Exception:
             self.indicate("下载异常", 3)

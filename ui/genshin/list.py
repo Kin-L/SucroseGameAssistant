@@ -22,6 +22,7 @@ class GenshinList:
         self.check_mail = Check(self.widget, (15, 320, 140, 22), "领取邮件")
         self.check_tree = Check(self.widget, (15, 365, 140, 22), "自动伐木")
         self.check_domain = Check(self.widget, (15, 410, 140, 22), "自动秘境")
+        self.check_pass = Check(self.widget, (15, 455, 140, 22), "领取纪行")
 
         self.set_team = PicButton(self.widget, (180, 50, 22, 22), setpath, (22, 22))
         self.set_disp = PicButton(self.widget, (180, 95, 22, 22), setpath, (22, 22))
@@ -32,3 +33,4 @@ class GenshinList:
         self.set_mail = PicButton(self.widget, (180, 320, 22, 22), setpath, (22, 22))
         self.set_tree = PicButton(self.widget, (180, 365, 22, 22), setpath, (22, 22))
         self.set_domain = PicButton(self.widget, (180, 410, 22, 22), setpath, (22, 22))
+        self.set_pass = PicButton(self.widget, (180, 455, 22, 22), setpath, (22, 22))

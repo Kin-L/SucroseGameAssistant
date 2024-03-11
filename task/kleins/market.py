@@ -33,10 +33,40 @@ class Market(Task):
                 click(1487, 79)
                 wait(2000)
                 self.indicate("领取援外协议完成")
-                click(1010, 712)
+                click(1487, 79)
                 wait(2000)
+                if self.task["援外兑换"][0]:
+                    if int(ocr((1663, 55, 1792, 95))[0].replace(" ", "")[:-4]) >= 200:
+                        if click_text("外显记录"):
+                            click(1128, 459)
+                            wait(800)
+                            click(1190, 657)
+                            wait(2000)
+                            click(205, 913)
+                            self.indicate("兑换外显记录")
+                            wait(2000)
+                    if int(ocr((1663, 55, 1792, 95))[0].replace(" ", "")[:-4]) >= 200:
+                        _t = self.task["援外兑换"][1]
+                        _t0 = _t
+                        if _t in ["遮阳伞", "小哑铃", "爱之歌", "手握式小风扇",
+                                  "演唱会门票", "相机", "灯塔胶囊"]:
+                            roll(1128, 459, 55)
+                            wait(800)
+                        elif _t == "须臾":
+                            _t0 = "须"
+                        click_text(_t)
+                        wait(1500)
+                        click(1128, 459)
+                        wait(800)
+                        click(1190, 657)
+                        wait(2000)
+                        self.indicate(f"兑换 {_t}")
+                        click(205, 913)
+                        wait(2000)
             else:
                 self.indicate("暂无援外协议可领取")
+
+
             click(299, 77)
             wait(1000)
             

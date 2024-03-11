@@ -192,7 +192,7 @@ class Image(System):
                     _l += [[i[1][0], zone, i[1][1]]]
                 _list = _l
             else:
-                _list = "", 0
+                _list = [["", None, 0]]
         elif mode == 2:  # 输出原始结果
             pass
         else:

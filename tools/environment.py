@@ -2,6 +2,24 @@ from .operate import Operate
 from .system import *
 
 
+def text_match(res, text, domain=(0, 0, 1920, 1080), border=False):
+    if text in res[0]:
+        rx1, ry1, rx2, ry2 = res[1]
+        dx1, dy1, dx2, dy2 = domain
+        if border:
+            if dx1 <= rx1 and dy1 <= ry1 and rx2 <= dx2 and ry2 <= dy2:
+                return int((rx1+rx2)//2), int((ry1+ry2)//2)
+            else:
+                return False
+        else:
+            if dx1 < rx1 and dy1 < ry1 and rx2 < dx2 and ry2 < dy2:
+                return int((rx1+rx2)//2), int((ry1+ry2)//2)
+            else:
+                return False
+    else:
+        return False
+
+
 class Environment(Operate):
     def __init__(self, wide, high):
         super().__init__()

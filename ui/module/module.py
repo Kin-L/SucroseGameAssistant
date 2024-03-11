@@ -11,8 +11,8 @@ class ModuleWindow:
         main.stack_setting.addWidget(self.widget_module)
         # 模块按钮
         self.scroll_list = ScrollArea(self.widget_module, (0, 0, 215, 65))
-        self.widget_icon = Widget(self.scroll_list, (0, 0, 270, 50))
-        self.widget_icon.setMinimumSize(270, 50)
+        self.widget_icon = Widget(self.scroll_list, (0, 0, 325, 50))
+        self.widget_icon.setMinimumSize(325, 50)
         self.scroll_list.setWidget(self.widget_icon)
         self.scroll_list.setFrameShape(QtWidgets.QFrame.Shape(0))
         # 配置切换列表

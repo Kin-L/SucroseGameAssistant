@@ -3,11 +3,10 @@ import os
 from time import sleep
 from win32con import PROCESS_ALL_ACCESS, SW_RESTORE
 from win32gui import (FindWindow, EnumWindows, GetClassName, GetWindowText,
-                      GetWindowRect, IsIconic, ShowWindow)
+                      GetClientRect, ClientToScreen, IsIconic, ShowWindow, SetForegroundWindow, GetForegroundWindow)
 from psutil import process_iter
 from signal import SIGTERM
 from subprocess import run
-from tools.system import foreground as tryforeground
 
 
 # 从exe名称获取pid
@@ -140,12 +139,13 @@ class Software:
 
     def get_window_information(self):
         if self.hwnd:
-            f = GetWindowRect(self.hwnd)
-            w, h = f[2] - f[0], f[3] - f[1]
+            # f = GetWindowRect(self.hwnd)
+            (p1, p2, w, h) = GetClientRect(self.hwnd)
+            x1, y1 = ClientToScreen(self.hwnd, (0, 0))
             if (1.7 <= round(w / h, 3) <= 1.8) and (664 <= h <= 2160):
                 x_zoom, y_zoom = w / self.compile_resolution[0], h / self.compile_resolution[1]
                 self.zoom = min(x_zoom, y_zoom)
-                self.frame, self.wide, self.high = f, w, h
+                self.frame, self.wide, self.high = (x1, y1, x1+w, y1+h), w, h
                 return True
             else:
                 print(f"不适配的分辨率: {self.wide} × {self.high}")
@@ -157,7 +157,14 @@ class Software:
             return False
 
     def foreground(self):
-        if IsIconic(self.hwnd):
-            ShowWindow(self.hwnd, SW_RESTORE)
-        else:
-            tryforeground(self.hwnd)
+        for i in range(10):
+            current_hwnd = GetForegroundWindow()
+            if current_hwnd == self.hwnd:
+                return True
+            if IsIconic(self.hwnd):
+                ShowWindow(self.hwnd, SW_RESTORE)
+                sleep(0.2)
+            if current_hwnd != self.hwnd:
+                SetForegroundWindow(self.hwnd)
+                sleep(0.2)
+        return False

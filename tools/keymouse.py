@@ -43,6 +43,7 @@ class KeyMouse(System):
     def roll(self, x, y, num):
         x, y = self.axis_change(x, y)
         SetCursorPos((x, y))
+        self.wait(0.1)
         if num > 0:
             u = 1
         else:
@@ -55,6 +56,7 @@ class KeyMouse(System):
     def roll_h(self, x, y, num):
         x, y = self.axis_change(x, y)
         SetCursorPos((x, y))
+        self.wait(0.1)
         if num > 0:
             u = 1
         else:

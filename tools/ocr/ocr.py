@@ -12,12 +12,12 @@ class OCR:
         self.workdir = workdir
         if CPUFeature["AVX2"]:
             self.exe_name = "PaddleOCR-json_v.1.3.1(simplify)"
-            self.load_url = "https://wwrv.lanzn.com/iPNtm1ldauhi"
+            self.load_url = "https://gitee.com/huixinghen/SucroseGameAssistant/releases/download/ocr/PaddleOCR-json_v.1.3.1(simplify).zip"
             self.exe_path = r"3rd_package\PaddleOCR-json_v.1.3.1(simplify)\PaddleOCR-json.exe"
             self.logger.debug("CPU 支持 AVX2 指令集，使用 PaddleOCR-json")
         else:
             self.exe_name = "RapidOCR-json_v0.2.0(simplify)"
-            self.load_url = "https://wwrv.lanzn.com/iOzdd1ldaqeb"
+            self.load_url = "https://gitee.com/huixinghen/SucroseGameAssistant/releases/download/ocr/RapidOCR-json_v0.2.0(simplify).zip"
             self.exe_path = r"3rd_package\RapidOCR-json_v0.2.0(simplify)\RapidOCR-json.exe"
             self.logger.debug("CPU 不支持 AVX2 指令集，使用 RapidOCR-json")
         self.running = None

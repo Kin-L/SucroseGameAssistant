@@ -61,7 +61,7 @@ class MainBottom(MainWindow, Module, Overall):
             if num == 0:
                 module.load_single(self.state["single"])
             elif num < len(name_list):
-                module.load_run(self.config["run"][name])
+                module.load_run(self.config[name])
             self.state[name]["load"] = True
         else:
             pass
