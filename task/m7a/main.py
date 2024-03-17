@@ -1,7 +1,7 @@
 # -*- coding:gbk -*-
 from ..default_task import Task
 from tools.environment import *
-from tools.software import get_pid, close
+from tools.software import get_pid, close, find_hwnd
 import traceback
 import os
 import yaml
@@ -54,8 +54,7 @@ class TaskM7A(Task):
                 _path = _dire + _name
                 while 1:
                     wait(10000)
-                    f = open(_path, encoding='utf-8')
-                    if "游戏退出成功" in f.readlines()[-2]:
+                    if not find_hwnd((1, "UnityWndClass", "崩坏：星穹铁道")):
                         break
                 # env.soft.kill()
                 self.indicate("三月七助手运行完成")

@@ -4,6 +4,7 @@ import sys
 from tools.software import *
 from PyQt5.QtGui import QPixmap
 import traceback
+import webbrowser
 
 
 class MainTop(MainUp):
@@ -35,6 +36,12 @@ class MainTop(MainUp):
         self.overall.button_check.clicked.connect(self.check_update)
         self.overall.button_update.clicked.connect(self.load_update)
         self.overall.timer.delete.clicked.connect(self.timer_delete)
+
+        self.overall.button_update_history.clicked.connect(lambda: os.startfile(env.workdir + "/update_history.txt"))
+        self.overall.button_logger.clicked.connect(lambda: os.startfile(env.workdir + "/personal/logs"))
+        self.overall.button_github.clicked.connect(lambda: webbrowser.open("https://github.com/Kin-L/SucroseGameAssistant"))
+        self.overall.button_gitee.clicked.connect(lambda: webbrowser.open("https://gitee.com/huixinghen/SucroseGameAssistant"))
+        self.overall.button_bilibili.clicked.connect(lambda: webbrowser.open("https://space.bilibili.com/406315493"))
         # 配置操作
         self.button_config_delete.clicked.connect(self.delete_plan)
         self.box_config_change.currentTextChanged.connect(self.config_change)

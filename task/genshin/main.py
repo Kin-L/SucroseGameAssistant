@@ -146,33 +146,33 @@ class TaskGenshin(Team, Dispatch, Transformer,
             if server == 0:
                 if "点击进入" in ocr((897, 989, 1027, 1048))[0].replace(" ", ""):
                     server = 2
-                    click(930, 630)
+                    click((930, 630))
                     self.indicate("开门")
                     wait(4000)
                     os.remove(sc)
                     sc = screenshot()
             elif server == 1:
                 if find_pic(r"assets\genshin\picture\login2.png", (863, 370, 1059, 467), sc)[1] >= 0.6:
-                    click(953, 659)
+                    click((953, 659))
                     self.indicate("登录B服账号")
                     wait(4000)
                     os.remove(sc)
                     sc = screenshot()
                 if "点击进入" in ocr((897, 989, 1027, 1048))[0].replace(" ", ""):
                     server = 2
-                    click(930, 630)
+                    click((930, 630))
                     self.indicate("开门")
                     wait(4000)
                     os.remove(sc)
                     sc = screenshot()
             if find_pic(r"assets\genshin\picture\sighin.png", (865, 240, 1060, 470), sc)[1] >= 0.6:
-                click(930, 850)
+                click((930, 850))
                 wait(800)
-                click(930, 850)
+                click((930, 850))
                 wait(100)
-                click(930, 850)
+                click((930, 850))
                 wait(1000)
-                click(930, 850)
+                click((930, 850))
                 wait(800)
                 self.indicate("今日月卡领取成功")
                 os.remove(sc)
@@ -180,26 +180,26 @@ class TaskGenshin(Team, Dispatch, Transformer,
             if find_pic(r"assets\genshin\picture\world.png", (57, 998, 179, 1075), sc)[1] >= 0.6:
                 self.indicate("加载到世界")
                 os.remove(sc)
-                click(509, 313)
+                click((509, 313))
                 wait(300)
-                click(509, 313)
+                click((509, 313))
                 wait(300)
                 break
             if "好友" in ocr((480, 442, 540, 481))[0]:
                 self.indicate("加载到主界面")
                 os.remove(sc)
-                click(509, 313)
+                click((509, 313))
                 wait(300)
-                click(509, 313)
+                click((509, 313))
                 wait(300)
                 break
-            (x, y), val0 = find_pic(r"assets\genshin\picture\close0.png", (1683, 0, 1919, 236), sc)
+            _p, val0 = find_pic(r"assets\genshin\picture\close0.png", (1683, 0, 1919, 236), sc)
             if val0 >= 0.6:
-                click(x, y)
+                click(_p)
                 wait(2500)
-            (x, y), val1 = find_pic(r"assets\genshin\picture\close1.png", (1609, 178, 1737, 293), sc)
+            _p, val1 = find_pic(r"assets\genshin\picture\close1.png", (1609, 178, 1737, 293), sc)
             if val1 >= 0.6:
-                click(x, y)
+                click(_p)
                 wait(2500)
             os.remove(sc)
             if i == second - 1:

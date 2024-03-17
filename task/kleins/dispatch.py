@@ -7,9 +7,9 @@ class Dispatch(Task):
         super().__init__()
     
     def kleins_dispatch(self):
-        click(146, 720)
+        click((146, 720))
         wait(1500)
-        click(1563, 141)
+        click((1563, 141))
         wait(1000)
         _list = [[176, 209], [285, 317], [394, 427],
                  [503, 539], [612, 645], [722, 755]]
@@ -22,52 +22,52 @@ class Dispatch(Task):
                 "采购方案": ["固定物品", "额外物品", "减少时间"]}
         for n in range(6):
             y1, y2 = _list[n]
-            x, y = _c[n]
+            _p = _c[n]
             zoom = (1068, y1, 1228, y2)
             _text = ocr(zoom)[0]
             if (":" in _text) or ("：" in _text):
                 self.indicate("线下采购" + str(n + 1) + ":进行中")
                 continue
             elif _text == "采购完成":
-                click(x, y)
+                click(_p)
                 wait(400)
-                click(1708, 977)
+                click((1708, 977))
                 wait(1200)
                 if self.task["再次采购"]:
-                    click(1208, 845)
+                    click((1208, 845))
                     self.indicate("线下采购" + str(n + 1) + ":完成 再次采购")
                     wait(1500)
                     continue
                 else:
-                    click(878, 851)
+                    click((878, 851))
                     self.indicate("线下采购" + str(n + 1) + ":完成 已领取")
                 wait(1200)
             elif _text == "尚未安排采购":
                 self.indicate("线下采购" + str(n + 1) + ":待派遣")
-                click(x, y)
+                click(_p)
                 wait(400)
             else:
                 self.indicate("error:线下采购" + str(n + 1) + " 识别异常")
                 raise RuntimeError("线下采购" + str(n + 1) + " 识别异常")
-            click(1562, 939)
+            click((1562, 939))
             wait(800)
             _mat, _fund, _plan = self.task[f"采购{n}"]
             _path = "assets/kleins/picture/dispatch/zone"+str(_mat)+".png"
-            (x, y), sim = find_pic(_path, (666, 420, 1860, 484))
+            _p, sim = find_pic(_path, (666, 420, 1860, 484))
             if sim == 0:
                 drag((1128, 451), (-200, 0))
                 wait(800)
-                (x, y), sim = find_pic(_path, (666, 420, 1860, 484))
-            click(x, y)
+                _p, sim = find_pic(_path, (666, 420, 1860, 484))
+            click(_p)
             wait(500)
-            x, y = [(951, 667), (961, 749), (960, 838)][_fund]
-            click(x, y)
+            _p = [(951, 667), (961, 749), (960, 838)][_fund]
+            click(_p)
             wait(500)
-            click(1571, 883)
+            click((1571, 883))
             wait(1500)
-            (x, y), sim = find_pic(f"assets/kleins/picture/dispatch/plan{_plan}.png", (194, 145, 454, 585))
+            _p, sim = find_pic(f"assets/kleins/picture/dispatch/plan{_plan}.png", (194, 145, 454, 585))
             if sim >= 0.85:
-                click(x, y)
+                click(_p)
                 wait(500)
                 self.indicate("线下采购开始:\n  " +
                               _dir["线下采购材料"][_mat] +
@@ -78,10 +78,10 @@ class Dispatch(Task):
                 self.indicate("线下采购开始:\n  " +
                               _dir["线下采购材料"][_mat] +
                               "\n  "+_dir["携带资金"][_fund])
-                click(143, 151)
+                click((143, 151))
                 wait(500)
-            click(397, 1008)
+            click((397, 1008))
             wait(1500)
         # 结束
-        click(296, 75)
+        click((296, 75))
         wait(1000)

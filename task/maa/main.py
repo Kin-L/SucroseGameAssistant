@@ -22,7 +22,7 @@ class TaskMAA(Task):
             if pid is not None:
                 self.indicate("MAA早已启动,进行重启")
                 close(pid)
-            env.set_soft(None, (1, "HwndWrapper[MAA.exe", "MAA"))
+            env.set_soft(None, (0, "HwndWrapper[MAA", "MAA"))
             _path = self.task["启动"]["maa_path"]
             if os.path.isfile(_path):
                 dire, name = os.path.split(_path)
@@ -63,9 +63,6 @@ class TaskMAA(Task):
             #     handle=CreateProcess(_path, '', None , None , 0 ,CREATE_NEW_CONSOLE , None , os.path.split(_path)[0] ,STARTUPINFO())
             #     WaitForSingleObject(handle[0],2)
             #     self.indicate("MAA运行中...")
-            _f = env.workdir + "/cache/maa_complete.txt"
-            if os.path.exists(_f):
-                os.remove(_f)
             def maa_run():
                 [_dir, name] = os.path.split(_path)
                 cmd = f"start /d \"{_dir}\" {name}"
@@ -88,14 +85,15 @@ class TaskMAA(Task):
             # 运行-结束
             while 1:
                 wait(10000)
-                if os.path.exists(_f):
-                    os.remove(_f)
+                if not find_hwnd((0, "HwndWrapper[MAA", "MAA")):
+                    self.indicate("MAA已关闭")
                     break
             with open(gui_path, 'r', encoding='utf-8') as g:
                 maa = json.load(g)
             maa["Current"] = current
             with open(gui_path, 'w', encoding='utf-8') as g:
                 json.dump(maa, g, ensure_ascii=False, indent=1)
+            g.close()
         except Exception:
             self.indicate("任务执行异常:MAA", log=False)
             logger.error("任务执行异常:MAA\n%s" % traceback.format_exc())

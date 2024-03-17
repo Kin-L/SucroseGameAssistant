@@ -27,9 +27,9 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
         try:
             self.kleins_log(60)
             # 触发舍友互动
-            click(969, 374)
+            click((969, 374))
             wait(500)
-            click(969, 374)
+            click((969, 374))
             wait(500)
             if self.task["功能0"]:
                 self.indicate("开始:作战")
@@ -86,7 +86,7 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
 
     def kleins_launch(self):
         # 路径修正
-        env.set_soft(None, (0, "UnityWndClass", "环行旅舍"))
+        env.set_soft(None, (1, "UnityWndClass", "环行旅舍"))
         _path = self.task["启动"]["game"]
         if os.path.isfile(_path):
             dire, name = os.path.split(_path)
@@ -107,13 +107,13 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
             return 3
         # 启动游戏
         cond = env.soft.run()
-        if cond == 1:
+        if cond == 2:
             self.indicate("游戏启动成功")
             self.indicate("等待加载,10秒后开始识别游戏状态")
             wait(1000)
             env.soft.foreground()
             wait(9000)
-        elif cond == 2:
+        elif cond == 1:
             self.indicate("游戏早已启动")
             env.soft.foreground()
             wait(1000)
@@ -132,7 +132,7 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
             if server == 0:
                 if "开始游戏" in ocr((870, 611, 1050, 655), sc)[0].replace(" ", ""):
                     wait(300)
-                    click(930, 630)
+                    click((930, 630))
                     self.indicate("登录游戏")
                     wait(5000)
                     os.remove(sc)
@@ -140,29 +140,28 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
             elif server == 1:
                 if "登录账号" in ocr((870, 611, 1050, 655), sc)[0].replace(" ", ""):
                     wait(300)
-                    click(960, 633)
+                    click((960, 633))
                     self.indicate("登录账号")
                     wait(1500)
                     os.remove(sc)
                     sc = screenshot()
-                if find_color("blue", (910, 658, 992, 704))[0]:
-                    wait(300)
-                    click(958, 679)
+                if find_pic(r"assets\kleins\picture\login2.png", (853, 369, 1055, 461), sc)[1] >= 0.6:
+                    click((958, 679))
                     self.indicate("登录游戏")
                     wait(5000)
                     os.remove(sc)
                     sc = screenshot()
             if "签到奖励" in ocr((832, 211, 1090, 313), sc)[0].replace(" ", ""):  # 签到奖励
-                click(1469, 551)
+                click((1469, 551))
                 wait(1500)
-                click(1789, 120)
+                click((1789, 120))
                 self.indicate("签到成功")
                 wait(1000)
                 os.remove(sc)
                 sc = screenshot()
-            (x, y), sim = find_pic("assets/kleins/picture/close/close2.png", search_path=sc)
+            _p, sim = find_pic("assets/kleins/picture/close/close2.png", search_path=sc)
             if sim >= 0.6:
-                click(x, y)
+                click(_p)
                 wait(1500)
                 os.remove(sc)
                 sc = screenshot()
@@ -175,7 +174,7 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
                     os.remove(sc)
                     return 0
             if find_pic("assets/kleins/picture/rehome.png", (238, 27, 355, 105), sc)[1] >= 0.7:
-                click(295, 69)
+                click((295, 69))
                 wait(1500)
                 os.remove(sc)
                 self.indicate("加载到主界面")
@@ -184,7 +183,7 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
                 self.indicate(f"error: 网络连接超时({net}次)")
                 if net < 4:
                     net += 1
-                    click(1063, 710)
+                    click((1063, 710))
                     wait(10000)
                 else:
                     os.remove(sc)

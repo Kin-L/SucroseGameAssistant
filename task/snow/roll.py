@@ -10,7 +10,7 @@ class Roll(Task):
 
     def snow_roll(self):
         self.indicate("开始获取抽卡记录")
-        click(1731, 678)
+        click((1731, 678))
         for i in range(10):
             wait(1000)
             if "共鸣" in ocr((1686, 940, 1843, 1006))[0]:
@@ -33,12 +33,12 @@ class Roll(Task):
         for i in ["限定角色共鸣", "限定武器共鸣", "常守之誓", "中庭炉心"]:
             if i == "限定角色共鸣":
                 if "天" in ocr((192, 68, 277, 120))[0]:
-                    click(167, 143)
+                    click((167, 143))
                 else:
                     continue
             elif i == "限定武器共鸣":
                 if "天" in ocr((197, 217, 279, 262))[0]:
-                    click(131, 281)
+                    click((131, 281))
                 else:
                     continue
             else:
@@ -47,9 +47,9 @@ class Roll(Task):
                 else:
                     continue
             wait(800)
-            click(1877, 141)
+            click((1877, 141))
             wait(2000)
-            click(1081, 84)
+            click((1081, 84))
             for o in range(20):
                 wait(1000)
                 if "保留" in ocr((865, 133, 970, 191))[0]:
@@ -87,13 +87,13 @@ class Roll(Task):
                 if num < 10:
                     break
                 else:
-                    click(1666, 602)
+                    click((1666, 602))
                     wait(500)
             current[i] += _nl
-            click(1851, 81)
+            click((1851, 81))
             wait(2000)
         with open("personal/snow/roll/history.json", 'w', encoding='utf-8') as x:
             json.dump(current, x, ensure_ascii=False, indent=1)
-        click(1674, 46)
+        click((1674, 46))
         wait(2000)
         self.indicate("获取抽卡记录完成")

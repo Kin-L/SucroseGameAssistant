@@ -9,7 +9,7 @@ class Roll(Task):
         super().__init__()
 
     def kleins_get_roll(self):
-        click(1698, 692)
+        click((1698, 692))
         for i in range(10):
             wait(1000)
             if click_text("联络记录", (294, 994, 428, 1046)):
@@ -38,7 +38,7 @@ class Roll(Task):
         _list = [360, 407, 452, 498, 543, 589, 634, 680, 725, 771]
         for i in ["定向联络", "常态联络", "初始联络", "限定联络"]:
             self.indicate("开始识别:"+i)
-            click(1385, 219)
+            click((1385, 219))
             wait(500)
             if click_text(i, (1212, 199, 1330, 357)):
                 wait(500)
@@ -68,12 +68,12 @@ class Roll(Task):
                     self.indicate("识别完成:" + i)
                     break
                 else:
-                    click(1042, 861)
+                    click((1042, 861))
                     wait(500)
             current[i] = _l+_nl
         with open("personal/kleins/roll/history.json", 'w', encoding='utf-8') as x:
             json.dump(current, x, ensure_ascii=False, indent=1)
-        click(1753, 182)
+        click((1753, 182))
         wait(800)
-        click(153, 68)
+        click((153, 68))
         wait(2000)

@@ -23,9 +23,9 @@ class TaskSnow(Fight, Daily, Mail, Roll):
         # noinspection PyBroadException
         try:
             self.snow_log(60)
-            click(829, 585)
+            click((829, 585))
             wait(500)
-            click(829, 585)
+            click((829, 585))
             wait(500)
             if self.task["功能0"]:
                 self.snow_fight()
@@ -68,12 +68,11 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             self.indicate("尘白禁区，无效启动路径")
             raise ValueError("尘白禁区:无效启动路径")
         # 启动游戏
+        env.soft.set_hwnd_find(1, "wailsWindow", "尘白禁区启动器")
         for u in range(2):
-            launch = find_hwnd((1, "wailsWindow", "尘白禁区启动器"))
-            if launch:
-                foreground(launch)
+            if env.soft.find_hwnd():
+                env.soft.foreground()
             else:
-                env.soft.set_hwnd_find(1, "wailsWindow", "尘白禁区启动器")
                 if env.soft.run(fls=False):
                     self.indicate("启动器打开成功")
                 else:
@@ -82,9 +81,9 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             wait(1000)
 
             if self.task["预下载"]:
-                (x, y), sim = find_pic(r"assets\snow\picture\pre-load.png")
+                _p, sim = find_pic(r"assets\snow\picture\pre-load.png")
                 if sim:
-                    click(x, y)
+                    click(_p)
                     wait(1500)
                     click_text("确定")
                     wait(2000)
@@ -119,18 +118,15 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             _list = ocr(mode=1)
             for o in _list:
                 if res := text_match(o, "开始游戏"):
-                    x, y = res
-                    click(x, y)
+                    click(res)
                     return True
                 elif res := text_match(o, "检查更新"):
-                    x, y = res
-                    click(x, y)
+                    click(res)
                     wait(2000)
                     break
-                elif text_match(o, "获取更新"):
+                elif res := text_match(o, "获取更新"):
                     if self.task["更新"]:
-                        x, y = res
-                        click(x, y)
+                        click(res)
                         wait(2000)
                         click_text("确定")
                         wait(2000)
@@ -163,58 +159,59 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                 if "开始游戏" in ocr((883, 920, 1049, 989))[0]:
                     server = 2
                     wait(300)
-                    click(930, 630)
+                    click((930, 630))
                     self.indicate("登录游戏")
                     wait(5000)
                     os.remove(sc)
                     sc = screenshot()
             elif server == 1:
-                if find_pic(r"assets\snow\picture\login2.png", (863, 370, 1059, 467), sc)[1] >= 0.6:
-                    click(953, 659)
+                if find_pic(r"assets\snow\picture\login2.png", (853, 369, 1055, 461), sc)[1] >= 0.6:
+                    click((964, 679))
                     self.indicate("登录B服账号")
                     wait(4000)
                     os.remove(sc)
                     sc = screenshot()
-                if "开始游戏" in ocr((883, 920, 1049, 989))[0]:
-                    server = 2
-                    click(930, 630)
-                    self.indicate("开门")
-                    wait(4000)
-                    os.remove(sc)
-                    sc = screenshot()
             if "获得道具" in ocr((813, 45, 1099, 138), sc)[0]:
-                click(967, 909)
-                wait(3500)
-                click(991, 123)
+                click((967, 909))
                 self.indicate("签到成功")
-                wait(2500)
                 os.remove(sc)
                 sc = screenshot()
+                wait(2500)
+            if "时间" in ocr((368, 217, 482, 249), sc)[0]:
+                click((991, 123))
+                os.remove(sc)
+                sc = screenshot()
+                wait(1500)
             if "维护" in ocr((1003, 419, 1190, 513), sc)[0]:
+                os.remove(sc)
                 raise RuntimeError("尘白禁区:游戏维护中")
             if "版本过低" in ocr((692, 414, 925, 513), sc)[0]:
-                raise RuntimeError("尘白禁区:游戏维护中")
-            if "任务" in ocr((1552, 364, 1618, 409))[0]:
-                # wait(500)
+                os.remove(sc)
+                raise RuntimeError("尘白禁区:版本过低")
+            if "服务器暂未开放" in ocr((784, 418, 1148, 508), sc)[0]:
+                os.remove(sc)
+                raise RuntimeError("尘白禁区:服务器暂未开放")
+            if "任务" in ocr((1552, 364, 1618, 409), sc)[0]:
+                wait(300)
                 os.remove(sc)
                 sc = screenshot()
-                if "任务" in ocr((1552, 364, 1618, 409))[0]:
+                if "任务" in ocr((1552, 364, 1618, 409), sc)[0]:
                     self.indicate("加载到主界面")
                     os.remove(sc)
-                    break
+                    return True
             while 1:
-                (x, y), sim = find_pic("assets/snow/picture/close.png", (1459, 122, 1805, 368), search_path=sc)
+                _p, sim = find_pic("assets/snow/picture/close.png", (1459, 122, 1805, 368), search_path=sc)
                 if sim >= 0.6:
-                    click(x, y)
+                    click(_p)
                     wait(1500)
                     os.remove(sc)
                     sc = screenshot()
                 else:
                     break
             while 1:
-                (x, y), sim = find_pic(r"assets\snow\picture\home.png", (1444, 0, 1921, 94), search_path=sc)
+                _p, sim = find_pic(r"assets\snow\picture\home.png", (1444, 0, 1921, 94), search_path=sc)
                 if sim >= 0.6:
-                    click(x, y)
+                    click(_p)
                     wait(1500)
                     os.remove(sc)
                     sc = screenshot()
@@ -222,6 +219,7 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                     break
             os.remove(sc)
             wait(1500)
+        raise RuntimeError("尘白禁区:登录超时")
 
 
 if __name__ == '__main__':

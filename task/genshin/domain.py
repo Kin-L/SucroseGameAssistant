@@ -30,7 +30,7 @@ class Domain(Genshin):
             self.open_sub("背包")
             wait(2000)
             self.check_overdue()
-            click(1247, 54)
+            click((1247, 54))
             wait(800)
             sc = screenshot()
             (x, y), val = find_pic(r"assets\genshin\picture\valu_tools\nssz.png",
@@ -40,12 +40,12 @@ class Domain(Genshin):
             else:
                 cond = 0
             os.remove(sc)
-            click(1843, 46)
+            click((1843, 46))
             wait(1500)
         else:
             cond = None
         self.open_sub("冒险之证")
-        click(300, 440)
+        click((300, 440))
         wait(800)
         if self.task["resin"] is None:
             ori = int((ocr((1368, 200, 1462, 236))[0].split("/")[0]).strip(" "))
@@ -56,18 +56,18 @@ class Domain(Genshin):
                       f"  浓缩树脂: {cond} 个")
         if (ori > 19) or (cond > 0):
             self.indicate("树脂足够,开始自动秘境")
-            click(537, 296)
+            click((537, 296))
             wait(800)
         else:
             self.indicate("树脂不足,自动秘境停止")
-            click(1673, 235)
+            click((1673, 235))
             wait(1500)
             return 0
         # 传送至秘境
         _domain = self.task["秘境"]
         self.tp_domain(_domain[1])
-        click(1690, 1008)
-        wait(500)
+        click((1690, 1008))
+        wait(800)
         self.world()
         self.indicate(f"到达秘境:{_domain[0]} {_domain[1]}")
 
@@ -86,35 +86,30 @@ class Domain(Genshin):
                 wait(500)
             wait(500)
         open_team()
-        if not self.team_ready():
+        if not self.isonline():
             self.indicate("处于联机/尘歌壶模式,更换队伍前进行状态初始化")
-            click(1843, 47)
-            self.world()
             self.tp_fontaine1()
             open_team()
-        click(77, 1016)
-        wait(800)
-        roll(580, 224, 55)
+            if self.isonline():
+                raise RuntimeError("处于联机模式,请退出联机后再试")
+        clickto((77, 1016), 800, ("管理队伍", (27, 17, 170, 75), 0))
+        roll((580, 224), 55)
         wait(500)
-        click(593, 389)
+        if "出战" in ocr((564, 370, 646, 429))[0]:
+            self.home()
+            return True
+        click((580, 398))
         wait(500)
-        click(328, 1016)
+        click((328, 1016))
         wait(800)
-        if self.team_ready():
-            press("esc")
-            wait(1500)
-            self.turn_world()
-            wait(300)
-            press("1")
-            wait(300)
-            press("1")
-            wait(300)
-            self.indicate("切换至战斗队伍")
-        else:
-            click(1843, 47)
-            self.world()
-            wait(300)
-            raise RuntimeError("处于联机模式,请退出联机后再试")
+        clickto((1557, 1020), 200, ("启用", (862, 514, 1057, 565), 0))
+        self.turn_world()
+        press("1")
+        wait(300)
+        press("1")
+        wait(300)
+        self.indicate("切换至战斗队伍")
+
         if _domain[1] == "太山府":
             pass
         elif _domain[1] == "无妄引咎密宫":

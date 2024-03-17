@@ -23,10 +23,12 @@ key_map = {
 
 
 class KeyMouse(System):
-    def move(self, x, y):
+    def move(self, xy):
+        x, y = xy
         SetCursorPos(self.axis_change(x, y))
 
-    def click(self, x=0, y=0):
+    def click(self, xy):
+        x, y = xy
         if (x, y) != (0, 0):
             x, y = self.axis_change(x, y)
             SetCursorPos((x, y))
@@ -40,7 +42,8 @@ class KeyMouse(System):
         from pyautogui import dragRel
         dragRel(xv, yv, duration=1, button='left')
 
-    def roll(self, x, y, num):
+    def roll(self, xy, num):
+        x, y = xy
         x, y = self.axis_change(x, y)
         SetCursorPos((x, y))
         self.wait(0.1)
@@ -53,7 +56,8 @@ class KeyMouse(System):
             mouse_event(0x0800, 0, 0, 120 * u, 0)
             self.wait(0.01)
 
-    def roll_h(self, x, y, num):
+    def roll_h(self, xy, num):
+        x, y = xy
         x, y = self.axis_change(x, y)
         SetCursorPos((x, y))
         self.wait(0.1)

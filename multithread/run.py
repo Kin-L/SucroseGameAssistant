@@ -46,7 +46,7 @@ class SGARun(QThread, TaskRun):
     def run(self):
         _k = False
         if not env.OCR.check():
-            self.indicate("OCR缺失,开始下载安装")
+            self.indicate("OCR缺失,开始下载安装(下载可能较慢,可选择以下链接或按照使用说明进行手动下载：https://gitee.com/huixinghen/SucroseGameAssistant/releases https://wwp.lanzn.com/b033h9ybi 密码:1siv)")
             if not self.install_ocr():
                 _k = True
         if not _k:
@@ -146,7 +146,7 @@ class SGARun(QThread, TaskRun):
         now_mute = get_mute()
         if (now_mute != self.ui.task["current_mute"]) and (now_mute == self.ui.task["静音"]):
             wait(1000)
-            move(50, 50)
+            move((50, 50))
             wait(200)
             change_mute()
         # 结束

@@ -10,20 +10,20 @@ class Recruit(Task):
         super().__init__()
 
     def kleins_recruit(self):
-        click(1469, 697)
+        click((1469, 697))
         wait(2000)
         _cf = self.task["使用加速"]
         _z1 = [(197, 281, 351, 323), (197, 392, 351, 431), (197, 499, 351, 540)]
         _z2 = [(171, 234, 379, 338), (174, 346, 378, 445), (172, 455, 377, 556)]
         for n in range(3):
-            x, y = [(129, 290), (126, 395), (131, 501)][n]
+            _p = [(129, 290), (126, 395), (131, 501)][n]
             if ocr(_z1[n])[0] == "访募完成":
                 self.indicate("访募%s:完成尝试领取" % (n+1))
-                self.receive_recruit(x, y)
+                self.receive_recruit(_p)
             while 1:
                 if find_pic("assets/kleins/picture/recruit/new.png", _z2[n])[1] >= 0.6:
                     self.indicate("访募%s:空闲,尝试开始访募" % (n+1))
-                    click(x, y)
+                    click(_p)
                     wait(1000)
                     _t = ocr((687, 512, 1025, 574))[0]
                     if "SSR" in _t:
@@ -46,7 +46,7 @@ class Recruit(Task):
                                 os.remove(sc)
                                 if i < 2:
                                     self.indicate("识别错误,更换区域")
-                                    click(954, 261)
+                                    click((954, 261))
                                     wait(500)
                                 else:
                                     self.indicate("识别错误,跳过该招募")
@@ -55,18 +55,18 @@ class Recruit(Task):
                             break
                         if _token == 0:
                             self.indicate("招募终止:缺少外显记录,")
-                            click(296, 75)
+                            click((296, 75))
                             wait(1000)
                             return 0
                         if _fund < self.task["访募金额"] * 100:
                             self.indicate("招募终止:缺少格")
-                            click(296, 75)
+                            click((296, 75))
                             wait(1000)
                             return 0
                         for i in range(self.task["访募金额"]):
-                            click(990, 626)
+                            click((990, 626))
                             wait(100)
-                        click(871, 818)
+                        click((871, 818))
                         wait(800)
                         self.indicate("舍友访募开始")
                         if not _cf:
@@ -76,18 +76,18 @@ class Recruit(Task):
                                 self.indicate("缺少高速显影剂")
                                 _cf = False
                             else:
-                                click(743, 811)
+                                click((743, 811))
                                 wait(1000)
                                 self.indicate("使用高速显影剂")
                                 self.receive_recruit(x, y)
                 else:
                     self.indicate("访募%s:进行中" % (n+1))
                     break
-        click(296, 75)
+        click((296, 75))
         wait(1000)
         
-    def receive_recruit(self, x, y):
-        click(x, y)
+    def receive_recruit(self, _p):
+        click(_p)
         wait(2500)
         sc = screenshot()
         nv = find_pic("assets/kleins/picture/recruit/N.png", (252, 444, 421, 553), sc)[1]
@@ -120,7 +120,7 @@ class Recruit(Task):
             self.indicate(f"error:舍友访募未知错误 ({now_time}.png)")
             raise RuntimeError("舍友访募未知错误")
         os.remove(sc)
-        click(273, 903)
+        click((273, 903))
         wait(1500)
-        click(273, 903)
+        click((273, 903))
         wait(1500)

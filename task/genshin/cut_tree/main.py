@@ -25,24 +25,24 @@ class CutTree(Mondstadt, LiYue, Inazuma, Sumeru, Fontaine):
         self.open_sub("背包")
         wait(2000)
         self.check_overdue()
-        click(1053, 48)
+        click((1053, 48))
         wait(800)
-        (x, y), val = find_pic(r"assets\genshin\picture\lit_tools\boon_elder_tree.png",
+        _p, val = find_pic(r"assets\genshin\picture\lit_tools\boon_elder_tree.png",
                                (110, 112, 1273, 805))
         if val < 0.75:
             self.indicate("没有找到道具：王树瑞佑")
             return True
         else:
-            click(x, y)
+            click(_p)
             wait(800)
             if find_pic(r"assets\genshin\picture\lit_tools\unload.png",
                         (1637, 972, 1765, 1068))[1] >= 0.75:
                 self.indicate("王树瑞佑已装备。")
-                click(1840, 47)
+                click((1840, 47))
                 wait(1500)
             else:
                 self.indicate("装备王树瑞佑。")
-                click(1694, 1013)
+                click((1694, 1013))
                 wait(1500)
         self.indicate(f"采集木材计划开始：\n"
                       f"  点位{_num}个\n"

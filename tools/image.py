@@ -201,6 +201,42 @@ class Image(System):
             os.remove(search_path)
         return _list
 
+    def find_text(self, text, zone="ALL", search_path: str = "", delete_flag: int = 1):
+        _list = self.ocr(zone, search_path=search_path, mode=1, delete_flag=delete_flag)
+        for t in _list:
+            if text in t[0]:
+                return self.center(t[1])
+        return False
+
+    def wait_pic(self, template_path, zone="ALL", wait_time=(1000, 10), similar=0.7):
+        while 1:
+            for i in range(wait_time[1]):
+                p, s = self.find_pic(template_path, zone)
+                if s >= similar:
+                    return p
+                else:
+                    sleep(wait_time[0] / 1000)
+            if self.soft.isforeground():
+                raise RuntimeError("识别超时")
+            else:
+                self.soft.foreground()
+                self.logger("切换顶层窗口")
+
+    def wait_text(self, text, zone="ALL", wait_time=(1000, 10)):
+        while 1:
+            for i in range(wait_time[1]):
+                _list = self.ocr(zone, mode=1)
+                for t in _list:
+                    if text in t[0]:
+                        return self.center(t[1])
+                else:
+                    sleep(wait_time[0] / 1000)
+            if self.soft.isforeground():
+                raise RuntimeError("识别超时")
+            else:
+                self.soft.foreground()
+                self.logger("切换顶层窗口")
+
 
 if __name__ == '__main__':
     # env = Environment(1920, 1080)

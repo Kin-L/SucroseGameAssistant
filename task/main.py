@@ -9,6 +9,7 @@ from task.snow.main import TaskSnow
 class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow):
     def task_start(self, task):
         _k = False
+        print(task)
         # ÔËÐÐ
         if task["Ä£¿é"] == 0:
             for i in range(5):

@@ -58,11 +58,48 @@ class Environment(Operate):
             self.logger.error("无效参数 mode_num")
             return False
 
+    def clickto(self, pos, wait_time, mat, path: str = ""):
+        target, zone, sim = mat
+        while 1:
+            for i in range(15):
+                self.click(pos)
+                self.wait(wait_time)
+                if sim:
+                    xy, val = self.find_pic(target, zone, path)
+                    if val >= sim:
+                        return xy
+                else:
+                    if xy := self.find_text(target, zone, path):
+                        return xy
+            if not self.soft.isforeground():
+                self.soft.foreground()
+            else:
+                raise RuntimeError("执行超时：clickto")
+
+    def pressto(self, key, wait_time, mat, path: str = ""):
+        target, zone, sim = mat
+        while 1:
+            for i in range(15):
+                press(key)
+                self.wait(wait_time)
+                if sim:
+                    pos, val = self.find_pic(target, zone, path)
+                    if val >= sim:
+                        return pos
+                else:
+                    if pos := self.find_text(target, zone, path):
+                        return pos
+            if not self.soft.isforeground():
+                self.soft.foreground()
+            else:
+                raise RuntimeError("执行超时：clickto")
+
 
 env = Environment(1920, 1080)
 logger = env.logger
 axis_zoom, axis_translation, axis_change = env.axis_zoom, env.axis_translation, env.axis_change
 move, click, drag, roll, roll_h = env.move, env.click, env.drag, env.roll, env.roll_h
 press, keydown, keyup, key_add, wait = env.press, env.keydown, env.keyup, env.key_add, env.wait
-ocr, screenshot, find_pic, find_color = env.ocr, env.screenshot, env.find_pic, env.find_color
-center, click_pic, click_text = env.center, env.click_pic, env.click_text
+ocr, screenshot, find_pic, find_color, find_text = env.ocr, env.screenshot, env.find_pic, env.find_color, env.find_text
+center, click_pic, click_text, clickto, pressto = env.center, env.click_pic, env.click_text, env.clickto, env.pressto
+wait_pic, wait_text = env.wait_pic, env.wait_text

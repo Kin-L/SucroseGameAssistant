@@ -41,10 +41,13 @@ def find_hwnd(mode_cls_tit):
         hwnd_list = []
         EnumWindows(lambda _hwnd, _hwnd_list: _hwnd_list.append(_hwnd), hwnd_list)
         for hwnd in hwnd_list:
-            class_name = GetClassName(hwnd)
-            title = GetWindowText(hwnd)
-            if cls in class_name and tit in title:
-                return hwnd
+            try:
+                class_name = GetClassName(hwnd)
+                title = GetWindowText(hwnd)
+                if cls in class_name and tit in title:
+                    return hwnd
+            except Exception as e:
+                print(e)
 
 
 class Software:
@@ -95,7 +98,9 @@ class Software:
             print("error:Software 需要先设置启动路径。")
             return 0
         else:
+            self.hwnd = find_hwnd(self.mode_cls_tit)
             if self.hwnd:
+                self.set_pid(self.hwnd)
                 print("该软件已启动。")
                 return 1
             else:
@@ -121,6 +126,10 @@ class Software:
 
     def isalive(self):
         return find_hwnd(self.mode_cls_tit)
+
+    def find_hwnd(self):
+        self.hwnd = find_hwnd(self.mode_cls_tit)
+        return self.hwnd
 
     def kill(self, second=10, num=2):
         if self.hwnd:
@@ -154,6 +163,13 @@ class Software:
 
         else:
             print("error:软件还未启动。")
+            return False
+
+    def isforeground(self):
+        current_hwnd = GetForegroundWindow()
+        if current_hwnd == self.hwnd:
+            return True
+        else:
             return False
 
     def foreground(self):

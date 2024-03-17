@@ -164,7 +164,7 @@ class MainDown(MainBottom):
             for i in range(5):
                 _name = config_dir["配置%s" % i]["name"]
                 if _name == "<未选择>":
-                    break
+                    continue
                 else:
                     _dir = self.get_config_dir(_name)
                     config_dir["配置%s" % i].update(self.add_path(_dir))

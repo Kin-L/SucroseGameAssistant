@@ -21,25 +21,19 @@ class Condensed(Genshin):
             wait(300)
             if "合成" in ocr((1205, 502, 1315, 578))[0]:
                 self.indicate("到达合成台")
+                break
             elif i == 2:
                 self.indicate("合成树脂未知错误,重试多次")
                 return True
             else:
-                self.indicate(f"error:合成树脂未知错误,开始重试第{i+1}/2次")
-        press("F")
-        wait(1000)
-        click(960, 950)
-        wait(1500)
-        click(107, 188)
-        wait(500)
-        click(1339, 408)
-        wait(600)
-        if "浓缩树脂" in ocr((739, 178, 882, 227))[0]:
-            num = int(ocr((996, 887, 1028, 924))[0].strip(" "))
-            click(1618, 497)
-            wait(600)
+                self.indicate(f"error:合成树脂未知错误,开始重试第{i+1}/2次") #
+        pressto("F", 1000, ("合成", (124, 18, 215, 79), 0))
+        if "浓缩树脂" in ocr((1270, 103, 1417, 158))[0]:
             fly = int(ocr((1025, 917, 1134, 941))[0].split("/")[0])
             cons = int(ocr((1162, 917, 1269, 941))[0].split("/")[0])
+            clickto((1339, 408), 600, ("浓缩树脂", (739, 178, 882, 227), 0))
+            num = int(ocr((996, 887, 1028, 924))[0].strip(" "))
+            clickto((1618, 497), 600, ("合成", (823, 740, 938, 788), 0))
             self.indicate(f"当前已有:\n"
                           f"  晶核:{fly}个\n"
                           f"  原粹树脂:{cons}/160\n"
@@ -47,7 +41,7 @@ class Condensed(Genshin):
             _n = min(int(cons/40), fly, 5-num)
             if _n:
                 for i in range(_n-1):
-                    click(1611, 671)
+                    click((1611, 671))
                     wait(400)
                 ori = cons-_n*40
                 cond = num+_n
@@ -55,15 +49,13 @@ class Condensed(Genshin):
                 self.indicate(f"本次合成浓缩树脂{_n}个\n"
                               f"  原粹树脂: {cons} -> {ori}\n"
                               f"  浓缩树脂: {num} -> {cond}")
-                click(1727, 1019)
+                click((1727, 1019))
                 wait(800)
-                click(1173, 786)
-                wait(200)
+                click((1180, 755))
+                wait(500)
             else:
                 self.indicate("浓缩树脂数量达到上限")
         else:
-            click(1618, 497)
-            wait(600)
             self.indicate("无法合成浓缩树脂:缺少树脂或晶核")
-        self.turn_world()
+        self.home()
         return False
