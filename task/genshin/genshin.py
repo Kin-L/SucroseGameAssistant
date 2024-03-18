@@ -53,7 +53,7 @@ class Genshin(Task):
     # 从秘境传送
     def tp_domain(self, domain):
         self.indicate("尝试传送到秘境:\n  " + domain)
-        pos = find_text("冒险之证", (117, 346, 742, 1052))
+        pos = wait_text("冒险之证", (117, 346, 742, 1052))
         pos = clickto(pos, 2500, ("秘境", (256, 416, 345, 469), 0))
         click((301, 442))
         wait(800)

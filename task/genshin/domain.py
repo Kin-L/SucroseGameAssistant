@@ -56,8 +56,7 @@ class Domain(Genshin):
                       f"  浓缩树脂: {cond} 个")
         if (ori > 19) or (cond > 0):
             self.indicate("树脂足够,开始自动秘境")
-            click((537, 296))
-            wait(800)
+            self.home()
         else:
             self.indicate("树脂不足,自动秘境停止")
             click((1673, 235))
