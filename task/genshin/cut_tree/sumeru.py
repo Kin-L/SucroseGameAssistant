@@ -44,7 +44,6 @@ class Sumeru(Genshin):
         wait(500)
         # 第二段
         self.home()
-        self.open_sub("冒险之证")
         self.tp_domain("熔铁的孤塞")
         click((1009, 726))
         wait(800)

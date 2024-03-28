@@ -60,21 +60,51 @@ class Environment(Operate):
 
     def clickto(self, pos, wait_time, mat, path: str = ""):
         target, zone, sim = mat
-        while 1:
-            for i in range(15):
-                self.click(pos)
-                self.wait(wait_time)
-                if sim:
+        if sim == 0:
+            while 1:
+                for i in range(15):
+                    self.click(pos)
+                    self.wait(wait_time)
+                    if xy := self.find_text(target, zone, path):
+                        return xy
+                if not self.soft.isforeground():
+                    self.soft.foreground()
+                else:
+                    raise RuntimeError("执行超时：clickto")
+        elif 0 < sim < 1:
+            while 1:
+                for i in range(15):
+                    self.click(pos)
+                    self.wait(wait_time)
                     xy, val = self.find_pic(target, zone, path)
                     if val >= sim:
                         return xy
+                if not self.soft.isforeground():
+                    self.soft.foreground()
                 else:
-                    if xy := self.find_text(target, zone, path):
+                    raise RuntimeError("执行超时：clickto")
+        elif sim == 1:
+            while 1:
+                for i in range(15):
+                    self.click(pos)
+                    self.wait(wait_time)
+                    if xy := self.match_text(target, zone, path):
                         return xy
-            if not self.soft.isforeground():
-                self.soft.foreground()
-            else:
-                raise RuntimeError("执行超时：clickto")
+                if not self.soft.isforeground():
+                    self.soft.foreground()
+                else:
+                    raise RuntimeError("执行超时：clickto")
+        elif sim == -1:
+            while 1:
+                for i in range(15):
+                    self.click(pos)
+                    self.wait(wait_time)
+                    if not self.match_text(target, zone, path):
+                        return 0, 0
+                if not self.soft.isforeground():
+                    self.soft.foreground()
+                else:
+                    raise RuntimeError("执行超时：clickto")
 
     def pressto(self, key, wait_time, mat, path: str = ""):
         target, zone, sim = mat

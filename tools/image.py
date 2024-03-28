@@ -208,6 +208,13 @@ class Image(System):
                 return self.center(t[1])
         return False
 
+    def match_text(self, text, zone="ALL", search_path: str = "", delete_flag: int = 1):
+        _list = self.ocr(zone, search_path=search_path, mode=1, delete_flag=delete_flag)
+        for t in _list:
+            if text == t[0]:
+                return self.center(t[1])
+        return False
+
     def wait_pic(self, template_path, zone="ALL", wait_time=(1000, 10), similar=0.7):
         while 1:
             for i in range(wait_time[1]):

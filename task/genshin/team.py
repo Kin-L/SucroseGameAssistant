@@ -23,11 +23,12 @@ class Team(Genshin):
         if "出战" in ocr((559, 192, 657, 256))[0]:
             self.home()
             return True
+
         click((580, 224))
         wait(500)
         click((328, 1016))
         wait(800)
-        clickto((1557, 1020), 200, ("启用", (862, 514, 1057, 565), 0))
+        clickto((1557, 1020), 200, ("出战", (1637, 992, 1774, 1048), -1))
         self.turn_world()
         press("1")
         wait(300)

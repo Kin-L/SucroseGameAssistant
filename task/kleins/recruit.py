@@ -34,20 +34,25 @@ class Recruit(Task):
                         break
                     else:
                         self.indicate("普通访募")
+                        _f = False
+                        _token = 0
+                        _fund = 0
+                        _expedite = 0
                         for i in range(3):
                             sc = screenshot()
+                            # noinspection PyBroadException
                             try:
                                 _fund = int(ocr((1272, 56, 1406, 90), sc)[0].strip(" "))
                                 _token = int(ocr((1507, 57, 1616, 90), sc)[0].strip(" "))
                                 _expedite = int(ocr((1746, 54, 1846, 90), sc, 0, 0)[0].strip(" "))
                                 _f = False
                                 break
-                            except:
-                                os.remove(sc)
+                            except Exception:
                                 if i < 2:
                                     self.indicate("识别错误,更换区域")
                                     click((954, 261))
                                     wait(500)
+
                                 else:
                                     self.indicate("识别错误,跳过该招募")
                                     _f = True
@@ -79,7 +84,7 @@ class Recruit(Task):
                                 click((743, 811))
                                 wait(1000)
                                 self.indicate("使用高速显影剂")
-                                self.receive_recruit(x, y)
+                                self.receive_recruit(_p)
                 else:
                     self.indicate("访募%s:进行中" % (n+1))
                     break
