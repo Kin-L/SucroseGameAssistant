@@ -95,13 +95,13 @@ class Domain(Genshin):
         roll((580, 224), 55)
         wait(500)
         if "出战" in ocr((564, 370, 646, 429))[0]:
-            self.home()
-            return True
-        click((580, 398))
-        wait(500)
-        click((328, 1016))
-        wait(800)
-        clickto((1557, 1020), 200, ("出战", (1637, 992, 1774, 1048), -1))
+            pass
+        else:
+            click((580, 398))
+            wait(500)
+            click((328, 1016))
+            wait(800)
+            clickto((1557, 1020), 200, ("出战", (1637, 992, 1774, 1048), -1))
         self.turn_world()
         press("1")
         wait(300)
