@@ -71,6 +71,7 @@ class Snow:
             "常规行动": [False, 0],
             "行动选择": 0,
             "后勤选择": "底比斯小队",
+            "活动后勤选择": "明夷小队",
             "个人故事": [False, False, "未选择", "未选择", "未选择", "未选择"],
             "拟境扫荡": False,
             "商店购物": [False, "新手战斗记录", "初级职级认证"],
@@ -99,6 +100,7 @@ class Snow:
         self.set.once_common.setCurrentIndex(config["常规行动"][1])
         self.set.mat.setCurrentIndex(config["行动选择"])
         self.set.logistics.setCurrentText(config["后勤选择"])
+        self.set.logistics1.setCurrentText(config["活动后勤选择"])
 
         self.set.check_character.setChecked(config["个人故事"][0])
         self.set.check_supplement.setChecked(config["个人故事"][1])
@@ -140,6 +142,7 @@ class Snow:
             self.set.once_common.currentIndex()]
         config["行动选择"] = self.set.mat.currentIndex()
         config["后勤选择"] = self.set.logistics.currentText()
+        config["活动后勤选择"] = self.set.logistics1.currentText()
         config["个人故事"] = [
             self.set.check_character.isChecked(),
             self.set.check_supplement.isChecked(),
@@ -159,7 +162,7 @@ class Snow:
         return config
 
     def open_roll_directory(self):
-        os.startfile(env.workdir + "/personal/snows/roll")
+        os.startfile(env.workdir + "/personal/snow/roll")
         self.main.indicate("打开文件夹: 共鸣记录", 1)
 
     def open_wiki(self):
@@ -202,6 +205,15 @@ class Snow:
                 elif "芬妮" in r:
                     if "冠" in r:
                         r = "芬妮-咎冠"
+                elif "琴诺" in r:
+                    if "悖" in r or "谬" in r:
+                        r = "琴诺-悖谬"
+                elif "不予显示" in r:
+                    r = "安卡希雅-[不予显示]"
+                elif "热年代" in r:
+                    r = "灸热年代"
+                elif "姐姐大人" in r:
+                    r = "恩雅-姐姐大人"
                 _a = _sheet[f"A{n_row}"]
                 _b = _sheet[f"B{n_row}"]
                 _c = _sheet[f"C{n_row}"]
@@ -240,16 +252,18 @@ class Snow:
                     count[1] += 1
                     count[5] += [f"{r}({n_four})"]
                     n_four = 0
-                elif r in ["安卡希雅-辉夜", "辰星-云篆", "晴-藏锋", "猫汐儿-溯影",
-                           "苔丝-魔术师", "伊切尔-豹豹", "凯茜雅-蓝闪",
+                elif r in ["安卡希雅-辉夜", "辰星-云篆", "晴-藏锋", "猫汐尔-溯影",
+                           "苔丝-魔术师", "伊切尔-豹豹", "凯茜雅-蓝闪", "琴诺-悖谬",
+                           "恩雅-羽蜕",
                            "松林极光", "朱书断邪", "普赛克16", "合金真理",
-                           "王牌怪诞", "海王星", "镭射风虎",
+                           "王牌怪诞", "海王星", "镭射风虎", "白夜别诗",
+                           "渊光",
                            "芬妮-咎冠", "肴-冬至", "里芙-狂猎", "茉莉安-雨燕", "芙提雅-缄默",
                            "小粮食", "星辰大海", "审判前夜", "熔岩骨骼",
                            "太阳酬金", "虎鲸号角", "太空骑手", "百战老兵",
                            "奥林匹斯", "星尘回忆"]:
                     _fon = fon_five
-                    count[4] += 1
+                    count[2] += 1
                     count[6] += [f"{r}({n_five})"]
                     n_five = 0
                 else:

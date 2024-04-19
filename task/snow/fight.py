@@ -81,7 +81,7 @@ class Fight(Task):
                         break
         cons = int(ocr((901, 12, 1028, 60))[0].replace(" ", "")[:-4])
         if cons >= 40:
-            if self.task["行动选择"] == 6:
+            if self.task["行动选择"] == 7:
                 if self.task["常规行动"][0]:
                     self.fight_common(self.task["常规行动"][1], True)
                     self.indicate(f"完成一次常规行动")
@@ -89,9 +89,9 @@ class Fight(Task):
                 if cons >= 30:
                     click((1499, 538))
                     wait(4000)
-                    click((669, 431))
+                    click((1687, 505))
                     wait(3000)
-                    click((1622, 354))
+                    click((1384, 384))
                     wait(1500)
                     click((1489, 1006))
                     wait(2000)
@@ -143,12 +143,12 @@ class Fight(Task):
         elif common == 4:
             roll(1002, 581, -55)
             wait(800)
-            click((794, 508))
+            click((358, 508))
             wait(2500)
         elif common == 5:
             roll(1002, 581, -55)
             wait(800)
-            click((1245, 515))
+            click((807, 515))
             wait(2500)
             if not self.task["后勤选择"] in ocr((901, 12, 1028, 60))[0]:
                 click((94, 935))
@@ -156,6 +156,18 @@ class Fight(Task):
                 click_text(self.task["后勤选择"])
                 wait(1000)
                 click((1823, 52))
+                wait(800)
+        elif common == 6:
+            roll(1002, 581, -55)
+            wait(800)
+            click((1268, 515))
+            wait(2500)
+            if not self.task["活动后勤选择"] in ocr((149, 965, 313, 1006))[0]:
+                click((95, 985))
+                wait(2000)
+                click_text(self.task["活动后勤选择"])
+                wait(1000)
+                click((1826, 60))
                 wait(800)
         roll(1002, 581, -55)
         wait(500)

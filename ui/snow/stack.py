@@ -45,13 +45,13 @@ class Fight:
         self.once_common = Combobox(self.page_fight, (170, 145, 160, 40))
         self.once_common.addItems(
             ["通用银", "角色经验素材", "武器经验素材",
-             "武器突破素材", "角色神经素材", "后勤获取"])
+             "武器突破素材", "角色神经素材", "后勤获取", "活动后勤获取"])
 
         self.label_mat = Label(self.page_fight, (15, 195, 80, 18), "剩余感知")
         self.mat = Combobox(self.page_fight, (15, 225, 180, 40))
         self.mat.addItems(
             ["通用银", "角色经验素材", "武器经验素材",
-             "武器突破素材", "角色神经素材", "后勤获取", "活动关卡-尽灼天幕"])
+             "武器突破素材", "角色神经素材", "后勤获取", "活动后勤获取", "活动关卡-素影遗痕"])
 
         self.label_logistics = Label(self.page_fight, (15, 275, 80, 18), "后勤选择")
         self.logistics = Combobox(self.page_fight, (15, 305, 160, 40))
@@ -64,6 +64,16 @@ class Fight:
              "新叶小队",
              "达摩小队",
              "凯夫曼小队"])
+        self.logistics1 = Combobox(self.page_fight, (185, 305, 160, 40))
+        self.logistics1.addItems(
+            ["明夷小队",
+             "秋津小队",
+             "阿玛纳小队",
+             "心园小队",
+             "伊莱小队",
+             "极光小队",
+             "祖灵小队",
+             "沙叶小队"])
 
 
 class Daily:
@@ -80,7 +90,7 @@ class Daily:
         self.character2 = Combobox(self.page_debris, (145, 110, 120, 40))
         self.character3 = Combobox(self.page_debris, (15, 155, 120, 40))
         self.character4 = Combobox(self.page_debris, (145, 155, 120, 40))
-        chara = ["未选择", "豹豹", "蓝闪", "魔术师", "藏锋", "溯影", "云篆", "辉夜",
+        chara = ["未选择", "羽蜕", "悖谬", "豹豹", "蓝闪", "魔术师", "藏锋", "溯影", "云篆", "辉夜",
                  "咎冠", "冬至", "狂猎", "雨燕", "缄默",
                  "小金鱼", "小太阳", "观测者", "黄金狮子", "养生专家",
                  "猫猫", "星期三", "姐姐大人", "双面", "旧日王牌",
@@ -95,13 +105,13 @@ class Daily:
         self.check_market = Check(self.page_debris, (15, 255, 220, 22), "通过商店购物一次完成每日")
         self.box_market1 = Combobox(self.page_debris, (15, 285, 160, 40))
         self.box_market2 = Combobox(self.page_debris, (180, 285, 160, 40))
-        self.box_market1.addItems(["新手战斗记录", "初级职级认证", "芳烃塑料"])
-        self.box_market2.addItems(["新手战斗记录", "初级职级认证", "芳烃塑料"])
+        self.box_market1.addItems(["新手战斗记录", "初级职级认证", "芳烃塑料", "芳烃塑料×3"])
+        self.box_market2.addItems(["新手战斗记录", "初级职级认证", "芳烃塑料", "芳烃塑料×3"])
         self.check_weapon = Check(self.page_debris, (15, 340, 220, 22), "通过武器升级一次完成每日")
 
         self.check_daily = Check(self.page_debris, (15, 375, 140, 22), "领取日常")
         self.check_daily2 = Check(self.page_debris, (15, 410, 140, 22), "领取凭证")
-        self.check_daily3 = Check(self.page_debris, (15, 445, 180, 22), "领取活动每日-尽灼天幕")
+        self.check_daily3 = Check(self.page_debris, (15, 445, 180, 22), "领取活动每日-素影遗痕")
 
 
 class Mail:

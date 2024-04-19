@@ -42,13 +42,14 @@ class TaskMAA(Task):
             setcurrent = self.task["配置"]
             _sga = copy.deepcopy(maa["Configurations"][setcurrent])
             if self.task["关闭软件"]:
-                after_completed = "ExitEmulatorAndSelf"
+                after_completed = "StopGame"
             else:
-                after_completed = "ExitSelf"
+                after_completed = "DoNothing"
             current = maa["Current"]
             _sga["Start.EndsWithScript"] = env.workdir + "/personal/bat/maa_create.bat"
             _sga["MainFunction.ActionAfterCompleted"] = after_completed
             _sga["Start.RunDirectly"] = "True"
+            _sga["Start.EndsWithScript"] = os.path.join(env.workdir, "assets/maa/bat_scr/maa_completed.bat")
             maa["Configurations"]["SGA-cache"] = _sga
             maa["Current"] = "SGA-cache"
             with open(gui_path, 'w', encoding='utf-8') as g:
@@ -63,6 +64,9 @@ class TaskMAA(Task):
             #     handle=CreateProcess(_path, '', None , None , 0 ,CREATE_NEW_CONSOLE , None , os.path.split(_path)[0] ,STARTUPINFO())
             #     WaitForSingleObject(handle[0],2)
             #     self.indicate("MAA运行中...")
+            fpath = os.path.join(dire, "completed.txt")
+            if os.path.exists(fpath):
+                os.remove(fpath)
             def maa_run():
                 [_dir, name] = os.path.split(_path)
                 cmd = f"start /d \"{_dir}\" {name}"
@@ -85,8 +89,10 @@ class TaskMAA(Task):
             # 运行-结束
             while 1:
                 wait(10000)
-                if not find_hwnd((0, "HwndWrapper[MAA", "MAA")):
-                    self.indicate("MAA已关闭")
+                if os.path.exists(fpath):
+                    os.remove(fpath)
+                    close(get_pid("MAA.exe"))
+                    self.indicate("关闭MAA")
                     break
             with open(gui_path, 'r', encoding='utf-8') as g:
                 maa = json.load(g)

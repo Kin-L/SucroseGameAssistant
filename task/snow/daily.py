@@ -35,23 +35,17 @@ class Daily(Task):
                     else:
                         self.indicate(f"记忆嵌片不足: {_num}")
                         break
-                    if i in ["冬至", "魔术师", "猫猫", "养生专家",
-                             "不予显示", "溯影", "藏锋"]:  # 6
-                        _r = [i, True]
-                    elif i in ["狂猎", "辉夜", "云篆", "雨燕", "蓝闪", "豹豹"
-                               "小金鱼", "小太阳", "观测者", "黄金狮子",
-                               "星期三", "姐姐大人", "双面", "旧日王牌",
-                               "绷带小组", "四手"]:  # 5
-                        _r = [i, False]
-                    elif i == "缄默":
-                        _r = ["默", False]
+                    if i == "缄默":
+                        _r = "默"
                     elif i == "咎冠":
-                        _r = ["冠", False]
+                        _r = "冠"
                     else:
-                        _r = None
+                        _r = i
                     _f = False
                     for o in range(8):
-                        if click_text(_r[0]):
+                        pos = find_text(_r)
+                        if pos:
+                            click((pos[0], 900))
                             break
                         elif o == 7:
                             roll((1002, 581), 250)
@@ -64,30 +58,11 @@ class Daily(Task):
                     if _f:
                         continue
                     wait(2500)
-                    if _r[1]:
-                        roll((1002, 581), -25)
-                        wait(800)
-                        _d, _p = (1674, 843, 1839, 890), (1871, 772)
-                    else:
-                        _d, _p = (1553, 447, 1726, 496), (1622, 376)
-                    if "0" in ocr(_d)[0]:
-                        click((1811, 51))
-                        wait(1500)
-                        continue
-                    else:
-                        click(_p)
-                    wait(1500)
-                    click((1489, 1006))
-                    wait(2000)
                     click((1280, 711))
                     wait(1000)
                     click((955, 826))
                     wait(4000)
                     click((932, 993))
-                    wait(1500)
-                    click((1811, 51))
-                    wait(1500)
-                    click((1811, 51))
                     wait(1500)
                     self.indicate(f"完成个人故事扫荡 {i}")
             click((1674, 44))
@@ -98,7 +73,7 @@ class Daily(Task):
             click((288, 507))
             wait(1500)
             x, y = find_text("精神", (150, 770, 1779, 848))
-            clickto((x, 462), 2000, ("作战", (1669, 988, 1854, 1065), 0))
+            clickto((x, 462), 2000, (r"assets\snow\picture\imitate.png", (218, 863, 339, 968), 0.7))
             for _p in [(223, 253), (216, 394)]:
                 click(_p)
                 wait(1500)
@@ -130,11 +105,23 @@ class Daily(Task):
         if self.task["商店购物"][0]:
             click((1790, 1029))
             wait(2000)
-            if not click_text(self.task["商店购物"][1]):
-                click_text(self.task["商店购物"][2])
+            _f = False
+            t1 = self.task["商店购物"][1]
+            t2 = self.task["商店购物"][2]
+            if self.task["商店购物"][1] == "芳烃塑料×3":
+                t1 = "芳烃塑料"
+                _f = True
+            if self.task["商店购物"][2] == "芳烃塑料×3":
+                t2 = "芳烃塑料"
+                _f = True
+            if not click_text(t1[0]):
+                click_text(t2[0])
             wait(1000)
             click((1710, 1011))
             wait(1500)
+            if _f:
+                click((1832, 853))
+                wait(500)
             click((1710, 1011))
             wait(1000)
             self.indicate("商店购物一次")

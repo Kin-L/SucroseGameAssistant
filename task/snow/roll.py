@@ -41,6 +41,11 @@ class Roll(Task):
                     click((131, 281))
                 else:
                     continue
+            elif i == "常守之誓":
+                if click_text("常守", (3, 67, 280, 1066)):
+                    pass
+                else:
+                    continue
             else:
                 if click_text(i, (3, 67, 280, 1066)):
                     pass
@@ -50,15 +55,24 @@ class Roll(Task):
             click((1877, 141))
             wait(2000)
             click((1081, 84))
-            for o in range(20):
-                wait(1000)
-                if "保留" in ocr((865, 133, 970, 191))[0]:
-                    break
-                elif o < 19:
-                    pass
+            wait(1000)
+            _num = 0
+            _time = 0
+            while 1:
+                wait(100)
+                if find_pic(r"assets\snow\picture\rollcheck.png")[1]:
+                    _num = 0
                 else:
+                    _num += 1
+                _time += 1
+                if _time == 200:
                     self.indicate("尘白禁区: 获取共鸣记录等待超时")
                     raise RuntimeError("尘白禁区: 获取共鸣记录等待超时")
+                else:
+                    if _num == 4:
+                        break
+                    else:
+                        pass
 
             _l = current[i]
             _nl = []
@@ -69,13 +83,18 @@ class Roll(Task):
                 num = 0
                 _p += 1
                 _line = []
+                _lf = 0
                 for row in _list1:
                     row = row[0].strip(" ")
                     if row:
-                        _line = [row, _list2[num][0]]
+                        _tline = _list2[num][0]
+                        if _tline[10] != " ":
+                            _tline = _tline[:10] + " " + _tline[10:]
+                        _line = [row, _tline]
+
                         if _p != 1:
                             if _line == _nl[9]:
-                                break
+                                _lf += 1
                         if _line not in _l:
                             _nl = [_line] + _nl
                             _line = []
@@ -85,6 +104,9 @@ class Roll(Task):
                     else:
                         break
                 if num < 10:
+                    break
+                elif _lf == 10:
+                    _nl = _nl[10:]
                     break
                 else:
                     click((1666, 602))
