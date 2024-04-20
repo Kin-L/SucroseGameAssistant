@@ -103,25 +103,32 @@ class Daily(Task):
             click((1615, 48))
             wait(2000)
         if self.task["商店购物"][0]:
+            print(self.task["商店购物"])
             click((1790, 1029))
             wait(2000)
-            _f = False
+            _f1 = False
+            _f2 = False
             t1 = self.task["商店购物"][1]
             t2 = self.task["商店购物"][2]
             if self.task["商店购物"][1] == "芳烃塑料×3":
                 t1 = "芳烃塑料"
-                _f = True
+                _f1 = True
             if self.task["商店购物"][2] == "芳烃塑料×3":
                 t2 = "芳烃塑料"
-                _f = True
-            if not click_text(t1[0]):
-                click_text(t2[0])
-            wait(1000)
+                _f2 = True
+            if not click_text(t1):
+                click_text(t2)
+                wait(1000)
+                if _f2:
+                    click((1832, 853))
+                    wait(500)
+            else:
+                wait(1000)
+                if _f1:
+                    click((1832, 853))
+                    wait(500)
             click((1710, 1011))
             wait(1500)
-            if _f:
-                click((1832, 853))
-                wait(500)
             click((1710, 1011))
             wait(1000)
             self.indicate("商店购物一次")

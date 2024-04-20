@@ -77,11 +77,20 @@ def foreground(hwnd):
         if current_hwnd == hwnd:
             return True
         if IsIconic(hwnd):
-            ShowWindow(hwnd, SW_RESTORE)
-            sleep(0.2)
+            # noinspection PyBroadException
+            try:
+                ShowWindow(hwnd, SW_RESTORE)
+                sleep(0.2)
+            except Exception:
+                pass
         if current_hwnd != hwnd:
-            SetForegroundWindow(hwnd)
-            sleep(0.2)
+            # noinspection PyBroadException
+            try:
+                SetForegroundWindow(hwnd)
+                sleep(0.2)
+            except Exception:
+                pass
+        sleep(0.2)
     return False
 
 
