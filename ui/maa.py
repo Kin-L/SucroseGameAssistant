@@ -37,7 +37,7 @@ class MAAStack:
         Line(self.stack, (0, 152, 395, 3))
 
         self.label_team_tip = Label(self.stack, (0, 160, 220, 27), "独立运行设置：")
-        self.independent = Independent(self.stack, (0, 200, 350, 70), True)
+        self.independent = Independent(self.stack, (0, 200, 360, 70), True)
         self.independent.check_kill_game.setText("完成后关闭明日方舟")
         Line(self.stack, (0, 280, 395, 3))
         self.label_tools = Label(self.stack, (0, 285, 220, 27), "实用工具：")

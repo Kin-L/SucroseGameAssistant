@@ -20,8 +20,8 @@ class Overall:
         self.version = self.get_ver()
         Label(self.widget, (225, 310, 120, 40), f"版本号 {self.version}", 14)
 
-        self.button_update_history = Button(self.widget, (315, 315, 80, 30), "更新日志")
-        self.button_logger = Button(self.widget, (405, 315, 80, 30), "运行日志")
+        self.button_update_history = Button(self.widget, (325, 315, 80, 30), "更新日志")
+        self.button_logger = Button(self.widget, (410, 315, 80, 30), "运行日志")
 
         self.button_github = TransPicButton(self.widget, (500, 312, 30, 30), r"assets\main_window\ui\github.png", (30, 30))
         self.button_gitee = TransPicButton(self.widget, (540, 312, 30, 30), r"assets\main_window\ui\gitee.png", (30, 30))

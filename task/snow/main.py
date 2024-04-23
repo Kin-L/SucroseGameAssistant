@@ -90,8 +90,8 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                 else:
                     self.indicate("ÔÝÎÞÔ¤ÏÂÔØ")
             if self.lauch_prepare():
-                for p in range(10):
-                    _h = find_hwnd((0, "UnrealWindow", "³¾°×½ûÇø"))
+                for p in range(10):  # 0, "UnrealWindow", "³¾°×½ûÇø"
+                    _h = find_hwnd((1, None, "³¾°×½ûÇø"))
                     if _h:
                         env.soft.set_hwnd_find(0, "UnrealWindow", "³¾°×½ûÇø")
                         env.soft.hwnd = _h

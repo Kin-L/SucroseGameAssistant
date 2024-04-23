@@ -141,12 +141,12 @@ class Fight(Task):
             click((1617, 502))
             wait(2500)
         elif common == 4:
-            roll(1002, 581, -55)
+            roll((1002, 581), -55)
             wait(800)
             click((358, 508))
             wait(2500)
         elif common == 5:
-            roll(1002, 581, -55)
+            roll((1002, 581), -55)
             wait(800)
             click((807, 515))
             wait(2500)
@@ -158,7 +158,7 @@ class Fight(Task):
                 click((1823, 52))
                 wait(800)
         elif common == 6:
-            roll(1002, 581, -55)
+            roll((1002, 581), -55)
             wait(800)
             click((1268, 515))
             wait(2500)
@@ -169,7 +169,7 @@ class Fight(Task):
                 wait(1000)
                 click((1826, 60))
                 wait(800)
-        roll(1002, 581, -55)
+        roll((1002, 581), -55)
         wait(500)
         click((872, 607))
         wait(1500)

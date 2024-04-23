@@ -39,6 +39,8 @@ class Daily(Task):
                         _r = "Ä¬"
                     elif i == "¾Ì¹Ú":
                         _r = "¹Ú"
+                    elif i == "ã£Ãý":
+                        _r = "Ãý"
                     else:
                         _r = i
                     _f = False
