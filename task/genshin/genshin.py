@@ -67,6 +67,8 @@ class Genshin(Task):
             _t = "无妄引"
         elif domain == "华池岩岫":
             _t = "华池"
+        elif domain == "褪色的剧场":
+            _t = "色的剧场"
         else:
             _t = domain
         for num in range(18):

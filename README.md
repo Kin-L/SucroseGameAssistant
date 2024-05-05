@@ -45,3 +45,8 @@ https://moesnow.github.io/March7thAssistant
 https://github.com/babalae/better-genshin-impact
 4.  SGA组合使用了MAA的功能  
 https://github.com/MaaAssistantArknights/MaaAssistantArknights
+
+#### 支持通道
+
+<img src="assets\main_window\ui\back\alipay.png" width = 35%>
+<img src="assets\main_window\ui\back\wechat.png" width = 40%>
