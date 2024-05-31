@@ -60,6 +60,7 @@ class Snow:
             "关闭软件": False,
             "完成后": 0,
             "SGA关闭": False,
+            "账号选择": "",
             "功能0": False,
             "功能1": False,
             "功能2": False,
@@ -68,7 +69,6 @@ class Snow:
             "感知互赠": False,
             "每日配给": False,
             "使用试剂": False,
-            "常规行动": [False, 0],
             "行动选择": 0,
             "后勤选择": "底比斯小队",
             "活动后勤选择": "明夷小队",
@@ -87,6 +87,8 @@ class Snow:
         self.set.independent.check_kill_game.setChecked(config["关闭软件"])
         self.set.independent.combo_after.setCurrentIndex(config["完成后"])
         self.set.independent.check_kill_sga.setChecked(config["SGA关闭"])
+        self.set.line_account.setText(config["账号选择"])
+        self.set.line_account.setSelection(0, 0)
 
         self.list.check_fight.setChecked(config["功能0"])
         self.list.check_daily.setChecked(config["功能1"])
@@ -96,8 +98,6 @@ class Snow:
         self.set.check_share.setChecked(config["感知互赠"])
         self.set.check_supply.setChecked(config["每日配给"])
         self.set.check_reagent.setChecked(config["使用试剂"])
-        self.set.check_common.setChecked(config["常规行动"][0])
-        self.set.once_common.setCurrentIndex(config["常规行动"][1])
         self.set.mat.setCurrentIndex(config["行动选择"])
         self.set.logistics.setCurrentText(config["后勤选择"])
         self.set.logistics1.setCurrentText(config["活动后勤选择"])
@@ -128,6 +128,7 @@ class Snow:
         config["关闭软件"] = self.set.independent.check_kill_game.isChecked()
         config["完成后"] = self.set.independent.combo_after.currentIndex()
         config["SGA关闭"] = self.set.independent.check_kill_sga.isChecked()
+        config["账号选择"] = self.set.line_account.text()
 
         config["功能0"] = self.list.check_fight.isChecked()
         config["功能1"] = self.list.check_daily.isChecked()
@@ -137,9 +138,6 @@ class Snow:
         config["感知互赠"] = self.set.check_share.isChecked()
         config["每日配给"] = self.set.check_supply.isChecked()
         config["使用试剂"] = self.set.check_reagent.isChecked()
-        config["常规行动"] = [
-            self.set.check_common.isChecked(),
-            self.set.once_common.currentIndex()]
         config["行动选择"] = self.set.mat.currentIndex()
         config["后勤选择"] = self.set.logistics.currentText()
         config["活动后勤选择"] = self.set.logistics1.currentText()
@@ -178,7 +176,7 @@ class Snow:
         import time
         now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
         import shutil
-        src = r"assets\snow\snow_roll_template.xlsx"
+        src = r"assets\snow\default_snow_roll.xlsx"
         dst = f"personal/snow/roll/尘白禁区共鸣记录 - {now}.xlsx"
         shutil.copyfile(src, dst)
         wb = load_workbook(dst)
@@ -188,7 +186,7 @@ class Snow:
         fon_five = Font(name='宋体', size=12, color="FFC332", bold=True)
         al = Alignment(horizontal='center', vertical='center')
         _count = []
-        for i in ["限定角色共鸣", "限定武器共鸣", "常守之誓", "中庭炉心"]:
+        for i in ["特选角色共鸣", "特选武器共鸣", "限定角色共鸣", "限定武器共鸣", "常守之誓", "中庭炉心", "新手池"]:
             _sheet = wb[i]
 
             _list = _dir[i]
@@ -214,6 +212,11 @@ class Snow:
                     r = "灸热年代"
                 elif "姐姐大人" in r:
                     r = "恩雅-姐姐大人"
+                elif "王权连" in r:
+                    r = "王权连枷"
+                elif "瑞斯" in r and "刻" in r:
+                    r = "瑟瑞斯-瞬刻"
+
                 _a = _sheet[f"A{n_row}"]
                 _b = _sheet[f"B{n_row}"]
                 _c = _sheet[f"C{n_row}"]
@@ -254,10 +257,10 @@ class Snow:
                     n_four = 0
                 elif r in ["安卡希雅-辉夜", "辰星-云篆", "晴-藏锋", "猫汐尔-溯影",
                            "苔丝-魔术师", "伊切尔-豹豹", "凯茜雅-蓝闪", "琴诺-悖谬",
-                           "恩雅-羽蜕",
+                           "恩雅-羽蜕", "瑟瑞斯-瞬刻",
                            "松林极光", "朱书断邪", "普赛克16", "合金真理",
                            "王牌怪诞", "海王星", "镭射风虎", "白夜别诗",
-                           "渊光",
+                           "渊光", "王权连枷",
                            "芬妮-咎冠", "肴-冬至", "里芙-狂猎", "茉莉安-雨燕", "芙提雅-缄默",
                            "小粮食", "星辰大海", "审判前夜", "熔岩骨骼",
                            "太阳酬金", "虎鲸号角", "太空骑手", "百战老兵",
@@ -347,5 +350,55 @@ class Snow:
             _str += i + " "
         sheet0["I12"] = _str
 
+        sheet0["B15"] = _count[4][0]
+        sheet0["C15"] = _count[4][1]
+        sheet0["D15"] = _count[4][2]
+        sheet0["E15"] = _count[4][3]
+        sheet0["F15"] = _count[4][4]
+        _list = _count[4][5]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I14"] = _str
+
+        _list = _count[4][6]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I15"] = _str
+
+        sheet0["B18"] = _count[5][0]
+        sheet0["C18"] = _count[5][1]
+        sheet0["D18"] = _count[5][2]
+        sheet0["E18"] = _count[5][3]
+        sheet0["F18"] = _count[5][4]
+        _list = _count[5][5]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I17"] = _str
+
+        _list = _count[5][6]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I18"] = _str
+
+        sheet0["B21"] = _count[6][0]
+        sheet0["C21"] = _count[6][1]
+        sheet0["D21"] = _count[6][2]
+        sheet0["E21"] = _count[6][3]
+        sheet0["F21"] = _count[6][4]
+        _list = _count[6][5]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I20"] = _str
+
+        _list = _count[6][6]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I21"] = _str
         wb.save(dst)
         self.main.indicate("共鸣记录已导出", 3)

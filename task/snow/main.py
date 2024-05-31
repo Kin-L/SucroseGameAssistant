@@ -61,6 +61,10 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             dire, name = os.path.split(_path)
             if name == "snow_launcher.exe":
                 env.soft.set_path(_path)
+                env.soft.set_hwnd_find(1, "wailsWindow", "尘白禁区启动器")
+            elif name == "SeasunGame.exe":
+                env.soft.set_path(_path)
+                env.soft.set_hwnd_find(1, "Qt5159QWindowIcon", "西山居启动器-尘白禁区")
             else:
                 self.indicate("尘白禁区，无效启动路径")
                 raise ValueError("尘白禁区:无效启动路径")
@@ -68,7 +72,6 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             self.indicate("尘白禁区，无效启动路径")
             raise ValueError("尘白禁区:无效启动路径")
         # 启动游戏
-        env.soft.set_hwnd_find(1, "wailsWindow", "尘白禁区启动器")
         for u in range(2):
             if env.soft.find_hwnd():
                 env.soft.foreground()
@@ -159,7 +162,22 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                 if "开始游戏" in ocr((883, 920, 1049, 989))[0]:
                     server = 2
                     wait(300)
-                    click((930, 630))
+                    click((1864, 222))
+                    wait(1000)
+                    click((1033, 38))
+                    wait(800)
+                    click((1152, 522))
+                    wait(800)
+                    click_text(self.task["账号选择"], (703, 462, 1216, 715))
+                    wait(800)
+                    click((964, 607))
+                    wait(800)
+                    while 1:
+                        if "开始游戏" in ocr((883, 920, 1049, 989))[0]:
+                            click((930, 630))
+                            wait(500)
+                        else:
+                            break
                     self.indicate("登录游戏")
                     wait(5000)
                     os.remove(sc)
@@ -199,6 +217,9 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                     self.indicate("加载到主界面")
                     os.remove(sc)
                     return True
+            if "等级提升" in ocr((1076, 356, 1345, 448), sc)[0]:
+                click((788, 1007))
+                wait(8000)
             while 1:
                 _p, sim = find_pic("assets/snow/picture/close.png", (1459, 122, 1805, 368), search_path=sc)
                 if sim >= 0.6:

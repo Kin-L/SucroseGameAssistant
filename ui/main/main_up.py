@@ -62,7 +62,7 @@ class MainUp(MainDown):
             try:
                 self.indicate("", 1)
                 newname = "默认配置" + str(random.randint(999, 10000))
-                shutil.copyfile(r"assets\main_window\默认配置.json",
+                shutil.copyfile(r"assets\main_window\default_config.json",
                                 r"personal\config\00%s.json" % newname)
                 # 更新方案列表
                 self.state["plan"][newname] = "00"

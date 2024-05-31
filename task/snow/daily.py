@@ -210,9 +210,9 @@ class Daily(Task):
             click((1502, 540))
             wait(1500)
             for i in range(10):
-                if "剩余时间" in ocr((838, 1026, 1112, 1077))[0]:
+                if "剩余时间" in ocr((893, 128, 1016, 170))[0]:
                     self.indicate("领取活动每日")
-                    click((371, 988))
+                    click((473, 948))
                     wait(2500)
                     if click_text("领取", (8, 842, 241, 978)):
                         wait(2500)

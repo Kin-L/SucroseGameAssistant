@@ -22,32 +22,58 @@ class Roll(Task):
                 raise RuntimeError("尘白禁区: 获取共鸣记录等待超时")
         wait(1200)
         current = {
+            "特选角色共鸣": [],
+            "特选武器共鸣": [],
             "限定角色共鸣": [],
             "限定武器共鸣": [],
             "常守之誓": [],
-            "中庭炉心": []
+            "中庭炉心": [],
+            "新手池": []
         }
         with open("personal/snow/roll/history.json", 'r', encoding='utf-8') as m:
             _dir = json.load(m)
         current.update(_dir)
-        for i in ["限定角色共鸣", "限定武器共鸣", "常守之誓", "中庭炉心"]:
-            if i == "限定角色共鸣":
-                if "天" in ocr((192, 68, 277, 120))[0]:
-                    click((167, 143))
-                else:
-                    continue
+        for i in ["特选角色共鸣", "特选武器共鸣", "限定角色共鸣", "限定武器共鸣", "常守之誓", "中庭炉心", "新手池"]:
+            if i == "特选角色共鸣":
+                click_text("常守", (3, 67, 280, 1066))
+                wait(500)
+                x, y = find_text("100", (3, 67, 280, 1066))
+                click((x, y))
+                wait(1000)
+                click((x-90, y+117))
+            elif i == "特选武器共鸣":
+                click_text("常守", (3, 67, 280, 1066))
+                wait(500)
+                x, y = find_text("100", (3, 67, 280, 1066))
+                click((x, y))
+                wait(1000)
+                click((x-90, y + 180))
+            elif i == "限定角色共鸣":
+                click_text("常守", (3, 67, 280, 1066))
+                wait(500)
+                x, y = find_text("50", (3, 67, 280, 1066))
+                click((x, y))
+                wait(1000)
+                click((x-90, y+117))
             elif i == "限定武器共鸣":
-                if "天" in ocr((197, 217, 279, 262))[0]:
-                    click((131, 281))
-                else:
-                    continue
+                click_text("常守", (3, 67, 280, 1066))
+                wait(500)
+                x, y = find_text("50", (3, 67, 280, 1066))
+                click((x, y))
+                wait(1000)
+                click((x-90, y + 180))
             elif i == "常守之誓":
                 if click_text("常守", (3, 67, 280, 1066)):
                     pass
                 else:
                     continue
-            else:
-                if click_text(i, (3, 67, 280, 1066)):
+            elif i == "中庭炉心":
+                if click_text("中庭炉心", (3, 67, 280, 1066)):
+                    pass
+                else:
+                    continue
+            elif i == "新手池":
+                if click_text("启程", (3, 67, 280, 1066)):
                     pass
                 else:
                     continue

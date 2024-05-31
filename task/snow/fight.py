@@ -80,47 +80,45 @@ class Fight(Task):
                         self.indicate(f"暂无限时试剂可用")
                         break
         cons = int(ocr((901, 12, 1028, 60))[0].replace(" ", "")[:-4])
-        if cons >= 40:
-            if self.task["行动选择"] == 7:
-                if self.task["常规行动"][0]:
-                    self.fight_common(self.task["常规行动"][1], True)
-                    self.indicate(f"完成一次常规行动")
-                cons = int(ocr((901, 12, 1028, 60))[0].replace(" ", "")[:-4])
-                if cons >= 30:
-                    click((1499, 538))
-                    wait(4000)
-                    click((1687, 505))
-                    wait(3000)
-                    click((1384, 384))
-                    wait(1500)
-                    click((1489, 1006))
-                    wait(2000)
-                    click((1280, 711))
-                    wait(1000)
-                    click((955, 826))
-                    wait(2500)
-                    while 1:
-                        if "完成" in ocr((929, 968, 1039, 1025))[0]:
-                            break
-                        click((932, 993))
-                        wait(1000)
+
+        if self.task["行动选择"] == 8:
+            cons = int(ocr((901, 12, 1028, 60))[0].replace(" ", "")[:-4])
+            if cons >= 30:
+                click((1499, 538))
+                wait(4000)
+                click_text("升格之路")
+                wait(3000)
+                click_text("深渊")
+                wait(1500)
+                click((1489, 1006))
+                wait(2000)
+                click((1280, 711))
+                wait(1000)
+                click((955, 826))
+                wait(2500)
+                while 1:
+                    if "完成" in ocr((929, 968, 1039, 1025))[0]:
+                        break
                     click((932, 993))
-                    wait(1500)
-                    for i in range(5):
-                        if "速战" in ocr((1438, 978, 1541, 1038))[0]:
-                            break
-                        else:
-                            click((1670, 157))
-                            wait(2000)
-                    self.indicate(f"感知扫荡：活动关卡")
-                    click((1674, 44))
-                    wait(2000)
-                else:
-                    self.indicate(f"感知不足：{cons}")
+                    wait(1000)
+                click((932, 993))
+                wait(1500)
+                for i in range(5):
+                    if "速战" in ocr((1438, 978, 1541, 1038))[0]:
+                        break
+                    else:
+                        click((1670, 157))
+                        wait(2000)
+                self.indicate(f"感知扫荡：活动关卡")
+                click((1674, 44))
+                wait(2000)
             else:
-                self.fight_common(self.task["行动选择"])
+                self.indicate(f"感知不足30：{cons}")
         else:
-            self.indicate(f"感知不足40：{cons}")
+            if cons >= 40:
+                self.fight_common(self.task["行动选择"])
+            else:
+                self.indicate(f"感知不足40：{cons}")
         self.indicate("检查完成：感知扫荡")
 
     def fight_common(self, common, once=False):
@@ -141,14 +139,18 @@ class Fight(Task):
             click((1617, 502))
             wait(2500)
         elif common == 4:
-            roll((1002, 581), -55)
-            wait(800)
-            click((358, 508))
+            for t in range(3):
+                roll((1002, 581), -35)
+                wait(800)
+                if click_text("冬之"):
+                    break
             wait(2500)
         elif common == 5:
-            roll((1002, 581), -55)
-            wait(800)
-            click((807, 515))
+            for t in range(3):
+                roll((1002, 581), -35)
+                wait(800)
+                if click_text("火之"):
+                    break
             wait(2500)
             if not self.task["后勤选择"] in ocr((901, 12, 1028, 60))[0]:
                 click((94, 935))
@@ -158,9 +160,11 @@ class Fight(Task):
                 click((1823, 52))
                 wait(800)
         elif common == 6:
-            roll((1002, 581), -55)
-            wait(800)
-            click((1268, 515))
+            for t in range(3):
+                roll((1002, 581), -35)
+                wait(800)
+                if click_text("心之"):
+                    break
             wait(2500)
             if not self.task["活动后勤选择"] in ocr((149, 965, 313, 1006))[0]:
                 click((95, 985))
@@ -169,6 +173,13 @@ class Fight(Task):
                 wait(1000)
                 click((1826, 60))
                 wait(800)
+        elif common == 7:
+            for t in range(3):
+                roll((1002, 581), -35)
+                wait(800)
+                if click_text("兵之"):
+                    break
+            wait(2500)
         roll((1002, 581), -55)
         wait(500)
         click((872, 607))
