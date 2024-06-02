@@ -162,22 +162,20 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                 if "开始游戏" in ocr((883, 920, 1049, 989))[0]:
                     server = 2
                     wait(300)
-                    click((1864, 222))
-                    wait(1000)
-                    click((1033, 38))
-                    wait(800)
-                    click((1152, 522))
-                    wait(800)
-                    click_text(self.task["账号选择"], (703, 462, 1216, 715))
-                    wait(800)
-                    click((964, 607))
-                    wait(800)
-                    while 1:
-                        if "开始游戏" in ocr((883, 920, 1049, 989))[0]:
-                            click((930, 630))
-                            wait(500)
-                        else:
-                            break
+                    if self.task["账号选择"]:
+                        click((1864, 222))
+                        wait(1000)
+                        click((1033, 38))
+                        wait(800)
+                        click((1152, 522))
+                        wait(800)
+                        click_text(self.task["账号选择"], (703, 462, 1216, 715))
+                        wait(800)
+                        click((964, 607))
+                        wait(800)
+                    for r in range(3):
+                        click((930, 630))
+                        wait(800)
                     self.indicate("登录游戏")
                     wait(5000)
                     os.remove(sc)

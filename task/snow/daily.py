@@ -214,7 +214,7 @@ class Daily(Task):
                     self.indicate("领取活动每日")
                     click((473, 948))
                     wait(2500)
-                    if click_text("领取", (8, 842, 241, 978)):
+                    if click_text("领取", (3, 844, 319, 1072)):
                         wait(2500)
                         click((155, 921))
                         wait(1500)

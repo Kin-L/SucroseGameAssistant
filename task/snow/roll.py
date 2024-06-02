@@ -1,4 +1,5 @@
 # -*- coding:gbk -*-
+import os.path
 from tools.environment import *
 from ..default_task import Task
 import json
@@ -30,9 +31,14 @@ class Roll(Task):
             "中庭炉心": [],
             "新手池": []
         }
-        with open("personal/snow/roll/history.json", 'r', encoding='utf-8') as m:
-            _dir = json.load(m)
-        current.update(_dir)
+        his_path = "personal/snow/roll/history.json"
+        if os.path.exists(his_path):
+            with open(his_path, 'r', encoding='utf-8') as m:
+                _dir = json.load(m)
+            current.update(_dir)
+        else:
+            open(his_path, 'a', encoding='utf-8')
+
         for i in ["特选角色共鸣", "特选武器共鸣", "限定角色共鸣", "限定武器共鸣", "常守之誓", "中庭炉心", "新手池"]:
             if i == "特选角色共鸣":
                 click_text("常守", (3, 67, 280, 1066))
