@@ -207,11 +207,11 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             if "服务器暂未开放" in ocr((784, 418, 1148, 508), sc)[0]:
                 os.remove(sc)
                 raise RuntimeError("尘白禁区:服务器暂未开放")
-            if "任务" in ocr((1552, 364, 1618, 409), sc)[0]:
+            if "任务" in ocr((1455, 324, 1533, 380), sc)[0]:
                 wait(300)
                 os.remove(sc)
                 sc = screenshot()
-                if "任务" in ocr((1552, 364, 1618, 409), sc)[0]:
+                if "任务" in ocr((1455, 324, 1533, 380), sc)[0]:
                     self.indicate("加载到主界面")
                     os.remove(sc)
                     return True

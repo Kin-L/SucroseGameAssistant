@@ -10,8 +10,8 @@ class Fight(Task):
         
     def snow_fight(self):
         self.indicate("开始检查：感知扫荡")
-        if self.task["感知互赠"] and find_color("yellow", (314, 350, 324, 359))[1]:
-            click((286, 379))
+        if self.task["感知互赠"] and find_color("yellow", (371, 465, 381, 475))[1]:
+            click((326, 484))
             wait(2000)
             click((1780, 1030))
             wait(500)
@@ -22,8 +22,8 @@ class Fight(Task):
             self.indicate(f"感知互赠完成")
             click((1674, 44))
             wait(2000)
-        if self.task["每日配给"] and find_color("yellow", (186, 475, 196, 485))[1]:
-            click((124, 508))
+        if self.task["每日配给"]:
+            click((155, 576))
             wait(1500)
             click_pic(r"assets\snow\picture\supply.png", zone=(0, 251, 89, 624))
             wait(1500)
@@ -85,10 +85,13 @@ class Fight(Task):
             cons = int(ocr((901, 12, 1028, 60))[0].replace(" ", "")[:-4])
             if cons >= 30:
                 click((1499, 538))
-                wait(4000)
-                click_text("升格之路")
+                wait(1000)
+                wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
+                wait(500)
+                click_text("风暴之眼")
                 wait(3000)
-                click_text("深渊")
+                # click_text("深渊")
+                click((1129, 294))
                 wait(1500)
                 click((1489, 1006))
                 wait(2000)
@@ -97,21 +100,14 @@ class Fight(Task):
                 click((955, 826))
                 wait(2500)
                 while 1:
-                    if "完成" in ocr((929, 968, 1039, 1025))[0]:
+                    pos, sim = find_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
+                    if sim:
+                        click(pos)
+                        wait(2000)
+                        self.indicate(f"感知扫荡：活动关卡")
                         break
                     click((932, 993))
-                    wait(1000)
-                click((932, 993))
-                wait(1500)
-                for i in range(5):
-                    if "速战" in ocr((1438, 978, 1541, 1038))[0]:
-                        break
-                    else:
-                        click((1670, 157))
-                        wait(2000)
-                self.indicate(f"感知扫荡：活动关卡")
-                click((1674, 44))
-                wait(2000)
+                    wait(1500)
             else:
                 self.indicate(f"感知不足30：{cons}")
         else:
@@ -169,7 +165,10 @@ class Fight(Task):
             if not self.task["活动后勤选择"] in ocr((149, 965, 313, 1006))[0]:
                 click((95, 985))
                 wait(2000)
-                click_text(self.task["活动后勤选择"])
+                if not click_text(self.task["活动后勤选择"]):
+                    roll((679, 494), -35)
+                    wait(500)
+                    click_text(self.task["活动后勤选择"])
                 wait(1000)
                 click((1826, 60))
                 wait(800)
@@ -192,17 +191,10 @@ class Fight(Task):
         click((955, 826))
         wait(2500)
         while 1:
-            if "完成" in ocr((929, 968, 1039, 1025))[0]:
+            pos, sim = find_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
+            if sim:
+                click(pos)
+                wait(2000)
                 break
             click((932, 993))
-            wait(1000)
-        click((932, 993))
-        wait(1500)
-        for i in range(5):
-            if "速战" in ocr((1438, 978, 1541, 1038))[0]:
-                break
-            else:
-                click((1670, 157))
-                wait(2000)
-        click((1674, 44))
-        wait(2000)
+            wait(1500)

@@ -9,8 +9,8 @@ class Mail(Task):
 
     def snow_mail(self):
         self.indicate("开始检查:邮件")
-        if find_color("yellow", (136, 333, 143, 340))[1]:
-            click((98, 365))
+        if find_color("yellow", (167, 443, 175, 455))[1]:
+            click((113, 465))
             wait(1500)
             click((402, 1004))
             wait(3000)

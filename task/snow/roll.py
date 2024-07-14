@@ -11,7 +11,7 @@ class Roll(Task):
 
     def snow_roll(self):
         self.indicate("开始获取抽卡记录")
-        click((1731, 678))
+        click((1655, 606))
         for i in range(10):
             wait(1000)
             if "共鸣" in ocr((1686, 940, 1843, 1006))[0]:
@@ -44,30 +44,30 @@ class Roll(Task):
                 click_text("常守", (3, 67, 280, 1066))
                 wait(500)
                 x, y = find_text("100", (3, 67, 280, 1066))
-                click((x, y))
+                click((x-90, y+35))
                 wait(1000)
-                click((x-90, y+117))
+                click((x-90, y+120))
             elif i == "特选武器共鸣":
                 click_text("常守", (3, 67, 280, 1066))
                 wait(500)
                 x, y = find_text("100", (3, 67, 280, 1066))
-                click((x, y))
+                click((x-90, y+35))
                 wait(1000)
-                click((x-90, y + 180))
+                click((x-90, y + 210))
             elif i == "限定角色共鸣":
                 click_text("常守", (3, 67, 280, 1066))
                 wait(500)
                 x, y = find_text("50", (3, 67, 280, 1066))
-                click((x, y))
+                click((x-90, y+35))
                 wait(1000)
-                click((x-90, y+117))
+                click((x-90, y+120))
             elif i == "限定武器共鸣":
                 click_text("常守", (3, 67, 280, 1066))
                 wait(500)
                 x, y = find_text("50", (3, 67, 280, 1066))
-                click((x, y))
+                click((x-90, y+35))
                 wait(1000)
-                click((x-90, y + 180))
+                click((x-90, y + 210))
             elif i == "常守之誓":
                 if click_text("常守", (3, 67, 280, 1066)):
                     pass
@@ -110,8 +110,9 @@ class Roll(Task):
             _nl = []
             _p = 0
             while 1:
-                _list1 = ocr((357, 185, 685, 866), mode=1)
-                _list2 = ocr((1357, 185, 1561, 866), mode=1)
+                _sc = screenshot()
+                _list1 = ocr((357, 185, 685, 866), _sc, mode=1)
+                _list2 = ocr((1357, 185, 1561, 866), _sc, mode=1)
                 num = 0
                 _p += 1
                 _line = []
@@ -122,10 +123,19 @@ class Roll(Task):
                         _tline = _list2[num][0]
                         if _tline[10] != " ":
                             _tline = _tline[:10] + " " + _tline[10:]
-                        _line = [row, _tline]
+                        _color = "未知"
+                        _zone = (342, 216+68*num, 362, 216+68*num+5)
+                        if find_color("blue", _zone, _sc)[1]:
+                            _color = "blue"
+                        elif find_color("purple", _zone, _sc)[1]:
+                            _color = "purple"
+                        elif find_color("orange", _zone, _sc)[1]:
+                            _color = "orange"
+
+                        _line = [row, _tline, _color]
 
                         if _p != 1:
-                            if _line == _nl[9]:
+                            if _line[:2] == _nl[9][:2]:
                                 _lf += 1
                         if _line not in _l:
                             _nl = [_line] + _nl
@@ -135,6 +145,7 @@ class Roll(Task):
                         num += 1
                     else:
                         break
+                os.remove(_sc)
                 if num < 10:
                     break
                 elif _lf == 10:

@@ -15,9 +15,10 @@ github(https://github.com/Kin-L/SucroseGameAssistant)
 gitee(https://gitee.com/huixinghen/SucroseGameAssistant)  
 
 5.  完整版下载链接，手动更新包链接：  
-完整版：  
+完整版： 
 蓝奏云： https://wwrv.lanzn.com/b033h9z0d 密码:bm32  
 gitee： https://gitee.com/huixinghen/SucroseGameAssistant/releases  
+123云盘（推荐）：https://www.123pan.com/s/PjLbVv-9kEuA.html提取码:stdl  
 更新包：https://gitee.com/huixinghen/SucroseGameAssistant/releases  
 手动更新方法：下载替换更新包，解压后将SGA文件夹与原SGA文件夹中同名文件夹进行合并并替换。  
 

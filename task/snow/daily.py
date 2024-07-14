@@ -19,7 +19,7 @@ class Daily(Task):
             _u = 0
             for i in self.task["个人故事"][2:]:
                 if i != "未选择":
-                    _num = int(ocr((1470, 38, 1540, 68))[0].replace(" ", "")[:-3])
+                    _num = int(ocr((1459, 27, 1540, 77))[0].split("/")[0])
                     if _num == 0 and self.task["个人故事"][1] and _u < 2:
                         _u += 1
                         click((1566, 51))
@@ -166,7 +166,7 @@ class Daily(Task):
             click((1619, 49))
             wait(2000)
         if self.task["领取日常"]:
-            click((1582, 392))
+            click((1497, 356))
             wait(1500)
             click((116, 157))
             wait(1500)
@@ -192,8 +192,8 @@ class Daily(Task):
                 self.indicate("领取定期奖励")
             click((1674, 44))
             wait(2000)
-        if self.task["领取凭证"] and find_color("yellow", (331, 481, 340, 491))[1]:
-            click((269, 514))
+        if self.task["领取凭证"] and find_color("yellow", (379, 557, 387, 566))[1]:
+            click((311, 580))
             wait(2000)
             for _p in [(1272, 1025), (1512, 1027), (1052, 1029)]:
                 click(_p)
@@ -207,26 +207,20 @@ class Daily(Task):
             click((1674, 44))
             wait(2000)
         if self.task["活动每日"]:
-            click((1502, 540))
+            click((1453, 479))
             wait(1500)
-            for i in range(10):
-                if "剩余时间" in ocr((893, 128, 1016, 170))[0]:
-                    self.indicate("领取活动每日")
-                    click((473, 948))
-                    wait(2500)
-                    if click_text("领取", (3, 844, 319, 1072)):
-                        wait(2500)
-                        click((155, 921))
-                        wait(1500)
-                        self.indicate("领取已完成的活动任务")
-                    else:
-                        self.indicate("暂无已完成的活动任务可领取")
-                    click((1668, 48))
-                    wait(1500)
-                    break
-                elif "任务" in ocr((1552, 364, 1618, 409))[0]:
-                    self.indicate("未识别到活动界面")
-                    break
-                else:
-                    wait(1500)
+            wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
+            self.indicate("领取活动每日")
+            click_text("云中行走")
+            wait(2500)
+            if click_text("领取"):
+                wait(2500)
+                click((155, 921))
+                wait(1500)
+                self.indicate("领取已完成的活动任务")
+            else:
+                self.indicate("暂无已完成的活动任务可领取")
+            click((1668, 48))
+            wait(1500)
+
         self.indicate("检查完成：日常周常")
