@@ -7,54 +7,54 @@ import webbrowser
 
 class Local:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_local = Widget(stack)
         stack.addWidget(self.page_local)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_local = Label(self.page_local, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£ºÔ­Éñ ÔËĞĞ·½Ê½")
+        # æ·»åŠ æ§ä»¶
+        self.label_local = Label(self.page_local, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šåŸç¥ è¿è¡Œæ–¹å¼")
         self.line_local0 = Line(self.page_local, (0, 42, 395, 3))
 
-        self.label_overall = Label(self.page_local, (0, 50, 180, 27), "È«¾ÖÉèÖÃ£º")
-        self.label_start = Label(self.page_local, (0, 90, 80, 27), "·şÎñÆ÷")
+        self.label_overall = Label(self.page_local, (0, 50, 180, 27), "å…¨å±€è®¾ç½®ï¼š")
+        self.label_start = Label(self.page_local, (0, 90, 80, 27), "æœåŠ¡å™¨")
         self.combo_server = Combobox(self.page_local, (80, 90, 100, 32))
-        self.combo_server.addItems(["¹Ù·ş", "B·ş"])
-        self.label_start = Label(self.page_local, (0, 130, 80, 27), "Æô¶¯Â·¾¶")
+        self.combo_server.addItems(["å®˜æœ", "Bæœ"])
+        self.label_start = Label(self.page_local, (0, 130, 80, 27), "å¯åŠ¨è·¯å¾„")
         self.line_start = Lineedit(self.page_local, (0, 160, 385, 33))
 
         self.line_local1 = Line(self.page_local, (0, 202, 395, 3))
 
-        self.label_single = Label(self.page_local, (0, 210, 220, 27), "¶ÀÁ¢ÔËĞĞÉèÖÃ£º")
+        self.label_single = Label(self.page_local, (0, 210, 220, 27), "ç‹¬ç«‹è¿è¡Œè®¾ç½®ï¼š")
         self.independent = Independent(self.page_local, (0, 250, 350, 70))
 
 
 class Team:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_team = Widget(stack)
         stack.addWidget(self.page_team)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_team = Label(self.page_team, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£ºÇĞ»»¶ÓÎé")
-        self.label_team_tip = Label(self.page_team, (90, 80, 220, 27), "ÇĞ»»¶ÓÎé ÔİÎŞÅäÖÃÏîÄ¿¡£")
+        # æ·»åŠ æ§ä»¶
+        self.label_team = Label(self.page_team, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šåˆ‡æ¢é˜Ÿä¼")
+        self.label_team_tip = Label(self.page_team, (90, 80, 220, 27), "åˆ‡æ¢é˜Ÿä¼ æš‚æ— é…ç½®é¡¹ç›®ã€‚")
 
 
 dispatch_dir = {
-    "ÃÉµÂ": ["Ë®¾§¿ó,°×Òø¿ó(1)", "Ë®¾§¿ó,°×Òø¿ó(2)", "Ä¦À­", "ÊŞÈâ,ÇİÈâ", "Çİµ°,ÌğÌğ»¨", "°×ÂÜ²·,ºúÂÜ²·"],
-    "Á§ÔÂ": ["Ë®¾§¿ó,°×Òø¿ó", "Ä¦À­1", "Ä¦À­2", "ÂíÎ²,½ğÓã²İ", "°×ÂÜ²·,ºúÂÜ²·", "Á«Åî,ËÉÈ×"],
-    "µ¾ÆŞ": ["Ä¦À­1", "Ä¦À­2", "ÊŞÈâ,Çİµ°", "ÇİÈâ,º£²İ", "°×ÂÜ²·,İÀ¹Ï", "ÌğÌğ»¨,ÈÕÂä¹û"],
-    "ĞëÃÖ": ["Ä¦À­", "Ç¾Ş±,Æ»¹û", "ËÉÈ×,Ä¢¹½", "Çİµ°,ÈÕÂä¹û", "ÏãĞÁ¹û,ºúÂÜ²·", "¶Õ¶ÕÌÒ,ËÉ¹û"],
-    "·ãµ¤": ["Ä¦À­", "Ï«Ôå,Ä¢¹½", "ÜÔ½à²İ,Çİµ°", "¾ÃÓêÁ«,ÊŞÈâ", "ÅİÅİ½Û,ÇİÈâ", "ÌğÌğ»¨,±¡ºÉ"]}
+    "è’™å¾·": ["æ°´æ™¶çŸ¿,ç™½é“¶çŸ¿(1)", "æ°´æ™¶çŸ¿,ç™½é“¶çŸ¿(2)", "æ‘©æ‹‰", "å…½è‚‰,ç¦½è‚‰", "ç¦½è›‹,ç”œç”œèŠ±", "ç™½èåœ,èƒ¡èåœ"],
+    "ç’ƒæœˆ": ["æ°´æ™¶çŸ¿,ç™½é“¶çŸ¿", "æ‘©æ‹‰1", "æ‘©æ‹‰2", "é©¬å°¾,é‡‘é±¼è‰", "ç™½èåœ,èƒ¡èåœ", "è²è“¬,æ¾èŒ¸"],
+    "ç¨»å¦»": ["æ‘©æ‹‰1", "æ‘©æ‹‰2", "å…½è‚‰,ç¦½è›‹", "ç¦½è‚‰,æµ·è‰", "ç™½èåœ,å ‡ç“œ", "ç”œç”œèŠ±,æ—¥è½æœ"],
+    "é¡»å¼¥": ["æ‘©æ‹‰", "è”·è–‡,è‹¹æœ", "æ¾èŒ¸,è˜‘è‡", "ç¦½è›‹,æ—¥è½æœ", "é¦™è¾›æœ,èƒ¡èåœ", "å¢©å¢©æ¡ƒ,æ¾æœ"],
+    "æ«ä¸¹": ["æ‘©æ‹‰", "æ±è—»,è˜‘è‡", "èŒ‰æ´è‰,ç¦½è›‹", "ä¹…é›¨è²,å…½è‚‰", "æ³¡æ³¡æ¡”,ç¦½è‚‰", "ç”œç”œèŠ±,è–„è·"]}
 
 
 class Disp:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_dispatch = Widget(stack)
         stack.addWidget(self.page_dispatch)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_dispatch = Label(self.page_dispatch, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£ºÌ½Ë÷ÅÉÇ²")
+        # æ·»åŠ æ§ä»¶
+        self.label_dispatch = Label(self.page_dispatch, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šæ¢ç´¢æ´¾é£")
 
-        self.label_area = Label(self.page_dispatch, (20, 45, 180, 27), "µØÇøÑ¡Ôñ")
-        self.label_mat = Label(self.page_dispatch, (180, 45, 180, 27), "²ÄÁÏÑ¡Ôñ")
+        self.label_area = Label(self.page_dispatch, (20, 45, 180, 27), "åœ°åŒºé€‰æ‹©")
+        self.label_mat = Label(self.page_dispatch, (180, 45, 180, 27), "ææ–™é€‰æ‹©")
 
         self.area0 = Combobox(self.page_dispatch, (0, 80, 100, 32))
         self.area1 = Combobox(self.page_dispatch, (0, 120, 100, 32))
@@ -68,17 +68,17 @@ class Disp:
         self.mat3 = Combobox(self.page_dispatch, (140, 200, 180, 32))
         self.mat4 = Combobox(self.page_dispatch, (140, 240, 180, 32))
 
-        self.area0.addItems(["ÃÉµÂ", "Á§ÔÂ", "µ¾ÆŞ", "ĞëÃÖ", "·ãµ¤"])
-        self.area1.addItems(["ÃÉµÂ", "Á§ÔÂ", "µ¾ÆŞ", "ĞëÃÖ", "·ãµ¤"])
-        self.area2.addItems(["ÃÉµÂ", "Á§ÔÂ", "µ¾ÆŞ", "ĞëÃÖ", "·ãµ¤"])
-        self.area3.addItems(["ÃÉµÂ", "Á§ÔÂ", "µ¾ÆŞ", "ĞëÃÖ", "·ãµ¤"])
-        self.area4.addItems(["ÃÉµÂ", "Á§ÔÂ", "µ¾ÆŞ", "ĞëÃÖ", "·ãµ¤"])
+        self.area0.addItems(["è’™å¾·", "ç’ƒæœˆ", "ç¨»å¦»", "é¡»å¼¥", "æ«ä¸¹"])
+        self.area1.addItems(["è’™å¾·", "ç’ƒæœˆ", "ç¨»å¦»", "é¡»å¼¥", "æ«ä¸¹"])
+        self.area2.addItems(["è’™å¾·", "ç’ƒæœˆ", "ç¨»å¦»", "é¡»å¼¥", "æ«ä¸¹"])
+        self.area3.addItems(["è’™å¾·", "ç’ƒæœˆ", "ç¨»å¦»", "é¡»å¼¥", "æ«ä¸¹"])
+        self.area4.addItems(["è’™å¾·", "ç’ƒæœˆ", "ç¨»å¦»", "é¡»å¼¥", "æ«ä¸¹"])
 
-        self.mat0.addItems(dispatch_dir["ÃÉµÂ"])
-        self.mat1.addItems(dispatch_dir["ÃÉµÂ"])
-        self.mat2.addItems(dispatch_dir["ÃÉµÂ"])
-        self.mat3.addItems(dispatch_dir["ÃÉµÂ"])
-        self.mat4.addItems(dispatch_dir["ÃÉµÂ"])
+        self.mat0.addItems(dispatch_dir["è’™å¾·"])
+        self.mat1.addItems(dispatch_dir["è’™å¾·"])
+        self.mat2.addItems(dispatch_dir["è’™å¾·"])
+        self.mat3.addItems(dispatch_dir["è’™å¾·"])
+        self.mat4.addItems(dispatch_dir["è’™å¾·"])
 
         self.area0.currentIndexChanged.connect(lambda: self.list_change(self.area0, self.mat0))
         self.area1.currentIndexChanged.connect(lambda: self.list_change(self.area1, self.mat1))
@@ -96,7 +96,7 @@ class Disp:
         self.mat3.setCurrentIndex(0)
         self.mat4.setCurrentIndex(0)
 
-        self.redisp = Check(self.page_dispatch, (0, 285, 100, 25), "ÔÙ´ÎÅÉÇ²")
+        self.redisp = Check(self.page_dispatch, (0, 285, 100, 25), "å†æ¬¡æ´¾é£")
 
     @staticmethod
     def list_change(fa, fm):
@@ -106,11 +106,11 @@ class Disp:
 
 class Trans:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_trans = Widget(stack)
         stack.addWidget(self.page_trans)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_trans = Label(self.page_trans, (0, 12, 200, 18), "ÉèÖÃÒ³Ãæ£º²ÎÁ¿ÖÊ±äÒÇ")
+        # æ·»åŠ æ§ä»¶
+        self.label_trans = Label(self.page_trans, (0, 12, 200, 18), "è®¾ç½®é¡µé¢ï¼šå‚é‡è´¨å˜ä»ª")
         self.LineEdit0 = Lineedit(self.page_trans, (0, 50, 385, 33))
         self.LineEdit1 = Lineedit(self.page_trans, (0, 100, 385, 33))
         self.LineEdit2 = Lineedit(self.page_trans, (0, 150, 385, 33))
@@ -120,116 +120,116 @@ class Trans:
 
 class Fly:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_fly = Widget(stack)
         stack.addWidget(self.page_fly)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_fly = Label(self.page_fly, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£º×Ô¶¯¾§µû")
-        self.fly0 = Check(self.page_fly, (0, 45, 140, 50), "ÓêÁÖ»¯³Ç¹ù×ó·½\nÉ³Ä®»îÁ¦Ö®¼ÒÏÂ·½")
-        self.fly1 = Check(self.page_fly, (0, 110, 140, 22), "É³Ä®°¢Èç´åÉÏ·½")
-        self.fly2 = Check(self.page_fly, (0, 165, 140, 22), "É³Ä®ÉáÉíÏİ¿ÓÏÂ·½")
-        self.fly3 = Check(self.page_fly, (0, 220, 140, 22), "ËşÀ­Ëşº£¹È")
-        self.fly4 = Check(self.page_fly, (0, 275, 140, 22), "µ¾ÆŞÆ½º£íÎ")
+        # æ·»åŠ æ§ä»¶
+        self.label_fly = Label(self.page_fly, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šè‡ªåŠ¨æ™¶è¶")
+        self.fly0 = Check(self.page_fly, (0, 45, 140, 50), "é›¨æ—åŒ–åŸéƒ­å·¦æ–¹\næ²™æ¼ æ´»åŠ›ä¹‹å®¶ä¸‹æ–¹")
+        self.fly1 = Check(self.page_fly, (0, 110, 140, 22), "æ²™æ¼ é˜¿å¦‚æ‘ä¸Šæ–¹")
+        self.fly2 = Check(self.page_fly, (0, 165, 140, 22), "æ²™æ¼ èˆèº«é™·å‘ä¸‹æ–¹")
+        self.fly3 = Check(self.page_fly, (0, 220, 140, 22), "å¡”æ‹‰å¡”æµ·è°·")
+        self.fly4 = Check(self.page_fly, (0, 275, 140, 22), "ç¨»å¦»å¹³æµ·ç ¦")
 
 
 class Concentrate:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_concentrate = Widget(stack)
         stack.addWidget(self.page_concentrate)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_concentrate = Label(self.page_concentrate, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£ºÅ¨ËõÊ÷Ö¬")
-        self.label_concentrate_tip = Label(self.page_concentrate, (90, 80, 220, 27), "Å¨ËõÊ÷Ö¬ ÔİÎŞÅäÖÃÏîÄ¿¡£")
+        # æ·»åŠ æ§ä»¶
+        self.label_concentrate = Label(self.page_concentrate, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šæµ“ç¼©æ ‘è„‚")
+        self.label_concentrate_tip = Label(self.page_concentrate, (90, 80, 220, 27), "æµ“ç¼©æ ‘è„‚ æš‚æ— é…ç½®é¡¹ç›®ã€‚")
 
 
 class Pot:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_pot = Widget(stack)
         stack.addWidget(self.page_pot)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_pot = Label(self.page_pot, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£º³¾¸èºø")
-        self.label_pot_tip = Label(self.page_pot, (90, 80, 220, 27), "³¾¸èºø ÔİÎŞÅäÖÃÏîÄ¿¡£")
+        # æ·»åŠ æ§ä»¶
+        self.label_pot = Label(self.page_pot, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šå°˜æ­Œå£¶")
+        self.label_pot_tip = Label(self.page_pot, (90, 80, 220, 27), "å°˜æ­Œå£¶ æš‚æ— é…ç½®é¡¹ç›®ã€‚")
 
 
 class Mail:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_mail = Widget(stack)
         stack.addWidget(self.page_mail)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_mail = Label(self.page_mail, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£ºÁìÈ¡ÓÊ¼ş")
-        self.label_mail_tip = Label(self.page_mail, (90, 80, 220, 27), "ÁìÈ¡ÓÊ¼ş ÔİÎŞÅäÖÃÏîÄ¿¡£")
+        # æ·»åŠ æ§ä»¶
+        self.label_mail = Label(self.page_mail, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šé¢†å–é‚®ä»¶")
+        self.label_mail_tip = Label(self.page_mail, (90, 80, 220, 27), "é¢†å–é‚®ä»¶ æš‚æ— é…ç½®é¡¹ç›®ã€‚")
 
 
 class Tree:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_tree = Widget(stack)
         stack.addWidget(self.page_tree)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_tree = Label(self.page_tree, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£º×Ô¶¯·¥Ä¾")
+        # æ·»åŠ æ§ä»¶
+        self.label_tree = Label(self.page_tree, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šè‡ªåŠ¨ä¼æœ¨")
         self.CompactSpinBox = CompactSpinBox(self.page_tree)
         self.CompactSpinBox.setGeometry(QtCore.QRect(0, 40, 120, 30))
 
-        self.tree0 = Check(self.page_tree, (0, 90, 120, 22), "èëÄ¾")
-        self.tree1 = Check(self.page_tree, (130, 90, 120, 22), "İÍ»ªÄ¾")
-        self.tree2 = Check(self.page_tree, (260, 90, 120, 22), "ËÉÄ¾")
-        self.tree3 = Check(self.page_tree, (0, 135, 120, 22), "È´É°Ä¾")
-        self.tree4 = Check(self.page_tree, (130, 135, 120, 22), "Öñ½Ú")
-        self.tree5 = Check(self.page_tree, (260, 135, 120, 22), "´¹ÏãÄ¾")
-        self.tree6 = Check(self.page_tree, (0, 180, 120, 22), "É¼Ä¾")
-        self.tree7 = Check(self.page_tree, (130, 180, 120, 22), "ÃÎ¼ûÄ¾")
-        self.tree8 = Check(self.page_tree, (260, 180, 120, 22), "·ãÄ¾")
-        self.tree9 = Check(self.page_tree, (0, 216, 120, 40), "¿×È¸Ä¾\nÓùÙ¤Ä¾")
-        self.tree10 = Check(self.page_tree, (130, 225, 120, 22), "ÓùÙ¤Ä¾")
-        self.tree11 = Check(self.page_tree, (260, 216, 120, 40), "Òµ¹ûÄ¾\n»ÔÄ¾")
-        self.tree12 = Check(self.page_tree, (0, 270, 120, 22), "Ö¤ÎòÄ¾")
-        self.tree13 = Check(self.page_tree, (130, 270, 120, 22), "´Ì¿ûÄ¾")
-        self.tree14 = Check(self.page_tree, (260, 270, 120, 22), "ĞüÁåÄ¾")
-        self.tree15 = Check(self.page_tree, (0, 315, 120, 22), "é²Ä¾")
-        self.tree16 = Check(self.page_tree, (130, 315, 120, 22), "°×á¯Ä¾")
-        self.tree17 = Check(self.page_tree, (260, 315, 120, 22), "Ïã°ØÄ¾")
-        self.tree18 = Check(self.page_tree, (0, 360, 120, 22), "¾æÄ¾")
+        self.tree0 = Check(self.page_tree, (0, 90, 120, 22), "æ¡¦æœ¨")
+        self.tree1 = Check(self.page_tree, (130, 90, 120, 22), "èƒåæœ¨")
+        self.tree2 = Check(self.page_tree, (260, 90, 120, 22), "æ¾æœ¨")
+        self.tree3 = Check(self.page_tree, (0, 135, 120, 22), "å´ç ‚æœ¨")
+        self.tree4 = Check(self.page_tree, (130, 135, 120, 22), "ç«¹èŠ‚")
+        self.tree5 = Check(self.page_tree, (260, 135, 120, 22), "å‚é¦™æœ¨")
+        self.tree6 = Check(self.page_tree, (0, 180, 120, 22), "æ‰æœ¨")
+        self.tree7 = Check(self.page_tree, (130, 180, 120, 22), "æ¢¦è§æœ¨")
+        self.tree8 = Check(self.page_tree, (260, 180, 120, 22), "æ«æœ¨")
+        self.tree9 = Check(self.page_tree, (0, 216, 120, 40), "å­”é›€æœ¨\nå¾¡ä¼½æœ¨")
+        self.tree10 = Check(self.page_tree, (130, 225, 120, 22), "å¾¡ä¼½æœ¨")
+        self.tree11 = Check(self.page_tree, (260, 216, 120, 40), "ä¸šæœæœ¨\nè¾‰æœ¨")
+        self.tree12 = Check(self.page_tree, (0, 270, 120, 22), "è¯æ‚Ÿæœ¨")
+        self.tree13 = Check(self.page_tree, (130, 270, 120, 22), "åˆºè‘µæœ¨")
+        self.tree14 = Check(self.page_tree, (260, 270, 120, 22), "æ‚¬é“ƒæœ¨")
+        self.tree15 = Check(self.page_tree, (0, 315, 120, 22), "æ¤´æœ¨")
+        self.tree16 = Check(self.page_tree, (130, 315, 120, 22), "ç™½å²‘æœ¨")
+        self.tree17 = Check(self.page_tree, (260, 315, 120, 22), "é¦™æŸæœ¨")
+        self.tree18 = Check(self.page_tree, (0, 360, 120, 22), "ç‚¬æœ¨")
 
 
 domain_dir = {
-    "Ê¥ÒÅÎï":
-        ["ÖÙÏÄÍ¥Ô°", "Ãú¼ÇÖ®¹È", "¹ÂÔÆÁèÏöÖ®´¦",
-            "ÎŞÍıÒı¾ÌÃÜ¹¬", "»ª³ØÑÒá¶", "·ÒµÂÄá¶ûÖ®¶¥",
-            "É½¼¹ÊØÍû", "—ÉÈ¾Ö®Í¥", "³ÁÃßÖ®Í¥",
-            "ÑÒÖĞÓÄ¹È", "Ôµ¾õËş", "³à½ğµÄ³ÇĞæ",
-            "ÈÛÌúµÄ¹ÂÈû", "×ï»öµÄÖÕÄ©", "ÁÙÆÙÖ®³Ç",
-            "ÍÊÉ«µÄ¾ç³¡","ºçÁéµÄ¾»ÍÁ"],
-    "Ìì¸³ÅàÑøËØ²Ä":
-        ["ÍüÈ´Ö®Ï¿", "Ì«É½¸®", "ÇÉ«Ö®Í¥",
-            "»èÊ¶Ëş", "²Ô°×µÄÒÅÈÙ", "ÔÌ»ğµÄÓÄĞæ"],
-    "ÎäÆ÷Í»ÆÆËØ²Ä":
-        ["ÈûÎ÷ÀòÑÇÃçÆÔ", "ÕğÀ×Á¬É½ÃÜ¹¬", "É°Á÷Ö®Í¥",
-            "ÓĞ¶¥Ëş", "Éî³±µÄÓàÏì", "Éî¹È²tÍûËù"]}
+    "åœ£é—ç‰©":
+        ["ä»²å¤åº­å›­", "é“­è®°ä¹‹è°·", "å­¤äº‘å‡Œéœ„ä¹‹å¤„",
+            "æ— å¦„å¼•å’å¯†å®«", "åæ± å²©å²«", "èŠ¬å¾·å°¼å°”ä¹‹é¡¶",
+            "å±±è„Šå®ˆæœ›", "æ¤›æŸ“ä¹‹åº­", "æ²‰çœ ä¹‹åº­",
+            "å²©ä¸­å¹½è°·", "ç¼˜è§‰å¡”", "èµ¤é‡‘çš„åŸå¢Ÿ",
+            "ç†”é“çš„å­¤å¡", "ç½ªç¥¸çš„ç»ˆæœ«", "ä¸´ç€‘ä¹‹åŸ",
+            "è¤ªè‰²çš„å‰§åœº","è™¹çµçš„å‡€åœŸ"],
+    "å¤©èµ‹åŸ¹å…»ç´ æ":
+        ["å¿˜å´ä¹‹å³¡", "å¤ªå±±åºœ", "è«è‰²ä¹‹åº­",
+            "æ˜è¯†å¡”", "è‹ç™½çš„é—è£", "è•´ç«çš„å¹½å¢Ÿ"],
+    "æ­¦å™¨çªç ´ç´ æ":
+        ["å¡è¥¿è‰äºšè‹—åœƒ", "éœ‡é›·è¿å±±å¯†å®«", "ç ‚æµä¹‹åº­",
+            "æœ‰é¡¶å¡”", "æ·±æ½®çš„ä½™å“", "æ·±å¤ç­æœ›æ‰€"]}
 
 
 class Domain:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_domain = Widget(stack)
         stack.addWidget(self.page_domain)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_domain = Label(self.page_domain, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£º×Ô¶¯ÃØ¾³")
+        # æ·»åŠ æ§ä»¶
+        self.label_domain = Label(self.page_domain, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šè‡ªåŠ¨ç§˜å¢ƒ")
         self.line_domain0 = Line(self.page_domain, (0, 40, 395, 3))
 
-        self.label_bgi = Label(self.page_domain, (0, 50, 180, 18), "BGIÂ·¾¶")
+        self.label_bgi = Label(self.page_domain, (0, 50, 180, 18), "BGIè·¯å¾„")
         self.line_bgi = Lineedit(self.page_domain, (0, 80, 385, 33))
 
-        self.label_domain_select = Label(self.page_domain, (0, 125, 180, 18), "ÃØ¾³Ñ¡Ôñ")
+        self.label_domain_select = Label(self.page_domain, (0, 125, 180, 18), "ç§˜å¢ƒé€‰æ‹©")
         self.domain_type = Combobox(self.page_domain, (0, 160, 130, 50))
         self.domain = Combobox(self.page_domain, (140, 160, 240, 50))
 
-        self.domain_type.addItems(["Ê¥ÒÅÎï", "Ìì¸³ÅàÑøËØ²Ä", "ÎäÆ÷Í»ÆÆËØ²Ä"])
-        self.domain.addItems(domain_dir["Ê¥ÒÅÎï"])
+        self.domain_type.addItems(["åœ£é—ç‰©", "å¤©èµ‹åŸ¹å…»ç´ æ", "æ­¦å™¨çªç ´ç´ æ"])
+        self.domain.addItems(domain_dir["åœ£é—ç‰©"])
 
         self.domain_type.currentIndexChanged.connect(lambda: self.domain_change(self.domain_type, self.domain))
-        self.button_BGI = Button(self.page_domain, (0, 220, 80, 30), "BGIÏÂÔØ")
+        self.button_BGI = Button(self.page_domain, (0, 220, 80, 30), "BGIä¸‹è½½")
         self.button_BGI.clicked.connect(self.open_BGI)
 
     @staticmethod
@@ -244,17 +244,17 @@ class Domain:
 
 class Pass:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_pass = Widget(stack)
         stack.addWidget(self.page_pass)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_pass = Label(self.page_pass, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£ºÁìÈ¡¼ÍĞĞ")
-        self.label_pass_tip = Label(self.page_pass, (90, 80, 220, 27), "ÁìÈ¡¼ÍĞĞ ÔİÎŞÅäÖÃÏîÄ¿¡£")
+        # æ·»åŠ æ§ä»¶
+        self.label_pass = Label(self.page_pass, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šé¢†å–çºªè¡Œ")
+        self.label_pass_tip = Label(self.page_pass, (90, 80, 220, 27), "é¢†å–çºªè¡Œ æš‚æ— é…ç½®é¡¹ç›®ã€‚")
 
 
 class GenshinStack(Local, Team, Disp, Trans, Fly, Concentrate, Pot, Mail, Tree, Domain, Pass):
     def __init__(self, widget, location):
-        # ¹¦ÄÜ¶Ñµş´°¿Ú
+        # åŠŸèƒ½å †å çª—å£
         self.stack = Stack(widget, location)
         Local.__init__(self, self.stack)
         Team.__init__(self, self.stack)
