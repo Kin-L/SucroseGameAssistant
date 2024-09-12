@@ -1,4 +1,3 @@
-# -*- coding:gbk -*-
 from tools.environment import *
 from .genshin import Genshin
 
@@ -19,25 +18,25 @@ class Condensed(Genshin):
             wait(1000)
             keyup("W")
             wait(300)
-            if "ºÏ³É" in ocr((1205, 502, 1315, 578))[0]:
-                self.indicate("µ½´ïºÏ³ÉÌ¨")
+            if "åˆæˆ" in ocr((1205, 502, 1315, 578))[0]:
+                self.indicate("åˆ°è¾¾åˆæˆå°")
                 break
             elif i == 2:
-                self.indicate("ºÏ³ÉÊ÷Ö¬Î´Öª´íÎó,ÖØÊÔ¶à´Î")
+                self.indicate("åˆæˆæ ‘è„‚æœªçŸ¥é”™è¯¯,é‡è¯•å¤šæ¬¡")
                 return True
             else:
-                self.indicate(f"error:ºÏ³ÉÊ÷Ö¬Î´Öª´íÎó,¿ªÊ¼ÖØÊÔµÚ{i+1}/2´Î") #
-        pressto("F", 1000, ("ºÏ³É", (124, 18, 215, 79), 0))
-        if "Å¨ËõÊ÷Ö¬" in ocr((1270, 103, 1417, 158))[0]:
+                self.indicate(f"error:åˆæˆæ ‘è„‚æœªçŸ¥é”™è¯¯,å¼€å§‹é‡è¯•ç¬¬{i+1}/2æ¬¡") #
+        pressto("F", 1000, ("åˆæˆ", (124, 18, 215, 79), 0))
+        if "æµ“ç¼©æ ‘è„‚" in ocr((1270, 103, 1417, 158))[0]:
             fly = int(ocr((1025, 917, 1134, 941))[0].split("/")[0])
             cons = int(ocr((1162, 917, 1269, 941))[0].split("/")[0])
-            clickto((1339, 408), 600, ("Å¨ËõÊ÷Ö¬", (739, 178, 882, 227), 0))
+            clickto((1339, 408), 600, ("æµ“ç¼©æ ‘è„‚", (739, 178, 882, 227), 0))
             num = int(ocr((996, 887, 1028, 924))[0].strip(" "))
-            clickto((1618, 497), 600, ("ºÏ³É", (823, 740, 938, 788), 0))
-            self.indicate(f"µ±Ç°ÒÑÓĞ:\n"
-                          f"  ¾§ºË:{fly}¸ö\n"
-                          f"  Ô­´âÊ÷Ö¬:{cons}/160\n"
-                          f"  Å¨ËõÊ÷Ö¬:{num}¸ö")
+            clickto((1618, 497), 600, ("åˆæˆ", (823, 740, 938, 788), 0))
+            self.indicate(f"å½“å‰å·²æœ‰:\n"
+                          f"  æ™¶æ ¸:{fly}ä¸ª\n"
+                          f"  åŸç²¹æ ‘è„‚:{cons}/160\n"
+                          f"  æµ“ç¼©æ ‘è„‚:{num}ä¸ª")
             _n = min(int(cons/40), fly, 5-num)
             if _n:
                 for i in range(_n-1):
@@ -46,16 +45,16 @@ class Condensed(Genshin):
                 ori = cons-_n*40
                 cond = num+_n
                 self.task["resin"] = [ori, cond]
-                self.indicate(f"±¾´ÎºÏ³ÉÅ¨ËõÊ÷Ö¬{_n}¸ö\n"
-                              f"  Ô­´âÊ÷Ö¬: {cons} -> {ori}\n"
-                              f"  Å¨ËõÊ÷Ö¬: {num} -> {cond}")
+                self.indicate(f"æœ¬æ¬¡åˆæˆæµ“ç¼©æ ‘è„‚{_n}ä¸ª\n"
+                              f"  åŸç²¹æ ‘è„‚: {cons} -> {ori}\n"
+                              f"  æµ“ç¼©æ ‘è„‚: {num} -> {cond}")
                 click((1727, 1019))
                 wait(800)
                 click((1180, 755))
                 wait(500)
             else:
-                self.indicate("Å¨ËõÊ÷Ö¬ÊıÁ¿´ïµ½ÉÏÏŞ")
+                self.indicate("æµ“ç¼©æ ‘è„‚æ•°é‡è¾¾åˆ°ä¸Šé™")
         else:
-            self.indicate("ÎŞ·¨ºÏ³ÉÅ¨ËõÊ÷Ö¬:È±ÉÙÊ÷Ö¬»ò¾§ºË")
+            self.indicate("æ— æ³•åˆæˆæµ“ç¼©æ ‘è„‚:ç¼ºå°‘æ ‘è„‚æˆ–æ™¶æ ¸")
         self.home()
         return False
