@@ -211,7 +211,7 @@ class Daily(Task):
             wait(1500)
             wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
             self.indicate("领取活动每日")
-            click_text("云中行走")
+            click_text("任务")
             wait(2500)
             if click_text("领取"):
                 wait(2500)

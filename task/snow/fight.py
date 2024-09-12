@@ -88,10 +88,10 @@ class Fight(Task):
                 wait(1000)
                 wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
                 wait(500)
-                click_text("风暴之眼")
+                click_text("材料")
                 wait(3000)
                 # click_text("深渊")
-                click((1129, 294))
+                click((1646, 359))
                 wait(1500)
                 click((1489, 1006))
                 wait(2000)
@@ -148,6 +148,10 @@ class Fight(Task):
                 if click_text("火之"):
                     break
             wait(2500)
+            click((1037, 951))
+            wait(500)
+            click((1037, 951))
+            wait(500)
             if not self.task["后勤选择"] in ocr((901, 12, 1028, 60))[0]:
                 click((94, 935))
                 wait(2000)
@@ -162,6 +166,10 @@ class Fight(Task):
                 if click_text("心之"):
                     break
             wait(2500)
+            click((1037, 951))
+            wait(500)
+            click((1037, 951))
+            wait(500)
             if not self.task["活动后勤选择"] in ocr((149, 965, 313, 1006))[0]:
                 click((95, 985))
                 wait(2000)

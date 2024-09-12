@@ -50,7 +50,7 @@ class Fight:
             ["通用银", "角色经验素材", "武器经验素材",
              "武器突破素材", "角色神经素材", "后勤获取",
              "活动后勤获取", "活动武器获取",
-             "活动关卡-空都演绎"])
+             "活动关卡-极夜行动"])
 
         self.label_logistics = Label(self.page_fight, (15, 275, 80, 18), "后勤选择")
         self.logistics = Combobox(self.page_fight, (15, 305, 160, 40))
@@ -73,6 +73,7 @@ class Fight:
              "极光小队",
              "祖灵小队",
              "沙叶小队",
+             "金甲小队",
              "星朗小队",
              "清乐小队"])
 
@@ -91,7 +92,9 @@ class Daily:
         self.character2 = Combobox(self.page_debris, (145, 110, 120, 40))
         self.character3 = Combobox(self.page_debris, (15, 155, 120, 40))
         self.character4 = Combobox(self.page_debris, (145, 155, 120, 40))
-        chara = ["未选择", "辉耀", "无限之视", "瞬刻", "羽蜕", "悖谬", "豹豹", "蓝闪", "魔术师", "藏锋", "溯影", "云篆", "辉夜",
+        chara = ["未选择", "龙舌兰", "辉耀", "无限之视",
+                 "瞬刻", "羽蜕", "悖谬", "豹豹", "蓝闪",
+                 "魔术师", "藏锋", "溯影", "云篆", "辉夜",
                  "咎冠", "冬至", "狂猎", "雨燕", "缄默",
                  "小金鱼", "小太阳", "观测者", "黄金狮子", "养生专家",
                  "猫猫", "星期三", "姐姐大人", "双面", "旧日王牌",
@@ -112,7 +115,7 @@ class Daily:
 
         self.check_daily = Check(self.page_debris, (15, 375, 140, 22), "领取日常")
         self.check_daily2 = Check(self.page_debris, (15, 410, 140, 22), "领取凭证")
-        self.check_daily3 = Check(self.page_debris, (15, 445, 180, 22), "领取活动每日-空都演绎")
+        self.check_daily3 = Check(self.page_debris, (15, 445, 180, 22), "领取活动每日-极夜行动")
 
 
 class Mail:
