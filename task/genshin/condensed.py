@@ -1,3 +1,4 @@
+# -*- coding:gbk -*-
 from tools.environment import *
 from .genshin import Genshin
 
@@ -18,43 +19,105 @@ class Condensed(Genshin):
             wait(1000)
             keyup("W")
             wait(300)
-            if "åˆæˆ" in ocr((1205, 502, 1315, 578))[0]:
-                self.indicate("åˆ°è¾¾åˆæˆå°")
+            if "ºÏ³É" in ocr((1205, 502, 1315, 578))[0]:
+                self.indicate("µ½´ïºÏ³ÉÌ¨")
                 break
             elif i == 2:
-                self.indicate("åˆæˆæ ‘è„‚æœªçŸ¥é”™è¯¯,é‡è¯•å¤šæ¬¡")
+                self.indicate("ºÏ³ÉÊ÷Ö¬Î´Öª´íÎó,ÖØÊÔ¶à´Î")
                 return True
             else:
-                self.indicate(f"error:åˆæˆæ ‘è„‚æœªçŸ¥é”™è¯¯,å¼€å§‹é‡è¯•ç¬¬{i+1}/2æ¬¡") #
-        pressto("F", 1000, ("åˆæˆ", (124, 18, 215, 79), 0))
-        if "æµ“ç¼©æ ‘è„‚" in ocr((1270, 103, 1417, 158))[0]:
+                self.indicate(f"error:ºÏ³ÉÊ÷Ö¬Î´Öª´íÎó,¿ªÊ¼ÖØÊÔµÚ{i+1}/2´Î")
+        press("F")
+        wait(1000)
+        click((960,950))
+        wait(1500)
+        click((107, 188))
+        wait(500)
+        click((1339, 408))
+        wait(600)
+        if "Å¨ËõÊ÷Ö¬" in ocr((739, 178, 882, 227))[0]:
+            num = int(ocr((996, 887, 1028, 924))[0].strip(" "))
+            click((1618, 497))
+            wait(600)
             fly = int(ocr((1025, 917, 1134, 941))[0].split("/")[0])
             cons = int(ocr((1162, 917, 1269, 941))[0].split("/")[0])
-            clickto((1339, 408), 600, ("æµ“ç¼©æ ‘è„‚", (739, 178, 882, 227), 0))
-            num = int(ocr((996, 887, 1028, 924))[0].strip(" "))
-            clickto((1618, 497), 600, ("åˆæˆ", (823, 740, 938, 788), 0))
-            self.indicate(f"å½“å‰å·²æœ‰:\n"
-                          f"  æ™¶æ ¸:{fly}ä¸ª\n"
-                          f"  åŸç²¹æ ‘è„‚:{cons}/160\n"
-                          f"  æµ“ç¼©æ ‘è„‚:{num}ä¸ª")
+            self.indicate(f"µ±Ç°ÒÑÓĞ:\n"
+                          f"  ¾§ºË:{fly}¸ö\n"
+                          f"  Ô­´âÊ÷Ö¬:{cons}/160\n"
+                          f"  Å¨ËõÊ÷Ö¬:{num}¸ö")
             _n = min(int(cons/40), fly, 5-num)
             if _n:
+                """ĞÂ°æ±¾×Ô¶¯Ñ¡ÔñÄÜ×öµÄ×î´óÊıÁ¿Å¨ËõÊ÷Ö¬£¬¹Ê×¢ÊÍµô
                 for i in range(_n-1):
                     click((1611, 671))
                     wait(400)
+
+                    """
                 ori = cons-_n*40
                 cond = num+_n
-                self.task["resin"] = [ori, cond]
-                self.indicate(f"æœ¬æ¬¡åˆæˆæµ“ç¼©æ ‘è„‚{_n}ä¸ª\n"
-                              f"  åŸç²¹æ ‘è„‚: {cons} -> {ori}\n"
-                              f"  æµ“ç¼©æ ‘è„‚: {num} -> {cond}")
+                self.task["resin"] = [ori, cond, _n]
+                self.indicate(f"±¾´ÎºÏ³ÉÅ¨ËõÊ÷Ö¬{_n}¸ö\n"
+                              f"  Ô­´âÊ÷Ö¬: {cons} -> {ori}\n"
+                              f"  Å¨ËõÊ÷Ö¬: {num} -> {cond}")
                 click((1727, 1019))
                 wait(800)
-                click((1180, 755))
-                wait(500)
+                click((1173, 786))
+                wait(200)
             else:
-                self.indicate("æµ“ç¼©æ ‘è„‚æ•°é‡è¾¾åˆ°ä¸Šé™")
+                self.indicate("Å¨ËõÊ÷Ö¬ÊıÁ¿´ïµ½ÉÏÏŞ")
         else:
-            self.indicate("æ— æ³•åˆæˆæµ“ç¼©æ ‘è„‚:ç¼ºå°‘æ ‘è„‚æˆ–æ™¶æ ¸")
-        self.home()
+            click((1618, 497))
+            wait(600)
+            self.indicate("ÎŞ·¨ºÏ³ÉÅ¨ËõÊ÷Ö¬:È±ÉÙÊ÷Ö¬»ò¾§ºË")
+        self.turn_world()
+        if self.task["Ã¿ÈÕ½±Àø"]:
+            if _n >= 4:
+                self.indicate(f"ºÏ³ÉÅ¨ËõÊ÷Ö¬×ã¹»£¬³¢ÊÔÁìÈ¡Ã¿ÈÕ½±Àø")
+                self.daily_gift()
+            else:
+                self.indicate(f"ºÏ³ÉÅ¨ËõÊ÷Ö¬²»×ã£¬ÎŞ·¨ÁìÈ¡Ã¿ÈÕ½±Àø")
         return False
+
+    def daily_gift(self):
+            self.home()
+            self.open_sub("Ã°ÏÕÖ®Ö¤")
+            click((291,343)) #µã»÷Ã¿ÈÕÈÎÎñÒ³Ãæ
+            wait(500) 
+            click((1552,753)) #Íê³ÉÃ¿ÈÕÈÎÎñ
+            wait(300)
+            click((1552,753))
+            wait(300)
+            click((593,851)) #µã»÷ÁìÈ¡½±ÀøÌø×ªµ½µØÍ¼
+            wait(1000)
+            self.indicate("Ç°Íù¿­ÉªÁÕ")
+            click((1634, 1003)) #µã»÷´«ËÍ
+            wait(3000)
+            self.turn_world()  #ÅĞ¶Ï´«ËÍÊÇ·ñ³É¹¦
+            keydown("W") #ÅÜµ½¿­ÉªÁÕÎ»ÖÃ
+            wait(2700)
+            keyup("W")
+            wait(500)
+            keydown("A")
+            wait(1500)
+            keyup("A")
+            wait(500)
+            press("F") #¸ú¿­ÉªÁÕ¶Ô»°
+            wait(1000)
+            click((960, 900))
+            wait(1500)
+            x, y = find_pic(r"assets\genshin\picture\condensed\get_daily_gift.png",(1300, 398, 1400, 532))[0]
+            if (x, y) == (0, 0):
+                self.indicate("Î´Ê¶±ğµ½Ã¿ÈÕÈÎÎñÍê³É")
+                click((1345,800))
+            else:
+                self.indicate("¿ªÊ¼ÁìÈ¡Ã¿ÈÕÈÎÎñ½±Àø")
+                click((x, y))
+                wait(2000)
+                click((x, y))
+                wait(1000)
+                click((x , y))
+                wait(500)
+                self.indicate("Ã¿ÈÕÈÎÎñÍê³É£¬Ã¿ÈÕ½±ÀøÒÑÁìÈ¡")
+            
+            
+        
