@@ -85,6 +85,7 @@ class Genshin:
             "¾§µû2": False,
             "¾§µû3": False,
             "¾§µû4": False,
+            "Ã¿ÈÕ½±Àø":False,
             "¿³Ê÷´ÎÊý": 0,
             "¿³Ê÷0": False,
             "¿³Ê÷1": False,
@@ -151,6 +152,8 @@ class Genshin:
         self.set.fly3.setChecked(config["¾§µû3"])
         self.set.fly4.setChecked(config["¾§µû4"])
 
+        self.set.daily_gift.setChecked(config["Ã¿ÈÕ½±Àø"])
+
         self.set.CompactSpinBox.setValue(config["¿³Ê÷´ÎÊý"])
         self.set.tree0.setChecked(config["¿³Ê÷0"])
         self.set.tree1.setChecked(config["¿³Ê÷1"])
@@ -213,6 +216,8 @@ class Genshin:
         config["¾§µû2"] = self.set.fly2.isChecked()
         config["¾§µû3"] = self.set.fly3.isChecked()
         config["¾§µû4"] = self.set.fly4.isChecked()
+
+        config["Ã¿ÈÕ½±Àø"] = self.set.daily_gift.isChecked()
 
         config["¿³Ê÷´ÎÊý"] = self.set.CompactSpinBox.value()
         config["¿³Ê÷0"] = self.set.tree0.isChecked()
