@@ -32,7 +32,7 @@ class Dispatch(Genshin):
                        "久雨莲,兽肉", "泡泡桔,禽肉", "甜甜花,薄荷"],
              "name5": ["颗粒果,蘑菇", "兽肉,苹果", "烬芯花,白萝卜",
                        "摩拉", "苦种,胡萝卜", "澄晶实,薄荷"],
-             "y_list": [123, 228, 332, 440, 545]} #派遣角色位置
+             "y_list": [123, 228, 332, 440, 545]}
 
         for i in range(3):
             self.tp_fontaine1()
@@ -47,7 +47,7 @@ class Dispatch(Genshin):
             wait(500)
             press("F")
             wait(1000)
-            click(960, 900)
+            click((960, 900))
             wait(1500)
             x, y = find_pic(r"assets\genshin\picture\dispatch\dispatch.png",
                             (1247, 311, 1337, 909))[0]
@@ -60,19 +60,19 @@ class Dispatch(Genshin):
                     continue
             else:
                 self.indicate("开始检查派遣")
-                click(x + 30, y)
+                click((x + 30, y))
                 wait(2000)
                 break
         if "全部领取" in ocr((108, 992, 252, 1045))[0]:
             self.indicate("存在可领取派遣")
-            click(169, 1020)
+            click((169, 1020))
             wait(2000)
             if self.task["再次派遣"]:
                 self.indicate("再次派遣")
-                click(1151, 1015)
+                click((1151, 1015))
             else:
                 self.indicate("领取派遣")
-                click(786, 1016)
+                click((786, 1016))
             wait(2000)
         _num = int(ocr((1713, 33, 1742, 63))[0].strip(" "))
         if _num == 5:
@@ -85,10 +85,10 @@ class Dispatch(Genshin):
                 cname = "%s-%s" % (_n, temp_dir[f"name{_r}"][_m])
                 self.indicate("检查派遣:\n  %s" % cname)
                 x, y = temp_dir["区域坐标"][_r]
-                click(x, y)
+                click((x, y))
                 wait(800)
                 x, y = temp_dir[_r][_m]
-                click(x, y)
+                click((x, y))
                 wait(800)
 
                 _text = ocr((1490, 979, 1823, 1050))[0]
@@ -96,9 +96,9 @@ class Dispatch(Genshin):
                     self.indicate("执行中:\n  " + cname)
                 elif "选择角色" in _text:
                     self.indicate("可以开始派遣:\n  " + cname)
-                    click(1793, 683)
+                    click((1793, 683))
                     wait(500)
-                    click(1692, 1024)
+                    click((1692, 1024))
                     wait(1000)
                     alist, blist, clist = [], [], []
                     sc = screenshot()
@@ -124,7 +124,7 @@ class Dispatch(Genshin):
                         y = blist[0]
                     else:
                         y = clist[0]
-                    click(269, y + 40)
+                    click((269, y + 40))
                     self.indicate("开始派遣:" + cname)
                     wait(800)
                     _num += 1
@@ -138,7 +138,7 @@ class Dispatch(Genshin):
             self.indicate("派遣检查异常")
             raise RuntimeError("原神:派遣检查异常")
         # 关闭派遣
-        click(1853, 51)
+        click((1853, 51))
         self.indicate("退出派遣")
         wait(3500)
         self.home()
