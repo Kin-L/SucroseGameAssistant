@@ -1,4 +1,4 @@
-# -*- coding:gbk -*-
+# -*- coding:utf-8 -*-
 from tools.environment import *
 from .genshin import Genshin
 
@@ -19,14 +19,14 @@ class Condensed(Genshin):
             wait(1000)
             keyup("W")
             wait(300)
-            if "ºÏ³É" in ocr((1205, 502, 1315, 578))[0]:
-                self.indicate("µ½´ïºÏ³ÉÌ¨")
+            if "åˆæˆ" in ocr((1205, 502, 1315, 578))[0]:
+                self.indicate("åˆ°è¾¾åˆæˆå°")
                 break
             elif i == 2:
-                self.indicate("ºÏ³ÉÊ÷Ö¬Î´Öª´íÎó,ÖØÊÔ¶à´Î")
+                self.indicate("åˆæˆæ ‘è„‚æœªçŸ¥é”™è¯¯,é‡è¯•å¤šæ¬¡")
                 return True
             else:
-                self.indicate(f"error:ºÏ³ÉÊ÷Ö¬Î´Öª´íÎó,¿ªÊ¼ÖØÊÔµÚ{i+1}/2´Î")
+                self.indicate(f"error:åˆæˆæ ‘è„‚æœªçŸ¥é”™è¯¯,å¼€å§‹é‡è¯•ç¬¬{i+1}/2æ¬¡")
         press("F")
         wait(1000)
         click((960,950))
@@ -35,19 +35,19 @@ class Condensed(Genshin):
         wait(500)
         click((1339, 408))
         wait(600)
-        if "Å¨ËõÊ÷Ö¬" in ocr((739, 178, 882, 227))[0]:
+        if "æµ“ç¼©æ ‘è„‚" in ocr((739, 178, 882, 227))[0]:
             num = int(ocr((996, 887, 1028, 924))[0].strip(" "))
             click((1618, 497))
             wait(600)
             fly = int(ocr((1025, 917, 1134, 941))[0].split("/")[0])
             cons = int(ocr((1162, 917, 1269, 941))[0].split("/")[0])
-            self.indicate(f"µ±Ç°ÒÑÓĞ:\n"
-                          f"  ¾§ºË:{fly}¸ö\n"
-                          f"  Ô­´âÊ÷Ö¬:{cons}/160\n"
-                          f"  Å¨ËõÊ÷Ö¬:{num}¸ö")
+            self.indicate(f"å½“å‰å·²æœ‰:\n"
+                          f"  æ™¶æ ¸:{fly}ä¸ª\n"
+                          f"  åŸç²¹æ ‘è„‚:{cons}/160\n"
+                          f"  æµ“ç¼©æ ‘è„‚:{num}ä¸ª")
             _n = min(int(cons/40), fly, 5-num)
             if _n:
-                """ĞÂ°æ±¾×Ô¶¯Ñ¡ÔñÄÜ×öµÄ×î´óÊıÁ¿Å¨ËõÊ÷Ö¬£¬¹Ê×¢ÊÍµô
+                """æ–°ç‰ˆæœ¬è‡ªåŠ¨é€‰æ‹©èƒ½åšçš„æœ€å¤§æ•°é‡æµ“ç¼©æ ‘è„‚ï¼Œæ•…æ³¨é‡Šæ‰
                 for i in range(_n-1):
                     click((1611, 671))
                     wait(400)
@@ -56,44 +56,44 @@ class Condensed(Genshin):
                 ori = cons-_n*40
                 cond = num+_n
                 self.task["resin"] = [ori, cond, _n]
-                self.indicate(f"±¾´ÎºÏ³ÉÅ¨ËõÊ÷Ö¬{_n}¸ö\n"
-                              f"  Ô­´âÊ÷Ö¬: {cons} -> {ori}\n"
-                              f"  Å¨ËõÊ÷Ö¬: {num} -> {cond}")
+                self.indicate(f"æœ¬æ¬¡åˆæˆæµ“ç¼©æ ‘è„‚{_n}ä¸ª\n"
+                              f"  åŸç²¹æ ‘è„‚: {cons} -> {ori}\n"
+                              f"  æµ“ç¼©æ ‘è„‚: {num} -> {cond}")
                 click((1727, 1019))
                 wait(800)
                 click((1173, 786))
                 wait(200)
             else:
-                self.indicate("Å¨ËõÊ÷Ö¬ÊıÁ¿´ïµ½ÉÏÏŞ")
+                self.indicate("æµ“ç¼©æ ‘è„‚æ•°é‡è¾¾åˆ°ä¸Šé™")
         else:
             click((1618, 497))
             wait(600)
-            self.indicate("ÎŞ·¨ºÏ³ÉÅ¨ËõÊ÷Ö¬:È±ÉÙÊ÷Ö¬»ò¾§ºË")
+            self.indicate("æ— æ³•åˆæˆæµ“ç¼©æ ‘è„‚:ç¼ºå°‘æ ‘è„‚æˆ–æ™¶æ ¸")
         self.turn_world()
-        if self.task["Ã¿ÈÕ½±Àø"]:
+        if self.task["æ¯æ—¥å¥–åŠ±"]:
             if _n >= 4:
-                self.indicate(f"ºÏ³ÉÅ¨ËõÊ÷Ö¬×ã¹»£¬³¢ÊÔÁìÈ¡Ã¿ÈÕ½±Àø")
+                self.indicate(f"åˆæˆæµ“ç¼©æ ‘è„‚è¶³å¤Ÿï¼Œå°è¯•é¢†å–æ¯æ—¥å¥–åŠ±")
                 self.daily_gift()
             else:
-                self.indicate(f"ºÏ³ÉÅ¨ËõÊ÷Ö¬²»×ã£¬ÎŞ·¨ÁìÈ¡Ã¿ÈÕ½±Àø")
+                self.indicate(f"åˆæˆæµ“ç¼©æ ‘è„‚ä¸è¶³ï¼Œæ— æ³•é¢†å–æ¯æ—¥å¥–åŠ±")
         return False
 
     def daily_gift(self):
             self.home()
-            self.open_sub("Ã°ÏÕÖ®Ö¤")
-            click((291,343)) #µã»÷Ã¿ÈÕÈÎÎñÒ³Ãæ
-            wait(500) 
-            click((1552,753)) #Íê³ÉÃ¿ÈÕÈÎÎñ
-            wait(300)
-            click((1552,753))
-            wait(300)
-            click((593,851)) #µã»÷ÁìÈ¡½±ÀøÌø×ªµ½µØÍ¼
+            self.open_sub("å†’é™©ä¹‹è¯")
+            click((291,343)) #ç‚¹å‡»æ¯æ—¥ä»»åŠ¡é¡µé¢
+            wait(800) 
+            click((1552,753)) #å®Œæˆæ¯æ—¥ä»»åŠ¡
             wait(1000)
-            self.indicate("Ç°Íù¿­ÉªÁÕ")
-            click((1634, 1003)) #µã»÷´«ËÍ
+            click((1552,753))
+            wait(1000)
+            click((593,851)) #ç‚¹å‡»é¢†å–å¥–åŠ±è·³è½¬åˆ°åœ°å›¾
+            wait(1500)
+            self.indicate("å‰å¾€å‡¯ç‘Ÿç³")
+            click((1634, 1003)) #ç‚¹å‡»ä¼ é€
             wait(3000)
-            self.turn_world()  #ÅĞ¶Ï´«ËÍÊÇ·ñ³É¹¦
-            keydown("W") #ÅÜµ½¿­ÉªÁÕÎ»ÖÃ
+            self.turn_world()  #åˆ¤æ–­ä¼ é€æ˜¯å¦æˆåŠŸ
+            keydown("W") #è·‘åˆ°å‡¯ç‘Ÿç³ä½ç½®
             wait(2700)
             keyup("W")
             wait(500)
@@ -101,23 +101,23 @@ class Condensed(Genshin):
             wait(1500)
             keyup("A")
             wait(500)
-            press("F") #¸ú¿­ÉªÁÕ¶Ô»°
+            press("F") #è·Ÿå‡¯ç‘Ÿç³å¯¹è¯
             wait(1000)
             click((960, 900))
             wait(1500)
             x, y = find_pic(r"assets\genshin\picture\condensed\get_daily_gift.png",(1300, 398, 1400, 532))[0]
             if (x, y) == (0, 0):
-                self.indicate("Î´Ê¶±ğµ½Ã¿ÈÕÈÎÎñÍê³É")
+                self.indicate("æœªè¯†åˆ«åˆ°æ¯æ—¥ä»»åŠ¡å®Œæˆ")
                 click((1345,800))
             else:
-                self.indicate("¿ªÊ¼ÁìÈ¡Ã¿ÈÕÈÎÎñ½±Àø")
+                self.indicate("å¼€å§‹é¢†å–æ¯æ—¥ä»»åŠ¡å¥–åŠ±")
                 click((x, y))
                 wait(2000)
                 click((x, y))
                 wait(1000)
                 click((x , y))
-                wait(500)
-                self.indicate("Ã¿ÈÕÈÎÎñÍê³É£¬Ã¿ÈÕ½±ÀøÒÑÁìÈ¡")
+                wait(1000)
+                self.indicate("æ¯æ—¥ä»»åŠ¡å®Œæˆï¼Œæ¯æ—¥å¥–åŠ±å·²é¢†å–")
             
             
         
