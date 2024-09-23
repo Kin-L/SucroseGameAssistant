@@ -55,7 +55,7 @@ class Condensed(Genshin):
                     """
                 ori = cons-_n*40
                 cond = num+_n
-                self.task["resin"] = [ori, cond, _n]
+                self.task["resin"] = [ori, cond]
                 self.indicate(f"本次合成浓缩树脂{_n}个\n"
                               f"  原粹树脂: {cons} -> {ori}\n"
                               f"  浓缩树脂: {num} -> {cond}")
