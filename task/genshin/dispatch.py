@@ -101,7 +101,7 @@ class Dispatch(Genshin):
                     click(1692, 1024)
                     wait(1000)
                     alist, blist, clist = [], [], []
-                    sc = screenshot()
+                    sc = scshot()
                     for y in temp_dir["y_list"]:
                         if "探险中" in ocr((221, y, 429, y + 46), sc)[0]:
                             continue
@@ -115,9 +115,9 @@ class Dispatch(Genshin):
                                 clist += [y]
                             else:
                                 self.indicate("原神:派遣选择角色异常")
-                                os.remove(sc)
+                                del sc
                                 raise RuntimeError("原神:派遣检查异常")
-                    os.remove(sc)
+                    del sc
                     if alist:
                         y = alist[0]
                     elif blist:

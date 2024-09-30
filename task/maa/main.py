@@ -1,10 +1,10 @@
-# -*- coding:gbk -*-
-import json
+from json import load, dump
 from ..default_task import Task
 from tools.environment import *
 from tools.software import get_pid, close, find_hwnd
-import os
-import traceback
+from os.path import isfile, split, join, exists
+from os import remove
+from traceback import format_exc
 
 
 class TaskMAA(Task):
@@ -14,34 +14,34 @@ class TaskMAA(Task):
     def maa_start(self, task: type[dir]):
         _k = False
         self.task = task
-        self.indicate("¿ªÊ¼ÈÎÎñ:MAA")
+        self.indicate("å¼€å§‹ä»»åŠ¡:MAA")
         # noinspection PyBroadException
         try:
-            # MAA¹Ø±Õ²¢³õÊ¼»¯
+            # MAAå…³é—­å¹¶åˆå§‹åŒ–
             pid = get_pid("MAA.exe")
             if pid is not None:
-                self.indicate("MAAÔçÒÑÆô¶¯,½øĞĞÖØÆô")
+                self.indicate("MAAæ—©å·²å¯åŠ¨,è¿›è¡Œé‡å¯")
                 close(pid)
             env.set_soft(None, (0, "HwndWrapper[MAA", "MAA"))
-            _path = self.task["Æô¶¯"]["maa_path"]
-            if os.path.isfile(_path):
-                dire, name = os.path.split(_path)
+            _path = self.task["å¯åŠ¨"]["maa_path"]
+            if isfile(_path):
+                dire, name = split(_path)
                 if name == "MAA.exe":
                     env.soft.set_path(_path)
                 else:
-                    self.indicate("MAA,ÎŞĞ§Æô¶¯Â·¾¶")
-                    raise ValueError("MAA,ÎŞĞ§Æô¶¯Â·¾¶")
+                    self.indicate("MAA,æ— æ•ˆå¯åŠ¨è·¯å¾„")
+                    raise ValueError("MAA,æ— æ•ˆå¯åŠ¨è·¯å¾„")
             else:
-                self.indicate("MAA,ÎŞĞ§Æô¶¯Â·¾¶")
-                raise ValueError("MAA,ÎŞĞ§Æô¶¯Â·¾¶")
-            # ĞŞ¸ÄMAAÔËĞĞÉèÖÃ
-            gui_path = os.path.split(_path)[0] + "/config/gui.json"
+                self.indicate("MAA,æ— æ•ˆå¯åŠ¨è·¯å¾„")
+                raise ValueError("MAA,æ— æ•ˆå¯åŠ¨è·¯å¾„")
+            # ä¿®æ”¹MAAè¿è¡Œè®¾ç½®
+            gui_path = split(_path)[0] + "/config/gui.json"
             with open(gui_path, 'r', encoding='utf-8') as g:
-                maa = json.load(g)
+                maa = load(g)
             import copy
-            setcurrent = self.task["ÅäÖÃ"]
+            setcurrent = self.task["é…ç½®"]
             _sga = copy.deepcopy(maa["Configurations"][setcurrent])
-            if self.task["¹Ø±ÕÈí¼ş"]:
+            if self.task["å…³é—­è½¯ä»¶"]:
                 after_completed = "StopGame"
             else:
                 after_completed = "DoNothing"
@@ -49,11 +49,11 @@ class TaskMAA(Task):
             _sga["Start.EndsWithScript"] = env.workdir + "/personal/bat/maa_create.bat"
             _sga["MainFunction.ActionAfterCompleted"] = after_completed
             _sga["Start.RunDirectly"] = "True"
-            _sga["Start.EndsWithScript"] = os.path.join(env.workdir, "assets/maa/bat_scr/maa_completed.bat")
+            _sga["Start.EndsWithScript"] = join(env.workdir, "assets/maa/bat_scr/maa_completed.bat")
             maa["Configurations"]["SGA-cache"] = _sga
             maa["Current"] = "SGA-cache"
             with open(gui_path, 'w', encoding='utf-8') as g:
-                json.dump(maa, g, ensure_ascii=False, indent=1)
+                dump(maa, g, ensure_ascii=False, indent=1)
             # def st():
             #     from win32process import CreateProcess, CREATE_NEW_CONSOLE, STARTUPINFO
             #     from win32event import WaitForSingleObject
@@ -61,50 +61,50 @@ class TaskMAA(Task):
             #     if ifexistexe==0:
             #         os.system('taskkill /f /im "MAA.exe"')
             #         wait(1000)
-            #     handle=CreateProcess(_path, '', None , None , 0 ,CREATE_NEW_CONSOLE , None , os.path.split(_path)[0] ,STARTUPINFO())
+            #     handle=CreateProcess(_path, '', None , None , 0 ,CREATE_NEW_CONSOLE , None , split(_path)[0] ,STARTUPINFO())
             #     WaitForSingleObject(handle[0],2)
-            #     self.indicate("MAAÔËĞĞÖĞ...")
-            fpath = os.path.join(dire, "completed.txt")
-            if os.path.exists(fpath):
-                os.remove(fpath)
+            #     self.indicate("MAAè¿è¡Œä¸­...")
+            fpath = join(dire, "completed.txt")
+            if exists(fpath):
+                remove(fpath)
             def maa_run():
-                [_dir, name] = os.path.split(_path)
+                [_dir, name] = split(_path)
                 cmd = f"start /d \"{_dir}\" {name}"
                 f = open("cache/MAA_start.bat", 'w', encoding='utf-8')
                 f.writelines(cmd)
                 f.close()
-                _p = os.path.join(env.workdir, "assets/main_window/bat_scr/PsExec64.exe")
+                _p = join(env.workdir, "assets/main_window/bat_scr/PsExec64.exe")
                 for n in range(2):
                     cmd_run(f"start \"\" \"{_p}\" -i -s -d \"{_path}\"")
                     for i in range(30):
                         wait(1000)
                         self.hwnd = find_hwnd((False, "HwndWrapper[MAA", "MAA"))
                         if self.hwnd:
-                            self.indicate("MAAÔËĞĞÖĞ...")
+                            self.indicate("MAAè¿è¡Œä¸­...")
                             return False
                 return True
             if maa_run():
-                raise RuntimeError("MAAÆô¶¯³¬Ê±")
+                raise RuntimeError("MAAå¯åŠ¨è¶…æ—¶")
             # st()
-            # ÔËĞĞ-½áÊø
+            # è¿è¡Œ-ç»“æŸ
             while 1:
                 wait(10000)
-                if os.path.exists(fpath):
-                    os.remove(fpath)
+                if exists(fpath):
+                    remove(fpath)
                     close(get_pid("MAA.exe"))
-                    self.indicate("¹Ø±ÕMAA")
+                    self.indicate("å…³é—­MAA")
                     break
             with open(gui_path, 'r', encoding='utf-8') as g:
-                maa = json.load(g)
+                maa = load(g)
             maa["Current"] = current
             with open(gui_path, 'w', encoding='utf-8') as g:
-                json.dump(maa, g, ensure_ascii=False, indent=1)
+                dump(maa, g, ensure_ascii=False, indent=1)
             g.close()
         except Exception:
-            self.indicate("ÈÎÎñÖ´ĞĞÒì³£:MAA", log=False)
-            logger.error("ÈÎÎñÖ´ĞĞÒì³£:MAA\n%s" % traceback.format_exc())
+            self.indicate("ä»»åŠ¡æ‰§è¡Œå¼‚å¸¸:MAA", log=False)
+            logger.error("ä»»åŠ¡æ‰§è¡Œå¼‚å¸¸:MAA\n%s" % format_exc())
             _k = True
-        self.indicate("Íê³ÉÈÎÎñ:MAA")
+        self.indicate("å®Œæˆä»»åŠ¡:MAA")
         return _k
 
 

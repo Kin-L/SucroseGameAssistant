@@ -1,11 +1,11 @@
 from .main_down import MainDown
 from tools.environment import *
-import traceback
-import shutil
-import random
-import os
-import json
-import time
+from traceback import format_exc
+from shutil import copyfile
+from random import randint
+from os import remove, rename
+from json import dump, load
+from time import strftime
 from datetime import timedelta, datetime
 
 
@@ -29,7 +29,7 @@ class MainUp(MainDown):
                 elif _text in self.state["serial"]:
                     self.state["serial"].remove(_text)
                 self.overall.timer.delete_overall_plan(_index)
-                os.remove(self.get_file_path(_text))
+                remove(self.get_file_path(_text))
                 if _index + 1 == _num:
                     self.box_config_change.setCurrentIndex(_index-1)
                     self.state["plan"].pop(_text)
@@ -51,26 +51,26 @@ class MainUp(MainDown):
             else:
                 self.indicate("删除配置失败：最少需要存在一项配置", 3)
         except Exception as e:
-            logger.error("删除配置异常:\n%s\n" % traceback.format_exc())
+            logger.error("删除配置异常:\n%s\n" % format_exc())
             self.indicate(f"删除配置异常：{e}", 3, log=False)
 
     # 选择方案改变 & 重命名 & 新建方案
     def config_change(self):
-        index_now = self.box_config_change.currentIndex()
+        _index_now = self.box_config_change.currentIndex()
         # 新建方案
-        if index_now == 0:
+        if _index_now == 0:
             try:
                 self.indicate("", 1)
-                newname = "默认配置" + str(random.randint(999, 10000))
-                shutil.copyfile(r"assets\main_window\default_config.json",
-                                r"personal\config\00%s.json" % newname)
+                newname = "默认配置" + str(randint(999, 10000))
+                copyfile(r"assets\main_window\default_config.json",
+                         r"personal\config\00%s.json" % newname)
                 # 更新方案列表
                 self.state["plan"][newname] = "00"
                 self.state["serial"] += [newname]
                 self.box_config_change.addItem(newname)
                 self.overall.timer.overall_add_item(newname)
             except Exception as e:
-                logger.error("新建配置异常:\n%s\n" % traceback.format_exc())
+                logger.error("新建配置异常:\n%s\n" % format_exc())
                 self.indicate(f"新建配置异常：{e}", 3, log=False)
                 return 0
             try:
@@ -87,28 +87,8 @@ class MainUp(MainDown):
                     self.box_config_change.setCurrentText(self.state["text"])
                     self.indicate("新配置已创建：" + newname, 3)
             except Exception as e:
-                logger.error("载入配置异常:\n%s\n" % traceback.format_exc())
+                logger.error("载入配置异常:\n%s\n" % format_exc())
                 self.indicate(f"载入配置异常：{e}", 3, log=False)
-        # 配置重命名
-        elif index_now == -1:
-            try:
-                self.indicate("", 1)
-                text_past = self.state["text"]
-                text_now = self.box_config_change.currentText()
-                prefix = self.state["plan"][text_past]
-                os.rename(r"personal/config/%s.json" % (prefix + text_past),
-                          r"personal/config/%s.json" % (prefix + text_now))
-                self.box_config_change.setItemText(self.state["index"], text_now)
-                self.box_config_change.setCurrentIndex(self.state["index"])
-                self.overall.timer.overall_rename_item(text_past, text_now)
-                if prefix != "00" and self.state["mix"]["load"]:
-                    self.mix.rename_item(text_past, text_now)
-                self.state["plan"][text_now] = self.state["plan"].pop(text_past)
-                self.state["text"] = text_now
-                self.indicate("配置更名：%s >>> %s" % (text_past, text_now), 3)
-            except Exception as e:
-                logger.error("重命名配置异常:\n%s\n" % traceback.format_exc())
-                self.indicate(f"重命名配置异常：{e}", 3, log=False)
         # 选择方案改变
         else:
             try:
@@ -121,7 +101,7 @@ class MainUp(MainDown):
                     self.send_config_dir(_dir)
                     self.indicate("载入配置：%s" % self.state["text"], 3)
             except Exception as e:
-                logger.error("载入配置异常:\n%s\n" % traceback.format_exc())
+                logger.error("载入配置异常:\n%s\n" % format_exc())
                 self.indicate(f"载入配置异常：{e}", 3, log=False)
 
     # 设置锁定模式（并加载配置）
@@ -147,16 +127,16 @@ class MainUp(MainDown):
                 new_prefix = self.state["prefix"][index_now]
                 self.state["plan"][text] = new_prefix
                 name_new = new_prefix + text
-                os.rename(path % name_past, path % name_new)
+                rename(path % name_past, path % name_new)
                 if prefix_past == "00" and index_now != 0:
                     self.mix.add_item(text)
                 else:
                     self.mix.remove_item(name_past)
             with open(path % name_new, 'w', encoding='utf-8') as c:
-                json.dump(self.get_config_dir(), c, ensure_ascii=False, indent=1)
+                dump(self.get_config_dir(), c, ensure_ascii=False, indent=1)
             self.indicate("保存配置：%s" % text, 3)
         except Exception as e:
-            logger.error("保存异常:\n%s\n" % traceback.format_exc())
+            logger.error("保存异常:\n%s\n" % format_exc())
             self.indicate(f"保存异常：{e}", 3, log=False)
 
     # 应用定时
@@ -164,7 +144,7 @@ class MainUp(MainDown):
         self.indicate("", 1)
         try:
             with open(r"personal\schtasks_index.json", 'r', encoding='utf-8') as x:
-                xml_dir = json.load(x)
+                xml_dir = load(x)
             auto, awake = [], []
             for num in range(self.overall.timer.time_item):
                 daily = eval("self.overall.timer.execute%s" % num).currentIndex()
@@ -181,7 +161,7 @@ class MainUp(MainDown):
                         _item[5] = "          <" + week + " />\n"
                     _str = eval("self.overall.timer.timer%s" % num).getTime().toString()
                     pydatetime = datetime.strptime(_str, "%H:%M:%S") - timedelta(minutes=2)
-                    wake_time = time.strftime("%H:%M", pydatetime.timetuple())
+                    wake_time = strftime("%H:%M", pydatetime.timetuple())
                     _item[1] = f"      <StartBoundary>2023-09-20T{wake_time}</StartBoundary>\n"
                     if _awake:
                         awake += _item
@@ -216,7 +196,7 @@ class MainUp(MainDown):
                 cmd_run("schtasks.exe /DELETE /tn SGA-awake /f")
                 self.indicate("清除定时", 3)
         except Exception as e:
-            logger.error("应用定时异常:\n%s\n" % traceback.format_exc())
+            logger.error("应用定时异常:\n%s\n" % format_exc())
             self.indicate(f"应用定时异常：{e}", 3, log=False)
 
     def timer_delete(self):

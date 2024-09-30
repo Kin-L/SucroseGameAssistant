@@ -1,6 +1,5 @@
-# -*- coding:gbk -*-
-import os
-import webbrowser
+from os import startfile
+from webbrowser import open as weopen
 from .list import SnowList
 from .stack import SnowStack
 from ui.element.control import *
@@ -8,7 +7,7 @@ from tools.environment import env
 from tools.system import check_path
 
 
-# ³¾°×½ûÇøÄ£×éÉèÖÃ´°¿Ú
+# å°˜ç™½ç¦åŒºæ¨¡ç»„è®¾ç½®çª—å£
 class Snow:
     def __init__(self, stack, icon, main):
         self.main = main
@@ -30,7 +29,7 @@ class Snow:
         self.list.set_roll.clicked.connect(lambda: self.set.stack.setCurrentIndex(4))
 
         self.set.button_wiki.clicked.connect(self.open_wiki)
-        self.set.button_arrange.clicked.connect(self.roll_arrange)
+        # self.set.button_arrange.clicked.connect(self.roll_arrange)
         self.set.button_open_roll.clicked.connect(self.open_roll_directory)
         Line(self.widget_snow, (215, 5, 3, 505), False)
 
@@ -53,119 +52,137 @@ class Snow:
 
     def input_config(self, _dir):
         config = {
-            "Ä£¿é": 5,
-            "Ô¤ÏÂÔØ": False,
-            "¸üĞÂ": False,
-            "¾²Òô": False,
-            "¹Ø±ÕÈí¼ş": False,
-            "Íê³Éºó": 0,
-            "SGA¹Ø±Õ": False,
-            "ÕËºÅÑ¡Ôñ": "",
-            "¹¦ÄÜ0": False,
-            "¹¦ÄÜ1": False,
-            "¹¦ÄÜ2": False,
-            "¹¦ÄÜ3": False,
-            "¹¦ÄÜ4": False,
-            "¸ĞÖª»¥Ôù": False,
-            "Ã¿ÈÕÅä¸ø": False,
-            "Ê¹ÓÃÊÔ¼Á": False,
-            "ĞĞ¶¯Ñ¡Ôñ": 0,
-            "ºóÇÚÑ¡Ôñ": "µ×±ÈË¹Ğ¡¶Ó",
-            "»î¶¯ºóÇÚÑ¡Ôñ": "Ã÷ÒÄĞ¡¶Ó",
-            "¸öÈË¹ÊÊÂ": [False, False, "Î´Ñ¡Ôñ", "Î´Ñ¡Ôñ", "Î´Ñ¡Ôñ", "Î´Ñ¡Ôñ"],
-            "Äâ¾³É¨µ´": False,
-            "ÉÌµê¹ºÎï": [False, "ĞÂÊÖÕ½¶·¼ÇÂ¼", "³õ¼¶Ö°¼¶ÈÏÖ¤"],
-            "ÎäÆ÷Éı¼¶": False,
-            "ÁìÈ¡ÈÕ³£": False,
-            "ÁìÈ¡Æ¾Ö¤": False,
-            "»î¶¯Ã¿ÈÕ": False
+            "æ¨¡å—": 5,
+            "é¢„ä¸‹è½½": False,
+            "æ›´æ–°": False,
+            "é™éŸ³": False,
+            "å…³é—­è½¯ä»¶": False,
+            "å®Œæˆå": 0,
+            "SGAå…³é—­": False,
+            "è´¦å·é€‰æ‹©": "",
+            "åŠŸèƒ½0": False,
+            "åŠŸèƒ½1": False,
+            "åŠŸèƒ½2": False,
+            "åŠŸèƒ½3": False,
+            "åŠŸèƒ½4": False,
+            "æ„ŸçŸ¥äº’èµ ": False,
+            "æ¯æ—¥é…ç»™": False,
+            "ä½¿ç”¨è¯•å‰‚": False,
+            "è¡ŒåŠ¨é€‰æ‹©": 0,
+            "åå‹¤é€‰æ‹©": "åº•æ¯”æ–¯å°é˜Ÿ",
+            "æ´»åŠ¨åå‹¤é€‰æ‹©": "æ˜å¤·å°é˜Ÿ",
+            "ä¸ªäººæ•…äº‹": [False, False, "æœªé€‰æ‹©", "æœªé€‰æ‹©", "æœªé€‰æ‹©", "æœªé€‰æ‹©"],
+            "æ‹Ÿå¢ƒæ‰«è¡": False,
+            "å•†åº—è´­ç‰©": [False, "æ–°æ‰‹æˆ˜æ–—è®°å½•", "åˆçº§èŒçº§è®¤è¯"],
+            "æ­¦å™¨å‡çº§": False,
+            "é¢†å–æ—¥å¸¸": False,
+            "é¢†å–å‡­è¯": False,
+            "æ´»åŠ¨æ¯æ—¥": False,
+            "å…±é¸£è®°å½•": [False, False, False, False, False, False, False, False]
         }
         config.update(_dir)
-        self.set.check_preload.setChecked(config["Ô¤ÏÂÔØ"])
-        self.set.check_update.setChecked(config["¸üĞÂ"])
-        self.set.independent.check_mute.setChecked(config["¾²Òô"])
-        self.set.independent.check_kill_game.setChecked(config["¹Ø±ÕÈí¼ş"])
-        self.set.independent.combo_after.setCurrentIndex(config["Íê³Éºó"])
-        self.set.independent.check_kill_sga.setChecked(config["SGA¹Ø±Õ"])
-        self.set.line_account.setText(config["ÕËºÅÑ¡Ôñ"])
+        self.set.check_preload.setChecked(config["é¢„ä¸‹è½½"])
+        self.set.check_update.setChecked(config["æ›´æ–°"])
+        self.set.independent.check_mute.setChecked(config["é™éŸ³"])
+        self.set.independent.check_kill_game.setChecked(config["å…³é—­è½¯ä»¶"])
+        self.set.independent.combo_after.setCurrentIndex(config["å®Œæˆå"])
+        self.set.independent.check_kill_sga.setChecked(config["SGAå…³é—­"])
+        self.set.line_account.setText(config["è´¦å·é€‰æ‹©"])
         self.set.line_account.setSelection(0, 0)
 
-        self.list.check_fight.setChecked(config["¹¦ÄÜ0"])
-        self.list.check_daily.setChecked(config["¹¦ÄÜ1"])
-        self.list.check_mail.setChecked(config["¹¦ÄÜ2"])
-        self.list.check_roll.setChecked(config["¹¦ÄÜ3"])
+        self.list.check_fight.setChecked(config["åŠŸèƒ½0"])
+        self.list.check_daily.setChecked(config["åŠŸèƒ½1"])
+        self.list.check_mail.setChecked(config["åŠŸèƒ½2"])
+        self.list.check_roll.setChecked(config["åŠŸèƒ½3"])
 
-        self.set.check_share.setChecked(config["¸ĞÖª»¥Ôù"])
-        self.set.check_supply.setChecked(config["Ã¿ÈÕÅä¸ø"])
-        self.set.check_reagent.setChecked(config["Ê¹ÓÃÊÔ¼Á"])
-        self.set.mat.setCurrentIndex(config["ĞĞ¶¯Ñ¡Ôñ"])
-        self.set.logistics.setCurrentText(config["ºóÇÚÑ¡Ôñ"])
-        self.set.logistics1.setCurrentText(config["»î¶¯ºóÇÚÑ¡Ôñ"])
+        self.set.check_share.setChecked(config["æ„ŸçŸ¥äº’èµ "])
+        self.set.check_supply.setChecked(config["æ¯æ—¥é…ç»™"])
+        self.set.check_reagent.setChecked(config["ä½¿ç”¨è¯•å‰‚"])
+        self.set.mat.setCurrentIndex(config["è¡ŒåŠ¨é€‰æ‹©"])
+        self.set.logistics.setCurrentText(config["åå‹¤é€‰æ‹©"])
+        self.set.logistics1.setCurrentText(config["æ´»åŠ¨åå‹¤é€‰æ‹©"])
 
-        self.set.check_character.setChecked(config["¸öÈË¹ÊÊÂ"][0])
-        self.set.check_supplement.setChecked(config["¸öÈË¹ÊÊÂ"][1])
-        self.set.character1.setCurrentText(config["¸öÈË¹ÊÊÂ"][2])
-        self.set.character2.setCurrentText(config["¸öÈË¹ÊÊÂ"][3])
-        self.set.character3.setCurrentText(config["¸öÈË¹ÊÊÂ"][4])
-        self.set.character4.setCurrentText(config["¸öÈË¹ÊÊÂ"][5])
+        self.set.check_character.setChecked(config["ä¸ªäººæ•…äº‹"][0])
+        self.set.check_supplement.setChecked(config["ä¸ªäººæ•…äº‹"][1])
+        self.set.character1.setCurrentText(config["ä¸ªäººæ•…äº‹"][2])
+        self.set.character2.setCurrentText(config["ä¸ªäººæ•…äº‹"][3])
+        self.set.character3.setCurrentText(config["ä¸ªäººæ•…äº‹"][4])
+        self.set.character4.setCurrentText(config["ä¸ªäººæ•…äº‹"][5])
 
-        self.set.check_imitate.setChecked(config["Äâ¾³É¨µ´"])
-        self.set.check_market.setChecked(config["ÉÌµê¹ºÎï"][0])
-        self.set.box_market1.setCurrentText(config["ÉÌµê¹ºÎï"][1])
-        self.set.box_market2.setCurrentText(config["ÉÌµê¹ºÎï"][2])
-        self.set.check_weapon.setChecked(config["ÎäÆ÷Éı¼¶"])
-        self.set.check_daily.setChecked(config["ÁìÈ¡ÈÕ³£"])
-        self.set.check_daily2.setChecked(config["ÁìÈ¡Æ¾Ö¤"])
-        self.set.check_daily3.setChecked(config["»î¶¯Ã¿ÈÕ"])
+        self.set.check_imitate.setChecked(config["æ‹Ÿå¢ƒæ‰«è¡"])
+        self.set.check_market.setChecked(config["å•†åº—è´­ç‰©"][0])
+        self.set.box_market1.setCurrentText(config["å•†åº—è´­ç‰©"][1])
+        self.set.box_market2.setCurrentText(config["å•†åº—è´­ç‰©"][2])
+        self.set.check_weapon.setChecked(config["æ­¦å™¨å‡çº§"])
+        self.set.check_daily.setChecked(config["é¢†å–æ—¥å¸¸"])
+        self.set.check_daily2.setChecked(config["é¢†å–å‡­è¯"])
+        self.set.check_daily3.setChecked(config["æ´»åŠ¨æ¯æ—¥"])
+        self.set.check_roll0.setChecked(config["å…±é¸£è®°å½•"][0])
+        self.set.check_roll1.setChecked(config["å…±é¸£è®°å½•"][1])
+        self.set.check_roll2.setChecked(config["å…±é¸£è®°å½•"][2])
+        self.set.check_roll3.setChecked(config["å…±é¸£è®°å½•"][3])
+        self.set.check_roll4.setChecked(config["å…±é¸£è®°å½•"][4])
+        self.set.check_roll5.setChecked(config["å…±é¸£è®°å½•"][5])
+        self.set.check_roll6.setChecked(config["å…±é¸£è®°å½•"][6])
+        self.set.check_opensheet.setChecked(config["å…±é¸£è®°å½•"][7])
 
     def output_config(self):
         config = dict()
-        config["Ä£¿é"] = 5
+        config["æ¨¡å—"] = 5
 
-        config["Ô¤ÏÂÔØ"] = self.set.check_preload.isChecked()
-        config["¸üĞÂ"] = self.set.check_update.isChecked()
-        config["¾²Òô"] = self.set.independent.check_mute.isChecked()
-        config["¹Ø±ÕÈí¼ş"] = self.set.independent.check_kill_game.isChecked()
-        config["Íê³Éºó"] = self.set.independent.combo_after.currentIndex()
-        config["SGA¹Ø±Õ"] = self.set.independent.check_kill_sga.isChecked()
-        config["ÕËºÅÑ¡Ôñ"] = self.set.line_account.text()
+        config["é¢„ä¸‹è½½"] = self.set.check_preload.isChecked()
+        config["æ›´æ–°"] = self.set.check_update.isChecked()
+        config["é™éŸ³"] = self.set.independent.check_mute.isChecked()
+        config["å…³é—­è½¯ä»¶"] = self.set.independent.check_kill_game.isChecked()
+        config["å®Œæˆå"] = self.set.independent.combo_after.currentIndex()
+        config["SGAå…³é—­"] = self.set.independent.check_kill_sga.isChecked()
+        config["è´¦å·é€‰æ‹©"] = self.set.line_account.text()
 
-        config["¹¦ÄÜ0"] = self.list.check_fight.isChecked()
-        config["¹¦ÄÜ1"] = self.list.check_daily.isChecked()
-        config["¹¦ÄÜ2"] = self.list.check_mail.isChecked()
-        config["¹¦ÄÜ3"] = self.list.check_roll.isChecked()
+        config["åŠŸèƒ½0"] = self.list.check_fight.isChecked()
+        config["åŠŸèƒ½1"] = self.list.check_daily.isChecked()
+        config["åŠŸèƒ½2"] = self.list.check_mail.isChecked()
+        config["åŠŸèƒ½3"] = self.list.check_roll.isChecked()
 
-        config["¸ĞÖª»¥Ôù"] = self.set.check_share.isChecked()
-        config["Ã¿ÈÕÅä¸ø"] = self.set.check_supply.isChecked()
-        config["Ê¹ÓÃÊÔ¼Á"] = self.set.check_reagent.isChecked()
-        config["ĞĞ¶¯Ñ¡Ôñ"] = self.set.mat.currentIndex()
-        config["ºóÇÚÑ¡Ôñ"] = self.set.logistics.currentText()
-        config["»î¶¯ºóÇÚÑ¡Ôñ"] = self.set.logistics1.currentText()
-        config["¸öÈË¹ÊÊÂ"] = [
+        config["æ„ŸçŸ¥äº’èµ "] = self.set.check_share.isChecked()
+        config["æ¯æ—¥é…ç»™"] = self.set.check_supply.isChecked()
+        config["ä½¿ç”¨è¯•å‰‚"] = self.set.check_reagent.isChecked()
+        config["è¡ŒåŠ¨é€‰æ‹©"] = self.set.mat.currentIndex()
+        config["åå‹¤é€‰æ‹©"] = self.set.logistics.currentText()
+        config["æ´»åŠ¨åå‹¤é€‰æ‹©"] = self.set.logistics1.currentText()
+        config["ä¸ªäººæ•…äº‹"] = [
             self.set.check_character.isChecked(),
             self.set.check_supplement.isChecked(),
             self.set.character1.currentText(),
             self.set.character2.currentText(),
             self.set.character3.currentText(),
             self.set.character4.currentText()]
-        config["Äâ¾³É¨µ´"] = self.set.check_imitate.isChecked()
-        config["ÉÌµê¹ºÎï"] = [
+        config["æ‹Ÿå¢ƒæ‰«è¡"] = self.set.check_imitate.isChecked()
+        config["å•†åº—è´­ç‰©"] = [
             self.set.check_market.isChecked(),
             self.set.box_market1.currentText(),
             self.set.box_market2.currentText()]
-        config["ÎäÆ÷Éı¼¶"] = self.set.check_weapon.isChecked()
-        config["ÁìÈ¡ÈÕ³£"] = self.set.check_daily.isChecked()
-        config["ÁìÈ¡Æ¾Ö¤"] = self.set.check_daily2.isChecked()
-        config["»î¶¯Ã¿ÈÕ"] = self.set.check_daily3.isChecked()
+        config["æ­¦å™¨å‡çº§"] = self.set.check_weapon.isChecked()
+        config["é¢†å–æ—¥å¸¸"] = self.set.check_daily.isChecked()
+        config["é¢†å–å‡­è¯"] = self.set.check_daily2.isChecked()
+        config["æ´»åŠ¨æ¯æ—¥"] = self.set.check_daily3.isChecked()
+        config["å…±é¸£è®°å½•"] = [
+            self.set.check_roll0.isChecked(),
+            self.set.check_roll1.isChecked(),
+            self.set.check_roll2.isChecked(),
+            self.set.check_roll3.isChecked(),
+            self.set.check_roll4.isChecked(),
+            self.set.check_roll5.isChecked(),
+            self.set.check_roll6.isChecked(),
+            self.set.check_opensheet.isChecked()]
         return config
 
     def open_roll_directory(self):
-        os.startfile(env.workdir + "/personal/snow/roll")
-        self.main.indicate("´ò¿ªÎÄ¼ş¼Ğ: ¹²Ãù¼ÇÂ¼", 1)
+        startfile(env.workdir + "/personal/snow/roll")
+        self.main.indicate("æ‰“å¼€æ–‡ä»¶å¤¹: å…±é¸£è®°å½•", 1)
 
     def open_wiki(self):
-        webbrowser.open("https://wiki.biligame.com/sonw/%E9%A6%96%E9%A1%B5")
-        self.main.indicate("´ò¿ªÍøÒ³: ³¾°×½ûÇø BWIKI", 1)
+        weopen("https://wiki.biligame.com/sonw/%E9%A6%96%E9%A1%B5")
+        self.main.indicate("æ‰“å¼€ç½‘é¡µ: å°˜ç™½ç¦åŒº BWIKI", 1)
 
     def roll_arrange(self):
         import json
@@ -177,16 +194,16 @@ class Snow:
         now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
         import shutil
         src = r"assets\snow\default_snow_roll.xlsx"
-        dst = f"personal/snow/roll/³¾°×½ûÇø¹²Ãù¼ÇÂ¼ - {now}.xlsx"
+        dst = f"personal/snow/roll/å°˜ç™½ç¦åŒºå…±é¸£è®°å½• - {now}.xlsx"
         shutil.copyfile(src, dst)
         wb = load_workbook(dst)
-        fon2 = Font(name='ËÎÌå', size=12)
-        fon_three = Font(name='ËÎÌå', size=12, color="3374F8")
-        fon_four = Font(name='ËÎÌå', size=12, color="7E30FF", bold=True)
-        fon_five = Font(name='ËÎÌå', size=12, color="FFC332", bold=True)
+        fon2 = Font(name='å®‹ä½“', size=12)
+        fon_three = Font(name='å®‹ä½“', size=12, color="3374F8")
+        fon_four = Font(name='å®‹ä½“', size=12, color="7E30FF", bold=True)
+        fon_five = Font(name='å®‹ä½“', size=12, color="FFC332", bold=True)
         al = Alignment(horizontal='center', vertical='center')
         _count = []
-        for i in ["ÌØÑ¡½ÇÉ«¹²Ãù", "ÌØÑ¡ÎäÆ÷¹²Ãù", "ÏŞ¶¨½ÇÉ«¹²Ãù", "ÏŞ¶¨ÎäÆ÷¹²Ãù", "³£ÊØÖ®ÊÄ", "ÖĞÍ¥Â¯ĞÄ", "ĞÂÊÖ³Ø"]:
+        for i in ["ç‰¹é€‰è§’è‰²å…±é¸£", "ç‰¹é€‰æ­¦å™¨å…±é¸£", "é™å®šè§’è‰²å…±é¸£", "é™å®šæ­¦å™¨å…±é¸£", "å¸¸å®ˆä¹‹èª“", "ä¸­åº­ç‚‰å¿ƒ", "æ–°æ‰‹æ± "]:
             _sheet = wb[i]
 
             _list = _dir[i]
@@ -205,28 +222,28 @@ class Snow:
                 n_row += 1
                 n_four += 1
                 n_five += 1
-                if "ÈÕÍõÅÆ" in r:
-                    r = "Çç-¾ÉÈÕÍõÅÆ"
-                elif "·ÒÄİ" in r:
-                    if "¹Ú" in r:
-                        r = "·ÒÄİ-¾Ì¹Ú"
-                elif "ÇÙÅµ" in r:
-                    if "ã£" in r or "Ãı" in r:
-                        r = "ÇÙÅµ-ã£Ãı"
-                elif "²»ÓèÏÔÊ¾" in r:
-                    r = "°²¿¨Ï£ÑÅ-[²»ÓèÏÔÊ¾]"
-                elif "ÈÈÄê´ú" in r:
-                    r = "¾ÄÈÈÄê´ú"
-                elif "½ã½ã´óÈË" in r:
-                    r = "¶÷ÑÅ-½ã½ã´óÈË"
-                elif "ÍõÈ¨Á¬" in r:
-                    r = "ÍõÈ¨Á¬¼Ï"
-                elif "ÈğË¹" in r and "¿Ì" in r:
-                    r = "ÉªÈğË¹-Ë²¿Ì"
-                elif "¾ÅÒ¹Ö®" in r:
-                    r = "¾ÅÒ¹Ö®Ãá"
-                elif "ÁúÉàÀ¼" in r:
-                    r = "Ş±µÙÑÅ-ÁúÉàÀ¼"
+                if "æ—¥ç‹ç‰Œ" in r:
+                    r = "æ™´-æ—§æ—¥ç‹ç‰Œ"
+                elif "èŠ¬å¦®" in r:
+                    if "å† " in r:
+                        r = "èŠ¬å¦®-å’å† "
+                elif "ç´è¯º" in r:
+                    if "æ‚–" in r or "è°¬" in r:
+                        r = "ç´è¯º-æ‚–è°¬"
+                elif "ä¸äºˆæ˜¾ç¤º" in r:
+                    r = "å®‰å¡å¸Œé›…-[ä¸äºˆæ˜¾ç¤º]"
+                elif "çƒ­å¹´ä»£" in r:
+                    r = "ç¸çƒ­å¹´ä»£"
+                elif "å§å§å¤§äºº" in r:
+                    r = "æ©é›…-å§å§å¤§äºº"
+                elif "ç‹æƒè¿" in r:
+                    r = "ç‹æƒè¿æ·"
+                elif "ç‘æ–¯" in r and "åˆ»" in r:
+                    r = "ç‘Ÿç‘æ–¯-ç¬åˆ»"
+                elif "ä¹å¤œä¹‹" in r:
+                    r = "ä¹å¤œä¹‹å†•"
+                elif "é¾™èˆŒå…°" in r:
+                    r = "è–‡è’‚é›…-é¾™èˆŒå…°"
 
                 _a = _sheet[f"A{n_row}"]
                 _b = _sheet[f"B{n_row}"]
@@ -240,51 +257,51 @@ class Snow:
                 _sheet[f"B{n_row}"].alignment = al
                 _sheet[f"C{n_row}"].alignment = al
                 _sheet[f"D{n_row}"].alignment = al
-                if r in ["ÎŞÉùÀ×µç", "ÄàÑ©", "Æ¤Ë¹¿Æ", "´¸»÷",
-                         "Âí¶û±´¿Ë", "³ÁÄ¬µÄÕæÏà", "Ìì¿ÕÇ½", "½ÌÑµ",
-                         "°ë¸ù»ğ¾æ", "±ùÀäÉ³Çğ", "»Ò¹·", "¾øÔµÌå",
-                         "ÈºÄñ³ğÈË", "ÓĞÈËÔÚÂğ", "ºÚÒÂÄÃÆÆÂØ", "°²È«Ïß",
-                         "Æ«Í·Í´", "ÖıÌúÎÀÊ¿", "ÎŞÀñÖ®±²", "¼òÒ×°âÊÖ",
-                         "¶¬ÇàÄ¾", "ÀÊÄ··ç±©", "¸ÖÖ®°×èëÁÖ", "ºşÖĞÅ®Éñ",
-                         "ÖØ´¸"] or col == "blue":
+                if r in ["æ— å£°é›·ç”µ", "æ³¥é›ª", "çš®æ–¯ç§‘", "é”¤å‡»",
+                         "é©¬å°”è´å…‹", "æ²‰é»˜çš„çœŸç›¸", "å¤©ç©ºå¢™", "æ•™è®­",
+                         "åŠæ ¹ç«ç‚¬", "å†°å†·æ²™ä¸˜", "ç°ç‹—", "ç»ç¼˜ä½“",
+                         "ç¾¤é¸Ÿä»‡äºº", "æœ‰äººåœ¨å—", "é»‘è¡£æ‹¿ç ´ä»‘", "å®‰å…¨çº¿",
+                         "åå¤´ç—›", "é“¸é“å«å£«", "æ— ç¤¼ä¹‹è¾ˆ", "ç®€æ˜“æ‰³æ‰‹",
+                         "å†¬é’æœ¨", "æœ—å§†é£æš´", "é’¢ä¹‹ç™½æ¡¦æ—", "æ¹–ä¸­å¥³ç¥",
+                         "é‡é”¤"] or col == "blue":
                     _fon = fon_three
                     count[0] += 1
-                elif r in ["°²¿¨Ï£ÑÅ-[²»ÓèÏÔÊ¾]", "ëÈ-ÑøÉú×¨¼Ò", "·ÒÄİ-»Æ½ğÊ¨×Ó", "¶÷ÑÅ-½ã½ã´óÈË",
-                           "Ã¨Ï«¶û-Ã¨Ã¨", "³½ĞÇ-¹Û²âÕß", "ÇÙÅµ-Ë«Ãæ", "ÜÔÀò°²-±Á´øĞ¡½ã",
-                           "ÀïÜ½-ĞÇÆÚÈı", "Çç-¾ÉÈÕÍõÅÆ", "ÄİËş-ËÄÊÖ", "Ü½ÌáÑÅ-Ğ¡Ì«Ñô",
-                           "ÉªÈğË¹-Ğ¡½ğÓã",
-                           "¾ÉÈÕÌ¾Ï¢", "Ğ¡Ğ¡¹¤¾ß", "¹Ø¼üµã", "²Êºç´ò»ğ»ú",
-                           "ÀÃéÙ×Ó", "²»Ğ­ºÍÒô", "´ó±¦±´¶ù", "ÄŞºçµÆ¹Ü",
-                           "ĞÒÔËÊ±¿Ì", "Ò°ĞÔ×°ĞŞ", "Ğ¡»ÆÑ¼", "¸¯Èâ±ãÀûµê",
-                           "ÊÇ£¡ÊÇ£¡´¬³¤£¡", "Â¥µÀ¹ÖÃ¨", "Å­²»¿ÉÓö", "²İİ®µ°¸â",
-                           "ÊæÊÊÈ¦", "»úĞµ¾¯¹Ù", "ÁúÏÑÏã", "±±¼«ºü",
-                           "¾ü½¢Äñ", "´ÎÂÈËá", "ÕıÔÚÊ©¹¤", "¹éÀ´",
-                           "Çà½ğÊ¯", "Éîº£ºô»½", "ÌğÌğÁé»ê", "ÃÔÂÒµÏË¹¿Æ",
-                           "µçÀëË®Ä¸", "Íß¶û»ùÀï2056", "Ğú»©ÏÖ³¡", "¾ÄÈÈÄê´ú",
-                           "ÊªµØ¹«Ô°", "Ö¸Ê¾¼Á"] or col == "purple":
+                elif r in ["å®‰å¡å¸Œé›…-[ä¸äºˆæ˜¾ç¤º]", "è‚´-å…»ç”Ÿä¸“å®¶", "èŠ¬å¦®-é»„é‡‘ç‹®å­", "æ©é›…-å§å§å¤§äºº",
+                           "çŒ«æ±å°”-çŒ«çŒ«", "è¾°æ˜Ÿ-è§‚æµ‹è€…", "ç´è¯º-åŒé¢", "èŒ‰è‰å®‰-ç»·å¸¦å°å§",
+                           "é‡ŒèŠ™-æ˜ŸæœŸä¸‰", "æ™´-æ—§æ—¥ç‹ç‰Œ", "å¦®å¡”-å››æ‰‹", "èŠ™æé›…-å°å¤ªé˜³",
+                           "ç‘Ÿç‘æ–¯-å°é‡‘é±¼",
+                           "æ—§æ—¥å¹æ¯", "å°å°å·¥å…·", "å…³é”®ç‚¹", "å½©è™¹æ‰“ç«æœº",
+                           "çƒ‚æ©˜å­", "ä¸åå’ŒéŸ³", "å¤§å®è´å„¿", "éœ“è™¹ç¯ç®¡",
+                           "å¹¸è¿æ—¶åˆ»", "é‡æ€§è£…ä¿®", "å°é»„é¸­", "è…è‚‰ä¾¿åˆ©åº—",
+                           "æ˜¯ï¼æ˜¯ï¼èˆ¹é•¿ï¼", "æ¥¼é“æ€ªçŒ«", "æ€’ä¸å¯é‡", "è‰è“è›‹ç³•",
+                           "èˆ’é€‚åœˆ", "æœºæ¢°è­¦å®˜", "é¾™æ¶é¦™", "åŒ—æç‹",
+                           "å†›èˆ°é¸Ÿ", "æ¬¡æ°¯é…¸", "æ­£åœ¨æ–½å·¥", "å½’æ¥",
+                           "é’é‡‘çŸ³", "æ·±æµ·å‘¼å”¤", "ç”œç”œçµé­‚", "è¿·ä¹±è¿ªæ–¯ç§‘",
+                           "ç”µç¦»æ°´æ¯", "ç“¦å°”åŸºé‡Œ2056", "å–§å“—ç°åœº", "ç¸çƒ­å¹´ä»£",
+                           "æ¹¿åœ°å…¬å›­", "æŒ‡ç¤ºå‰‚"] or col == "purple":
                     _fon = fon_four
                     count[1] += 1
                     count[5] += [f"{r}({n_four})"]
                     n_four = 0
-                elif r in ["°²¿¨Ï£ÑÅ-»ÔÒ¹", "³½ĞÇ-ÔÆ×­", "Çç-²Ø·æ", "Ã¨Ï«¶û-ËİÓ°",
-                           "Ì¦Ë¿-Ä§ÊõÊ¦", "ÒÁÇĞ¶û-±ª±ª", "¿­ÜçÑÅ-À¶ÉÁ", "ÇÙÅµ-ã£Ãı",
-                           "¶÷ÑÅ-ÓğÍÉ", "ÉªÈğË¹-Ë²¿Ì", "ÀïÜ½-ÎŞÏŞÖ®ÊÓ", "·ÒÄİ-»ÔÒ«",
-                           "Ş±µÙÑÅ-ÁúÉàÀ¼",
-                           "ËÉÁÖ¼«¹â", "ÖìÊé¶ÏĞ°", "ÆÕÈü¿Ë16", "ºÏ½ğÕæÀí",
-                           "ÍõÅÆ¹Öµ®", "º£ÍõĞÇ", "ÀØÉä·ç»¢", "°×Ò¹±ğÊ«",
-                           "Ô¨¹â", "ÍõÈ¨Á¬¼Ï", "¾ÅÒ¹Ö®Ãá", "²¶ĞÄÏÈ·æ",
-                           "×¥ÅÄÊ¤»ú",
-                           "·ÒÄİ-¾Ì¹Ú", "ëÈ-¶¬ÖÁ", "ÀïÜ½-¿ñÁÔ", "ÜÔÀò°²-ÓêÑà", "Ü½ÌáÑÅ-¼êÄ¬",
-                           "Ğ¡Á¸Ê³", "ĞÇ³½´óº£", "ÉóÅĞÇ°Ò¹", "ÈÛÑÒ¹Ç÷À",
-                           "Ì«Ñô³ê½ğ", "»¢¾¨ºÅ½Ç", "Ì«¿ÕÆïÊÖ", "°ÙÕ½ÀÏ±ø",
-                           "°ÂÁÖÆ¥Ë¹", "ĞÇ³¾»ØÒä"] or col == "orange":
+                elif r in ["å®‰å¡å¸Œé›…-è¾‰å¤œ", "è¾°æ˜Ÿ-äº‘ç¯†", "æ™´-è—é”‹", "çŒ«æ±å°”-æº¯å½±",
+                           "è‹”ä¸-é­”æœ¯å¸ˆ", "ä¼Šåˆ‡å°”-è±¹è±¹", "å‡¯èŒœé›…-è“é—ª", "ç´è¯º-æ‚–è°¬",
+                           "æ©é›…-ç¾½èœ•", "ç‘Ÿç‘æ–¯-ç¬åˆ»", "é‡ŒèŠ™-æ— é™ä¹‹è§†", "èŠ¬å¦®-è¾‰è€€",
+                           "è–‡è’‚é›…-é¾™èˆŒå…°",
+                           "æ¾æ—æå…‰", "æœ±ä¹¦æ–­é‚ª", "æ™®èµ›å…‹16", "åˆé‡‘çœŸç†",
+                           "ç‹ç‰Œæ€ªè¯", "æµ·ç‹æ˜Ÿ", "é•­å°„é£è™", "ç™½å¤œåˆ«è¯—",
+                           "æ¸Šå…‰", "ç‹æƒè¿æ·", "ä¹å¤œä¹‹å†•", "æ•å¿ƒå…ˆé”‹",
+                           "æŠ“æ‹èƒœæœº",
+                           "èŠ¬å¦®-å’å† ", "è‚´-å†¬è‡³", "é‡ŒèŠ™-ç‹‚çŒ", "èŒ‰è‰å®‰-é›¨ç‡•", "èŠ™æé›…-ç¼„é»˜",
+                           "å°ç²®é£Ÿ", "æ˜Ÿè¾°å¤§æµ·", "å®¡åˆ¤å‰å¤œ", "ç†”å²©éª¨éª¼",
+                           "å¤ªé˜³é…¬é‡‘", "è™é²¸å·è§’", "å¤ªç©ºéª‘æ‰‹", "ç™¾æˆ˜è€å…µ",
+                           "å¥¥æ—åŒ¹æ–¯", "æ˜Ÿå°˜å›å¿†"] or col == "orange":
                     _fon = fon_five
                     count[2] += 1
                     count[6] += [f"{r}({n_five})"]
                     n_five = 0
                 else:
                     print(r, t)
-                    self.main.indicate(f"Ï¡ÓĞ¶ÈÒì³£Ê¶±ğÒì³£:{r}", 3)
+                    self.main.indicate(f"ç¨€æœ‰åº¦å¼‚å¸¸è¯†åˆ«å¼‚å¸¸:{r}", 3)
                     return False
                 _sheet[f"A{n_row}"].font = _fon
                 _sheet[f"B{n_row}"].font = _fon
@@ -294,7 +311,7 @@ class Snow:
             count[3] = n_row-1
             count[4] = n_five
             _count += [count]
-        sheet0 = wb["×ÜÀÀ"]
+        sheet0 = wb["æ€»è§ˆ"]
         sheet0["B3"] = _count[0][0]
         sheet0["C3"] = _count[0][1]
         sheet0["D3"] = _count[0][2]
@@ -414,4 +431,4 @@ class Snow:
             _str += i + " "
         sheet0["I21"] = _str
         wb.save(dst)
-        self.main.indicate("¹²Ãù¼ÇÂ¼ÒÑµ¼³ö", 3)
+        self.main.indicate("å…±é¸£è®°å½•å·²å¯¼å‡º", 3)

@@ -5,6 +5,7 @@ PyQt5-tools
 PyQt-Fluent-Widgets
 Pillow
 pywin32
+win32gui
 keyboard
 pyautogui
 pyyaml
@@ -17,3 +18,4 @@ pyuac
 colorama
 requests
 cpufeature
+numpy

@@ -1,13 +1,12 @@
-# -*- coding:gbk -*-
 from ui.element.control import *
 from .list import MixList
 from .stack import MixStack
 
 
-# Ô­ÉñÄ£×éÉèÖÃ´°¿Ú
+# åŸç¥æ¨¡ç»„è®¾ç½®çª—å£
 class Mix:
     def __init__(self, stack, icon, main):
-        # Á¬ĞøÈÎÎñ
+        # è¿ç»­ä»»åŠ¡
         self.widget_mix = Widget()
         stack.addWidget(self.widget_mix)
         self.button_mix = PicButton(icon, (0, 0, 50, 50),
@@ -21,12 +20,12 @@ class Mix:
         Line(self.widget_mix, (215, 5, 3, 505), False)
 
     def load_single(self, single):
-        # ÔËĞĞÁĞ±íÅäÖÃ¼ÓÔØ
-        self.list.combobox_mix_config0.addItems(["<Î´Ñ¡Ôñ>"] + single)
-        self.list.combobox_mix_config1.addItems(["<Î´Ñ¡Ôñ>"] + single)
-        self.list.combobox_mix_config2.addItems(["<Î´Ñ¡Ôñ>"] + single)
-        self.list.combobox_mix_config3.addItems(["<Î´Ñ¡Ôñ>"] + single)
-        self.list.combobox_mix_config4.addItems(["<Î´Ñ¡Ôñ>"] + single)
+        # è¿è¡Œåˆ—è¡¨é…ç½®åŠ è½½
+        self.list.combobox_mix_config0.addItems(["<æœªé€‰æ‹©>"] + single)
+        self.list.combobox_mix_config1.addItems(["<æœªé€‰æ‹©>"] + single)
+        self.list.combobox_mix_config2.addItems(["<æœªé€‰æ‹©>"] + single)
+        self.list.combobox_mix_config3.addItems(["<æœªé€‰æ‹©>"] + single)
+        self.list.combobox_mix_config4.addItems(["<æœªé€‰æ‹©>"] + single)
 
     def add_item(self, name):
         self.list.combobox_mix_config0.addItem(name)
@@ -51,53 +50,53 @@ class Mix:
 
     def input_config(self, _dir):
         config = {
-            "Ä£¿é": 0,
-            "ÅäÖÃ0": {
-                "name": "<Î´Ñ¡Ôñ>"
+            "æ¨¡å—": 0,
+            "é…ç½®0": {
+                "name": "<æœªé€‰æ‹©>"
             },
-            "ÅäÖÃ1": {
-                "name": "<Î´Ñ¡Ôñ>"
+            "é…ç½®1": {
+                "name": "<æœªé€‰æ‹©>"
             },
-            "ÅäÖÃ2": {
-                "name": "<Î´Ñ¡Ôñ>"
+            "é…ç½®2": {
+                "name": "<æœªé€‰æ‹©>"
             },
-            "ÅäÖÃ3": {
-                "name": "<Î´Ñ¡Ôñ>"
+            "é…ç½®3": {
+                "name": "<æœªé€‰æ‹©>"
             },
-            "ÅäÖÃ4": {
-                "name": "<Î´Ñ¡Ôñ>"
+            "é…ç½®4": {
+                "name": "<æœªé€‰æ‹©>"
             },
-            "¾²Òô": False,
-            "¹Ø±ÕÈí¼ş": True,
-            "Íê³Éºó": 0,
-            "SGA¹Ø±Õ": False,
+            "é™éŸ³": False,
+            "å…³é—­è½¯ä»¶": True,
+            "å®Œæˆå": 0,
+            "SGAå…³é—­": False,
         }
         config.update(_dir)
-        self.list.combobox_mix_config0.setCurrentText(config["ÅäÖÃ0"]["name"])
-        self.list.combobox_mix_config1.setCurrentText(config["ÅäÖÃ1"]["name"])
-        self.list.combobox_mix_config2.setCurrentText(config["ÅäÖÃ2"]["name"])
-        self.list.combobox_mix_config3.setCurrentText(config["ÅäÖÃ3"]["name"])
-        self.list.combobox_mix_config4.setCurrentText(config["ÅäÖÃ4"]["name"])
+        self.list.combobox_mix_config0.setCurrentText(config["é…ç½®0"]["name"])
+        self.list.combobox_mix_config1.setCurrentText(config["é…ç½®1"]["name"])
+        self.list.combobox_mix_config2.setCurrentText(config["é…ç½®2"]["name"])
+        self.list.combobox_mix_config3.setCurrentText(config["é…ç½®3"]["name"])
+        self.list.combobox_mix_config4.setCurrentText(config["é…ç½®4"]["name"])
 
-        self.set.independent.check_mute.setChecked(config["¾²Òô"])
-        self.set.independent.combo_after.setCurrentIndex(config["Íê³Éºó"])
-        self.set.independent.check_kill_sga.setChecked(config["SGA¹Ø±Õ"])
+        self.set.independent.check_mute.setChecked(config["é™éŸ³"])
+        self.set.independent.combo_after.setCurrentIndex(config["å®Œæˆå"])
+        self.set.independent.check_kill_sga.setChecked(config["SGAå…³é—­"])
 
     def output_config(self):
         config = dict()
-        config["Ä£¿é"] = 0
-        config["ÅäÖÃ0"] = dict()
-        config["ÅäÖÃ1"] = dict()
-        config["ÅäÖÃ2"] = dict()
-        config["ÅäÖÃ3"] = dict()
-        config["ÅäÖÃ4"] = dict()
-        config["ÅäÖÃ0"]["name"] = self.list.combobox_mix_config0.currentText()
-        config["ÅäÖÃ1"]["name"] = self.list.combobox_mix_config1.currentText()
-        config["ÅäÖÃ2"]["name"] = self.list.combobox_mix_config2.currentText()
-        config["ÅäÖÃ3"]["name"] = self.list.combobox_mix_config3.currentText()
-        config["ÅäÖÃ4"]["name"] = self.list.combobox_mix_config4.currentText()
-        config["¾²Òô"] = self.set.independent.check_mute.isChecked()
-        config["¹Ø±ÕÈí¼ş"] = True
-        config["Íê³Éºó"] = self.set.independent.combo_after.currentIndex()
-        config["SGA¹Ø±Õ"] = self.set.independent.check_kill_sga.isChecked()
+        config["æ¨¡å—"] = 0
+        config["é…ç½®0"] = dict()
+        config["é…ç½®1"] = dict()
+        config["é…ç½®2"] = dict()
+        config["é…ç½®3"] = dict()
+        config["é…ç½®4"] = dict()
+        config["é…ç½®0"]["name"] = self.list.combobox_mix_config0.currentText()
+        config["é…ç½®1"]["name"] = self.list.combobox_mix_config1.currentText()
+        config["é…ç½®2"]["name"] = self.list.combobox_mix_config2.currentText()
+        config["é…ç½®3"]["name"] = self.list.combobox_mix_config3.currentText()
+        config["é…ç½®4"]["name"] = self.list.combobox_mix_config4.currentText()
+        config["é™éŸ³"] = self.set.independent.check_mute.isChecked()
+        config["å…³é—­è½¯ä»¶"] = True
+        config["å®Œæˆå"] = self.set.independent.combo_after.currentIndex()
+        config["SGAå…³é—­"] = self.set.independent.check_kill_sga.isChecked()
         return config

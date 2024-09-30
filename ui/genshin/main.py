@@ -1,4 +1,3 @@
-# -*- coding:gbk -*-
 from .list import GenshinList
 from .stack import GenshinStack
 from ui.element.control import Line, Widget, PicButton
@@ -54,186 +53,186 @@ class Genshin:
 
     def input_config(self, _dir):
         config = {
-            "Ä£¿é": 2,
-            "¾²Òô": False,
-            "¹Ø±ÕÈí¼ş": False,
-            "Íê³Éºó": 0,
-            "SGA¹Ø±Õ": False,
-            "¹¦ÄÜ0": False,
-            "¹¦ÄÜ1": False,
-            "¹¦ÄÜ2": False,
-            "¹¦ÄÜ3": False,
-            "¹¦ÄÜ4": False,
-            "¹¦ÄÜ5": False,
-            "¹¦ÄÜ6": False,
-            "¹¦ÄÜ7": False,
-            "¹¦ÄÜ8": False,
-            "¹¦ÄÜ9": False,
-            "ÅÉÇ²0": [0, 0],
-            "ÅÉÇ²1": [0, 0],
-            "ÅÉÇ²2": [0, 0],
-            "ÅÉÇ²3": [0, 0],
-            "ÅÉÇ²4": [0, 0],
-            "ÔÙ´ÎÅÉÇ²": False,
-            "²ÎÁ¿ÖÊ±äÒÇ0": "",
-            "²ÎÁ¿ÖÊ±äÒÇ1": "",
-            "²ÎÁ¿ÖÊ±äÒÇ2": "",
-            "²ÎÁ¿ÖÊ±äÒÇ3": "",
-            "²ÎÁ¿ÖÊ±äÒÇ4": "",
-            "¾§µû0": False,
-            "¾§µû1": False,
-            "¾§µû2": False,
-            "¾§µû3": False,
-            "¾§µû4": False,
-            "¿³Ê÷´ÎÊı": 0,
-            "¿³Ê÷0": False,
-            "¿³Ê÷1": False,
-            "¿³Ê÷2": False,
-            "¿³Ê÷3": False,
-            "¿³Ê÷4": False,
-            "¿³Ê÷5": False,
-            "¿³Ê÷6": False,
-            "¿³Ê÷7": False,
-            "¿³Ê÷8": False,
-            "¿³Ê÷9": False,
-            "¿³Ê÷10": False,
-            "¿³Ê÷11": False,
-            "¿³Ê÷12": False,
-            "¿³Ê÷13": False,
-            "¿³Ê÷14": False,
-            "¿³Ê÷15": False,
-            "¿³Ê÷16": False,
-            "¿³Ê÷17": False,
-            "¿³Ê÷18": False,
-            "ÃØ¾³": ["Ê¥ÒÅÎï", "ÖÙÏÄÍ¥Ôº"]
+            "æ¨¡å—": 2,
+            "é™éŸ³": False,
+            "å…³é—­è½¯ä»¶": False,
+            "å®Œæˆå": 0,
+            "SGAå…³é—­": False,
+            "åŠŸèƒ½0": False,
+            "åŠŸèƒ½1": False,
+            "åŠŸèƒ½2": False,
+            "åŠŸèƒ½3": False,
+            "åŠŸèƒ½4": False,
+            "åŠŸèƒ½5": False,
+            "åŠŸèƒ½6": False,
+            "åŠŸèƒ½7": False,
+            "åŠŸèƒ½8": False,
+            "åŠŸèƒ½9": False,
+            "æ´¾é£0": [0, 0],
+            "æ´¾é£1": [0, 0],
+            "æ´¾é£2": [0, 0],
+            "æ´¾é£3": [0, 0],
+            "æ´¾é£4": [0, 0],
+            "å†æ¬¡æ´¾é£": False,
+            "å‚é‡è´¨å˜ä»ª0": "",
+            "å‚é‡è´¨å˜ä»ª1": "",
+            "å‚é‡è´¨å˜ä»ª2": "",
+            "å‚é‡è´¨å˜ä»ª3": "",
+            "å‚é‡è´¨å˜ä»ª4": "",
+            "æ™¶è¶0": False,
+            "æ™¶è¶1": False,
+            "æ™¶è¶2": False,
+            "æ™¶è¶3": False,
+            "æ™¶è¶4": False,
+            "ç æ ‘æ¬¡æ•°": 0,
+            "ç æ ‘0": False,
+            "ç æ ‘1": False,
+            "ç æ ‘2": False,
+            "ç æ ‘3": False,
+            "ç æ ‘4": False,
+            "ç æ ‘5": False,
+            "ç æ ‘6": False,
+            "ç æ ‘7": False,
+            "ç æ ‘8": False,
+            "ç æ ‘9": False,
+            "ç æ ‘10": False,
+            "ç æ ‘11": False,
+            "ç æ ‘12": False,
+            "ç æ ‘13": False,
+            "ç æ ‘14": False,
+            "ç æ ‘15": False,
+            "ç æ ‘16": False,
+            "ç æ ‘17": False,
+            "ç æ ‘18": False,
+            "ç§˜å¢ƒ": ["åœ£é—ç‰©", "ä»²å¤åº­é™¢"]
         }
         config.update(_dir)
-        self.set.independent.check_mute.setChecked(config["¾²Òô"])
-        self.set.independent.check_kill_game.setChecked(config["¹Ø±ÕÈí¼ş"])
-        self.set.independent.combo_after.setCurrentIndex(config["Íê³Éºó"])
-        self.set.independent.check_kill_sga.setChecked(config["SGA¹Ø±Õ"])
-        self.list.check_team.setChecked(config["¹¦ÄÜ0"])
-        self.list.check_disp.setChecked(config["¹¦ÄÜ1"])
-        self.list.check_trans.setChecked(config["¹¦ÄÜ2"])
-        self.list.check_fly.setChecked(config["¹¦ÄÜ3"])
-        self.list.check_comp.setChecked(config["¹¦ÄÜ4"])
-        self.list.check_pot.setChecked(config["¹¦ÄÜ5"])
-        self.list.check_mail.setChecked(config["¹¦ÄÜ6"])
-        self.list.check_tree.setChecked(config["¹¦ÄÜ7"])
-        self.list.check_domain.setChecked(config["¹¦ÄÜ8"])
-        self.list.check_pass.setChecked(config["¹¦ÄÜ9"])
+        self.set.independent.check_mute.setChecked(config["é™éŸ³"])
+        self.set.independent.check_kill_game.setChecked(config["å…³é—­è½¯ä»¶"])
+        self.set.independent.combo_after.setCurrentIndex(config["å®Œæˆå"])
+        self.set.independent.check_kill_sga.setChecked(config["SGAå…³é—­"])
+        self.list.check_team.setChecked(config["åŠŸèƒ½0"])
+        self.list.check_disp.setChecked(config["åŠŸèƒ½1"])
+        self.list.check_trans.setChecked(config["åŠŸèƒ½2"])
+        self.list.check_fly.setChecked(config["åŠŸèƒ½3"])
+        self.list.check_comp.setChecked(config["åŠŸèƒ½4"])
+        self.list.check_pot.setChecked(config["åŠŸèƒ½5"])
+        self.list.check_mail.setChecked(config["åŠŸèƒ½6"])
+        self.list.check_tree.setChecked(config["åŠŸèƒ½7"])
+        self.list.check_domain.setChecked(config["åŠŸèƒ½8"])
+        self.list.check_pass.setChecked(config["åŠŸèƒ½9"])
 
-        self.set.area0.setCurrentIndex(config["ÅÉÇ²0"][0])
-        self.set.area1.setCurrentIndex(config["ÅÉÇ²1"][0])
-        self.set.area2.setCurrentIndex(config["ÅÉÇ²2"][0])
-        self.set.area3.setCurrentIndex(config["ÅÉÇ²3"][0])
-        self.set.area4.setCurrentIndex(config["ÅÉÇ²4"][0])
+        self.set.area0.setCurrentIndex(config["æ´¾é£0"][0])
+        self.set.area1.setCurrentIndex(config["æ´¾é£1"][0])
+        self.set.area2.setCurrentIndex(config["æ´¾é£2"][0])
+        self.set.area3.setCurrentIndex(config["æ´¾é£3"][0])
+        self.set.area4.setCurrentIndex(config["æ´¾é£4"][0])
         self.set.list_change(self.set.area0, self.set.mat0)
         self.set.list_change(self.set.area1, self.set.mat1)
         self.set.list_change(self.set.area2, self.set.mat2)
         self.set.list_change(self.set.area3, self.set.mat3)
         self.set.list_change(self.set.area4, self.set.mat4)
-        self.set.mat0.setCurrentIndex(config["ÅÉÇ²0"][1])
-        self.set.mat1.setCurrentIndex(config["ÅÉÇ²1"][1])
-        self.set.mat2.setCurrentIndex(config["ÅÉÇ²2"][1])
-        self.set.mat3.setCurrentIndex(config["ÅÉÇ²3"][1])
-        self.set.mat4.setCurrentIndex(config["ÅÉÇ²4"][1])
-        self.set.redisp.setChecked(config["ÔÙ´ÎÅÉÇ²"])
+        self.set.mat0.setCurrentIndex(config["æ´¾é£0"][1])
+        self.set.mat1.setCurrentIndex(config["æ´¾é£1"][1])
+        self.set.mat2.setCurrentIndex(config["æ´¾é£2"][1])
+        self.set.mat3.setCurrentIndex(config["æ´¾é£3"][1])
+        self.set.mat4.setCurrentIndex(config["æ´¾é£4"][1])
+        self.set.redisp.setChecked(config["å†æ¬¡æ´¾é£"])
 
-        self.set.LineEdit0.setText(config["²ÎÁ¿ÖÊ±äÒÇ0"])
-        self.set.LineEdit1.setText(config["²ÎÁ¿ÖÊ±äÒÇ1"])
-        self.set.LineEdit2.setText(config["²ÎÁ¿ÖÊ±äÒÇ2"])
-        self.set.LineEdit3.setText(config["²ÎÁ¿ÖÊ±äÒÇ3"])
-        self.set.LineEdit4.setText(config["²ÎÁ¿ÖÊ±äÒÇ4"])
-        self.set.fly0.setChecked(config["¾§µû0"])
-        self.set.fly1.setChecked(config["¾§µû1"])
-        self.set.fly2.setChecked(config["¾§µû2"])
-        self.set.fly3.setChecked(config["¾§µû3"])
-        self.set.fly4.setChecked(config["¾§µû4"])
+        self.set.LineEdit0.setText(config["å‚é‡è´¨å˜ä»ª0"])
+        self.set.LineEdit1.setText(config["å‚é‡è´¨å˜ä»ª1"])
+        self.set.LineEdit2.setText(config["å‚é‡è´¨å˜ä»ª2"])
+        self.set.LineEdit3.setText(config["å‚é‡è´¨å˜ä»ª3"])
+        self.set.LineEdit4.setText(config["å‚é‡è´¨å˜ä»ª4"])
+        self.set.fly0.setChecked(config["æ™¶è¶0"])
+        self.set.fly1.setChecked(config["æ™¶è¶1"])
+        self.set.fly2.setChecked(config["æ™¶è¶2"])
+        self.set.fly3.setChecked(config["æ™¶è¶3"])
+        self.set.fly4.setChecked(config["æ™¶è¶4"])
 
-        self.set.CompactSpinBox.setValue(config["¿³Ê÷´ÎÊı"])
-        self.set.tree0.setChecked(config["¿³Ê÷0"])
-        self.set.tree1.setChecked(config["¿³Ê÷1"])
-        self.set.tree2.setChecked(config["¿³Ê÷2"])
-        self.set.tree3.setChecked(config["¿³Ê÷3"])
-        self.set.tree4.setChecked(config["¿³Ê÷4"])
-        self.set.tree5.setChecked(config["¿³Ê÷5"])
-        self.set.tree6.setChecked(config["¿³Ê÷6"])
-        self.set.tree7.setChecked(config["¿³Ê÷7"])
-        self.set.tree8.setChecked(config["¿³Ê÷8"])
-        self.set.tree9.setChecked(config["¿³Ê÷9"])
-        self.set.tree10.setChecked(config["¿³Ê÷10"])
-        self.set.tree11.setChecked(config["¿³Ê÷11"])
-        self.set.tree12.setChecked(config["¿³Ê÷12"])
-        self.set.tree13.setChecked(config["¿³Ê÷13"])
-        self.set.tree14.setChecked(config["¿³Ê÷14"])
-        self.set.tree15.setChecked(config["¿³Ê÷15"])
-        self.set.tree16.setChecked(config["¿³Ê÷16"])
-        self.set.tree17.setChecked(config["¿³Ê÷17"])
-        self.set.tree18.setChecked(config["¿³Ê÷18"])
-        self.set.domain_type.setCurrentText(config["ÃØ¾³"][0])
+        self.set.CompactSpinBox.setValue(config["ç æ ‘æ¬¡æ•°"])
+        self.set.tree0.setChecked(config["ç æ ‘0"])
+        self.set.tree1.setChecked(config["ç æ ‘1"])
+        self.set.tree2.setChecked(config["ç æ ‘2"])
+        self.set.tree3.setChecked(config["ç æ ‘3"])
+        self.set.tree4.setChecked(config["ç æ ‘4"])
+        self.set.tree5.setChecked(config["ç æ ‘5"])
+        self.set.tree6.setChecked(config["ç æ ‘6"])
+        self.set.tree7.setChecked(config["ç æ ‘7"])
+        self.set.tree8.setChecked(config["ç æ ‘8"])
+        self.set.tree9.setChecked(config["ç æ ‘9"])
+        self.set.tree10.setChecked(config["ç æ ‘10"])
+        self.set.tree11.setChecked(config["ç æ ‘11"])
+        self.set.tree12.setChecked(config["ç æ ‘12"])
+        self.set.tree13.setChecked(config["ç æ ‘13"])
+        self.set.tree14.setChecked(config["ç æ ‘14"])
+        self.set.tree15.setChecked(config["ç æ ‘15"])
+        self.set.tree16.setChecked(config["ç æ ‘16"])
+        self.set.tree17.setChecked(config["ç æ ‘17"])
+        self.set.tree18.setChecked(config["ç æ ‘18"])
+        self.set.domain_type.setCurrentText(config["ç§˜å¢ƒ"][0])
         self.set.domain_change(self.set.domain_type, self.set.domain)
-        self.set.domain.setCurrentText(config["ÃØ¾³"][1])
+        self.set.domain.setCurrentText(config["ç§˜å¢ƒ"][1])
 
     def output_config(self):
         config = dict()
-        config["Ä£¿é"] = 2
+        config["æ¨¡å—"] = 2
 
-        config["¾²Òô"] = self.set.independent.check_mute.isChecked()
-        config["¹Ø±ÕÈí¼ş"] = self.set.independent.check_kill_game.isChecked()
-        config["Íê³Éºó"] = self.set.independent.combo_after.currentIndex()
-        config["SGA¹Ø±Õ"] = self.set.independent.check_kill_sga.isChecked()
+        config["é™éŸ³"] = self.set.independent.check_mute.isChecked()
+        config["å…³é—­è½¯ä»¶"] = self.set.independent.check_kill_game.isChecked()
+        config["å®Œæˆå"] = self.set.independent.combo_after.currentIndex()
+        config["SGAå…³é—­"] = self.set.independent.check_kill_sga.isChecked()
 
-        config["¹¦ÄÜ0"] = self.list.check_team.isChecked()
-        config["¹¦ÄÜ1"] = self.list.check_disp.isChecked()
-        config["¹¦ÄÜ2"] = self.list.check_trans.isChecked()
-        config["¹¦ÄÜ3"] = self.list.check_fly.isChecked()
-        config["¹¦ÄÜ4"] = self.list.check_comp.isChecked()
-        config["¹¦ÄÜ5"] = self.list.check_pot.isChecked()
-        config["¹¦ÄÜ6"] = self.list.check_mail.isChecked()
-        config["¹¦ÄÜ7"] = self.list.check_tree.isChecked()
-        config["¹¦ÄÜ8"] = self.list.check_domain.isChecked()
-        config["¹¦ÄÜ9"] = self.list.check_pass.isChecked()
+        config["åŠŸèƒ½0"] = self.list.check_team.isChecked()
+        config["åŠŸèƒ½1"] = self.list.check_disp.isChecked()
+        config["åŠŸèƒ½2"] = self.list.check_trans.isChecked()
+        config["åŠŸèƒ½3"] = self.list.check_fly.isChecked()
+        config["åŠŸèƒ½4"] = self.list.check_comp.isChecked()
+        config["åŠŸèƒ½5"] = self.list.check_pot.isChecked()
+        config["åŠŸèƒ½6"] = self.list.check_mail.isChecked()
+        config["åŠŸèƒ½7"] = self.list.check_tree.isChecked()
+        config["åŠŸèƒ½8"] = self.list.check_domain.isChecked()
+        config["åŠŸèƒ½9"] = self.list.check_pass.isChecked()
 
-        config["ÅÉÇ²0"] = [self.set.area0.currentIndex(), self.set.mat0.currentIndex()]
-        config["ÅÉÇ²1"] = [self.set.area1.currentIndex(), self.set.mat1.currentIndex()]
-        config["ÅÉÇ²2"] = [self.set.area2.currentIndex(), self.set.mat2.currentIndex()]
-        config["ÅÉÇ²3"] = [self.set.area3.currentIndex(), self.set.mat3.currentIndex()]
-        config["ÅÉÇ²4"] = [self.set.area4.currentIndex(), self.set.mat4.currentIndex()]
-        config["ÔÙ´ÎÅÉÇ²"] = self.set.redisp.isChecked()
+        config["æ´¾é£0"] = [self.set.area0.currentIndex(), self.set.mat0.currentIndex()]
+        config["æ´¾é£1"] = [self.set.area1.currentIndex(), self.set.mat1.currentIndex()]
+        config["æ´¾é£2"] = [self.set.area2.currentIndex(), self.set.mat2.currentIndex()]
+        config["æ´¾é£3"] = [self.set.area3.currentIndex(), self.set.mat3.currentIndex()]
+        config["æ´¾é£4"] = [self.set.area4.currentIndex(), self.set.mat4.currentIndex()]
+        config["å†æ¬¡æ´¾é£"] = self.set.redisp.isChecked()
 
-        config["²ÎÁ¿ÖÊ±äÒÇ0"] = self.set.LineEdit0.text()
-        config["²ÎÁ¿ÖÊ±äÒÇ1"] = self.set.LineEdit1.text()
-        config["²ÎÁ¿ÖÊ±äÒÇ2"] = self.set.LineEdit2.text()
-        config["²ÎÁ¿ÖÊ±äÒÇ3"] = self.set.LineEdit3.text()
-        config["²ÎÁ¿ÖÊ±äÒÇ4"] = self.set.LineEdit4.text()
+        config["å‚é‡è´¨å˜ä»ª0"] = self.set.LineEdit0.text()
+        config["å‚é‡è´¨å˜ä»ª1"] = self.set.LineEdit1.text()
+        config["å‚é‡è´¨å˜ä»ª2"] = self.set.LineEdit2.text()
+        config["å‚é‡è´¨å˜ä»ª3"] = self.set.LineEdit3.text()
+        config["å‚é‡è´¨å˜ä»ª4"] = self.set.LineEdit4.text()
 
-        config["¾§µû0"] = self.set.fly0.isChecked()
-        config["¾§µû1"] = self.set.fly1.isChecked()
-        config["¾§µû2"] = self.set.fly2.isChecked()
-        config["¾§µû3"] = self.set.fly3.isChecked()
-        config["¾§µû4"] = self.set.fly4.isChecked()
+        config["æ™¶è¶0"] = self.set.fly0.isChecked()
+        config["æ™¶è¶1"] = self.set.fly1.isChecked()
+        config["æ™¶è¶2"] = self.set.fly2.isChecked()
+        config["æ™¶è¶3"] = self.set.fly3.isChecked()
+        config["æ™¶è¶4"] = self.set.fly4.isChecked()
 
-        config["¿³Ê÷´ÎÊı"] = self.set.CompactSpinBox.value()
-        config["¿³Ê÷0"] = self.set.tree0.isChecked()
-        config["¿³Ê÷1"] = self.set.tree1.isChecked()
-        config["¿³Ê÷2"] = self.set.tree2.isChecked()
-        config["¿³Ê÷3"] = self.set.tree3.isChecked()
-        config["¿³Ê÷4"] = self.set.tree4.isChecked()
-        config["¿³Ê÷5"] = self.set.tree5.isChecked()
-        config["¿³Ê÷6"] = self.set.tree6.isChecked()
-        config["¿³Ê÷7"] = self.set.tree7.isChecked()
-        config["¿³Ê÷8"] = self.set.tree8.isChecked()
-        config["¿³Ê÷9"] = self.set.tree9.isChecked()
-        config["¿³Ê÷10"] = self.set.tree10.isChecked()
-        config["¿³Ê÷11"] = self.set.tree11.isChecked()
-        config["¿³Ê÷12"] = self.set.tree12.isChecked()
-        config["¿³Ê÷13"] = self.set.tree13.isChecked()
-        config["¿³Ê÷14"] = self.set.tree14.isChecked()
-        config["¿³Ê÷15"] = self.set.tree15.isChecked()
-        config["¿³Ê÷16"] = self.set.tree16.isChecked()
-        config["¿³Ê÷17"] = self.set.tree17.isChecked()
-        config["¿³Ê÷18"] = self.set.tree18.isChecked()
-        config["ÃØ¾³"] = [self.set.domain_type.currentText(),
+        config["ç æ ‘æ¬¡æ•°"] = self.set.CompactSpinBox.value()
+        config["ç æ ‘0"] = self.set.tree0.isChecked()
+        config["ç æ ‘1"] = self.set.tree1.isChecked()
+        config["ç æ ‘2"] = self.set.tree2.isChecked()
+        config["ç æ ‘3"] = self.set.tree3.isChecked()
+        config["ç æ ‘4"] = self.set.tree4.isChecked()
+        config["ç æ ‘5"] = self.set.tree5.isChecked()
+        config["ç æ ‘6"] = self.set.tree6.isChecked()
+        config["ç æ ‘7"] = self.set.tree7.isChecked()
+        config["ç æ ‘8"] = self.set.tree8.isChecked()
+        config["ç æ ‘9"] = self.set.tree9.isChecked()
+        config["ç æ ‘10"] = self.set.tree10.isChecked()
+        config["ç æ ‘11"] = self.set.tree11.isChecked()
+        config["ç æ ‘12"] = self.set.tree12.isChecked()
+        config["ç æ ‘13"] = self.set.tree13.isChecked()
+        config["ç æ ‘14"] = self.set.tree14.isChecked()
+        config["ç æ ‘15"] = self.set.tree15.isChecked()
+        config["ç æ ‘16"] = self.set.tree16.isChecked()
+        config["ç æ ‘17"] = self.set.tree17.isChecked()
+        config["ç æ ‘18"] = self.set.tree18.isChecked()
+        config["ç§˜å¢ƒ"] = [self.set.domain_type.currentText(),
                         self.set.domain.currentText()]
         return config

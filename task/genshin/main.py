@@ -1,8 +1,5 @@
-# -*- coding:gbk -*-
 from tools.environment import *
 from tools.software import find_hwnd
-import traceback
-import os
 from .team import Team
 from .dispatch import Dispatch
 from .transformer import Transformer
@@ -25,109 +22,109 @@ class TaskGenshin(Team, Dispatch, Transformer,
         _k = False
         self.task = task
         env.OCR.enable()
-        self.indicate("¿ªÊ¼ÈÎÎñ:Ô­Éñ")
+        self.indicate("å¼€å§‹ä»»åŠ¡:åŸç¥")
         self.task["resin"] = None
         self.genshin_launch()
         # noinspection PyBroadException
         try:
             self.genshin_log(60)
-            if self.task["¹¦ÄÜ0"]:
-                self.indicate("¿ªÊ¼:¶ÓÎéÇĞ»»")
+            if self.task["åŠŸèƒ½0"]:
+                self.indicate("å¼€å§‹:é˜Ÿä¼åˆ‡æ¢")
                 self.genshin_team()
-                self.indicate("Íê³É:¶ÓÎéÇĞ»»")
-            if self.task["¹¦ÄÜ1"]:
-                self.indicate("¿ªÊ¼:Ì½Ë÷ÅÉÇ²")
+                self.indicate("å®Œæˆ:é˜Ÿä¼åˆ‡æ¢")
+            if self.task["åŠŸèƒ½1"]:
+                self.indicate("å¼€å§‹:æ¢ç´¢æ´¾é£")
                 if self.genshin_dispatch():
                     _k = True
-                self.indicate("Íê³É:Ì½Ë÷ÅÉÇ²")
-            if self.task["¹¦ÄÜ2"]:
-                self.indicate("¿ªÊ¼:²ÎÁ¿ÖÊ±äÒÇ")
+                self.indicate("å®Œæˆ:æ¢ç´¢æ´¾é£")
+            if self.task["åŠŸèƒ½2"]:
+                self.indicate("å¼€å§‹:å‚é‡è´¨å˜ä»ª")
                 if self.genshin_transformer():
                     _k = True
-                self.indicate("Íê³É:²ÎÁ¿ÖÊ±äÒÇ")
-            if self.task["¹¦ÄÜ3"]:
-                self.indicate("¿ªÊ¼:×Ô¶¯¾§µû")
+                self.indicate("å®Œæˆ:å‚é‡è´¨å˜ä»ª")
+            if self.task["åŠŸèƒ½3"]:
+                self.indicate("å¼€å§‹:è‡ªåŠ¨æ™¶è¶")
                 if self.genshin_catch_fly():
                     _k = True
-                self.indicate("Íê³É:×Ô¶¯¾§µû")
-            if self.task["¹¦ÄÜ4"]:
-                self.indicate("¿ªÊ¼:Å¨ËõÊ÷Ö¬")
+                self.indicate("å®Œæˆ:è‡ªåŠ¨æ™¶è¶")
+            if self.task["åŠŸèƒ½4"]:
+                self.indicate("å¼€å§‹:æµ“ç¼©æ ‘è„‚")
                 if self.genshin_make_condensed():
                     _k = True
-                self.indicate("Íê³É:Å¨ËõÊ÷Ö¬")
-            if self.task["¹¦ÄÜ5"]:
-                self.indicate("¿ªÊ¼:³¾¸èºø")
+                self.indicate("å®Œæˆ:æµ“ç¼©æ ‘è„‚")
+            if self.task["åŠŸèƒ½5"]:
+                self.indicate("å¼€å§‹:å°˜æ­Œå£¶")
                 self.genshin_rambler()
-                self.indicate("Íê³É:³¾¸èºø")
-            if self.task["¹¦ÄÜ6"]:
-                self.indicate("¿ªÊ¼:ÁìÈ¡ÓÊ¼ş")
+                self.indicate("å®Œæˆ:å°˜æ­Œå£¶")
+            if self.task["åŠŸèƒ½6"]:
+                self.indicate("å¼€å§‹:é¢†å–é‚®ä»¶")
                 self.genshin_mail()
-                self.indicate("Íê³É:ÁìÈ¡ÓÊ¼ş")
-            if self.task["¹¦ÄÜ7"]:
-                self.indicate("¿ªÊ¼:×Ô¶¯·¥Ä¾")
+                self.indicate("å®Œæˆ:é¢†å–é‚®ä»¶")
+            if self.task["åŠŸèƒ½7"]:
+                self.indicate("å¼€å§‹:è‡ªåŠ¨ä¼æœ¨")
                 if self.genshin_cut_tree():
                     _k = True
-                self.indicate("Íê³É:×Ô¶¯·¥Ä¾")
-            if self.task["¹¦ÄÜ8"]:
-                self.indicate("¿ªÊ¼:×Ô¶¯ÃØ¾³")
+                self.indicate("å®Œæˆ:è‡ªåŠ¨ä¼æœ¨")
+            if self.task["åŠŸèƒ½8"]:
+                self.indicate("å¼€å§‹:è‡ªåŠ¨ç§˜å¢ƒ")
                 if self.genshin_domain():
                     _k = True
-                self.indicate("Íê³É:×Ô¶¯ÃØ¾³")
-            if self.task["¹¦ÄÜ9"]:
-                self.indicate("¿ªÊ¼:ÁìÈ¡¼ÍĞĞ")
+                self.indicate("å®Œæˆ:è‡ªåŠ¨ç§˜å¢ƒ")
+            if self.task["åŠŸèƒ½9"]:
+                self.indicate("å¼€å§‹:é¢†å–çºªè¡Œ")
                 self.genshin_pass()
-                self.indicate("Íê³É:ÁìÈ¡¼ÍĞĞ")
+                self.indicate("å®Œæˆ:é¢†å–çºªè¡Œ")
         except Exception:
-            self.indicate("ÈÎÎñÖ´ĞĞÒì³£:Ô­Éñ", log=False)
-            logger.error("ÈÎÎñÖ´ĞĞÒì³£:Ô­Éñ\n%s" % traceback.format_exc())
+            self.indicate("ä»»åŠ¡æ‰§è¡Œå¼‚å¸¸:åŸç¥", log=False)
+            logger.error("ä»»åŠ¡æ‰§è¡Œå¼‚å¸¸:åŸç¥\n%s" % format_exc())
             _k = True
         env.OCR.disable()
-        if self.task["¹Ø±ÕÈí¼ş"]:
-            self.indicate("³¢ÊÔ¹Ø±ÕÓÎÏ·")
+        if self.task["å…³é—­è½¯ä»¶"]:
+            self.indicate("å°è¯•å…³é—­æ¸¸æˆ")
             s, n = 15, 2
             if env.soft.kill(s, n):
-                self.indicate("ÓÎÏ·ÒÑ¹Ø±Õ")
+                self.indicate("æ¸¸æˆå·²å…³é—­")
             else:
-                self.indicate(f"error:ÓÎÏ·¹Ø±Õ³¬Ê±({s * n}s)")
+                self.indicate(f"error:æ¸¸æˆå…³é—­è¶…æ—¶({s * n}s)")
                 raise RuntimeError("genshin exit error")
-        self.indicate("Íê³ÉÈÎÎñ:Ô­Éñ")
+        self.indicate("å®Œæˆä»»åŠ¡:åŸç¥")
         return _k
 
     def genshin_launch(self):
-        # Â·¾¶ĞŞÕı
-        env.set_soft(None, (0, "UnityWndClass", "Ô­Éñ"))
-        _path = self.task["Æô¶¯"]["game"]
+        # è·¯å¾„ä¿®æ­£
+        env.set_soft(None, (0, "UnityWndClass", "åŸç¥"))
+        _path = self.task["å¯åŠ¨"]["game"]
         # print(_path)
-        if os.path.isfile(_path):
-            dire, name = os.path.split(_path)
+        if isfile(_path):
+            dire, name = split(_path)
             if name == "YuanShen.exe":
                 env.soft.set_path(_path)
             elif name == "launcher.exe":
                 path = dire + "/Genshin Impact Game/YuanShen.exe"
-                if os.path.isfile(path):
+                if isfile(path):
                     env.soft.set_path(path)
                 else:
-                    self.indicate("Ô­Éñ,ÎŞĞ§Æô¶¯Â·¾¶")
-                    raise ValueError("Ô­Éñ:ÎŞĞ§Æô¶¯Â·¾¶")
+                    self.indicate("åŸç¥,æ— æ•ˆå¯åŠ¨è·¯å¾„")
+                    raise ValueError("åŸç¥:æ— æ•ˆå¯åŠ¨è·¯å¾„")
             else:
-                self.indicate("Ô­Éñ,ÎŞĞ§Æô¶¯Â·¾¶")
-                raise ValueError("Ô­Éñ:ÎŞĞ§Æô¶¯Â·¾¶")
+                self.indicate("åŸç¥,æ— æ•ˆå¯åŠ¨è·¯å¾„")
+                raise ValueError("åŸç¥:æ— æ•ˆå¯åŠ¨è·¯å¾„")
         else:
-            self.indicate("Ô­Éñ,ÎŞĞ§Æô¶¯Â·¾¶")
-            raise ValueError("Ô­Éñ:ÎŞĞ§Æô¶¯Â·¾¶")
-        # Æô¶¯ÓÎÏ·
+            self.indicate("åŸç¥,æ— æ•ˆå¯åŠ¨è·¯å¾„")
+            raise ValueError("åŸç¥:æ— æ•ˆå¯åŠ¨è·¯å¾„")
+        # å¯åŠ¨æ¸¸æˆ
         env.soft.hwnd = find_hwnd(env.soft.mode_cls_tit)
         cond = env.soft.run()
         if cond == 1:
-            self.indicate("ÓÎÏ·ÔçÒÑÆô¶¯")
+            self.indicate("æ¸¸æˆæ—©å·²å¯åŠ¨")
             wait(1000)
         elif cond == 2:
-            self.indicate("ÓÎÏ·Æô¶¯³É¹¦")
-            self.indicate("µÈ´ı¼ÓÔØ,10Ãëºó¿ªÊ¼Ê¶±ğÓÎÏ·×´Ì¬")
+            self.indicate("æ¸¸æˆå¯åŠ¨æˆåŠŸ")
+            self.indicate("ç­‰å¾…åŠ è½½,10ç§’åå¼€å§‹è¯†åˆ«æ¸¸æˆçŠ¶æ€")
             wait(10000)
         elif cond == 0:
-            self.indicate("ÓÎÏ·Æô¶¯³¬Ê±")
-            raise RuntimeError("Ô­Éñ:ÓÎÏ·Æô¶¯³¬Ê±")
+            self.indicate("æ¸¸æˆå¯åŠ¨è¶…æ—¶")
+            raise RuntimeError("åŸç¥:æ¸¸æˆå¯åŠ¨è¶…æ—¶")
         for i in range(10):
             env.soft.foreground()
             wait(1000)
@@ -138,33 +135,30 @@ class TaskGenshin(Team, Dispatch, Transformer,
                 wait(2000)
         
     def genshin_log(self, second: int):
-        # µÇÂ¼&½øÈëÓÎÏ·
-        self.indicate("¿ªÊ¼Ê¶±ğÓÎÏ·×´Ì¬")
-        server = self.task["Æô¶¯"]["server"]
+        # ç™»å½•&è¿›å…¥æ¸¸æˆ
+        self.indicate("å¼€å§‹è¯†åˆ«æ¸¸æˆçŠ¶æ€")
+        server = self.task["å¯åŠ¨"]["server"]
         for i in range(second):
-            sc = screenshot()
+            sc = scshot()
             if server == 0:
-                if "µã»÷½øÈë" in ocr((897, 989, 1027, 1048))[0].replace(" ", ""):
+                if "ç‚¹å‡»è¿›å…¥" in ocr((897, 989, 1027, 1048))[0].replace(" ", ""):
                     server = 2
                     click((930, 630))
-                    self.indicate("¿ªÃÅ")
+                    self.indicate("å¼€é—¨")
                     wait(4000)
-                    os.remove(sc)
-                    sc = screenshot()
+                    sc = scshot()
             elif server == 1:
                 if find_pic(r"assets\genshin\picture\login2.png", (863, 370, 1059, 467), sc)[1] >= 0.6:
                     click((953, 659))
-                    self.indicate("µÇÂ¼B·şÕËºÅ")
+                    self.indicate("ç™»å½•Bæœè´¦å·")
                     wait(4000)
-                    os.remove(sc)
-                    sc = screenshot()
-                if "µã»÷½øÈë" in ocr((897, 989, 1027, 1048))[0].replace(" ", ""):
+                    sc = scshot()
+                if "ç‚¹å‡»è¿›å…¥" in ocr((897, 989, 1027, 1048))[0].replace(" ", ""):
                     server = 2
                     click((930, 630))
-                    self.indicate("¿ªÃÅ")
+                    self.indicate("å¼€é—¨")
                     wait(4000)
-                    os.remove(sc)
-                    sc = screenshot()
+                    sc = scshot()
             if find_pic(r"assets\genshin\picture\sighin.png", (865, 240, 1060, 470), sc)[1] >= 0.6:
                 click((930, 850))
                 wait(800)
@@ -174,20 +168,19 @@ class TaskGenshin(Team, Dispatch, Transformer,
                 wait(1000)
                 click((930, 850))
                 wait(800)
-                self.indicate("½ñÈÕÔÂ¿¨ÁìÈ¡³É¹¦")
-                os.remove(sc)
-                sc = screenshot()
+                self.indicate("ä»Šæ—¥æœˆå¡é¢†å–æˆåŠŸ")
+                sc = scshot()
             if find_pic(r"assets\genshin\picture\world.png", (57, 998, 179, 1075), sc)[1] >= 0.6:
-                self.indicate("¼ÓÔØµ½ÊÀ½ç")
-                os.remove(sc)
+                self.indicate("åŠ è½½åˆ°ä¸–ç•Œ")
+                del sc
                 click((509, 313))
                 wait(300)
                 click((509, 313))
                 wait(300)
                 break
-            if "ºÃÓÑ" in ocr((480, 442, 540, 481))[0]:
-                self.indicate("¼ÓÔØµ½Ö÷½çÃæ")
-                os.remove(sc)
+            if "å¥½å‹" in ocr((480, 442, 540, 481))[0]:
+                self.indicate("åŠ è½½åˆ°ä¸»ç•Œé¢")
+                del sc
                 click((509, 313))
                 wait(300)
                 click((509, 313))
@@ -201,16 +194,16 @@ class TaskGenshin(Team, Dispatch, Transformer,
             if val1 >= 0.6:
                 click(_p)
                 wait(2500)
-            os.remove(sc)
+            del sc
             if i == second - 1:
-                self.indicate(f"µÇÂ¼³¬Ê±£¨{second * 2}s£©")
-                raise RuntimeError("Ô­Éñ:Ê¶±ğÓÎÏ·×´Ì¬³¬Ê±")
+                self.indicate(f"ç™»å½•è¶…æ—¶ï¼ˆ{second * 2}sï¼‰")
+                raise RuntimeError("åŸç¥:è¯†åˆ«æ¸¸æˆçŠ¶æ€è¶…æ—¶")
             wait(2000)
             
 
 if __name__ == '__main__':
     logger.enable_console()
-    logger.hr("»¶Ó­Ê¹ÓÃ É°ÌÇ´úÀív1.1\n"
+    logger.hr("æ¬¢è¿ä½¿ç”¨ ç ‚ç³–ä»£ç†v1.1\n"
               "https://github.com/Kin-L/SGA-Sucrose_Game_Assistant\n"
-              "´Ë³ÌĞòÎªÃâ·Ñ¿ªÔ´ÏîÄ¿ Èç¹ûÄã¸¶ÁËÇ®ÇëÁ¢¿ÌÍË¿î", 0)
+              "æ­¤ç¨‹åºä¸ºå…è´¹å¼€æºé¡¹ç›® å¦‚æœä½ ä»˜äº†é’±è¯·ç«‹åˆ»é€€æ¬¾", 0)
     pass

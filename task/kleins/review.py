@@ -1,5 +1,3 @@
-import os
-
 from tools.environment import *
 from ..default_task import Task
 
@@ -36,7 +34,7 @@ class Review(Task):
         _list = [(575, 820, 825, 868),
                  (1003, 821, 1252, 867),
                  (1430, 822, 1680, 867)]
-        sc = screenshot()
+        sc = scshot()
         for n in range(3):
             _text = ocr(_list[n], sc)[0]
             if _text == "回顾完成":
@@ -88,7 +86,7 @@ class Review(Task):
             click((1652, 875))
             self.indicate("战术回顾%s开始" % n)
             wait(1500)
-        os.remove(sc)
+        del sc
         # 结束
         click((296, 75))
         wait(1000)

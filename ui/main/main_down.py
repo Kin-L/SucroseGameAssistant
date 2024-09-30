@@ -1,10 +1,11 @@
 from .main_bottom import MainBottom
-import json
+from json import dump, load
 from tools.environment import *
-import os
+from os.path import splitext, exists
+from os import listdir, makedirs
 from time import localtime
 from datetime import datetime
-from tools.software import find_hwnd
+from tools.software import find_hwnd, close, get_pid
 
 
 class MainDown(MainBottom):
@@ -42,20 +43,20 @@ class MainDown(MainBottom):
         }
         self.state["version"] = self.overall.version
         self.state["hwnd"] = find_hwnd((True, "Qt5152QWindowIcon", "砂糖代理"))
-        if os.path.exists("personal/main_config.json"):
+        if exists("personal/main_config.json"):
             try:
                 with open("personal/main_config.json", 'r', encoding='utf-8') as c:
-                    config = json.load(c)
+                    config = load(c)
             except:
                 with open("personal/main_config_bak.json", 'r', encoding='utf-8') as c:
-                    config = json.load(c)
+                    config = load(c)
                 with open("personal/main_config.json", 'w', encoding='utf-8') as c:
-                    json.dump(config, c, ensure_ascii=False, indent=1)
+                    dump(config, c, ensure_ascii=False, indent=1)
                 self.indicate("主配置文件损坏,从备份中恢复")
             self.config.update(config)
         # 获取设置及分类
-        for file in os.listdir("personal/config"):
-            name, suffix = os.path.splitext(file)
+        for file in listdir("personal/config"):
+            name, suffix = splitext(file)
             if suffix == ".json":
                 prefix = name[:2]
                 name = name[2:]
@@ -83,6 +84,8 @@ class MainDown(MainBottom):
             config_list += [self.box_config_change.itemText(i)]
         if _text in config_list:
             self.box_config_change.setCurrentText(_text)
+            # print(self.box_config_change.currentText())
+            # print(self.box_config_change.currentIndex())
             self.state["text"] = _text
             self.state["index"] = self.box_config_change.currentIndex()
         else:
@@ -93,24 +96,24 @@ class MainDown(MainBottom):
         self.send_config_dir(self.config["current"])
         # 根据运行路径修改基础文件
         if env.workdir != self.config["work_path"]:
-            if not os.path.exists("cache"):
-                os.makedirs("cache")
+            if not exists("cache"):
+                makedirs("cache")
             self.config["work_path"] = env.workdir
             vbs_dir = "%s/personal/bat" % env.workdir
             vbs_path = "%s/personal/bat/start-SGA.vbs" % env.workdir
             with open("personal/schtasks_index.json", 'r', encoding='utf-8') as m:
-                xml_dir = json.load(m)
+                xml_dir = load(m)
             xml_list = xml_dir["part2"]
             xml_list[32] = "      <Command>" + vbs_path + "</Command>\n"
             xml_list[34] = "      <WorkingDirectory>" + vbs_dir + "</WorkingDirectory>\n"
             xml_dir["part2"] = xml_list
             with open("personal/schtasks_index.json", 'w', encoding='utf-8') as x:
-                json.dump(xml_dir, x, ensure_ascii=False, indent=1)
+                dump(xml_dir, x, ensure_ascii=False, indent=1)
 
             f = open("personal/bat/start-SGA.bat", 'r', encoding='utf-8')
             start_list = f.readlines()
             f.close()
-            start_list[5] = "start /d \"%s\" SGA.exe\n" % env.workdir
+            start_list[5] = "start /d \"%s\" SGA.exe True\n" % env.workdir
             f = open("personal/bat/start-SGA.bat", 'w', encoding='utf-8')
             f.writelines(start_list)
             f.close()
@@ -124,7 +127,7 @@ class MainDown(MainBottom):
             f.close()
 
             _path = "personal/bat/maa_create.bat"
-            if os.path.exists(_path):
+            if exists(_path):
                 f = open(_path, 'r', encoding='ansi')
                 bat_list = f.readlines()
                 f.close()
@@ -145,12 +148,18 @@ class MainDown(MainBottom):
                 module = eval(f"self.{text}")
                 self.config[text] = module.get_run()
         with open("personal/main_config.json", 'w', encoding='utf-8') as c:
-            json.dump(self.config, c, ensure_ascii=False, indent=1)
+            dump(self.config, c, ensure_ascii=False, indent=1)
         with open("personal/main_config_bak.json", 'w', encoding='utf-8') as c:
-            json.dump(self.config, c, ensure_ascii=False, indent=1)
+            dump(self.config, c, ensure_ascii=False, indent=1)
 
     def exit_save(self):
         self.save_main_data()
+        while 1:
+            v = get_pid("PaddleOCR-json.exe")
+            if v:
+                close(v)
+            else:
+                break
 
     def add_path(self, config_dir):
         _name = self.state["name"][config_dir["模块"]]

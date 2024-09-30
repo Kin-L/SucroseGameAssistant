@@ -1,6 +1,5 @@
 from tools.environment import *
 from ..default_task import Task
-import os
 
 
 class Fight(Task):
@@ -17,15 +16,14 @@ class Fight(Task):
             self.indicate("重游完成，领取重游奖励。")
             wait(2500)
             while 1:
-                sc = screenshot()
+                sc = scshot()
                 if "向导等级" in ocr((827, 134, 1088, 262), sc)[0].replace(" ", ""):
                     self.indicate("等级提升！")
                     click((1282, 690))
-                    os.remove(sc)
-                    sc = screenshot()
+                    sc = scshot()
                 if "再次重游" in ocr((1703, 50, 1832, 97), sc)[0].replace(" ", ""):
                     wait(500)
-                    os.remove(sc)
+                    del sc
                     if self.task["再次重游"]:
                         click((1744, 80))
                         wait(1800)
@@ -63,7 +61,7 @@ class Fight(Task):
                         click((971, 930))
                         wait(800)
                     break
-                os.remove(sc)
+                del sc
                 wait(1000)
         else:
             self.indicate("作战空闲中。")

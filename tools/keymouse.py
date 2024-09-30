@@ -1,7 +1,5 @@
-# -*- coding:gbk -*-
 # import pywintypes
 from win32api import mouse_event, SetCursorPos, keybd_event
-from time import sleep
 from win32con import KEYEVENTF_KEYUP
 from .system import *
 key_map = {
@@ -90,10 +88,10 @@ class KeyMouse(System):
     def key_add(key1, key2):
         key_num1 = key_map[key1.upper()]
         key_num2 = key_map[key2.upper()]
-        keybd_event(key_num1, 0, 0, 0)  # ctrl按下
-        keybd_event(key_num2, 0, 0, 0)  # a按下
-        keybd_event(key_num2, 0, 0, 0)  # a抬起
-        keybd_event(key_num1, 0, 0, 0)  # ctrl抬起
+        keybd_event(key_num1, 0, 0, 0)  # ctrl鎸変笅
+        keybd_event(key_num2, 0, 0, 0)  # a鎸変笅
+        keybd_event(key_num2, 0, 0, 0)  # a鎶捣
+        keybd_event(key_num1, 0, 0, 0)  # ctrl鎶捣
 
     @staticmethod
     def wait(t):

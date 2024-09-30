@@ -32,14 +32,14 @@ class Domain(Genshin):
             self.check_overdue()
             click((1247, 54))
             wait(800)
-            sc = screenshot()
+            sc = scshot()
             (x, y), val = find_pic(r"assets\genshin\picture\valu_tools\nssz.png",
                                    (110, 112, 1273, 805), sc)
             if val > 0.7:
                 cond = int(ocr((x-15, y+65, x+15, y+92), sc)[0])
             else:
                 cond = 0
-            os.remove(sc)
+            del sc
             click((1843, 46))
             wait(1500)
         else:

@@ -43,7 +43,7 @@ class Genshin(Task):
 
     # 从主界面打开子界面
     def open_sub(self, cho):
-        if click_text(cho, (117, 346, 742, 1052)):
+        if click_text(cho, (117, 346, 742, 1052), once=False):
             self.indicate("打开" + cho)
             wait(2500)
             return True

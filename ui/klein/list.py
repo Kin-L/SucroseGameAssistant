@@ -1,26 +1,25 @@
-# -*- coding:gbk -*-
 from ui.element.control import *
 
 
 class KleinList:
     def __init__(self, widget, location):
-        # 功能列表窗口
+        # 鍔熻兘鍒楄〃绐楀彛
         scroll = ScrollArea(widget, location)
         scroll.setFrameShape(QtWidgets.QFrame.Shape(0))
-        # 设置控件
-        self.label_klein = Label(scroll, (75, 10, 80, 20), "环行旅舍", 18)
+        # 璁剧疆鎺т欢
+        self.label_klein = Label(scroll, (75, 10, 80, 20), "鐜鏃呰垗", 18)
         setpath = "assets/main_window/ui/set.png"
         self.set_klein = PicButton(scroll, (180, 10, 22, 22), setpath, (22, 22))
 
-        self.check_fight = Check(scroll, (15, 50, 140, 22), "作战/重游")
-        self.check_disp = Check(scroll, (15, 95, 140, 22), "线下采购")
-        self.check_review = Check(scroll, (15, 140, 140, 22), "战术回顾")
-        self.check_market = Check(scroll, (15, 185, 140, 22), "集市领取")
-        self.check_recruit = Check(scroll, (15, 230, 140, 22), "舍友访募")
-        self.check_reward = Check(scroll, (15, 275, 140, 22), "今日工作")
-        self.check_network = Check(scroll, (15, 320, 140, 22), "卡门商网")
-        self.check_mail = Check(scroll, (15, 365, 140, 22), "领取邮件")
-        self.check_roll = Check(scroll, (15, 410, 140, 22), "抽卡历史")
+        self.check_fight = Check(scroll, (15, 50, 140, 22), "浣滄垬/閲嶆父")
+        self.check_disp = Check(scroll, (15, 95, 140, 22), "绾夸笅閲囪喘")
+        self.check_review = Check(scroll, (15, 140, 140, 22), "鎴樻湳鍥為【")
+        self.check_market = Check(scroll, (15, 185, 140, 22), "闆嗗競棰嗗彇")
+        self.check_recruit = Check(scroll, (15, 230, 140, 22), "鑸嶅弸璁垮嫙")
+        self.check_reward = Check(scroll, (15, 275, 140, 22), "浠婃棩宸ヤ綔")
+        self.check_network = Check(scroll, (15, 320, 140, 22), "鍗￠棬鍟嗙綉")
+        self.check_mail = Check(scroll, (15, 365, 140, 22), "棰嗗彇閭欢")
+        self.check_roll = Check(scroll, (15, 410, 140, 22), "鎶藉崱鍘嗗彶")
 
         self.set_fight = PicButton(scroll, (180, 50, 22, 22), setpath, (22, 22))
         self.set_disp = PicButton(scroll, (180, 95, 22, 22), setpath, (22, 22))

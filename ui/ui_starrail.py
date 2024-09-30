@@ -1,4 +1,3 @@
-# -*- coding:gbk -*-
 from PyQt5 import QtCore, QtGui, QtWidgets
 from qfluentwidgets import CheckBox, ComboBox, CompactSpinBox, EditableComboBox, ImageLabel, LineEdit, PushButton, \
     SegmentedWidget, SmoothScrollArea, StrongBodyLabel, SubtitleLabel, TimePicker, TransparentPushButton

@@ -1,6 +1,3 @@
-# -*- coding:gbk -*-
-import os
-
 from tools.environment import *
 from ..default_task import Task
 
@@ -10,217 +7,193 @@ class Daily(Task):
         super().__init__()
 
     def snow_daily(self):
-        self.indicate("¿ªÊ¼¼ì²é£ºÈÕ³£ÖÜ³£")
-        if self.task["¸öÈË¹ÊÊÂ"][0]:
-            click((1728, 531))
-            wait(2500)
-            click((843, 848))
-            wait(2000)
+        self.indicate("å¼€å§‹æ£€æŸ¥ï¼šæ—¥å¸¸å‘¨å¸¸")
+        if self.task["ä¸ªäººæ•…äº‹"][0]:
+            click_change((1690, 470), (1552, 468, 1626, 515))
+            pos = wait_text("ä¸ªäºº", (733, 812, 947, 891))
+            click_change(pos, (733, 812, 947, 891))
             _u = 0
-            for i in self.task["¸öÈË¹ÊÊÂ"][2:]:
-                if i != "Î´Ñ¡Ôñ":
-                    _num = int(ocr((1459, 27, 1540, 77))[0].split("/")[0])
-                    if _num == 0 and self.task["¸öÈË¹ÊÊÂ"][1] and _u < 2:
-                        _u += 1
-                        click((1566, 51))
-                        wait(2000)
-                        click((1221, 626))
-                        wait(800)
-                        click((1420, 768))
-                        wait(2000)
-                        click((668, 66))
-                        wait(1500)
-                    elif _num > 2:
-                        pass
-                    else:
-                        self.indicate(f"¼ÇÒäÇ¶Æ¬²»×ã: {_num}")
-                        break
-                    if i == "¼êÄ¬":
-                        _r = "Ä¬"
-                    elif i == "¾Ì¹Ú":
-                        _r = "¹Ú"
-                    elif i == "ã£Ãı":
-                        _r = "Ãı"
+            for i in self.task["ä¸ªäººæ•…äº‹"][2:]:
+                if i != "æœªé€‰æ‹©":
+
+                    if i == "ç¼„é»˜":
+                        _r = "é»˜"
+                    elif i == "å’å† ":
+                        _r = "å† "
+                    elif i == "æ‚–è°¬":
+                        _r = "è°¬"
                     else:
                         _r = i
                     _f = False
+                    cl = False
                     for o in range(8):
-                        pos = find_text(_r)
+                        pos = find_text(_r, (0, 731, 1920, 858))
                         if pos:
-                            click((pos[0], 900))
+                            (_x, _y) = pos
+                            _str = ocr((_x+267, 177,  _x+447, 233))[0]
+
+                            if "0" in _str or "o" in _str or "O" in _str:
+                                self.indicate(f"ä»Šæ—¥å·²å®Œæˆï¼šè§’è‰² {i}")
+                                _f = True
+                            elif _str.count("2") == 2:
+                                cl = True
                             break
                         elif o == 7:
                             roll((1002, 581), 250)
                             wait(800)
                             _f = True
-                            self.indicate(f"Î´Ê¶±ğµ½½ÇÉ«: {i}")
+                            self.indicate(f"æœªè¯†åˆ«åˆ°è§’è‰²: {i}")
                         else:
                             roll((1002, 581), -25)
                             wait(800)
                     if _f:
                         continue
-                    wait(2500)
-                    click((1280, 711))
-                    wait(1000)
-                    click((955, 826))
-                    wait(4000)
-                    click((932, 993))
-                    wait(1500)
-                    self.indicate(f"Íê³É¸öÈË¹ÊÊÂÉ¨µ´ {i}")
-            click((1674, 44))
-            wait(2000)
-        if self.task["Äâ¾³É¨µ´"]:
-            click((1728, 531))
-            wait(2500)
-            click((288, 507))
-            wait(1500)
-            x, y = find_text("¾«Éñ", (150, 770, 1779, 848))
-            clickto((x, 462), 2000, (r"assets\snow\picture\imitate.png", (218, 863, 339, 968), 0.7))
-            for _p in [(223, 253), (216, 394)]:
-                click(_p)
-                wait(1500)
-                for i in range(4):
-                    sc = screenshot()
-                    if ("¿ìËÙ" in ocr((1351, 977, 1512, 1052), sc)[0] and
-                            int(ocr((1791, 576, 1852, 611), sc)[0].replace(" ", "")[:-2]) > 0):
-                        os.remove(sc)
-                        click((1415, 999))
-                        wait(2500)
-                        click((1375, 773))
-                        wait(2000)
-                        self.indicate("Äâ¾³É¨µ´Ò»´Î")
+                    _num = int(ocr((1459, 27, 1540, 77))[0].split("/")[0])
+                    if _num == 0 and self.task["ä¸ªäººæ•…äº‹"][1] and _u < 2:
+                        _u += 1
+                        click_change((1566, 51), (1547, 38, 1584, 69))
+                        pos = wait_text("ç¡®å®š", (1354, 717, 1552, 817))
+                        if cl:
+                            click_change((1221, 626), (934, 595, 990, 656))
+                        click_change(pos, (1354, 717, 1552, 817))
+                        wait_text("è·å¾—é“å…·", (809, 40, 1113, 147))
+                        click_change((1037, 951), (809, 40, 1113, 147))
+                    elif _num > 2:
+                        pass
                     else:
-                        os.remove(sc)
+                        self.indicate(f"è®°å¿†åµŒç‰‡ä¸è¶³: {_num}")
                         break
-            if find_color("yellow", (188, 869, 195, 876))[1]:
-                click((137, 914))
-                wait(2000)
-                click((1742, 1001))
-                wait(2000)
-                click((1742, 1001))
-                wait(2000)
-                self.indicate("ÁìÈ¡ÆÀ²â½±Àø")
-                click((1862, 87))
-                wait(2000)
-            click((1615, 48))
-            wait(2000)
-        if self.task["ÉÌµê¹ºÎï"][0]:
-            print(self.task["ÉÌµê¹ºÎï"])
-            click((1790, 1029))
-            wait(2000)
-            _f1 = False
-            _f2 = False
-            t1 = self.task["ÉÌµê¹ºÎï"][1]
-            t2 = self.task["ÉÌµê¹ºÎï"][2]
-            if self.task["ÉÌµê¹ºÎï"][1] == "·¼ÌşËÜÁÏ¡Á3":
-                t1 = "·¼ÌşËÜÁÏ"
-                _f1 = True
-            if self.task["ÉÌµê¹ºÎï"][2] == "·¼ÌşËÜÁÏ¡Á3":
-                t2 = "·¼ÌşËÜÁÏ"
-                _f2 = True
-            if not click_text(t1):
-                click_text(t2)
-                wait(1000)
-                if _f2:
-                    click((1832, 853))
+                    click_change((_x, 900), (858, 801, 1072, 875))
+                    if cl:
+                        click_change((1168, 718), (875, 685, 945, 749))
+                    click_text("å¼€å§‹", (858, 801, 1072, 875))
+                    wait_text("å®Œæˆ", (929, 965, 1041, 1028))
+                    self.indicate(f"å®Œæˆä¸ªäººæ•…äº‹æ‰«è¡ {i}")
+                    click_change((932, 993), (929, 965, 1041, 1028))
                     wait(500)
-            else:
-                wait(1000)
-                if _f1:
-                    click((1832, 853))
-                    wait(500)
-            click((1710, 1011))
-            wait(1500)
-            click((1710, 1011))
-            wait(1000)
-            self.indicate("ÉÌµê¹ºÎïÒ»´Î")
-            click((1615, 48))
-            wait(2000)
-        if self.task["ÎäÆ÷Éı¼¶"]:
-            click((1612, 1024))
-            wait(2000)
-            click((73, 1025))
-            wait(2000)
-            click((585, 327))
-            wait(1000)
-            click((585, 327))
-            wait(1000)
-            click((1316, 840))
-            wait(1500)
-
-            click((425, 191))
-            wait(2000)
-            click((985, 774))
-            wait(2000)
-            click((181, 300))
-            wait(2000)
-            click((1383, 717))
-            wait(1500)
-            click((119, 168))
-            wait(1000)
-            click((1701, 1015))
-            wait(2000)
-            click((1619, 49))
-            wait(2000)
-            self.indicate("ÎäÆ÷Éı¼¶Ò»´Î")
-            click((1619, 49))
-            wait(2000)
-        if self.task["ÁìÈ¡ÈÕ³£"]:
-            click((1497, 356))
-            wait(1500)
-            click((116, 157))
-            wait(1500)
-            if "ÁìÈ¡" in ocr((55, 973, 197, 1023))[0]:
-                click((131, 999))
-                wait(2000)
-                click((131, 999))
-                wait(2000)
-                self.indicate("ÁìÈ¡ÈÕ³£½±Àø")
-            for i in range(5):
-                if "Ö´ĞĞ¶È" in ocr((311, 894, 430, 937))[0]:
-                    break
-                else:
-                    click((119, 991))
-                    wait(2000)
-            click((101, 257))
-            wait(1500)
-            if "ÁìÈ¡" in ocr((55, 973, 197, 1023))[0]:
-                click((131, 999))
-                wait(2000)
-                click((131, 999))
-                wait(2000)
-                self.indicate("ÁìÈ¡¶¨ÆÚ½±Àø")
-            click((1674, 44))
-            wait(2000)
-        if self.task["ÁìÈ¡Æ¾Ö¤"] and find_color("yellow", (379, 557, 387, 566))[1]:
-            click((311, 580))
-            wait(2000)
-            for _p in [(1272, 1025), (1512, 1027), (1052, 1029)]:
+            click_change((1668, 49), (1646, 24, 1697, 72))
+            wait(500)
+        if self.task["æ‹Ÿå¢ƒæ‰«è¡"]:
+            click_change((1690, 470), (1552, 468, 1626, 515))
+            pos = wait_text("ç‰¹åˆ«", (157, 464, 425, 560))
+            click_change(pos, (157, 464, 425, 560))
+            x, y = wait_text("ç²¾ç¥", (150, 770, 1779, 848))
+            click_change((x, 462), (61, 998, 245, 1059))
+            wait_text("æ–—", (1288, 180, 1451, 239))
+            for _p in [(224, 253), (216, 394)]:
                 click(_p)
                 wait(800)
-                if "ÁìÈ¡" in ocr((76, 1000, 220, 1045))[0]:
-                    click((149, 1015))
-                    wait(2000)
-                    click((149, 1015))
-                    wait(2000)
-                    self.indicate("ÁìÈ¡Æ¾Ö¤½±Àø")
-            click((1674, 44))
-            wait(2000)
-        if self.task["»î¶¯Ã¿ÈÕ"]:
-            click((1453, 479))
-            wait(1500)
-            wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
-            self.indicate("ÁìÈ¡»î¶¯Ã¿ÈÕ")
-            click_text("ÈÎÎñ")
-            wait(2500)
-            if click_text("ÁìÈ¡"):
-                wait(2500)
-                click((155, 921))
-                wait(1500)
-                self.indicate("ÁìÈ¡ÒÑÍê³ÉµÄ»î¶¯ÈÎÎñ")
-            else:
-                self.indicate("ÔİÎŞÒÑÍê³ÉµÄ»î¶¯ÈÎÎñ¿ÉÁìÈ¡")
-            click((1668, 48))
-            wait(1500)
+                for i in range(4):
+                    sc = scshot()
+                    if ("å¿«é€Ÿ" in ocr((1351, 977, 1512, 1052), sc)[0] and
+                            int(ocr((1791, 576, 1852, 611), sc)[0].replace(" ", "")[:-2]) > 0):
+                        del sc
+                        click_change((1415, 999), (1358, 964, 1548, 1071))
+                        wait(500)
+                        click_change((1375, 773), (1358, 964, 1548, 1071))
+                        wait(500)
+                        self.indicate("æ‹Ÿå¢ƒæ‰«è¡ä¸€æ¬¡")
+                    else:
+                        del sc
+                        break
+            if find_color("yellow", (188, 869, 195, 876))[1]:
+                click_change((137, 914), (107, 883, 179, 948))
+                click_change((1742, 1001), (1670, 971, 1830, 1022))
+                wait_text("è·å¾—é“å…·", (809, 40, 1113, 147))
+                click_change((1383, 502), (809, 40, 1113, 147))
+                self.indicate("é¢†å–è¯„æµ‹å¥–åŠ±")
+                click_change((1862, 87), (1846, 67, 1884, 105))
+                wait(500)
+            click_change((1668, 49), (1646, 24, 1697, 72))
+            wait(500)
+        if self.task["å•†åº—è´­ç‰©"][0]:
+            click_text("å•†åº—", (1756, 997, 1852, 1061))
+            wait_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+            for i in [self.task["å•†åº—è´­ç‰©"][1], self.task["å•†åº—è´­ç‰©"][2]]:
+                _f = False
+                if i == "èŠ³çƒƒå¡‘æ–™Ã—3":
+                    i = "èŠ³çƒƒå¡‘æ–™"
+                    _f = True
 
-        self.indicate("¼ì²éÍê³É£ºÈÕ³£ÖÜ³£")
+                pos = find_text(i, (323, 213, 1860, 1003))
+                if pos:
+                    click_change(pos, (1723, 981, 1840, 1044))
+                    if _f:
+                        click_change((1832, 853), (1545, 834, 1582, 874))
+                    break
+            click_change((1782, 1014), (1738, 988, 1827, 1041))
+            wait_text("è·å¾—é“å…·", (809, 40, 1113, 147))
+            click_change((96, 969), (809, 40, 1113, 147))
+            self.indicate("å•†åº—è´­ç‰©ä¸€æ¬¡")
+            click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+            wait(500)
+        if self.task["æ­¦å™¨å‡çº§"]:
+            click_text("èƒŒåŒ…", (1599, 994, 1692, 1063))
+            wait(500)
+            # æ’åº
+            click_change((73, 1025), (50, 1011, 111, 1056))
+            wait(500)
+            click_change((585, 327), (625, 303, 681, 349))
+            click_change((585, 327), (625, 303, 681, 349))
+            click_change((1316, 840), (1302, 798, 1435, 893))
+            # å‡çº§
+            click_change((425, 191), (50, 1011, 111, 1056))
+            click_change((985, 774), (50, 1011, 111, 1056))
+            click_change((181, 300), (123, 263, 248, 332))
+            pos = wait_text("å‡çº§", (1691, 981, 1818, 1053))
+            click_change((1383, 717), (123, 263, 248, 332))
+            click_change((119, 168), (1341, 675, 1431, 766))
+            click_change(pos, (1691, 981, 1818, 1053))
+            wait_text("å‡", (869, 323, 1051, 408))
+            self.indicate("æ­¦å™¨å‡çº§ä¸€æ¬¡")
+            click_change((1668, 49), (1646, 24, 1697, 72))
+            click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+            wait(500)
+        if self.task["é¢†å–æ—¥å¸¸"]:
+            click_text("ä»»åŠ¡", (1440, 311, 1555, 403))
+            wait(500)
+            pos = find_text("é¢†å–", (55, 973, 197, 1023))
+            if pos:
+                click_change(pos, (18, 952, 242, 1040))
+                click_to_pic(pos, r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+                self.indicate("é¢†å–æ—¥å¸¸å¥–åŠ±")
+            click_change((101, 257), (292, 106, 560, 172))
+            pos = find_text("é¢†å–", (55, 973, 197, 1023))
+            if pos:
+                click_change(pos, (18, 952, 242, 1040))
+                wait_text("è·å¾—é“å…·", (809, 40, 1113, 147))
+                self.indicate("é¢†å–æ—¥å¸¸å¥–åŠ±")
+                click_change(pos, (809, 40, 1113, 147))
+            click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+            wait(500)
+        if self.task["é¢†å–å‡­è¯"] and find_color("yellow", (379, 557, 387, 566))[1]:
+            click_change((311, 580), (283, 560, 366, 599))
+            for _p in [(1272, 1025), (1512, 1027), (1052, 1029)]:
+                click_change(_p, (537, 609, 716, 661))
+                wait(300)
+                pos = find_text("é¢†å–", (76, 1000, 220, 1045))
+                if pos:
+                    click_change(pos, (76, 1000, 220, 1045))
+                    wait_text("è·å¾—é“å…·", (809, 40, 1113, 147))
+                    self.indicate("é¢†å–å‡­è¯å¥–åŠ±")
+                    click_change(pos, (809, 40, 1113, 147))
+            click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+            wait(500)
+        if self.task["æ´»åŠ¨æ¯æ—¥"]:
+            click_change((1499, 538), (1402, 463, 1499, 505))
+            wait_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+            wait(300)
+            pos = find_text("ä»»åŠ¡")
+            if pos:
+                x, y = pos
+                click_change(pos, (x-10, y-10, x+10,  y+10))
+                pos = wait_text("é¢†å–", (0, 605, 578, 1080))
+                click_change(pos, (76, 1000, 220, 1045))
+                wait_text("è·å¾—é“å…·", (809, 40, 1113, 147))
+                self.indicate("é¢†å–å·²å®Œæˆçš„æ´»åŠ¨ä»»åŠ¡")
+                click_change(pos, (809, 40, 1113, 147))
+            else:
+                self.indicate("æœªæ‰¾åˆ°â€œä»»åŠ¡â€, ç‰ˆæœ¬æœªé€‚é…")
+            click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+            wait(500)
+        self.indicate("æ£€æŸ¥å®Œæˆï¼šæ—¥å¸¸å‘¨å¸¸")

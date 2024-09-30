@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from ui.main.main_top import *
 from ui.element.control import *
-import traceback
+from traceback import format_exc
 from PyQt5.QtCore import QThread, pyqtSignal
 from task.main import TaskRun
+from os.path import join, basename, splitext
+from os import remove
 
 
 class Kill(QThread):
@@ -28,7 +30,7 @@ class Kill(QThread):
             self.ui.button_start.show()
             self.ui.label_status.setPixmap(pixmap)
         except Exception:
-            logger.error("手动终止线程异常:\n%s\n" % traceback.format_exc())
+            logger.error("手动终止线程异常:\n%s\n" % format_exc())
             sys.exit(1)
 
     def indicate(self, msg: str, mode=2, his=True, log=True):
@@ -56,12 +58,12 @@ class SGARun(QThread, TaskRun):
                     _k = True
             except Exception:
                 _k = True
-                logger.error("执行流程异常:\n%s" % traceback.format_exc())
+                logger.error("执行流程异常:\n%s" % format_exc())
         # noinspection PyBroadException
         try:
             self.kill(_k)
         except Exception:
-            logger.error("结束流程异常:\n%s\n" % traceback.format_exc())
+            logger.error("结束流程异常:\n%s\n" % format_exc())
 
     def indicate(self, msg: str, mode=2, his=True, log=True):
         self.send.emit(msg, mode, his, log)
@@ -72,9 +74,9 @@ class SGARun(QThread, TaskRun):
             from urllib.request import urlretrieve
             import requests
             import json
-            temp_path = os.path.join(env.workdir, "cache")
-            temp_name = os.path.basename(env.OCR.exe_name + ".zip")
-            load_path = os.path.join(temp_path, temp_name)
+            temp_path = join(env.workdir, "cache")
+            temp_name = basename(env.OCR.exe_name + ".zip")
+            load_path = join(temp_path, temp_name)
             load = "https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/releases?page=1&per_page=20"
             response = requests.get(load, timeout=10)
             if response.status_code == 200:
@@ -85,7 +87,7 @@ class SGARun(QThread, TaskRun):
                 raise ValueError(f"连接错误(code {response.status_code})")
         except Exception:
             self.indicate("下载异常")
-            logger.error("下载异常:\n%s\n" % traceback.format_exc())
+            logger.error("下载异常:\n%s\n" % format_exc())
             return False
         # noinspection PyBroadException
         try:
@@ -93,26 +95,26 @@ class SGARun(QThread, TaskRun):
             unpack_archive(load_path, temp_path)
         except Exception:
             self.indicate("解压异常")
-            logger.error("解压异常:\n%s\n" % traceback.format_exc())
+            logger.error("解压异常:\n%s\n" % format_exc())
             return False
         # noinspection PyBroadException
         try:
             from shutil import copytree
-            extract_folder = os.path.splitext(load_path)[0]
-            cover_folder = os.path.join(env.workdir, "3rd_package", env.OCR.exe_name)
+            extract_folder = splitext(load_path)[0]
+            cover_folder = join(env.workdir, "3rd_package", env.OCR.exe_name)
             copytree(extract_folder, cover_folder, dirs_exist_ok=True)
         except Exception:
             self.indicate("替换异常")
-            logger.error("替换异常:\n%s\n" % traceback.format_exc())
+            logger.error("替换异常:\n%s\n" % format_exc())
             return False
         # noinspection PyBroadException
         try:
             from shutil import rmtree
-            os.remove(load_path)
+            remove(load_path)
             rmtree(extract_folder)
         except Exception:
             self.indicate("删除临时文件异常")
-            logger.error("删除临时文件异常:\n%s\n" % traceback.format_exc())
+            logger.error("删除临时文件异常:\n%s\n" % format_exc())
             return False
         # 弹窗重启
         self.indicate(f"安装成功:{cover_folder}")

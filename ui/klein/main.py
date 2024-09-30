@@ -1,6 +1,6 @@
-# -*- coding:gbk -*-
-import os
-import webbrowser
+from os.path import exists
+from os import startfile
+from webbrowser import open as weopen
 from .list import KleinList
 from .stack import KleinStack
 from ui.element.control import *
@@ -8,7 +8,7 @@ from tools.environment import env
 from tools.system import check_path
 
 
-# Ô­ÉñÄ£×éÉèÖÃ´°¿Ú
+# åŸç¥æ¨¡ç»„è®¾ç½®çª—å£
 class Klein:
     def __init__(self, stack, icon, main):
         self.main = main
@@ -60,229 +60,229 @@ class Klein:
 
     def input_config(self, _dir):
         config = {
-            "Ä£¿é": 1,
-            "¾²Òô": False,
-            "¹Ø±ÕÈí¼ş": False,
-            "Íê³Éºó": 0,
-            "SGA¹Ø±Õ": False,
-            "¹¦ÄÜ0": False,
-            "¹¦ÄÜ1": False,
-            "¹¦ÄÜ2": False,
-            "¹¦ÄÜ3": False,
-            "¹¦ÄÜ4": False,
-            "¹¦ÄÜ5": False,
-            "¹¦ÄÜ6": False,
-            "¹¦ÄÜ7": False,
-            "¹¦ÄÜ8": False,
-            "ÔÙ´ÎÖØÓÎ": False,
-            "×÷Õ½¹Ø¿¨": 0,
-            "ÔÙ´Î²É¹º": False,
-            "²É¹º0": [0, 0, 0],
-            "²É¹º1": [1, 0, 0],
-            "²É¹º2": [2, 0, 0],
-            "²É¹º3": [3, 0, 0],
-            "²É¹º4": [4, 0, 0],
-            "²É¹º5": [5, 0, 0],
-            "»Ø¹Ë": 35.0,
-            "Ô®Íâ¶Ò»»": [False, "Ğëô§"],
-            "Ê¹ÓÃ¼ÓËÙ": False,
-            "·ÃÄ¼½ğ¶î": 0,
-            "Ã¿ÖÜ²¹¸ø": [False, "ÌğÆ·×ÔÖú²Í„»", "ÌğÆ·×ÔÖú²Í„»"],
+            "æ¨¡å—": 1,
+            "é™éŸ³": False,
+            "å…³é—­è½¯ä»¶": False,
+            "å®Œæˆå": 0,
+            "SGAå…³é—­": False,
+            "åŠŸèƒ½0": False,
+            "åŠŸèƒ½1": False,
+            "åŠŸèƒ½2": False,
+            "åŠŸèƒ½3": False,
+            "åŠŸèƒ½4": False,
+            "åŠŸèƒ½5": False,
+            "åŠŸèƒ½6": False,
+            "åŠŸèƒ½7": False,
+            "åŠŸèƒ½8": False,
+            "å†æ¬¡é‡æ¸¸": False,
+            "ä½œæˆ˜å…³å¡": 0,
+            "å†æ¬¡é‡‡è´­": False,
+            "é‡‡è´­0": [0, 0, 0],
+            "é‡‡è´­1": [1, 0, 0],
+            "é‡‡è´­2": [2, 0, 0],
+            "é‡‡è´­3": [3, 0, 0],
+            "é‡‡è´­4": [4, 0, 0],
+            "é‡‡è´­5": [5, 0, 0],
+            "å›é¡¾": 35.0,
+            "æ´å¤–å…‘æ¢": [False, "é¡»è‡¾"],
+            "ä½¿ç”¨åŠ é€Ÿ": False,
+            "è®¿å‹Ÿé‡‘é¢": 0,
+            "æ¯å‘¨è¡¥ç»™": [False, "ç”œå“è‡ªåŠ©é¤åŠµ", "ç”œå“è‡ªåŠ©é¤åŠµ"],
             }
         config.update(_dir)
-        self.set.independent.check_mute.setChecked(config["¾²Òô"])
-        self.set.independent.check_kill_game.setChecked(config["¹Ø±ÕÈí¼ş"])
-        self.set.independent.combo_after.setCurrentIndex(config["Íê³Éºó"])
-        self.set.independent.check_kill_sga.setChecked(config["SGA¹Ø±Õ"])
+        self.set.independent.check_mute.setChecked(config["é™éŸ³"])
+        self.set.independent.check_kill_game.setChecked(config["å…³é—­è½¯ä»¶"])
+        self.set.independent.combo_after.setCurrentIndex(config["å®Œæˆå"])
+        self.set.independent.check_kill_sga.setChecked(config["SGAå…³é—­"])
 
-        self.list.check_fight.setChecked(config["¹¦ÄÜ0"])
-        self.list.check_disp.setChecked(config["¹¦ÄÜ1"])
-        self.list.check_review.setChecked(config["¹¦ÄÜ2"])
-        self.list.check_market.setChecked(config["¹¦ÄÜ3"])
-        self.list.check_recruit.setChecked(config["¹¦ÄÜ4"])
-        self.list.check_reward.setChecked(config["¹¦ÄÜ5"])
-        self.list.check_network.setChecked(config["¹¦ÄÜ6"])
-        self.list.check_mail.setChecked(config["¹¦ÄÜ7"])
-        self.list.check_roll.setChecked(config["¹¦ÄÜ8"])
+        self.list.check_fight.setChecked(config["åŠŸèƒ½0"])
+        self.list.check_disp.setChecked(config["åŠŸèƒ½1"])
+        self.list.check_review.setChecked(config["åŠŸèƒ½2"])
+        self.list.check_market.setChecked(config["åŠŸèƒ½3"])
+        self.list.check_recruit.setChecked(config["åŠŸèƒ½4"])
+        self.list.check_reward.setChecked(config["åŠŸèƒ½5"])
+        self.list.check_network.setChecked(config["åŠŸèƒ½6"])
+        self.list.check_mail.setChecked(config["åŠŸèƒ½7"])
+        self.list.check_roll.setChecked(config["åŠŸèƒ½8"])
 
-        self.set.re_fight.setChecked(config["ÔÙ´ÎÖØÓÎ"])
-        self.set.mat.setCurrentIndex(config["×÷Õ½¹Ø¿¨"])
+        self.set.re_fight.setChecked(config["å†æ¬¡é‡æ¸¸"])
+        self.set.mat.setCurrentIndex(config["ä½œæˆ˜å…³å¡"])
 
-        self.set.check_redisp.setChecked(config["ÔÙ´Î²É¹º"])
-        self.set.mat0.setCurrentIndex(config["²É¹º0"][0])
-        self.set.mat1.setCurrentIndex(config["²É¹º1"][0])
-        self.set.mat2.setCurrentIndex(config["²É¹º2"][0])
-        self.set.mat3.setCurrentIndex(config["²É¹º3"][0])
-        self.set.mat4.setCurrentIndex(config["²É¹º4"][0])
-        self.set.mat5.setCurrentIndex(config["²É¹º5"][0])
+        self.set.check_redisp.setChecked(config["å†æ¬¡é‡‡è´­"])
+        self.set.mat0.setCurrentIndex(config["é‡‡è´­0"][0])
+        self.set.mat1.setCurrentIndex(config["é‡‡è´­1"][0])
+        self.set.mat2.setCurrentIndex(config["é‡‡è´­2"][0])
+        self.set.mat3.setCurrentIndex(config["é‡‡è´­3"][0])
+        self.set.mat4.setCurrentIndex(config["é‡‡è´­4"][0])
+        self.set.mat5.setCurrentIndex(config["é‡‡è´­5"][0])
 
-        self.set.fund0.setCurrentIndex(config["²É¹º0"][1])
-        self.set.fund1.setCurrentIndex(config["²É¹º1"][1])
-        self.set.fund2.setCurrentIndex(config["²É¹º2"][1])
-        self.set.fund3.setCurrentIndex(config["²É¹º3"][1])
-        self.set.fund4.setCurrentIndex(config["²É¹º4"][1])
-        self.set.fund5.setCurrentIndex(config["²É¹º5"][1])
+        self.set.fund0.setCurrentIndex(config["é‡‡è´­0"][1])
+        self.set.fund1.setCurrentIndex(config["é‡‡è´­1"][1])
+        self.set.fund2.setCurrentIndex(config["é‡‡è´­2"][1])
+        self.set.fund3.setCurrentIndex(config["é‡‡è´­3"][1])
+        self.set.fund4.setCurrentIndex(config["é‡‡è´­4"][1])
+        self.set.fund5.setCurrentIndex(config["é‡‡è´­5"][1])
 
-        self.set.plan0.setCurrentIndex(config["²É¹º0"][2])
-        self.set.plan1.setCurrentIndex(config["²É¹º1"][2])
-        self.set.plan2.setCurrentIndex(config["²É¹º2"][2])
-        self.set.plan3.setCurrentIndex(config["²É¹º3"][2])
-        self.set.plan4.setCurrentIndex(config["²É¹º4"][2])
-        self.set.plan5.setCurrentIndex(config["²É¹º5"][2])
+        self.set.plan0.setCurrentIndex(config["é‡‡è´­0"][2])
+        self.set.plan1.setCurrentIndex(config["é‡‡è´­1"][2])
+        self.set.plan2.setCurrentIndex(config["é‡‡è´­2"][2])
+        self.set.plan3.setCurrentIndex(config["é‡‡è´­3"][2])
+        self.set.plan4.setCurrentIndex(config["é‡‡è´­4"][2])
+        self.set.plan5.setCurrentIndex(config["é‡‡è´­5"][2])
 
-        self.set.num_box_review.setValue(config["»Ø¹Ë"])
+        self.set.num_box_review.setValue(config["å›é¡¾"])
 
-        self.set.check_mconvert.setChecked(config["Ô®Íâ¶Ò»»"][0])
-        self.set.box_mconvert.setCurrentText(config["Ô®Íâ¶Ò»»"][1])
+        self.set.check_mconvert.setChecked(config["æ´å¤–å…‘æ¢"][0])
+        self.set.box_mconvert.setCurrentText(config["æ´å¤–å…‘æ¢"][1])
 
-        self.set.check_accelerate.setChecked(config["Ê¹ÓÃ¼ÓËÙ"])
-        self.set.recruit_plan.setCurrentIndex(config["·ÃÄ¼½ğ¶î"])
+        self.set.check_accelerate.setChecked(config["ä½¿ç”¨åŠ é€Ÿ"])
+        self.set.recruit_plan.setCurrentIndex(config["è®¿å‹Ÿé‡‘é¢"])
 
-        self.set.check_weekly.setChecked(config["Ã¿ÖÜ²¹¸ø"][0])
-        self.set.box_weekly1.setCurrentText(config["Ã¿ÖÜ²¹¸ø"][1])
-        self.set.box_weekly2.setCurrentText(config["Ã¿ÖÜ²¹¸ø"][2])
+        self.set.check_weekly.setChecked(config["æ¯å‘¨è¡¥ç»™"][0])
+        self.set.box_weekly1.setCurrentText(config["æ¯å‘¨è¡¥ç»™"][1])
+        self.set.box_weekly2.setCurrentText(config["æ¯å‘¨è¡¥ç»™"][2])
 
     def output_config(self):
         config = dict()
-        config["Ä£¿é"] = 1
-        config["¾²Òô"] = self.set.independent.check_mute.isChecked()
-        config["¹Ø±ÕÈí¼ş"] = self.set.independent.check_kill_game.isChecked()
-        config["Íê³Éºó"] = self.set.independent.combo_after.currentIndex()
-        config["SGA¹Ø±Õ"] = self.set.independent.check_kill_sga.isChecked()
+        config["æ¨¡å—"] = 1
+        config["é™éŸ³"] = self.set.independent.check_mute.isChecked()
+        config["å…³é—­è½¯ä»¶"] = self.set.independent.check_kill_game.isChecked()
+        config["å®Œæˆå"] = self.set.independent.combo_after.currentIndex()
+        config["SGAå…³é—­"] = self.set.independent.check_kill_sga.isChecked()
 
-        config["¹¦ÄÜ0"] = self.list.check_fight.isChecked()
-        config["¹¦ÄÜ1"] = self.list.check_disp.isChecked()
-        config["¹¦ÄÜ2"] = self.list.check_review.isChecked()
-        config["¹¦ÄÜ3"] = self.list.check_market.isChecked()
-        config["¹¦ÄÜ4"] = self.list.check_recruit.isChecked()
-        config["¹¦ÄÜ5"] = self.list.check_reward.isChecked()
-        config["¹¦ÄÜ6"] = self.list.check_network.isChecked()
-        config["¹¦ÄÜ7"] = self.list.check_mail.isChecked()
-        config["¹¦ÄÜ8"] = self.list.check_roll.isChecked()
+        config["åŠŸèƒ½0"] = self.list.check_fight.isChecked()
+        config["åŠŸèƒ½1"] = self.list.check_disp.isChecked()
+        config["åŠŸèƒ½2"] = self.list.check_review.isChecked()
+        config["åŠŸèƒ½3"] = self.list.check_market.isChecked()
+        config["åŠŸèƒ½4"] = self.list.check_recruit.isChecked()
+        config["åŠŸèƒ½5"] = self.list.check_reward.isChecked()
+        config["åŠŸèƒ½6"] = self.list.check_network.isChecked()
+        config["åŠŸèƒ½7"] = self.list.check_mail.isChecked()
+        config["åŠŸèƒ½8"] = self.list.check_roll.isChecked()
 
-        config["ÔÙ´ÎÖØÓÎ"] = self.set.re_fight.isChecked()
-        config["×÷Õ½¹Ø¿¨"] = self.set.mat.currentIndex()
+        config["å†æ¬¡é‡æ¸¸"] = self.set.re_fight.isChecked()
+        config["ä½œæˆ˜å…³å¡"] = self.set.mat.currentIndex()
 
-        config["ÔÙ´Î²É¹º"] = self.set.check_redisp.isChecked()
-        config["²É¹º0"] = [self.set.mat0.currentIndex(),
+        config["å†æ¬¡é‡‡è´­"] = self.set.check_redisp.isChecked()
+        config["é‡‡è´­0"] = [self.set.mat0.currentIndex(),
                          self.set.fund0.currentIndex(),
                          self.set.plan0.currentIndex()]
-        config["²É¹º1"] = [self.set.mat1.currentIndex(),
+        config["é‡‡è´­1"] = [self.set.mat1.currentIndex(),
                          self.set.fund1.currentIndex(),
                          self.set.plan1.currentIndex()]
-        config["²É¹º2"] = [self.set.mat2.currentIndex(),
+        config["é‡‡è´­2"] = [self.set.mat2.currentIndex(),
                          self.set.fund2.currentIndex(),
                          self.set.plan2.currentIndex()]
-        config["²É¹º3"] = [self.set.mat3.currentIndex(),
+        config["é‡‡è´­3"] = [self.set.mat3.currentIndex(),
                          self.set.fund3.currentIndex(),
                          self.set.plan3.currentIndex()]
-        config["²É¹º4"] = [self.set.mat4.currentIndex(),
+        config["é‡‡è´­4"] = [self.set.mat4.currentIndex(),
                          self.set.fund4.currentIndex(),
                          self.set.plan4.currentIndex()]
-        config["²É¹º5"] = [self.set.mat5.currentIndex(),
+        config["é‡‡è´­5"] = [self.set.mat5.currentIndex(),
                          self.set.fund5.currentIndex(),
                          self.set.plan5.currentIndex()]
 
-        config["»Ø¹Ë"] = self.set.num_box_review.value()
+        config["å›é¡¾"] = self.set.num_box_review.value()
 
-        config["Ô®Íâ¶Ò»»"] = [
+        config["æ´å¤–å…‘æ¢"] = [
             self.set.check_mconvert.isChecked(),
             self.set.box_mconvert.currentText()]
 
-        config["Ê¹ÓÃ¼ÓËÙ"] = self.set.check_accelerate.isChecked()
-        config["·ÃÄ¼½ğ¶î"] = self.set.recruit_plan.currentIndex()
+        config["ä½¿ç”¨åŠ é€Ÿ"] = self.set.check_accelerate.isChecked()
+        config["è®¿å‹Ÿé‡‘é¢"] = self.set.recruit_plan.currentIndex()
 
-        config["Ã¿ÖÜ²¹¸ø"] = [
+        config["æ¯å‘¨è¡¥ç»™"] = [
             self.set.check_weekly.isChecked(),
             self.set.box_weekly1.currentText(),
             self.set.box_weekly2.currentText()
         ]
-        self.set.check_weekly.setChecked(config["Ã¿ÖÜ²¹¸ø"][0])
-        self.set.box_weekly1.setCurrentText(config["Ã¿ÖÜ²¹¸ø"][1])
-        self.set.box_weekly2.setCurrentText(config["Ã¿ÖÜ²¹¸ø"][2])
+        self.set.check_weekly.setChecked(config["æ¯å‘¨è¡¥ç»™"][0])
+        self.set.box_weekly1.setCurrentText(config["æ¯å‘¨è¡¥ç»™"][1])
+        self.set.box_weekly2.setCurrentText(config["æ¯å‘¨è¡¥ç»™"][2])
         return config
 
     def open_roll(self):
         self.main.indicate("", 1)
-        os.startfile(env.workdir + "/personal/kleins/roll")
-        self.main.indicate("´ò¿ªÎÄ¼ş¼Ğ: ÁªÂç¼ÇÂ¼", 3)
+        startfile(env.workdir + "/personal/kleins/roll")
+        self.main.indicate("æ‰“å¼€æ–‡ä»¶å¤¹: è”ç»œè®°å½•", 3)
 
     def open_recruit_directory(self):
         self.main.indicate("", 1)
-        os.startfile(env.workdir + "/personal/kleins/recruit")
-        self.main.indicate("´ò¿ªÎÄ¼ş: ·ÃÄ¼ÀúÊ·", 3)
+        startfile(env.workdir + "/personal/kleins/recruit")
+        self.main.indicate("æ‰“å¼€æ–‡ä»¶: è®¿å‹Ÿå†å²", 3)
 
     def open_recruit_history(self):
         self.main.indicate("", 1)
-        os.startfile(env.workdir + "/personal/kleins/recruit/history.txt")
-        self.main.indicate("´ò¿ªÎÄ¼ş¼Ğ: ·ÃÄ¼½ØÍ¼", 3)
+        startfile(env.workdir + "/personal/kleins/recruit/history.txt")
+        self.main.indicate("æ‰“å¼€æ–‡ä»¶å¤¹: è®¿å‹Ÿæˆªå›¾", 3)
 
     def gift_inquiry(self):
         self.main.indicate("", 1)
-        webbrowser.open("https://www.bilibili.com/read/cv24639360/?from=search&spm_id_from=333.337.0.0")
-        self.main.indicate("´ò¿ªÍøÒ³: ÀñÎïÈÏ¿É¶È¶ÔÕÕ±í", 3)
+        weopen("https://www.bilibili.com/read/cv24639360/?from=search&spm_id_from=333.337.0.0")
+        self.main.indicate("æ‰“å¼€ç½‘é¡µ: ç¤¼ç‰©è®¤å¯åº¦å¯¹ç…§è¡¨", 3)
 
     def open_wiki(self):
         self.main.indicate("", 1)
-        webbrowser.open("https://wiki.biligame.com/kelaiyinshe/%E8%88%8D%E5%8F%8B%E5%9B%BE%E9%89%B4")
-        self.main.indicate("´ò¿ªÍøÒ³: »·ĞĞÂÃÉá BWIKI", 3)
+        weopen("https://wiki.biligame.com/kelaiyinshe/%E8%88%8D%E5%8F%8B%E5%9B%BE%E9%89%B4")
+        self.main.indicate("æ‰“å¼€ç½‘é¡µ: ç¯è¡Œæ—…èˆ BWIKI", 3)
 
     def arrange_roll(self):
         import json
         self.main.indicate("", 1)
         his_path = "personal/kleins/roll/history.json"
-        if os.path.exists(his_path):
+        if exists(his_path):
             with open(his_path, 'r', encoding='utf-8') as m:
                 _dir = json.load(m)
         else:
-            self.main.indicate("ÉĞÎŞÒÑÊ¶±ğµÄÁªÂç¼ÇÂ¼", 3)
+            self.main.indicate("å°šæ— å·²è¯†åˆ«çš„è”ç»œè®°å½•", 3)
         from openpyxl import Workbook
         from openpyxl.styles import Font, Alignment
         _excel = Workbook()
-        sheet0 = _excel.create_sheet("×ÜÀÀ")
-        sheet0["A1"] = "³é¿¨×ÜÀÀ"
-        sheet0["A2"] = "¶¨ÏòÁªÂç"
+        sheet0 = _excel.create_sheet("æ€»è§ˆ")
+        sheet0["A1"] = "æŠ½å¡æ€»è§ˆ"
+        sheet0["A2"] = "å®šå‘è”ç»œ"
         sheet0["B2"] = "N"
         sheet0["C2"] = "R"
         sheet0["D2"] = "SR"
         sheet0["E2"] = "SRR"
-        sheet0["F2"] = "×Ü³éÊı"
-        sheet0["G2"] = "¿¨³ØË®Î»"
-        sheet0["A3"] = "¼ÆÊı"
+        sheet0["F2"] = "æ€»æŠ½æ•°"
+        sheet0["G2"] = "å¡æ± æ°´ä½"
+        sheet0["A3"] = "è®¡æ•°"
 
-        sheet0["A5"] = "³£Ì¬ÁªÂç"
+        sheet0["A5"] = "å¸¸æ€è”ç»œ"
         sheet0["B5"] = "N"
         sheet0["C5"] = "R"
         sheet0["D5"] = "SR"
         sheet0["E5"] = "SSR"
-        sheet0["F5"] = "×Ü³éÊı"
-        sheet0["G5"] = "¿¨³ØË®Î»"
-        sheet0["A6"] = "¼ÆÊı"
+        sheet0["F5"] = "æ€»æŠ½æ•°"
+        sheet0["G5"] = "å¡æ± æ°´ä½"
+        sheet0["A6"] = "è®¡æ•°"
 
-        sheet0["A8"] = "³õÊ¼ÁªÂç"
+        sheet0["A8"] = "åˆå§‹è”ç»œ"
         sheet0["B8"] = "N"
         sheet0["C8"] = "R"
         sheet0["D8"] = "SR"
         sheet0["E8"] = "SRR"
-        sheet0["F8"] = "×Ü³éÊı"
-        sheet0["G8"] = "¿¨³ØË®Î»"
-        sheet0["A9"] = "¼ÆÊı"
+        sheet0["F8"] = "æ€»æŠ½æ•°"
+        sheet0["G8"] = "å¡æ± æ°´ä½"
+        sheet0["A9"] = "è®¡æ•°"
 
-        sheet0["A11"] = "ÏŞ¶¨ÁªÂç"
+        sheet0["A11"] = "é™å®šè”ç»œ"
         sheet0["B11"] = "N"
         sheet0["C11"] = "R"
         sheet0["D11"] = "SR"
         sheet0["E11"] = "SRR"
-        sheet0["F11"] = "×Ü³éÊı"
-        sheet0["G11"] = "¿¨³ØË®Î»"
-        sheet0["A12"] = "¼ÆÊı"
+        sheet0["F11"] = "æ€»æŠ½æ•°"
+        sheet0["G11"] = "å¡æ± æ°´ä½"
+        sheet0["A12"] = "è®¡æ•°"
 
-        fon1 = Font(name='µÈÏß', size=14, bold=True)
-        fon2 = Font(name='ËÎÌå', size=12)
-        fon_n = Font(name='ËÎÌå', size=12, color="6C6C6C")
-        fon_r = Font(name='ËÎÌå', size=12, color="3374F8")
-        fon_sr = Font(name='ËÎÌå', size=12, color="7E30FF", bold=True)
-        fon_srr = Font(name='ËÎÌå', size=12, color="FFC332", bold=True)
+        fon1 = Font(name='ç­‰çº¿', size=14, bold=True)
+        fon2 = Font(name='å®‹ä½“', size=12)
+        fon_n = Font(name='å®‹ä½“', size=12, color="6C6C6C")
+        fon_r = Font(name='å®‹ä½“', size=12, color="3374F8")
+        fon_sr = Font(name='å®‹ä½“', size=12, color="7E30FF", bold=True)
+        fon_srr = Font(name='å®‹ä½“', size=12, color="FFC332", bold=True)
         al = Alignment(horizontal='center', vertical='center')
         sheet0["A1"].font = fon1
 
@@ -421,14 +421,14 @@ class Klein:
         sheet0.row_dimensions[11].height = 18
         sheet0.row_dimensions[12].height = 18
         _count = []
-        for i in ["¶¨ÏòÁªÂç", "³£Ì¬ÁªÂç", "³õÊ¼ÁªÂç", "ÏŞ¶¨ÁªÂç"]:
+        for i in ["å®šå‘è”ç»œ", "å¸¸æ€è”ç»œ", "åˆå§‹è”ç»œ", "é™å®šè”ç»œ"]:
             _sheet = _excel.create_sheet(i)
-            _sheet["A1"] = "Ê±¼ä"
-            _sheet["B1"] = "¿¨³Ø"
-            _sheet["C1"] = "Ï¡ÓĞ¶È"
-            _sheet["D1"] = "½ÇÉ«Ãû"
-            _sheet["E1"] = "×Ü´ÎÊı"
-            _sheet["F1"] = "±£µ×Ë®Î»"
+            _sheet["A1"] = "æ—¶é—´"
+            _sheet["B1"] = "å¡æ± "
+            _sheet["C1"] = "ç¨€æœ‰åº¦"
+            _sheet["D1"] = "è§’è‰²å"
+            _sheet["E1"] = "æ€»æ¬¡æ•°"
+            _sheet["F1"] = "ä¿åº•æ°´ä½"
             _sheet.column_dimensions['A'].width = 23
             _sheet.column_dimensions['B'].width = 20
             _sheet.column_dimensions['C'].width = 10
@@ -493,7 +493,7 @@ class Klein:
                     count[7] += [f"{c}({n_ssr})"]
                     n_ssr = 0
                 else:
-                    print("Ï¡ÓĞ¶ÈÒì³£")
+                    print("ç¨€æœ‰åº¦å¼‚å¸¸")
                     continue
                 _sheet[f"A{n_a}"].font = _fon
                 _sheet[f"B{n_a}"].font = _fon
@@ -579,6 +579,6 @@ class Klein:
         _excel.remove(_excel['Sheet'])
         import time
         now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
-        _path = f"personal/kleins/roll/»·ĞĞÂÃÉáÁªÂç¼ÇÂ¼ - {now}.xlsx"
+        _path = f"personal/kleins/roll/ç¯è¡Œæ—…èˆè”ç»œè®°å½• - {now}.xlsx"
         _excel.save(_path)
-        self.main.indicate("ÁªÂç¼ÇÂ¼ÒÑµ¼³ö", 3)
+        self.main.indicate("è”ç»œè®°å½•å·²å¯¼å‡º", 3)

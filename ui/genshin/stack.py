@@ -1,7 +1,7 @@
 from qfluentwidgets import CompactSpinBox
 from ui.element.ui_part import Independent
 from ui.element.control import *
-import webbrowser
+from webbrowser import open as weopen
 
 
 class Local:
@@ -33,7 +33,8 @@ class Team:
         stack.addWidget(self.page_team)
         # 添加控件
         self.label_team = Label(self.page_team, (0, 12, 180, 18), "设置页面：切换队伍")
-        self.label_team_tip = Label(self.page_team, (0, 80, 400, 200),"第一次使用请亲手配置队伍,为SGA保留左边/上边第一个\n队伍为跑图队伍。队伍需求：\n  (1)1号位为任意成女体型角色(如丽莎,雷电将军）,武器、\n天赋、队伍共鸣不应有加速buff\n  (2)2号位为草元素主角或纳西妲,用于捕捉晶蝶的机关\n触发\n  (3)队伍中应有早柚,瑶瑶等角色,用于捕捉晶蝶。\n\n如使用自动秘境功能请将队伍配置在二号队伍位置")
+        self.label_team_tip = Label(self.page_team, (0, 80, 400, 200),
+                                    "第一次使用请亲手配置队伍,为SGA保留左边/上边第一个\n队伍为跑图队伍。队伍需求：\n  (1)1号位为任意成女体型角色(如丽莎,雷电将军）,武器、\n天赋、队伍共鸣不应有加速buff\n  (2)2号位为草元素主角或纳西妲,用于捕捉晶蝶的机关\n触发\n  (3)队伍中应有早柚,瑶瑶等角色,用于捕捉晶蝶。\n\n如使用自动秘境功能请将队伍配置在二号队伍位置")
 
 
 dispatch_dir = {
@@ -42,7 +43,7 @@ dispatch_dir = {
     "稻妻": ["摩拉1", "摩拉2", "兽肉,禽蛋", "禽肉,海草", "白萝卜,堇瓜", "甜甜花,日落果"],
     "须弥": ["摩拉", "蔷薇,苹果", "松茸,蘑菇", "禽蛋,日落果", "香辛果,胡萝卜", "墩墩桃,松果"],
     "枫丹": ["摩拉", "汐藻,蘑菇", "茉洁草,禽蛋", "久雨莲,兽肉", "泡泡桔,禽肉", "甜甜花,薄荷"],
-    "纳塔": ["颗粒果,蘑菇", "兽肉,苹果", "烬芯花,白萝卜","摩拉", "苦种,胡萝卜", "澄晶实,薄荷"]}
+    "纳塔": ["颗粒果,蘑菇", "兽肉,苹果", "烬芯花,白萝卜", "摩拉", "苦种,胡萝卜", "澄晶实,薄荷"]}
 
 
 class Disp:
@@ -200,7 +201,7 @@ domain_dir = {
             "山脊守望", "椛染之庭", "沉眠之庭",
             "岩中幽谷", "缘觉塔", "赤金的城墟",
             "熔铁的孤塞", "罪祸的终末", 
-            "临瀑之城","虹灵的净土"],
+            "临瀑之城", "虹灵的净土"],
     "天赋培养素材":
         ["忘却之峡", "太山府", "菫色之庭",
             "昏识塔", "苍白的遗荣", "蕴火的幽墟"],
@@ -239,7 +240,7 @@ class Domain:
 
     @staticmethod
     def open_BGI():
-        webbrowser.open("https://bgi.huiyadan.com/")
+        weopen("https://bgi.huiyadan.com/")
 
 
 class Pass:

@@ -1,4 +1,3 @@
-# -*- coding:gbk -*-
 from tools.environment import *
 from .mondstadt import Mondstadt
 from .liyue import LiYue
@@ -9,20 +8,20 @@ from .fontaine import Fontaine
 
 class CutTree(Mondstadt, LiYue, Inazuma, Sumeru, Fontaine):
     def genshin_cut_tree(self):
-        _freq = self.task["¿³Ê÷´ÎÊı"]
+        _freq = self.task["ç æ ‘æ¬¡æ•°"]
         if not _freq:
-            self.indicate("Ñ­»·´ÎÊıÓ¦´óÓÚ0")
+            self.indicate("å¾ªç¯æ¬¡æ•°åº”å¤§äº0")
             return True
         _num = 0
         for i in range(19):
-            if self.task[f"¿³Ê÷{i}"]:
+            if self.task[f"ç æ ‘{i}"]:
                 _num += 1
         if _num < 5:
-            self.indicate("Ñ¡ÔñµãÎ»ÊıÓ¦>=5ÒÔ±£ÕÏÄ¾²ÄË¢ĞÂÑ­»·")
+            self.indicate("é€‰æ‹©ç‚¹ä½æ•°åº”>=5ä»¥ä¿éšœæœ¨æåˆ·æ–°å¾ªç¯")
             return True
         self.home()
-        self.indicate("¼ì²éÍõÊ÷ÈğÓÓ¡£")
-        self.open_sub("±³°ü")
+        self.indicate("æ£€æŸ¥ç‹æ ‘ç‘ä½‘ã€‚")
+        self.open_sub("èƒŒåŒ…")
         wait(2000)
         self.check_overdue()
         click((1053, 48))
@@ -30,60 +29,60 @@ class CutTree(Mondstadt, LiYue, Inazuma, Sumeru, Fontaine):
         _p, val = find_pic(r"assets\genshin\picture\lit_tools\boon_elder_tree.png",
                                (110, 112, 1273, 805))
         if val < 0.75:
-            self.indicate("Ã»ÓĞÕÒµ½µÀ¾ß£ºÍõÊ÷ÈğÓÓ")
+            self.indicate("æ²¡æœ‰æ‰¾åˆ°é“å…·ï¼šç‹æ ‘ç‘ä½‘")
             return True
         else:
             click(_p)
             wait(800)
             if find_pic(r"assets\genshin\picture\lit_tools\unload.png",
                         (1637, 972, 1765, 1068))[1] >= 0.75:
-                self.indicate("ÍõÊ÷ÈğÓÓÒÑ×°±¸¡£")
+                self.indicate("ç‹æ ‘ç‘ä½‘å·²è£…å¤‡ã€‚")
                 click((1840, 47))
                 wait(1500)
             else:
-                self.indicate("×°±¸ÍõÊ÷ÈğÓÓ¡£")
+                self.indicate("è£…å¤‡ç‹æ ‘ç‘ä½‘ã€‚")
                 click((1694, 1013))
                 wait(1500)
-        self.indicate(f"²É¼¯Ä¾²Ä¼Æ»®¿ªÊ¼£º\n"
-                      f"  µãÎ»{_num}¸ö\n"
-                      f"  Ñ­»·´ÎÊı£º{_freq}")
+        self.indicate(f"é‡‡é›†æœ¨æè®¡åˆ’å¼€å§‹ï¼š\n"
+                      f"  ç‚¹ä½{_num}ä¸ª\n"
+                      f"  å¾ªç¯æ¬¡æ•°ï¼š{_freq}")
         for f in range(_freq):
-            if self.task["¿³Ê÷0"]:
+            if self.task["ç æ ‘0"]:
                 self.birch()
-            if self.task["¿³Ê÷1"]:
+            if self.task["ç æ ‘1"]:
                 self.cuihua()
-            if self.task["¿³Ê÷2"]:
+            if self.task["ç æ ‘2"]:
                 self.pine()
-            if self.task["¿³Ê÷3"]:
+            if self.task["ç æ ‘3"]:
                 self.sand_bearer()
-            if self.task["¿³Ê÷4"]:
+            if self.task["ç æ ‘4"]:
                 self.bamboo()
-            if self.task["¿³Ê÷5"]:
+            if self.task["ç æ ‘5"]:
                 self.fragrant()
-            if self.task["¿³Ê÷6"]:
+            if self.task["ç æ ‘6"]:
                 self.fir()
-            if self.task["¿³Ê÷7"]:
+            if self.task["ç æ ‘7"]:
                 self.yumemiru()
-            if self.task["¿³Ê÷8"]:
+            if self.task["ç æ ‘8"]:
                 self.maple()
-            if self.task["¿³Ê÷9"]:
+            if self.task["ç æ ‘9"]:
                 self.aralia_otogi()
-            if self.task["¿³Ê÷10"]:
+            if self.task["ç æ ‘10"]:
                 self.otogi()
-            if self.task["¿³Ê÷11"]:
+            if self.task["ç æ ‘11"]:
                 self.karmaphala_bright()
-            if self.task["¿³Ê÷12"]:
+            if self.task["ç æ ‘12"]:
                 self.adhigama()
-            if self.task["¿³Ê÷13"]:
+            if self.task["ç æ ‘13"]:
                 self.mountain_date()
-            if self.task["¿³Ê÷14"]:
+            if self.task["ç æ ‘14"]:
                 self.mallow()
-            if self.task["¿³Ê÷15"]:
+            if self.task["ç æ ‘15"]:
                 self.linden()
-            if self.task["¿³Ê÷16"]:
+            if self.task["ç æ ‘16"]:
                 self.ash()
-            if self.task["¿³Ê÷17"]:
+            if self.task["ç æ ‘17"]:
                 self.cypress()
-            if self.task["¿³Ê÷18"]:
+            if self.task["ç æ ‘18"]:
                 self.torch()
         return False

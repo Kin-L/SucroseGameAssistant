@@ -1,10 +1,6 @@
-# -*- coding:gbk -*-
 from ..default_task import Task
 from tools.environment import *
 from tools.software import get_pid, close, find_hwnd
-import traceback
-import os
-import yaml
 
 
 class TaskM7A(Task):
@@ -14,64 +10,64 @@ class TaskM7A(Task):
     def m7a_start(self, task: type[dir]):
         _k = False
         self.task = task
-        self.indicate("¿ªÊ¼ÈÎÎñ:ÈıÔÂÆßÖúÊÖ")
+        self.indicate("å¼€å§‹ä»»åŠ¡:ä¸‰æœˆä¸ƒåŠ©æ‰‹")
         # noinspection PyBroadException
         try:
-            # MAA¹Ø±Õ²¢³õÊ¼»¯
+            # MAAå…³é—­å¹¶åˆå§‹åŒ–
             pid = get_pid("March7th Assistant.exe")
             if pid is not None:
-                self.indicate("ÈıÔÂÆßÖúÊÖÒÑÆô¶¯,×¼±¸ÖØÆô")
+                self.indicate("ä¸‰æœˆä¸ƒåŠ©æ‰‹å·²å¯åŠ¨,å‡†å¤‡é‡å¯")
                 close(pid)
-            _path = self.task["Æô¶¯"]["m7a_path"]
-            if os.path.isfile(_path):
-                dire, name = os.path.split(_path)
+            _path = self.task["å¯åŠ¨"]["m7a_path"]
+            if isfile(_path):
+                dire, name = split(_path)
                 if name == "March7th Assistant.exe":
                     pass
                 elif name == "March7th Launcher.exe":
                     _path = dire + "/March7th Launcher.exe"
                 else:
-                    self.indicate("ÈıÔÂÆßÖúÊÖ,ÎŞĞ§Æô¶¯Â·¾¶")
-                    raise ValueError("ÈıÔÂÆßÖúÊÖ,ÎŞĞ§Æô¶¯Â·¾¶")
+                    self.indicate("ä¸‰æœˆä¸ƒåŠ©æ‰‹,æ— æ•ˆå¯åŠ¨è·¯å¾„")
+                    raise ValueError("ä¸‰æœˆä¸ƒåŠ©æ‰‹,æ— æ•ˆå¯åŠ¨è·¯å¾„")
             else:
-                self.indicate("ÈıÔÂÆßÖúÊÖ,ÎŞĞ§Æô¶¯Â·¾¶")
-                raise ValueError("ÈıÔÂÆßÖúÊÖ,ÎŞĞ§Æô¶¯Â·¾¶")
+                self.indicate("ä¸‰æœˆä¸ƒåŠ©æ‰‹,æ— æ•ˆå¯åŠ¨è·¯å¾„")
+                raise ValueError("ä¸‰æœˆä¸ƒåŠ©æ‰‹,æ— æ•ˆå¯åŠ¨è·¯å¾„")
             env.set_soft(None, [True, "ConsoleWindowClass", "m7a"])
             env.soft.set_path(_path)
-            # ĞŞ¸ÄM7AÔËĞĞÉèÖÃ
-            config_yaml = os.path.split(_path)[0] + "/config.yaml"
+            # ä¿®æ”¹M7Aè¿è¡Œè®¾ç½®
+            config_yaml = split(_path)[0] + "/config.yaml"
             with open(config_yaml, 'r', encoding='utf-8') as f:
-                _dir = yaml.load(stream=f, Loader=yaml.FullLoader)
+                _dir = yload(stream=f, Loader=FullLoader)
             current = _dir["after_finish"]
             _dir["after_finish"] = "Exit"
             with open(config_yaml, 'w', encoding='utf-8', ) as f:
-                yaml.dump(_dir, f, encoding='utf-8', allow_unicode=True)
-            # ÔËĞĞ-½áÊø
+                ydump(_dir, f, encoding='utf-8', allow_unicode=True)
+            # è¿è¡Œ-ç»“æŸ
             _run = env.soft.run(fls=False, tit="m7a")
             if _run:
-                self.indicate("ÈıÔÂÆßÖúÊÖÔËĞĞÖĞ...")
-                _dire = os.path.split(_path)[0] + "/logs/"
-                _name = os.listdir(_dire)[-1]
+                self.indicate("ä¸‰æœˆä¸ƒåŠ©æ‰‹è¿è¡Œä¸­...")
+                _dire = split(_path)[0] + "/logs/"
+                _name = listdir(_dire)[-1]
                 _path = _dire + _name
                 while 1:
                     wait(10000)
-                    if not find_hwnd((1, "UnityWndClass", "±À»µ£ºĞÇñ·ÌúµÀ")):
+                    if not find_hwnd((1, "UnityWndClass", "å´©åï¼šæ˜Ÿç©¹é“é“")):
                         break
                 # env.soft.kill()
-                self.indicate("ÈıÔÂÆßÖúÊÖÔËĞĞÍê³É")
+                self.indicate("ä¸‰æœˆä¸ƒåŠ©æ‰‹è¿è¡Œå®Œæˆ")
             else:
-                self.indicate("ÈıÔÂÆßÖúÊÖÆô¶¯Ê§°Ü")
+                self.indicate("ä¸‰æœˆä¸ƒåŠ©æ‰‹å¯åŠ¨å¤±è´¥")
                 _k = True
-            # ĞŞ¸Ä»ØM7AÔËĞĞÉèÖÃ
+            # ä¿®æ”¹å›M7Aè¿è¡Œè®¾ç½®
             with open(config_yaml, 'r', encoding='utf-8') as f:
-                _dir = yaml.load(stream=f, Loader=yaml.FullLoader)
+                _dir = yload(stream=f, Loader=FullLoader)
             _dir["after_finish"] = current
             with open(config_yaml, 'w', encoding='utf-8', ) as f:
-                yaml.dump(_dir, f, encoding='utf-8', allow_unicode=True)
+                ydump(_dir, f, encoding='utf-8', allow_unicode=True)
         except Exception:
-            self.indicate("ÈÎÎñÖ´ĞĞÒì³£:ÈıÔÂÆßÖúÊÖ", log=False)
-            logger.error("ÈÎÎñÖ´ĞĞÒì³£:ÈıÔÂÆßÖúÊÖ\n%s" % traceback.format_exc())
+            self.indicate("ä»»åŠ¡æ‰§è¡Œå¼‚å¸¸:ä¸‰æœˆä¸ƒåŠ©æ‰‹", log=False)
+            logger.error("ä»»åŠ¡æ‰§è¡Œå¼‚å¸¸:ä¸‰æœˆä¸ƒåŠ©æ‰‹\n%s" % format_exc())
             _k = True
-        self.indicate("Íê³ÉÈÎÎñ:ÈıÔÂÆßÖúÊÖ")
+        self.indicate("å®Œæˆä»»åŠ¡:ä¸‰æœˆä¸ƒåŠ©æ‰‹")
         return _k
 
 

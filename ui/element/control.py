@@ -1,5 +1,3 @@
-import sys
-
 from qfluentwidgets import (SmoothScrollArea, StrongBodyLabel,
                             PushButton, ToolButton, TransparentToolButton,
                             CheckBox, ComboBox, LineEdit,

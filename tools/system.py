@@ -1,4 +1,3 @@
-# -*- coding:gbk -*-
 from pyautogui import press as papress
 from sys import exit
 from pyuac import isUserAdmin, runAsAdmin
@@ -16,7 +15,7 @@ from win32gui import (IsIconic, ShowWindow, GetForegroundWindow, SetForegroundWi
 from win32con import SW_RESTORE
 
 
-# windowsÌáÊ¾
+# windowsæç¤º
 def notify(title, massage):
     toaster = ToastNotifier()
     toaster.show_toast(title, massage,
@@ -26,10 +25,10 @@ def notify(title, massage):
 
 
 def message_box(text):
-    MessageBox(0, text, "É°ÌÇ´úÀí", MB_OK)
+    MessageBox(0, text, "ç ‚ç³–ä»£ç†", MB_OK)
 
 
-# ²éÑ¯¾²Òô×´Ì¬
+# æŸ¥è¯¢é™éŸ³çŠ¶æ€
 def get_mute():
     devices = AudioUtilities.GetSpeakers()
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
@@ -37,12 +36,12 @@ def get_mute():
     return volume.GetMute()
 
 
-# ÇĞ»»¾²Òô×´Ì¬
+# åˆ‡æ¢é™éŸ³çŠ¶æ€
 def change_mute():
     papress('volumemute')
 
 
-# Ï¨ÆÁ
+# ç†„å±
 def screen_off():
     power_off = 2
     windll.user32.PostMessageW(0xffff, 0x0112, 0xF170, power_off)
@@ -50,12 +49,12 @@ def screen_off():
     shell32.ShellExecuteW(None, 'open', 'rundll32.exe', 'USER32', '', 5)
 
 
-# cmdÔËĞĞ
+# cmdè¿è¡Œ
 def cmd_run(cmd_str):
     run(cmd_str, shell=True)
 
 
-# »ñÈ¡µçÄÔËõ·ÅºÍ·Ö±æÂÊ
+# è·å–ç”µè„‘ç¼©æ”¾å’Œåˆ†è¾¨ç‡
 def get_resolution_zoom():
     from ctypes import windll
     user32 = windll.user32
@@ -94,18 +93,30 @@ def foreground(hwnd):
     return False
 
 
+def center(zone):
+    x1, y1, x2, y2 = zone
+    return int((x1+x2)/2), int((y1+y2)/2)
+
+
+def str_find(target, _list):
+    for t in _list:
+        if target in t[0]:
+            return center(t[1])
+    return False
+
+
 class System:
     def __init__(self):
-        # ÆôÓÃÈÕÖ¾
+        # å¯ç”¨æ—¥å¿—
         from tools.logger.log import Logger
         self.logger = Logger().get_logger()
-        # ²ÎÊı³õÉè
+        # å‚æ•°åˆè®¾
         self.OCR = None
         self.workdir = None
         self.resolution_compile = None
         self.frame, self.zoom = None, None
         self.soft = type[classmethod]
-        # »ñÈ¡Ëõ·ÅÇ°ºó·Ö±æÂÊ£¬Ëõ·Å±ÈÀı
+        # è·å–ç¼©æ”¾å‰ååˆ†è¾¨ç‡ï¼Œç¼©æ”¾æ¯”ä¾‹
         self.resolution_origin = None
         self.resolution_now = None
         self.zoom_desktop = None
@@ -116,13 +127,13 @@ class System:
         _pb = path is None
         _pc = mode_cls_tit[1:] == (None, None)
         if _pb and _pc:
-            print("set_soft ÎŞĞ§ÉèÖÃ¡£")
+            print("set_soft æ— æ•ˆè®¾ç½®ã€‚")
         else:
             if not _pb:
                 self.soft.set_path(path)
             self.soft.set_hwnd_find(mode_cls_tit[0], mode_cls_tit[1], mode_cls_tit[2])
 
-    # »ù×¼·Ö±æÂÊ
+    # åŸºå‡†åˆ†è¾¨ç‡
     def set_compile(self, wide, high):
         self.resolution_compile = (wide, high)
 
@@ -130,33 +141,40 @@ class System:
         from os import getcwd
         self.workdir = getcwd()
 
-    # »ñÈ¡¹ÜÀíÔ±È¨ÏŞ
+    # è·å–ç®¡ç†å‘˜æƒé™
     def get_user_admin(self):
         if isUserAdmin():
-            self.logger.debug("¹ÜÀíÔ±È¨ÏŞÆô¶¯")
+            self.logger.debug("ç®¡ç†å‘˜æƒé™å¯åŠ¨")
         else:
-            self.logger.debug("·Ç¹ÜÀíÔ±È¨ÏŞÆô¶¯,³¢ÊÔ»ñÈ¡¹ÜÀíÔ±È¨ÏŞ")
+            self.logger.debug("éç®¡ç†å‘˜æƒé™å¯åŠ¨,å°è¯•è·å–ç®¡ç†å‘˜æƒé™")
             runAsAdmin(wait=False)
             if isUserAdmin():
-                self.logger.debug("³É¹¦»ñÈ¡¹ÜÀíÔ±È¨ÏŞ")
+                self.logger.debug("æˆåŠŸè·å–ç®¡ç†å‘˜æƒé™")
             else:
-                self.logger.debug("»ñÈ¡¹ÜÀíÔ±È¨ÏŞÊ§°Ü")
-                self.logger.debug("ÍË³ö")
+                self.logger.debug("è·å–ç®¡ç†å‘˜æƒé™å¤±è´¥")
+                self.logger.debug("é€€å‡º")
                 exit(1)
 
-    # ×ø±êÖáËõ·Å
+    # åæ ‡è½´ç¼©æ”¾
     def axis_zoom(self, x, y):
         if self.zoom != 1:
             x, y = int(x * self.zoom), int(y * self.zoom)
         return x, y
 
-    # ×ø±êÖáÒÆ¶¯
+    def zone_zoom(self, zone):
+        (x1, y1, x2, y2) = zone
+        if self.zoom != 1:
+            return int(x1 * self.zoom), int(y1 * self.zoom), int(x2 * self.zoom), int(y2 * self.zoom)
+        else:
+            return x1, y1, x2, y2
+
+    # åæ ‡è½´ç§»åŠ¨
     def axis_translation(self, x, y):
         if self.frame != (0, 0):
             x, y = x + self.frame[0], y + self.frame[1]
         return x, y
 
-    # ×ø±êÖáËõ·Å²¢ÒÆ¶¯
+    # åæ ‡è½´ç¼©æ”¾å¹¶ç§»åŠ¨
     def axis_change(self, x, y):
         if self.zoom != 1:
             x, y = int(x * self.zoom), int(y * self.zoom)
@@ -169,4 +187,4 @@ if __name__ == '__main__':
     pass
     # frame, zoom, Ocr, logger = None, None, None, None
     # env = Environment(1920, 1080)
-    # env.soft.set_hwnd_find(True, ("UnityWndClass", "Ô­Éñ"))
+    # env.soft.set_hwnd_find(True, ("UnityWndClass", "åŸç¥"))

@@ -1,4 +1,3 @@
-# -*- coding:gbk -*-
 from tools.environment import *
 from ..default_task import Task
 
@@ -8,19 +7,21 @@ class Mail(Task):
         super().__init__()
 
     def snow_mail(self):
-        self.indicate("¿ªÊ¼¼ì²é:ÓÊ¼ş")
+        self.indicate("å¼€å§‹æ£€æŸ¥:é‚®ä»¶")
         if find_color("yellow", (167, 443, 175, 455))[1]:
-            click((113, 465))
-            wait(1500)
-            click((402, 1004))
-            wait(3000)
-            click((955, 866))
-            wait(1000)
-            self.indicate("ÁìÈ¡ÓÊ¼şÍê³É")
-            click((1674, 44))
-            wait(2000)
-        else:
-            self.indicate("ÔİÎŞĞÂÓÊ¼ş")
+            click_change((113, 465), (91, 451, 131, 477))
             wait(500)
-        self.indicate("¼ì²éÍê³É:ÓÊ¼ş")
+            pos = find_text("é¢†å–", (308, 967, 516, 1044))
+            if pos:
+                click_change((402, 1004), (308, 967, 516, 1044))
+                wait_text("è·å¾—é“å…·", (809, 40, 1113, 147))
+                self.indicate("é¢†å–é‚®ä»¶å®Œæˆ")
+                click_change(pos, (809, 40, 1113, 147))
+            else:
+                self.indicate("æš‚æ— æ–°é‚®ä»¶")
+            click_change((1668, 49), (1646, 24, 1697, 72))
+            wait(500)
+        else:
+            self.indicate("æš‚æ— æ–°é‚®ä»¶")
+        self.indicate("æ£€æŸ¥å®Œæˆ:é‚®ä»¶")
             

@@ -1,12 +1,13 @@
 # coding:utf-8
 from PyQt5.QtCore import QThread, pyqtSignal
 from tools.environment import *
-import traceback
-import os
-import requests
-import json
-import time
-import sys
+from traceback import format_exc
+from os.path import join, splitext
+from os import remove
+from requests import get
+from json import loads
+from time import sleep
+from sys import exit as sysexit
 
 
 class Update(QThread):
@@ -36,13 +37,13 @@ class Update(QThread):
     def check(self):
         # noinspection PyBroadException
         try:
-             # cur_ver = "2.0.0"   ver_lit = [2, 0, 0]
+            # cur_ver = "2.0.0"   ver_lit = [2, 0, 0]
             url = "https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/releases/latest"
         
             for i in range(3):
-                response = requests.get(url, timeout=10)
+                response = get(url, timeout=10)
                 if response.status_code == 200:
-                    data = json.loads(response.text)
+                    data = loads(response.text)
                     new_version = data["tag_name"]
                     if self.version == new_version:
                         self.indicate(f"已为最新版本: {self.version}", 3)
@@ -64,12 +65,12 @@ class Update(QThread):
                             self.ui.overall.button_update.setEnabled(True)
                         return 1
                 elif i < 2:
-                    time.sleep(2)
+                    sleep(2)
                 else:
                     raise ConnectionError("检查更新异常")
         except Exception:
             self.indicate("检查更新异常", 3)
-            logger.error("检查更新异常:\n%s\n" % traceback.format_exc())
+            logger.error("检查更新异常:\n%s\n" % format_exc())
             return 0
 
     def load_add_update(self):
@@ -77,13 +78,13 @@ class Update(QThread):
         # noinspection PyBroadException
         try:
             from urllib.request import urlretrieve
-            temp_path = os.path.join(env.workdir, "cache")
-            load_path = os.path.join(temp_path, self.download["name"])
+            temp_path = join(env.workdir, "cache")
+            load_path = join(temp_path, self.download["name"])
             urlretrieve(self.download["browser_download_url"], load_path)
             self.indicate("下载完成")
         except Exception:
             self.indicate("下载异常", 3)
-            logger.error("下载异常:\n%s\n" % traceback.format_exc())
+            logger.error("下载异常:\n%s\n" % format_exc())
             return 0
         # noinspection PyBroadException
         try:
@@ -91,26 +92,26 @@ class Update(QThread):
             unpack_archive(load_path, temp_path)
         except Exception:
             self.indicate("解压异常", 3)
-            logger.error("解压异常:\n%s\n" % traceback.format_exc())
+            logger.error("解压异常:\n%s\n" % format_exc())
             return 0
         # noinspection PyBroadException
         try:
             from shutil import copytree
-            extract_folder = os.path.splitext(load_path)[0]
+            extract_folder = splitext(load_path)[0]
             cover_folder = env.workdir
             copytree(extract_folder, cover_folder, dirs_exist_ok=True)
         except Exception:
             self.indicate("替换异常", 3)
-            logger.error("替换异常:\n%s\n" % traceback.format_exc())
+            logger.error("替换异常:\n%s\n" % format_exc())
             return 0
         # noinspection PyBroadException
         try:
             from shutil import rmtree
-            os.remove(load_path)
+            remove(load_path)
             rmtree(extract_folder)
         except Exception:
             self.indicate("删除临时文件异常", 3)
-            logger.error("删除临时文件异常:\n%s\n" % traceback.format_exc())
+            logger.error("删除临时文件异常:\n%s\n" % format_exc())
             return 0
         # 弹窗重启
         self.indicate("更新成功,进行重启", 3)
@@ -119,6 +120,6 @@ class Update(QThread):
             self.ui.overall.button_check.setEnabled(True)
             self.ui.overall.button_update.hide()
         cmd_run("start "" /d \"personal/bat\" restart.vbs")
-        sys.exit(0)
+        sysexit(0)
         
             

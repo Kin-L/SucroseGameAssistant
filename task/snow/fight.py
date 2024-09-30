@@ -1,7 +1,5 @@
-# -*- coding:gbk -*-
 from tools.environment import *
 from ..default_task import Task
-import os
 
 
 class Fight(Task):
@@ -9,200 +7,185 @@ class Fight(Task):
         super().__init__()
         
     def snow_fight(self):
-        self.indicate("¿ªÊ¼¼ì²é£º¸ĞÖªÉ¨µ´")
-        if self.task["¸ĞÖª»¥Ôù"] and find_color("yellow", (371, 465, 381, 475))[1]:
-            click((326, 484))
-            wait(2000)
-            click((1780, 1030))
-            wait(500)
-            click((1780, 1030))
-            wait(500)
-            click((1780, 1030))
-            wait(500)
-            self.indicate(f"¸ĞÖª»¥ÔùÍê³É")
-            click((1674, 44))
-            wait(2000)
-        if self.task["Ã¿ÈÕÅä¸ø"]:
-            click((155, 576))
-            wait(1500)
-            click_pic(r"assets\snow\picture\supply.png", zone=(0, 251, 89, 624))
-            wait(1500)
-            if "Ã¿ÈÕÎï×ÊÅä¸øÏä" in ocr((176, 621, 558, 676))[0]:
-                click((365, 651))
+        self.indicate("å¼€å§‹æ£€æŸ¥ï¼šæ„ŸçŸ¥æ‰«è¡")
+        if self.task["æ„ŸçŸ¥äº’èµ "]:
+            click_change((326, 484), (317, 475, 340, 497))
+            if "æ”¶" in ocr((1705, 993, 1880, 1066))[0]:
+                click_text("æ”¶", (1705, 993, 1880, 1066))
                 wait(2000)
-                click((1355, 768))
-                wait(2000)
-                self.indicate(f"Ã¿ÈÕÎï×ÊÅä¸øÏä ÁìÈ¡Íê³É")
-                click((1674, 44))
-                wait(2000)
-                click((1674, 44))
-                wait(2000)
+            self.indicate(f"æ„ŸçŸ¥äº’èµ å®Œæˆ")
+            click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+        if self.task["æ¯æ—¥é…ç»™"]:
+            click_change((147, 556), (151, 560, 217, 592))
+            pos, sim = find_pic(r"assets\snow\picture\supply.png", zone=(0, 170, 93, 714))
+            if sim:
+                click_change(pos, (303, 62, 374, 94))
             else:
-                self.indicate(f"Ã¿ÈÕÎï×ÊÅä¸øÏä ÔİÎŞ")
-                click((1674, 44))
-                wait(2000)
-        if self.task["Ê¹ÓÃÊÔ¼Á"]:
-            self.indicate(f"¼ì²éÏŞÊ±ÊÔ¼Á")
-            while 1:
-                click((1052, 33))
-                wait(2500)
-                sc = screenshot()
-                pt = ocr((293, 312, 511, 379), sc)[0]
-                pn = int(ocr((340, 530, 474, 578), sc)[0].replace(" ", "").split("/")[-1])
-                if "ÎŞ" not in pt and pn > 0:
-                    os.remove(sc)
-                    click((401, 451))
-                    wait(800)
-                    click((1285, 729))
-                    wait(800)
-                    click((1356, 837))
-                    wait(2000)
-                    click((1383, 502))
-                    wait(2000)
-                    self.indicate(f"Ê¹ÓÃÏŞÊ±ÊÔ¼Á(ÖĞ)")
-                else:
-                    yt = ocr((558, 309, 778, 378), sc)[0]
-                    yn = int(ocr((602, 532, 735, 578), sc)[0].replace(" ", "").split("/")[-1])
-                    os.remove(sc)
-                    if "ÎŞ" not in yt and yn > 0:
-                        click((669, 454))
-                        wait(800)
-                        click((1285, 729))
-                        wait(800)
-                        click((1356, 837))
-                        wait(2000)
-                        click((1383, 502))
-                        wait(2000)
-                        self.indicate(f"Ê¹ÓÃÏŞÊ±ÊÔ¼Á(´ó)")
-                    else:
-                        click((770, 962))
-                        wait(1500)
-                        self.indicate(f"ÔİÎŞÏŞÊ±ÊÔ¼Á¿ÉÓÃ")
-                        break
+                raise RuntimeError("æ¯æ—¥é…ç»™è¯†åˆ«é”™è¯¯")
+            if "æ¯æ—¥" in ocr((176, 621, 558, 676))[0]:
+                click_text("æ¯æ—¥", (223, 606, 504, 692))
+                click_change((1313, 773), (1269, 750, 1355, 798))
+                self.indicate(f"æ¯æ—¥ç‰©èµ„é…ç»™ç®± é¢†å–å®Œæˆ")
+                click_change((1668, 49), (1646, 24, 1697, 72))
+                click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+            else:
+                self.indicate(f"æ¯æ—¥ç‰©èµ„é…ç»™ç®± æš‚æ— ")
+                click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+        if self.task["ä½¿ç”¨è¯•å‰‚"]:
+            self.indicate(f"æ£€æŸ¥é™æ—¶è¯•å‰‚")
+            click_change((1055, 35), (1031, 17, 1078, 53))
+            sc = scshot()
+            pt = ocr((293, 312, 511, 379), sc)[0]
+            used = False
+            if "æ— " not in pt and pt:
+                click((401, 451))
+                wait(600)
+                click((1285, 729))
+                wait(600)
+                click_change((1356, 837), (1257, 804, 1413, 864))
+                wait_text("è·å¾—é“å…·", (809, 40, 1113, 147))
+                click_change((1383, 502), (930, 471, 985, 543))
+                self.indicate(f"ä½¿ç”¨é™æ—¶è¯•å‰‚(ä¸­)")
+                used = True
+            yt = ocr((558, 309, 778, 378), sc)[0]
+            if "æ— " not in yt and yt:
+                if used:
+                    click_change((1055, 35), (1031, 17, 1078, 53))
+                click((669, 454))
+                wait(600)
+                click((1285, 729))
+                wait(600)
+                click_change((1356, 837), (1257, 804, 1413, 864))
+                wait_text("è·å¾—é“å…·", (809, 40, 1113, 147))
+                click_change((1383, 502), (930, 471, 985, 543))
+                self.indicate(f"ä½¿ç”¨é™æ—¶è¯•å‰‚(å¤§)")
+                used = True
+            if not used:
+                click_change((1055, 35), (1031, 17, 1078, 53))
+                self.indicate(f"æš‚æ— é™æ—¶è¯•å‰‚å¯ç”¨")
+            del sc
         cons = int(ocr((901, 12, 1028, 60))[0].replace(" ", "")[:-4])
 
-        if self.task["ĞĞ¶¯Ñ¡Ôñ"] == 8:
+        if self.task["è¡ŒåŠ¨é€‰æ‹©"] == 8:
             cons = int(ocr((901, 12, 1028, 60))[0].replace(" ", "")[:-4])
             if cons >= 30:
-                click((1499, 538))
-                wait(1000)
+                click_change((1499, 538), (1402, 463, 1499, 505))
                 wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
-                wait(500)
-                click_text("²ÄÁÏ")
-                wait(3000)
-                # click_text("ÉîÔ¨")
-                click((1646, 359))
-                wait(1500)
-                click((1489, 1006))
-                wait(2000)
+                wait(300)
+                click_text("ææ–™")
+                wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
+                pos = find_text("æ·±æ¸Š")
+                if pos:
+                    click_change(pos, (1387, 945, 1599, 1075))
+                else:
+                    raise RuntimeError("æ„ŸçŸ¥æ‰«è¡è¯†åˆ«é”™è¯¯")
+                # click((1646, 359))
+                wait_text("é€Ÿæˆ˜", (1387, 945, 1599, 1075))
+                click_text("é€Ÿæˆ˜", (1387, 945, 1599, 1075))
                 click((1280, 711))
-                wait(1000)
-                click((955, 826))
-                wait(2500)
-                while 1:
-                    pos, sim = find_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
-                    if sim:
-                        click(pos)
-                        wait(2000)
-                        self.indicate(f"¸ĞÖªÉ¨µ´£º»î¶¯¹Ø¿¨")
-                        break
-                    click((932, 993))
-                    wait(1500)
+                wait(600)
+                click_text("å¼€å§‹", (858, 801, 1072, 875))
+                press_to_pic("esc", r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+                self.indicate(f"æ‰«è¡æ´»åŠ¨ææ–™å…³å¡å®Œæˆ")
+                click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+                wait(500)
             else:
-                self.indicate(f"¸ĞÖª²»×ã30£º{cons}")
+                self.indicate(f"æ„ŸçŸ¥ä¸è¶³30ï¼š{cons}")
         else:
             if cons >= 40:
-                self.fight_common(self.task["ĞĞ¶¯Ñ¡Ôñ"])
+                self.fight_common(self.task["è¡ŒåŠ¨é€‰æ‹©"])
             else:
-                self.indicate(f"¸ĞÖª²»×ã40£º{cons}")
-        self.indicate("¼ì²éÍê³É£º¸ĞÖªÉ¨µ´")
+                self.indicate(f"æ„ŸçŸ¥ä¸è¶³40ï¼š{cons}")
+        self.indicate("æ£€æŸ¥å®Œæˆï¼šæ„ŸçŸ¥æ‰«è¡")
 
-    def fight_common(self, common, once=False):
-        click((1728, 531))
-        wait(2500)
-        click((1682, 599))
-        wait(1500)
+    def fight_common(self, common):
+        click_change((1690, 470), (1552, 468, 1626, 515))
+        pos = wait_text("è¡ŒåŠ¨", (1575, 538, 1844, 657))
+        click_change(pos, (1575, 538, 1844, 657))
+        wait_text("ç™¾è¶³", (626, 782, 818, 868))
         if common == 0:
-            click((267, 495))
-            wait(2500)
+            click_change((267, 495), (64, 1003, 225, 1057))
+            wait(800)
         elif common == 1:
-            click((707, 497))
-            wait(2500)
+            click_change((707, 497), (64, 1003, 225, 1057))
+            wait(800)
         elif common == 2:
-            click((1165, 478))
-            wait(2500)
+            click_change((1165, 478), (64, 1003, 225, 1057))
+            wait(800)
         elif common == 3:
-            click((1617, 502))
-            wait(2500)
+            click_change((1617, 502), (64, 1003, 225, 1057))
+            wait(800)
         elif common == 4:
             for t in range(3):
                 roll((1002, 581), -35)
                 wait(800)
-                if click_text("¶¬Ö®"):
+                pos = find_text("å†¬ä¹‹", (0, 767, 1920, 891))
+                if pos:
+                    click_change(pos, (64, 1003, 225, 1057))
+                    wait(800)
                     break
-            wait(2500)
         elif common == 5:
             for t in range(3):
                 roll((1002, 581), -35)
                 wait(800)
-                if click_text("»ğÖ®"):
+                pos = find_text("ç«ä¹‹", (0, 767, 1920, 891))
+                if pos:
+                    click_change(pos, (64, 1003, 225, 1057))
+                    wait(800)
                     break
-            wait(2500)
-            click((1037, 951))
-            wait(500)
-            click((1037, 951))
-            wait(500)
-            if not self.task["ºóÇÚÑ¡Ôñ"] in ocr((901, 12, 1028, 60))[0]:
-                click((94, 935))
-                wait(2000)
-                click_text(self.task["ºóÇÚÑ¡Ôñ"])
-                wait(1000)
-                click((1823, 52))
-                wait(800)
+            pos = find_text("æ¥æ”¶", (977, 954, 1094, 1011))
+            if pos:
+                click_change(pos, (966, 872, 1107, 1032))
+                wait_text("è·å¾—é“å…·", (809, 40, 1113, 147))
+                click_change((1037, 951), (966, 872, 1107, 1032))
+            if not self.task["åå‹¤é€‰æ‹©"][:-2] in ocr((164, 923, 350, 982))[0]:
+                click_text("å°", (38, 890, 154, 1025))
+                wait_text("å°", (825, 10, 1111, 129))
+                pos = find_text(self.task["åå‹¤é€‰æ‹©"][:-2], (158, 174, 903, 941))
+                click_change(pos, (1488, 193, 1619, 237))
+                click_change((1823, 52), (1811, 40, 1846, 79))
         elif common == 6:
             for t in range(3):
                 roll((1002, 581), -35)
                 wait(800)
-                if click_text("ĞÄÖ®"):
+                pos = find_text("å¿ƒä¹‹", (0, 767, 1920, 891))
+                if pos:
+                    click_change(pos, (64, 1003, 225, 1057))
+                    wait(800)
                     break
-            wait(2500)
-            click((1037, 951))
-            wait(500)
-            click((1037, 951))
-            wait(500)
-            if not self.task["»î¶¯ºóÇÚÑ¡Ôñ"] in ocr((149, 965, 313, 1006))[0]:
-                click((95, 985))
-                wait(2000)
-                if not click_text(self.task["»î¶¯ºóÇÚÑ¡Ôñ"]):
+            pos = find_text("æ¥æ”¶", (977, 954, 1094, 1011))
+            if pos:
+                click_change(pos, (966, 872, 1107, 1032))
+                wait_text("è·å¾—é“å…·", (809, 40, 1113, 147))
+                click_change((1037, 951), (966, 872, 1107, 1032))
+            if not self.task["åå‹¤é€‰æ‹©"][:-2] in ocr((164, 923, 350, 982))[0]:
+                click_text("å°", (38, 890, 154, 1025))
+                wait_text("å°", (825, 10, 1111, 129))
+                pos = find_text(self.task["åå‹¤é€‰æ‹©"][:-2], (158, 174, 903, 941))
+                if not pos:
                     roll((679, 494), -35)
                     wait(500)
-                    click_text(self.task["»î¶¯ºóÇÚÑ¡Ôñ"])
-                wait(1000)
-                click((1826, 60))
-                wait(800)
+                    pos = find_text(self.task["åå‹¤é€‰æ‹©"][:-2], (158, 174, 903, 941))
+                click_change(pos, (1488, 193, 1619, 237))
+                click_change((1823, 52), (1811, 40, 1846, 79))
         elif common == 7:
             for t in range(3):
                 roll((1002, 581), -35)
                 wait(800)
-                if click_text("±øÖ®"):
+                pos = find_text("å…µä¹‹", (0, 767, 1920, 891))
+                if pos:
+                    click_change(pos, (64, 1003, 225, 1057))
+                    wait(800)
                     break
-            wait(2500)
         roll((1002, 581), -55)
         wait(500)
-        click((872, 607))
-        wait(1500)
-        click((1489, 1006))
-        wait(2000)
-        if not once:
-            click((1280, 711))
-            wait(1000)
-        click((955, 826))
-        wait(2500)
-        while 1:
-            pos, sim = find_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
-            if sim:
-                click(pos)
-                wait(2000)
-                break
-            click((932, 993))
-            wait(1500)
+        click_change((872, 607), (1387, 945, 1599, 1075))
+        wait_text("é€Ÿæˆ˜", (1387, 945, 1599, 1075))
+        click_text("é€Ÿæˆ˜", (1387, 945, 1599, 1075))
+        click((1280, 711))
+        wait(600)
+        click_text("å¼€å§‹", (858, 801, 1072, 875))
+        press_to_pic("esc", r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+        self.indicate(f"æ‰«è¡å¸¸è§„è¡ŒåŠ¨å…³å¡å®Œæˆ")
+        click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+        wait(500)

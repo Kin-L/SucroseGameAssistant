@@ -1,5 +1,5 @@
-# -*- coding:gbk -*-
-import os
+from os import kill
+from os.path import isfile, split
 from time import sleep
 from win32con import PROCESS_ALL_ACCESS, SW_RESTORE
 from win32gui import (FindWindow, EnumWindows, GetClassName, GetWindowText,
@@ -9,7 +9,7 @@ from signal import SIGTERM
 from subprocess import run
 
 
-# ´ÓexeÃû³Æ»ñÈ¡pid
+# ä»exeåç§°è·å–pid
 def get_pid(name):
     pids = process_iter()
     for pid in pids:
@@ -17,12 +17,12 @@ def get_pid(name):
             return pid.pid
 
 
-# Õı³£¹Ø±Õ½ø³Ì
+# æ­£å¸¸å…³é—­è¿›ç¨‹
 def close(pid, sig=SIGTERM):
-    os.kill(pid, sig)
+    kill(pid, sig)
 
 
-# »ñÈ¡½ø³Ìpid¼°Â·¾¶
+# è·å–è¿›ç¨‹pidåŠè·¯å¾„
 def get_process_name(hwnd):
     from win32process import GetWindowThreadProcessId, GetModuleFileNameEx
     from win32api import OpenProcess
@@ -32,7 +32,7 @@ def get_process_name(hwnd):
     return pid, path
 
 
-# ¸ù¾İÀà/±êÌâ²éÕÒ´°¿Ú¾ä±ú
+# æ ¹æ®ç±»/æ ‡é¢˜æŸ¥æ‰¾çª—å£å¥æŸ„
 def find_hwnd(mode_cls_tit):
     mode, cls, tit = mode_cls_tit
     if mode:
@@ -59,49 +59,48 @@ class Software:
         self.frame, self.wide, self.high, self.zoom = None, None, None, None
 
     def set_path(self, path: str):
-        if os.path.isfile(path):
-            self.path, [self.dir, self.name] = path, os.path.split(path)
+        if isfile(path):
+            self.path, [self.dir, self.name] = path, split(path)
             return True
         else:
-            print("error:Software ÎŞĞ§Â·¾¶¡£")
+            print("error:Software æ— æ•ˆè·¯å¾„ã€‚")
             return False
 
     def set_pid(self, hwnd):
         if hwnd:
             self.pid, self.path = get_process_name(hwnd)
-            self.dir, self.name = os.path.split(self.path)
+            self.dir, self.name = split(self.path)
         else:
-            print("error:Software ´°¿ÚÎ´Æô¶¯¡£")
+            print("error:Software çª—å£æœªå¯åŠ¨ã€‚")
 
     def set_hwnd_find(self, mode, cls, tit):
-        if mode == 0:  # ¾«È·ÉèÖÃ
+        if mode == 0:  # ç²¾ç¡®è®¾ç½®
             self.mode_cls_tit = [True, cls, tit]
         elif mode == 1:
             self.mode_cls_tit = [False, cls, tit]
-        elif mode == 2:  # Í¨¹ıÂ·¾¶ÉèÖÃ
+        elif mode == 2:  # é€šè¿‡è·¯å¾„è®¾ç½®
             if self.path is not None:
                 if self.name == "YuanShen.exe":
-                    self.mode_cls_tit = [True, "UnityWndClass", "Ô­Éñ"]
-                elif self.name == "»·ĞĞÂÃÉá.exe":
-                    self.mode_cls_tit = [True, "UnityWndClass", "»·ĞĞÂÃÉá"]
+                    self.mode_cls_tit = [True, "UnityWndClass", "åŸç¥"]
+                elif self.name == "ç¯è¡Œæ—…èˆ.exe":
+                    self.mode_cls_tit = [True, "UnityWndClass", "ç¯è¡Œæ—…èˆ"]
                 elif self.name == "MAA.exe":
                     self.mode_cls_tit = [False, "HwndWrapper[MAA.exe", "MAA"]
                 elif self.name == "March7th Assistant.exe":
                     self.mode_cls_tit = [True, "ConsoleWindowClass", ""]
                 else:
-                    print("error:Software ²»Ö§³Ö×Ô¶¯Ê¶±ğµÄÈí¼ş¡£")
+                    print("error:Software ä¸æ”¯æŒè‡ªåŠ¨è¯†åˆ«çš„è½¯ä»¶ã€‚")
             else:
-                print("error:Software ÎŞĞ§Â·¾¶¡£")
+                print("error:Software æ— æ•ˆè·¯å¾„ã€‚")
 
     def run(self, second=30, num=2, fls=True, tit=None):
         if self.path is None:
-            print("error:Software ĞèÒªÏÈÉèÖÃÆô¶¯Â·¾¶¡£")
+            print("error:Software éœ€è¦å…ˆè®¾ç½®å¯åŠ¨è·¯å¾„ã€‚")
             return 0
         else:
             self.hwnd = find_hwnd(self.mode_cls_tit)
             if self.hwnd:
                 self.set_pid(self.hwnd)
-                print("¸ÃÈí¼şÒÑÆô¶¯¡£")
                 return 1
             else:
                 if tit is None:
@@ -111,7 +110,6 @@ class Software:
                 if fls:
                     cmd = cmd + " -popupwindow"
                 for n in range(num):
-                    # os.startfile(self.path)
                     run(cmd, shell=True)
                     # run("start /d \"" + self.dir + "\" " + self.name + " -popupwindow", shell=True)
                     for i in range(second):
@@ -119,9 +117,9 @@ class Software:
                         self.hwnd = find_hwnd(self.mode_cls_tit)
                         if self.hwnd:
                             self.set_pid(self.hwnd)
-                            print("Èí¼şÆô¶¯³É¹¦¡£")
+                            print("è½¯ä»¶å¯åŠ¨æˆåŠŸã€‚")
                             return 2
-                print(f"error:Æô¶¯³¬Ê±¡£({second*num}s)")
+                print(f"error:å¯åŠ¨è¶…æ—¶ã€‚({second*num}s)")
                 return 0
 
     def isalive(self):
@@ -139,30 +137,35 @@ class Software:
                     sleep(1)
                     self.hwnd = find_hwnd(self.mode_cls_tit)
                     if not self.hwnd:
-                        print("Èí¼ş¹Ø±Õ³É¹¦¡£")
+                        print("è½¯ä»¶å…³é—­æˆåŠŸã€‚")
                         return True
-            print(f"error:¹Ø±Õ³¬Ê±¡£({second*num}s)")
+            print(f"error:å…³é—­è¶…æ—¶ã€‚({second*num}s)")
             return False
         else:
-            print("¸ÃÈí¼şÎ´Æô¶¯¡£")
+            print("è¯¥è½¯ä»¶æœªå¯åŠ¨ã€‚")
 
-    def get_window_information(self):
+    def get_window_information(self, mode=True):
         if self.hwnd:
             # f = GetWindowRect(self.hwnd)
             (p1, p2, w, h) = GetClientRect(self.hwnd)
             x1, y1 = ClientToScreen(self.hwnd, (0, 0))
-            if (1.7 <= round(w / h, 3) <= 1.8) and (664 <= h <= 2160):
+            if not mode:
+                x_zoom, y_zoom = w / self.compile_resolution[0], h / self.compile_resolution[1]
+                self.zoom = min(x_zoom, y_zoom)
+                self.frame, self.wide, self.high = (x1, y1, x1 + w, y1 + h), w, h
+                return True
+            elif (1.7 <= round(w / h, 3) <= 1.8) and (664 <= h <= 2160) and mode:
                 x_zoom, y_zoom = w / self.compile_resolution[0], h / self.compile_resolution[1]
                 self.zoom = min(x_zoom, y_zoom)
                 self.frame, self.wide, self.high = (x1, y1, x1+w, y1+h), w, h
                 return True
             else:
-                print(f"²»ÊÊÅäµÄ·Ö±æÂÊ: {self.wide} ¡Á {self.high}")
+                print(f"ä¸é€‚é…çš„åˆ†è¾¨ç‡: {self.wide} Ã— {self.high}")
                 self.zoom = None
                 return False
 
         else:
-            print("error:Èí¼ş»¹Î´Æô¶¯¡£")
+            print("error:è½¯ä»¶è¿˜æœªå¯åŠ¨ã€‚")
             return False
 
     def isforeground(self):
