@@ -1,8 +1,8 @@
-# -*- coding:gbk -*-
-import os.path
+from os.path import exists, join
+from os import makedirs, startfile
 from tools.environment import *
 from ..default_task import Task
-import json
+from json import dump
 
 
 class Roll(Task):
@@ -10,84 +10,84 @@ class Roll(Task):
         super().__init__()
 
     def snow_roll(self):
-        self.indicate("¿ªÊ¼»ñÈ¡³é¿¨¼ÇÂ¼")
-        click((1655, 606))
-        for i in range(10):
-            wait(1000)
-            if "¹²Ãù" in ocr((1686, 940, 1843, 1006))[0]:
-                break
-            elif i < 9:
-                wait(1000)
-            else:
-                self.indicate("³¾°×½ûÇø: »ñÈ¡¹²Ãù¼ÇÂ¼µÈ´ý³¬Ê±")
-                raise RuntimeError("³¾°×½ûÇø: »ñÈ¡¹²Ãù¼ÇÂ¼µÈ´ý³¬Ê±")
-        wait(1200)
+        self.indicate("å¼€å§‹èŽ·å–æŠ½å¡è®°å½•")
+        click_change((1655, 606), (1525, 573, 1611, 624))
+        wait_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
         current = {
-            "ÌØÑ¡½ÇÉ«¹²Ãù": [],
-            "ÌØÑ¡ÎäÆ÷¹²Ãù": [],
-            "ÏÞ¶¨½ÇÉ«¹²Ãù": [],
-            "ÏÞ¶¨ÎäÆ÷¹²Ãù": [],
-            "³£ÊØÖ®ÊÄ": [],
-            "ÖÐÍ¥Â¯ÐÄ": [],
-            "ÐÂÊÖ³Ø": []
+            "ç‰¹é€‰è§’è‰²å…±é¸£": [],
+            "ç‰¹é€‰æ­¦å™¨å…±é¸£": [],
+            "é™å®šè§’è‰²å…±é¸£": [],
+            "é™å®šæ­¦å™¨å…±é¸£": [],
+            "å¸¸å®ˆä¹‹èª“": [],
+            "ä¸­åº­ç‚‰å¿ƒ": [],
+            "æ–°æ‰‹æ± ": []
         }
-        his_path = "personal/snow/roll/history.json"
-        if os.path.exists(his_path):
-            with open(his_path, 'r', encoding='utf-8') as m:
-                _dir = json.load(m)
-            current.update(_dir)
-        else:
-            open(his_path, 'a', encoding='utf-8')
 
-        for i in ["ÌØÑ¡½ÇÉ«¹²Ãù", "ÌØÑ¡ÎäÆ÷¹²Ãù", "ÏÞ¶¨½ÇÉ«¹²Ãù", "ÏÞ¶¨ÎäÆ÷¹²Ãù", "³£ÊØÖ®ÊÄ", "ÖÐÍ¥Â¯ÐÄ", "ÐÂÊÖ³Ø"]:
-            if i == "ÌØÑ¡½ÇÉ«¹²Ãù":
-                click_text("³£ÊØ", (3, 67, 280, 1066))
-                wait(500)
+        # if os.path.exists(his_path):
+        #     with open(his_path, 'r', encoding='utf-8') as m:
+        #         _dir = json.load(m)
+        #     current.update(_dir)
+        # else:
+        #     open(his_path, 'a', encoding='utf-8')
+
+        if True in self.task["å…±é¸£è®°å½•"]:
+            pass
+        else:
+            self.indicate("å…±é¸£è®°å½•ï¼šè¯·è‡³å°‘å‹¾é€‰ä¸€ä¸ªå¡æ± é€‰é¡¹")
+            return True
+        roll_list = []
+        if self.task["å…±é¸£è®°å½•"][0]:
+            roll_list += ["ç‰¹é€‰è§’è‰²å…±é¸£"]
+        if self.task["å…±é¸£è®°å½•"][1]:
+            roll_list += ["ç‰¹é€‰æ­¦å™¨å…±é¸£"]
+        if self.task["å…±é¸£è®°å½•"][2]:
+            roll_list += ["é™å®šè§’è‰²å…±é¸£"]
+        if self.task["å…±é¸£è®°å½•"][3]:
+            roll_list += ["é™å®šæ­¦å™¨å…±é¸£"]
+        if self.task["å…±é¸£è®°å½•"][4]:
+            roll_list += ["å¸¸å®ˆä¹‹èª“"]
+        if self.task["å…±é¸£è®°å½•"][5]:
+            roll_list += ["ä¸­åº­ç‚‰å¿ƒ"]
+        if self.task["å…±é¸£è®°å½•"][6]:
+            roll_list += ["æ–°æ‰‹æ± "]
+        for i in roll_list:
+            if i == "ç‰¹é€‰è§’è‰²å…±é¸£":
+                pos = find_text("å¸¸å®ˆ", (3, 67, 280, 1066))
+                click_to_text(pos, "å‡º", (377, 227, 490, 292))
                 x, y = find_text("100", (3, 67, 280, 1066))
-                click((x-90, y+35))
-                wait(1000)
-                click((x-90, y+120))
-            elif i == "ÌØÑ¡ÎäÆ÷¹²Ãù":
-                click_text("³£ÊØ", (3, 67, 280, 1066))
-                wait(500)
+                click_change((x-90, y+35), (349, 854, 389, 897))
+                click_to_text((x-90, y+120), "è§’è‰²", (465, 959, 702, 1002))
+            elif i == "ç‰¹é€‰æ­¦å™¨å…±é¸£":
+                pos = find_text("å¸¸å®ˆ", (3, 67, 280, 1066))
+                click_to_text(pos, "å‡º", (377, 227, 490, 292))
                 x, y = find_text("100", (3, 67, 280, 1066))
-                click((x-90, y+35))
-                wait(1000)
-                click((x-90, y + 210))
-            elif i == "ÏÞ¶¨½ÇÉ«¹²Ãù":
-                click_text("³£ÊØ", (3, 67, 280, 1066))
-                wait(500)
+                click_change((x - 90, y + 35), (349, 854, 389, 897))
+                click_to_text((x - 90, y + 210), "æ­¦å™¨", (465, 959, 702, 1002))
+            elif i == "é™å®šè§’è‰²å…±é¸£":
+                pos = find_text("å¸¸å®ˆ", (3, 67, 280, 1066))
+                click_to_text(pos, "å‡º", (377, 227, 490, 292))
                 x, y = find_text("50", (3, 67, 280, 1066))
-                click((x-90, y+35))
-                wait(1000)
-                click((x-90, y+120))
-            elif i == "ÏÞ¶¨ÎäÆ÷¹²Ãù":
-                click_text("³£ÊØ", (3, 67, 280, 1066))
-                wait(500)
+                click_change((x - 90, y + 35), (349, 854, 389, 897))
+                click_to_text((x - 90, y + 120), "è§’è‰²", (494, 994, 645, 1035))
+            elif i == "é™å®šæ­¦å™¨å…±é¸£":
+                pos = find_text("å¸¸å®ˆ", (3, 67, 280, 1066))
+                click_to_text(pos, "å‡º", (377, 227, 490, 292))
                 x, y = find_text("50", (3, 67, 280, 1066))
-                click((x-90, y+35))
-                wait(1000)
-                click((x-90, y + 210))
-            elif i == "³£ÊØÖ®ÊÄ":
-                if click_text("³£ÊØ", (3, 67, 280, 1066)):
-                    pass
-                else:
-                    continue
-            elif i == "ÖÐÍ¥Â¯ÐÄ":
-                if click_text("ÖÐÍ¥Â¯ÐÄ", (3, 67, 280, 1066)):
-                    pass
-                else:
-                    continue
-            elif i == "ÐÂÊÖ³Ø":
-                if click_text("Æô³Ì", (3, 67, 280, 1066)):
-                    pass
-                else:
-                    continue
-            wait(800)
-            click((1877, 141))
-            wait(2000)
-            click((1081, 84))
-            wait(1000)
+                click_change((x - 90, y + 35), (349, 854, 389, 897))
+                click_to_text((x - 90, y + 210), "æ­¦å™¨", (494, 994, 645, 1035))
+            elif i == "å¸¸å®ˆä¹‹èª“":
+                pos = find_text("å¸¸å®ˆ", (3, 67, 280, 1066))
+                click_to_text(pos, "å‡º", (377, 227, 490, 292))
+            elif i == "ä¸­åº­ç‚‰å¿ƒ":
+                pos = find_text("ä¸­åº­ç‚‰å¿ƒ", (3, 67, 280, 1066))
+                click_to_text(pos, "å‡º", (377, 227, 490, 292))
+            elif i == "æ–°æ‰‹æ± ":
+                pos = find_text("å¯ç¨‹", (3, 67, 280, 1066))
+                click_to_text(pos, "åˆ°", (324, 71, 500, 129))
+            wait(500)
+            click_change((1877, 141), (1858, 117, 1903, 163))
+            wait(500)
+            click_change((1081, 84), (379, 177, 579, 215))
             _num = 0
             _time = 0
             while 1:
@@ -98,21 +98,38 @@ class Roll(Task):
                     _num += 1
                 _time += 1
                 if _time == 200:
-                    self.indicate("³¾°×½ûÇø: »ñÈ¡¹²Ãù¼ÇÂ¼µÈ´ý³¬Ê±")
-                    raise RuntimeError("³¾°×½ûÇø: »ñÈ¡¹²Ãù¼ÇÂ¼µÈ´ý³¬Ê±")
+                    self.indicate("å°˜ç™½ç¦åŒº: èŽ·å–å…±é¸£è®°å½•ç­‰å¾…è¶…æ—¶")
+                    raise RuntimeError("å°˜ç™½ç¦åŒº: èŽ·å–å…±é¸£è®°å½•ç­‰å¾…è¶…æ—¶")
                 else:
                     if _num == 4:
                         break
                     else:
                         pass
 
-            _l = current[i]
             _nl = []
             _p = 0
+            page_pic = None
             while 1:
-                _sc = screenshot()
-                _list1 = ocr((357, 185, 685, 866), _sc, mode=1)
-                _list2 = ocr((1357, 185, 1561, 866), _sc, mode=1)
+                _sc = scshot()
+                if page_pic is not None:
+                    u = 0
+                    for u in range(3):
+                        centre, sim = find_pic(page_pic, (1621, 475, 1729, 569), _sc)
+                        if sim >= 0.95:
+                            if u == 2:
+                                break
+                            else:
+                                click((1666, 602))
+                                wait(600)
+                        else:
+                            break
+                    if u == 2:
+                        break
+                _sc = scshot()
+                page_pic = _sc[488:555, 1635:1716]
+                _list1 = ocr((357, 185, 685, 866), _sc, 1)
+                _list2 = ocr((1357, 185, 1561, 866), _sc, 1)
+
                 num = 0
                 _p += 1
                 _line = []
@@ -123,7 +140,7 @@ class Roll(Task):
                         _tline = _list2[num][0]
                         if _tline[10] != " ":
                             _tline = _tline[:10] + " " + _tline[10:]
-                        _color = "Î´Öª"
+                        _color = "æœªçŸ¥"
                         _zone = (342, 216+68*num, 362, 216+68*num+5)
                         if find_color("blue", _zone, _sc)[1]:
                             _color = "blue"
@@ -137,28 +154,241 @@ class Roll(Task):
                         if _p != 1:
                             if _line[:2] == _nl[9][:2]:
                                 _lf += 1
-                        if _line not in _l:
-                            _nl = [_line] + _nl
-                            _line = []
-                        else:
-                            break
+                        _nl = [_line] + _nl
+                        _line = []
                         num += 1
                     else:
                         break
-                os.remove(_sc)
+                del _sc
                 if num < 10:
-                    break
-                elif _lf == 10:
-                    _nl = _nl[10:]
                     break
                 else:
                     click((1666, 602))
-                    wait(500)
+                    wait(600)
             current[i] += _nl
-            click((1851, 81))
-            wait(2000)
-        with open("personal/snow/roll/history.json", 'w', encoding='utf-8') as x:
-            json.dump(current, x, ensure_ascii=False, indent=1)
-        click((1674, 46))
-        wait(2000)
-        self.indicate("»ñÈ¡³é¿¨¼ÇÂ¼Íê³É")
+            click_change((1851, 81), (1834, 64, 1872, 103))
+            wait(1000)
+        click_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+        wait(500)
+        self.indicate("èŽ·å–æŠ½å¡è®°å½•å®Œæˆ")
+        self.roll_arrange(current)
+
+    def roll_arrange(self, _dir):
+        import time
+        now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
+        his_path = f"personal/snow/roll/cache/history - {now}.json"
+        _path = r"personal/snow/roll/cache"
+        if not exists(_path):
+            makedirs("personal/snow/roll/cache")
+        with open(his_path, 'a', encoding='utf-8') as x:
+            dump(_dir, x, ensure_ascii=False, indent=1)
+        self.indicate("æŠ½å¡è®°å½•å·²æš‚å­˜")
+        from openpyxl import load_workbook
+        from openpyxl.styles import Font, Alignment
+        src = r"assets\snow\default_snow_roll.xlsx"
+        dst = f"personal/snow/roll/å°˜ç™½ç¦åŒºå…±é¸£è®°å½• - {now}.xlsx"
+        import shutil
+        shutil.copyfile(src, dst)
+        wb = load_workbook(dst)
+        fon2 = Font(name='å®‹ä½“', size=12)
+        fon_three = Font(name='å®‹ä½“', size=12, color="3374F8")
+        fon_four = Font(name='å®‹ä½“', size=12, color="7E30FF", bold=True)
+        fon_five = Font(name='å®‹ä½“', size=12, color="FFC332", bold=True)
+        al = Alignment(horizontal='center', vertical='center')
+        _count = []
+        for i in ["ç‰¹é€‰è§’è‰²å…±é¸£", "ç‰¹é€‰æ­¦å™¨å…±é¸£", "é™å®šè§’è‰²å…±é¸£", "é™å®šæ­¦å™¨å…±é¸£", "å¸¸å®ˆä¹‹èª“", "ä¸­åº­ç‚‰å¿ƒ", "æ–°æ‰‹æ± "]:
+            _sheet = wb[i]
+
+            _list = _dir[i]
+            n_row = 1
+            n_four = 0
+            n_five = 0
+            count = [0, 0, 0, 0, 0, [], []]
+            for _line in _list:
+                [r, t, col] = _line
+                n_row += 1
+                n_four += 1
+                n_five += 1
+                if "æ—¥çŽ‹ç‰Œ" in r:
+                    r = "æ™´-æ—§æ—¥çŽ‹ç‰Œ"
+                elif "èŠ¬å¦®" in r:
+                    if "å† " in r:
+                        r = "èŠ¬å¦®-å’Žå† "
+                elif "ç´è¯º" in r:
+                    if "æ‚–" in r or "è°¬" in r:
+                        r = "ç´è¯º-æ‚–è°¬"
+                elif "ä¸äºˆæ˜¾ç¤º" in r:
+                    r = "å®‰å¡å¸Œé›…-[ä¸äºˆæ˜¾ç¤º]"
+                elif "çƒ­å¹´ä»£" in r:
+                    r = "ç¸çƒ­å¹´ä»£"
+                elif "å§å§å¤§äºº" in r:
+                    r = "æ©é›…-å§å§å¤§äºº"
+                elif "çŽ‹æƒè¿ž" in r:
+                    r = "çŽ‹æƒè¿žæž·"
+                elif "ç‘žæ–¯" in r and "åˆ»" in r:
+                    r = "ç‘Ÿç‘žæ–¯-çž¬åˆ»"
+                elif "ä¹å¤œä¹‹" in r:
+                    r = "ä¹å¤œä¹‹å†•"
+                elif "é¾™èˆŒå…°" in r:
+                    r = "è–‡è’‚é›…-é¾™èˆŒå…°"
+
+                _a = _sheet[f"A{n_row}"]
+                _b = _sheet[f"B{n_row}"]
+                _c = _sheet[f"C{n_row}"]
+                _d = _sheet[f"D{n_row}"]
+                _sheet[f"A{n_row}"] = t
+                _sheet[f"B{n_row}"] = r
+                _sheet[f"C{n_row}"] = n_row - 1
+                _sheet[f"D{n_row}"] = n_five
+                _sheet[f"A{n_row}"].alignment = al
+                _sheet[f"B{n_row}"].alignment = al
+                _sheet[f"C{n_row}"].alignment = al
+                _sheet[f"D{n_row}"].alignment = al
+                if col == "blue":
+                    _fon = fon_three
+                    count[0] += 1
+                elif col == "purple":
+                    _fon = fon_four
+                    count[1] += 1
+                    count[5] += [f"{r}({n_four})"]
+                    n_four = 0
+                elif col == "orange":
+                    _fon = fon_five
+                    count[2] += 1
+                    count[6] += [f"{r}({n_five})"]
+                    n_five = 0
+                else:
+                    print(r, t)
+                    self.indicate(f"ç¨€æœ‰åº¦å¼‚å¸¸è¯†åˆ«å¼‚å¸¸:{r}", 3)
+                    return False
+                _sheet[f"A{n_row}"].font = _fon
+                _sheet[f"B{n_row}"].font = _fon
+                _sheet[f"C{n_row}"].font = fon2
+                _sheet[f"D{n_row}"].font = fon2
+                _sheet.row_dimensions[n_row].height = 18
+            count[3] = n_row - 1
+            count[4] = n_five
+            _count += [count]
+        sheet0 = wb["æ€»è§ˆ"]
+        sheet0["B3"] = _count[0][0]
+        sheet0["C3"] = _count[0][1]
+        sheet0["D3"] = _count[0][2]
+        sheet0["E3"] = _count[0][3]
+        sheet0["F3"] = _count[0][4]
+
+        _list = _count[0][5]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I2"] = _str
+        _list = _count[0][6]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I3"] = _str
+
+        sheet0["B6"] = _count[1][0]
+        sheet0["C6"] = _count[1][1]
+        sheet0["D6"] = _count[1][2]
+        sheet0["E6"] = _count[1][3]
+        sheet0["F6"] = _count[1][4]
+        _list = _count[1][5]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I5"] = _str
+
+        _list = _count[1][6]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I6"] = _str
+
+        sheet0["B9"] = _count[2][0]
+        sheet0["C9"] = _count[2][1]
+        sheet0["D9"] = _count[2][2]
+        sheet0["E9"] = _count[2][3]
+        sheet0["F9"] = _count[2][4]
+        _list = _count[2][5]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I8"] = _str
+
+        _list = _count[2][6]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I9"] = _str
+
+        sheet0["B12"] = _count[3][0]
+        sheet0["C12"] = _count[3][1]
+        sheet0["D12"] = _count[3][2]
+        sheet0["E12"] = _count[3][3]
+        sheet0["F12"] = _count[3][4]
+        _list = _count[3][5]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I11"] = _str
+
+        _list = _count[3][6]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I12"] = _str
+
+        sheet0["B15"] = _count[4][0]
+        sheet0["C15"] = _count[4][1]
+        sheet0["D15"] = _count[4][2]
+        sheet0["E15"] = _count[4][3]
+        sheet0["F15"] = _count[4][4]
+        _list = _count[4][5]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I14"] = _str
+
+        _list = _count[4][6]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I15"] = _str
+
+        sheet0["B18"] = _count[5][0]
+        sheet0["C18"] = _count[5][1]
+        sheet0["D18"] = _count[5][2]
+        sheet0["E18"] = _count[5][3]
+        sheet0["F18"] = _count[5][4]
+        _list = _count[5][5]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I17"] = _str
+
+        _list = _count[5][6]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I18"] = _str
+
+        sheet0["B21"] = _count[6][0]
+        sheet0["C21"] = _count[6][1]
+        sheet0["D21"] = _count[6][2]
+        sheet0["E21"] = _count[6][3]
+        sheet0["F21"] = _count[6][4]
+        _list = _count[6][5]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I20"] = _str
+
+        _list = _count[6][6]
+        _str = ""
+        for i in _list:
+            _str += i + " "
+        sheet0["I21"] = _str
+        wb.save(dst)
+        self.indicate("å…±é¸£è®°å½•å·²å¯¼å‡º", 3)
+        if self.task["å…±é¸£è®°å½•"][7]:
+            startfile(join(env.workdir, dst))

@@ -1,26 +1,25 @@
-# -*- coding:gbk -*-
 from ui.element.control import *
 from ui.element.ui_part import *
-import time
+from time import strftime, localtime
 from tools.environment import logger
 
 
-# Ö÷´°¿Ú
+# ä¸»çª—å£
 class MainWindow:  # FramelessWindow
     def __init__(self):
-        # Ö÷´°¿Ú³õÊ¼»¯
+        # ä¸»çª—å£åˆå§‹åŒ–
         self.main_window = MWindow()
-        self.button_set_home = OverallButton(self.main_window)  # È«¾Ö/Ä£¿é ÉèÖÃ°´Å¥
-        self.button_history = PicButton(self.main_window, (693, 0, 56, 56),  # ÀúÊ·ĞÅÏ¢°´Å¥
+        self.button_set_home = OverallButton(self.main_window)  # å…¨å±€/æ¨¡å— è®¾ç½®æŒ‰é’®
+        self.button_history = PicButton(self.main_window, (693, 0, 56, 56),  # å†å²ä¿¡æ¯æŒ‰é’®
                                         r"assets\main_window\ui\history.png", (25, 25))
-        self.button_sponsor = PicButton(self.main_window, (751, 0, 56, 56),  # ÔŞÉÍ°´Å¥
+        self.button_sponsor = PicButton(self.main_window, (751, 0, 56, 56),  # èµèµæŒ‰é’®
                                         r"assets\main_window\ui\support.png", (25, 25))
         self.window_support = Support()
-        self.button_statement = Button(self.main_window, (809, 0, 96, 27), "Ê¹ÓÃĞëÖª")
-        self.button_instructions = Button(self.main_window, (809, 29, 96, 27), "Ê¹ÓÃËµÃ÷")
-        self.label_status = Picture(self.main_window, (485, 430, 150, 150),   # Ö¸Ê¾Í¼±ê
+        self.button_statement = Button(self.main_window, (809, 0, 96, 27), "ä½¿ç”¨é¡»çŸ¥")
+        self.button_instructions = Button(self.main_window, (809, 29, 96, 27), "ä½¿ç”¨è¯´æ˜")
+        self.label_status = Picture(self.main_window, (485, 430, 150, 150),   # æŒ‡ç¤ºå›¾æ ‡
                                     r"assets\main_window\ui\ico\0.png")
-        self.box_info = InfoBox(self.main_window)  # Ö¸Ê¾ĞÅÏ¢´°¿Ú
+        self.box_info = InfoBox(self.main_window)  # æŒ‡ç¤ºä¿¡æ¯çª—å£
         self.stack_setting = Stack(self.main_window, (5, 0, 620, 570))
         self.state = \
             {"name": ["mix", "kleins", "genshin", "maa", "m7a", "snow"],
@@ -33,23 +32,24 @@ class MainWindow:  # FramelessWindow
              "snow":    {"load": False, "prefix": "05"},
              "plan":    {},    "serial": [],   "single":    [],
              "stack":   None,  "locked": None, "hwnd":      None,
-             "text":    None,  "index":  None, "wait_time": 1}
+             "text":    None,  "index":  None, "wait_time": 1,
+             "rename": None}
         self.config = None
         self.task = {}
         self.overall = None
 
-        # ĞÅÏ¢À¸ÏÔÊ¾ĞÅÏ¢
+        # ä¿¡æ¯æ æ˜¾ç¤ºä¿¡æ¯
     def indicate(self, msg, mode=2, his=True, log=True):
-        if mode == 0:  # Çå¿ÕĞÅÏ¢À¸
+        if mode == 0:  # æ¸…ç©ºä¿¡æ¯æ 
             self.box_info.clear()
-        elif mode == 1:  # Ê±¼äÇ°×ºµÄĞÅÏ¢Í·²¿×·¼Ó
-            now_time = time.strftime("%Y-%m-%d", time.localtime())
+        elif mode == 1:  # æ—¶é—´å‰ç¼€çš„ä¿¡æ¯å¤´éƒ¨è¿½åŠ 
+            now_time = strftime("%Y-%m-%d", localtime())
             self.box_info.append(now_time)
             if his:
                 txt = open(r"personal\history.txt", 'a+', encoding='utf-8')
                 txt.write(now_time + "\n")
-        elif mode == 2:  # Ê±¼äÇ°×ºµÄĞÅÏ¢³ÖĞø×·¼Ó
-            _t = time.strftime("%H:%M:%S ", time.localtime()) + msg
+        elif mode == 2:  # æ—¶é—´å‰ç¼€çš„ä¿¡æ¯æŒç»­è¿½åŠ 
+            _t = strftime("%H:%M:%S ", localtime()) + msg
             _t = _t.replace("\n", "\n         ")
             self.box_info.append(_t)
             self.box_info.ensureCursorVisible()
@@ -58,8 +58,8 @@ class MainWindow:  # FramelessWindow
                 txt.write(_t + "\n")
             if log:
                 logger.info(msg.replace("\n", "\n                   "))
-        elif mode == 3:  # ĞÅÏ¢¶ÎÂä½áÎ²
-            _t = time.strftime("%H:%M:%S ", time.localtime()) + msg
+        elif mode == 3:  # ä¿¡æ¯æ®µè½ç»“å°¾
+            _t = strftime("%H:%M:%S ", localtime()) + msg
             _t = _t.replace("\n", "\n         ")
             self.box_info.append(_t + "\n------------------------------")
             self.box_info.ensureCursorVisible()
@@ -69,11 +69,11 @@ class MainWindow:  # FramelessWindow
             if log:
                 logger.info(msg.replace("\n", "\n                   ") +
                             "\n-------------------------------------")
-        elif mode == 4:  # Ö±½Ó×·¼ÓĞÅÏ¢
+        elif mode == 4:  # ç›´æ¥è¿½åŠ ä¿¡æ¯
             self.box_info.append(msg)
             self.box_info.ensureCursorVisible()
             if his:
                 txt = open(r"personal\history.txt", 'a+', encoding='utf-8')
                 txt.write("msg" + "\n")
         else:
-            print("ĞÅÏ¢Êä³ö,ÎŞĞ§Ä£Ê½")
+            print("ä¿¡æ¯è¾“å‡º,æ— æ•ˆæ¨¡å¼")

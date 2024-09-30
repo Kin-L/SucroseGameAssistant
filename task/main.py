@@ -1,4 +1,3 @@
-# -*- coding:gbk -*-
 from task.maa.main import TaskMAA
 from task.genshin.main import TaskGenshin
 from task.kleins.main import TaskKleins
@@ -10,14 +9,14 @@ class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow):
     def task_start(self, task):
         _k = False
         print(task)
-        # ÔËĞĞ
-        if task["Ä£¿é"] == 0:
+        # è¿è¡Œ
+        if task["æ¨¡å—"] == 0:
             for i in range(5):
-                single_task = task["ÅäÖÃ%s" % i]
-                if single_task["name"] == "<Î´Ñ¡Ôñ>":
-                    self.indicate(f"¼Æ»®{i+1}Î´Ñ¡Ôñ¡£")
+                single_task = task["é…ç½®%s" % i]
+                if single_task["name"] == "<æœªé€‰æ‹©>":
+                    self.indicate(f"è®¡åˆ’{i+1}æœªé€‰æ‹©ã€‚")
                 else:
-                    single_task["¹Ø±ÕÈí¼ş"] = True
+                    single_task["å…³é—­è½¯ä»¶"] = True
                     if self.single_run(single_task):
                         _k = True
         else:
@@ -27,28 +26,28 @@ class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow):
 
     def single_run(self, task):
         _k = False
-        if task["Ä£¿é"] == 1:
+        if task["æ¨¡å—"] == 1:
             TaskKleins.__init__(self)
             if self.kleins_start(task):
                 _k = True
-        elif task["Ä£¿é"] == 2:
+        elif task["æ¨¡å—"] == 2:
             TaskGenshin.__init__(self)
             if self.genshin_start(task):
                 _k = True
-        elif task["Ä£¿é"] == 3:
+        elif task["æ¨¡å—"] == 3:
             TaskMAA.__init__(self)
             if self.maa_start(task):
                 _k = True
-        elif task["Ä£¿é"] == 4:
+        elif task["æ¨¡å—"] == 4:
             TaskM7A.__init__(self)
             if self.m7a_start(task):
                 _k = True
-        elif task["Ä£¿é"] == 5:
+        elif task["æ¨¡å—"] == 5:
             TaskSnow.__init__(self)
             if self.snow_start(task):
                 _k = True
         else:
-            self.indicate("error:Î´ÖªÄ£¿é¡£")
+            self.indicate("error:æœªçŸ¥æ¨¡å—ã€‚")
             _k = True
         return _k
 

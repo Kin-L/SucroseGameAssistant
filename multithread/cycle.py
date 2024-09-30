@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from ui.main.main_top import *
 from ui.element.control import *
-import traceback
+from traceback import format_exc
 from PyQt5.QtCore import QThread, pyqtSignal
 from task.main import TaskRun
 from pyautogui import press as papress
-import time
+from time import sleep
 
 
 class Cycle(QThread, TaskRun):
@@ -19,18 +19,18 @@ class Cycle(QThread, TaskRun):
         # noinspection PyBroadException
         try:
             for i in range(self.ui.state["wait_time"]):
-                time.sleep(6)
+                sleep(6)
                 self.ui.save_main_data()
             while 1:
                 text = self.ui.check_timer()
                 if text:
                     self.time_to_run(text)
                     break
-                time.sleep(10)
+                sleep(10)
                 self.ui.save_main_data()
-                time.sleep(10)
+                sleep(10)
         except Exception:
-            logger.error("时间循环线程异常:\n%s\n" % traceback.format_exc())
+            logger.error("时间循环线程异常:\n%s\n" % format_exc())
             sys.exit(1)
 
     def indicate(self, msg: str, mode=2, his=True, log=True):

@@ -1,4 +1,3 @@
-# -*- coding:gbk -*-
 from qfluentwidgets import DoubleSpinBox
 from ui.element.ui_part import Independent
 from ui.element.control import *
@@ -6,55 +5,55 @@ from ui.element.control import *
 
 class Local:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_local = Widget(stack)
         stack.addWidget(self.page_local)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_local = Label(self.page_local, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£º»·ĞĞÂÃÉá ÔËĞĞ·½Ê½")
+        # æ·»åŠ æ§ä»¶
+        self.label_local = Label(self.page_local, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šç¯è¡Œæ—…èˆ è¿è¡Œæ–¹å¼")
         Line(self.page_local, (0, 42, 395, 3))
 
-        self.label_klein_overall = Label(self.page_local, (0, 50, 180, 27), "È«¾ÖÉèÖÃ£º")
-        self.label_start = Label(self.page_local, (0, 90, 80, 27), "·şÎñÆ÷")  # Æô¶¯Â·¾¶ /
+        self.label_klein_overall = Label(self.page_local, (0, 50, 180, 27), "å…¨å±€è®¾ç½®ï¼š")
+        self.label_start = Label(self.page_local, (0, 90, 80, 27), "æœåŠ¡å™¨")  # å¯åŠ¨è·¯å¾„ /
         self.combo_server = Combobox(self.page_local, (80, 90, 100, 32))
-        self.combo_server.addItems(["¹Ù·ş", "B·ş"])
-        self.label_start = Label(self.page_local, (0, 130, 80, 27), "Æô¶¯Â·¾¶")
+        self.combo_server.addItems(["å®˜æœ", "Bæœ"])
+        self.label_start = Label(self.page_local, (0, 130, 80, 27), "å¯åŠ¨è·¯å¾„")
         self.line_start = Lineedit(self.page_local, (0, 160, 385, 33))
         Line(self.page_local, (0, 202, 395, 3))
 
-        self.label_team_tip = Label(self.page_local, (0, 210, 220, 27), "¶ÀÁ¢ÔËĞĞÉèÖÃ£º")
+        self.label_team_tip = Label(self.page_local, (0, 210, 220, 27), "ç‹¬ç«‹è¿è¡Œè®¾ç½®ï¼š")
         self.independent = Independent(self.page_local, (0, 250, 350, 70))
         Line(self.page_local, (0, 330, 395, 3))
-        self.label_tools = Label(self.page_local, (0, 335, 220, 27), "ÊµÓÃ¹¤¾ß£º")
-        self.button_gift = Button(self.page_local, (0, 370, 100, 30), "ÈÏ¿É¶ÈÀñÎï")
-        self.button_wiki = Button(self.page_local, (110, 370, 85, 30), "ÉáÓÑÍ¼¼ø")
+        self.label_tools = Label(self.page_local, (0, 335, 220, 27), "å®ç”¨å·¥å…·ï¼š")
+        self.button_gift = Button(self.page_local, (0, 370, 100, 30), "è®¤å¯åº¦ç¤¼ç‰©")
+        self.button_wiki = Button(self.page_local, (110, 370, 85, 30), "èˆå‹å›¾é‰´")
 
 
 class Fight:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_fight = Widget(stack)
         stack.addWidget(self.page_fight)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_fight = Label(self.page_fight, (0, 12, 220, 18), "ÉèÖÃÒ³Ãæ£º×÷Õ½/ÖØÓÎ")
-        self.label_mat = Label(self.page_fight, (120, 50, 80, 18), "²ÄÁÏÑ¡Ôñ")
-        self.re_fight = Check(self.page_fight, (0, 90, 180, 18), "ÔÙ´ÎÖØÓÎ")
+        # æ·»åŠ æ§ä»¶
+        self.label_fight = Label(self.page_fight, (0, 12, 220, 18), "è®¾ç½®é¡µé¢ï¼šä½œæˆ˜/é‡æ¸¸")
+        self.label_mat = Label(self.page_fight, (120, 50, 80, 18), "ææ–™é€‰æ‹©")
+        self.re_fight = Check(self.page_fight, (0, 90, 180, 18), "å†æ¬¡é‡æ¸¸")
         self.mat = Combobox(self.page_fight, (110, 80, 100, 40))
-        self.mat.addItems(["¸ñ", "·çÎïÖ¾", "½Ú"])
+        self.mat.addItems(["æ ¼", "é£ç‰©å¿—", "èŠ‚"])
 
 
 class Disp:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_dispatch = Widget(stack)
         stack.addWidget(self.page_dispatch)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_dispatch = Label(self.page_dispatch, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£ºÌ½Ë÷ÅÉÇ²")
+        # æ·»åŠ æ§ä»¶
+        self.label_dispatch = Label(self.page_dispatch, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šæ¢ç´¢æ´¾é£")
 
-        self.check_redisp = Check(self.page_dispatch, (0, 50, 180, 18), "ÔÙ´Î²É¹º")
+        self.check_redisp = Check(self.page_dispatch, (0, 50, 180, 18), "å†æ¬¡é‡‡è´­")
 
-        self.label_disp_mat = Label(self.page_dispatch, (25, 80, 80, 27), "²ÄÁÏÑ¡Ôñ")
-        self.label_fund = Label(self.page_dispatch, (130, 80, 80, 27), "×Ê½ğÑ¡Ôñ")
-        self.label_plan = Label(self.page_dispatch, (260, 80, 80, 27), "·½°¸Ñ¡Ôñ")
+        self.label_disp_mat = Label(self.page_dispatch, (25, 80, 80, 27), "ææ–™é€‰æ‹©")
+        self.label_fund = Label(self.page_dispatch, (130, 80, 80, 27), "èµ„é‡‘é€‰æ‹©")
+        self.label_plan = Label(self.page_dispatch, (260, 80, 80, 27), "æ–¹æ¡ˆé€‰æ‹©")
 
         self.mat0 = Combobox(self.page_dispatch, (0, 110, 100, 32))
         self.mat1 = Combobox(self.page_dispatch, (0, 150, 100, 32))
@@ -77,7 +76,7 @@ class Disp:
         self.plan4 = Combobox(self.page_dispatch, (225, 270, 140, 32))
         self.plan5 = Combobox(self.page_dispatch, (225, 310, 140, 32))
 
-        mat_list = ["Ê³ÓÍ", "»ÆÓÍ", "Éú³é", "Ê³ÑÎ", "ºú½·", "½´ÁÏ", "ÌÇÀà", "½æÄ©", "ÏãÁÏ·Û", "Î÷ºìÊÁ´×"]
+        mat_list = ["é£Ÿæ²¹", "é»„æ²¹", "ç”ŸæŠ½", "é£Ÿç›", "èƒ¡æ¤’", "é…±æ–™", "ç³–ç±»", "èŠ¥æœ«", "é¦™æ–™ç²‰", "è¥¿çº¢æŸ¿é†‹"]
         self.mat0.addItems(mat_list)
         self.mat1.addItems(mat_list)
         self.mat2.addItems(mat_list)
@@ -85,7 +84,7 @@ class Disp:
         self.mat4.addItems(mat_list)
         self.mat5.addItems(mat_list)
 
-        fund_list = ["ÁãÔª¹º", "1000¸ñ", "2000¸ñ", "3000¸ñ"]
+        fund_list = ["é›¶å…ƒè´­", "1000æ ¼", "2000æ ¼", "3000æ ¼"]
         self.fund0.addItems(fund_list)
         self.fund1.addItems(fund_list)
         self.fund2.addItems(fund_list)
@@ -93,7 +92,7 @@ class Disp:
         self.fund4.addItems(fund_list)
         self.fund5.addItems(fund_list)
 
-        plan_list = ["¸ü¶à¹Ì¶¨ÎïÆ·", "¸ü¶à¶îÍâÎïÆ·", "¼õÉÙ²É¹ºÊ±¼ä"]
+        plan_list = ["æ›´å¤šå›ºå®šç‰©å“", "æ›´å¤šé¢å¤–ç‰©å“", "å‡å°‘é‡‡è´­æ—¶é—´"]
         self.plan0.addItems(plan_list)
         self.plan1.addItems(plan_list)
         self.plan2.addItems(plan_list)
@@ -104,45 +103,45 @@ class Disp:
 
 class Review:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_review = Widget(stack)
         stack.addWidget(self.page_review)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_review = Label(self.page_review, (0, 12, 200, 18), "ÉèÖÃÒ³Ãæ£ºÕ½Êõ»Ø¹Ë")
+        # æ·»åŠ æ§ä»¶
+        self.label_review = Label(self.page_review, (0, 12, 200, 18), "è®¾ç½®é¡µé¢ï¼šæˆ˜æœ¯å›é¡¾")
 
-        self.label_review_choose = Label(self.page_review, (0, 50, 100, 18), "Õ½Êõ»Ø¹ËÑ¡Ôñ")
+        self.label_review_choose = Label(self.page_review, (0, 50, 100, 18), "æˆ˜æœ¯å›é¡¾é€‰æ‹©")
         self.num_box_review = DoubleSpinBox(self.page_review)
         self.num_box_review.setGeometry(QtCore.QRect(0, 80, 160, 30))
 
 
 class Market:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_market = Widget(stack)
         stack.addWidget(self.page_market)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_recruit = Label(self.page_market, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£º¼¯ÊĞÁìÈ¡")
-        self.check_mconvert = Check(self.page_market, (0, 85, 100, 22), "Ô®Íâ¶Ò»»")
+        # æ·»åŠ æ§ä»¶
+        self.label_recruit = Label(self.page_market, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šé›†å¸‚é¢†å–")
+        self.check_mconvert = Check(self.page_market, (0, 85, 100, 22), "æ´å¤–å…‘æ¢")
         self.box_mconvert = Combobox(self.page_market, (105, 80, 180, 32))
-        self.box_mconvert.addItems(["Ğëô§", "Ô­Òº", "ìİÊ¯¿óÎï", "´ÅÆ¬",
-                                    "ÒíÆ¬", "¹ÅÓïÊ¯", "¹Ì´¼Á£", "ÒìÌ¬Ë®",
-                                    "ÌğÆ·×ÔÖú²Í„»", "ÓÎÏ·»ú", "Ã«Ìº", "ÕÚÑôÉ¡",
-                                    "Ğ¡ÑÆÁå", "°®Ö®¸è", "ÊÖÎÕÊ½Ğ¡·çÉÈ", "Ñİ³ª»áÃÅÆ±",
-                                    "Ïà»ú", "µÆËş½ºÄÒ"])
+        self.box_mconvert.addItems(["é¡»è‡¾", "åŸæ¶²", "ç‡§çŸ³çŸ¿ç‰©", "ç£ç‰‡",
+                                    "ç¿¼ç‰‡", "å¤è¯­çŸ³", "å›ºé†‡ç²’", "å¼‚æ€æ°´",
+                                    "ç”œå“è‡ªåŠ©é¤åŠµ", "æ¸¸æˆæœº", "æ¯›æ¯¯", "é®é˜³ä¼",
+                                    "å°å“‘é“ƒ", "çˆ±ä¹‹æ­Œ", "æ‰‹æ¡å¼å°é£æ‰‡", "æ¼”å”±ä¼šé—¨ç¥¨",
+                                    "ç›¸æœº", "ç¯å¡”èƒ¶å›Š"])
 
 
 class Recruit:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_recruit = Widget(stack)
         stack.addWidget(self.page_recruit)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_recruit = Label(self.page_recruit, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£ºÉáÓÑ·ÃÄ¼")
+        # æ·»åŠ æ§ä»¶
+        self.label_recruit = Label(self.page_recruit, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šèˆå‹è®¿å‹Ÿ")
 
-        self.check_accelerate = Check(self.page_recruit, (0, 85, 80, 22), "¼ÓËÙ")
-        self.label_recruit_plan = Label(self.page_recruit, (115, 50, 80, 18), "ÕĞÄ¼¼Æ»®")
+        self.check_accelerate = Check(self.page_recruit, (0, 85, 80, 22), "åŠ é€Ÿ")
+        self.label_recruit_plan = Label(self.page_recruit, (115, 50, 80, 18), "æ‹›å‹Ÿè®¡åˆ’")
         self.recruit_plan = Combobox(self.page_recruit, (105, 80, 100, 32))
-        self.recruit_plan.addItems(["0¸ñ", "100¸ñ", "200¸ñ", "300¸ñ", "400¸ñ", "500¸ñ", "600¸ñ", "700¸ñ"])
+        self.recruit_plan.addItems(["0æ ¼", "100æ ¼", "200æ ¼", "300æ ¼", "400æ ¼", "500æ ¼", "600æ ¼", "700æ ¼"])
 
         self.button_history = TransPicButton(
             self.page_recruit, (220, 45, 30, 30),
@@ -154,59 +153,59 @@ class Recruit:
 
 class Reward:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_reward = Widget(stack)
         stack.addWidget(self.page_reward)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_recruit = Label(self.page_reward, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£º½ñÈÕ¹¤×÷")
-        self.check_weekly = Check(self.page_reward, (0, 85, 120, 22), "¶Ò»»Ã¿ÖÜ²¹¸ø")
+        # æ·»åŠ æ§ä»¶
+        self.label_recruit = Label(self.page_reward, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šä»Šæ—¥å·¥ä½œ")
+        self.check_weekly = Check(self.page_reward, (0, 85, 120, 22), "å…‘æ¢æ¯å‘¨è¡¥ç»™")
         self.box_weekly1 = Combobox(self.page_reward, (0, 115, 180, 32))
-        self.box_weekly1.addItems(["ÌğÆ·×ÔÖú²Í„»", "ÓÎÏ·»ú", "Ã«Ìº", "ÕÚÑôÉ¡",
-                                   "Ğ¡ÑÆÁå", "°®Ö®¸è", "ÊÖÎÕÊ½Ğ¡·çÉÈ", "Ñİ³ª»áÃÅÆ±",
-                                   "Ïà»ú", "µÆËş½ºÄÒ"])
+        self.box_weekly1.addItems(["ç”œå“è‡ªåŠ©é¤åŠµ", "æ¸¸æˆæœº", "æ¯›æ¯¯", "é®é˜³ä¼",
+                                   "å°å“‘é“ƒ", "çˆ±ä¹‹æ­Œ", "æ‰‹æ¡å¼å°é£æ‰‡", "æ¼”å”±ä¼šé—¨ç¥¨",
+                                   "ç›¸æœº", "ç¯å¡”èƒ¶å›Š"])
         self.box_weekly2 = Combobox(self.page_reward, (0, 160, 180, 32))
-        self.box_weekly2.addItems(["ÌğÆ·×ÔÖú²Í„»", "ÓÎÏ·»ú", "Ã«Ìº", "ÕÚÑôÉ¡",
-                                   "Ğ¡ÑÆÁå", "°®Ö®¸è", "ÊÖÎÕÊ½Ğ¡·çÉÈ", "Ñİ³ª»áÃÅÆ±",
-                                   "Ïà»ú", "µÆËş½ºÄÒ"])
+        self.box_weekly2.addItems(["ç”œå“è‡ªåŠ©é¤åŠµ", "æ¸¸æˆæœº", "æ¯›æ¯¯", "é®é˜³ä¼",
+                                   "å°å“‘é“ƒ", "çˆ±ä¹‹æ­Œ", "æ‰‹æ¡å¼å°é£æ‰‡", "æ¼”å”±ä¼šé—¨ç¥¨",
+                                   "ç›¸æœº", "ç¯å¡”èƒ¶å›Š"])
 
 
 class Network:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_network = Widget(stack)
         stack.addWidget(self.page_network)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_network = Label(self.page_network, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£º¿¨ÃÅÉÌÍø")
-        self.label_network_tip = Label(self.page_network, (90, 80, 220, 27), "¿¨ÃÅÉÌÍø ÔİÎŞÅäÖÃÏîÄ¿¡£")
+        # æ·»åŠ æ§ä»¶
+        self.label_network = Label(self.page_network, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šå¡é—¨å•†ç½‘")
+        self.label_network_tip = Label(self.page_network, (90, 80, 220, 27), "å¡é—¨å•†ç½‘ æš‚æ— é…ç½®é¡¹ç›®ã€‚")
 
 
 class Mail:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_mail = Widget(stack)
         stack.addWidget(self.page_mail)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_mail = Label(self.page_mail, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£ºÁìÈ¡ÓÊ¼ş")
-        self.label_mail_tip = Label(self.page_mail, (90, 80, 220, 27), "ÁìÈ¡ÓÊ¼ş ÔİÎŞÅäÖÃÏîÄ¿¡£")
+        # æ·»åŠ æ§ä»¶
+        self.label_mail = Label(self.page_mail, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šé¢†å–é‚®ä»¶")
+        self.label_mail_tip = Label(self.page_mail, (90, 80, 220, 27), "é¢†å–é‚®ä»¶ æš‚æ— é…ç½®é¡¹ç›®ã€‚")
 
 
 class Roll:
     def __init__(self, stack):
-        # ³õÊ¼»¯´°¿Ú
+        # åˆå§‹åŒ–çª—å£
         self.page_roll = Widget(stack)
         stack.addWidget(self.page_roll)
-        # Ìí¼Ó¿Ø¼ş
-        self.label_roll = Label(self.page_roll, (0, 12, 180, 18), "ÉèÖÃÒ³Ãæ£º³é¿¨¼ÇÂ¼")
-        self.button_arrange = Button(self.page_roll, (0, 45, 180, 30), "µ¼³ö³é¿¨¼ÇÂ¼ÎªExcel")
+        # æ·»åŠ æ§ä»¶
+        self.label_roll = Label(self.page_roll, (0, 12, 180, 18), "è®¾ç½®é¡µé¢ï¼šæŠ½å¡è®°å½•")
+        self.button_arrange = Button(self.page_roll, (0, 45, 180, 30), "å¯¼å‡ºæŠ½å¡è®°å½•ä¸ºExcel")
         self.button_open_roll = (
             TransPicButton(self.page_roll, (185, 45, 30, 30),
                            "assets/main_window/ui/directory.png", (25, 25)))
-        self.label_roll_tip = Label(self.page_roll, (90, 100, 220, 27), "³é¿¨¼ÇÂ¼ ÔİÎŞÅäÖÃÏîÄ¿¡£")
+        self.label_roll_tip = Label(self.page_roll, (90, 100, 220, 27), "æŠ½å¡è®°å½• æš‚æ— é…ç½®é¡¹ç›®ã€‚")
 
 
 class KleinStack(Local, Fight, Disp, Review, Market, Recruit, Reward, Network, Mail, Roll):
     def __init__(self, widget, location):
-        # ¹¦ÄÜ¶Ñµş´°¿Ú
+        # åŠŸèƒ½å †å çª—å£
         self.stack = Stack(widget, location)
         Local.__init__(self, self.stack)
         Fight.__init__(self, self.stack)

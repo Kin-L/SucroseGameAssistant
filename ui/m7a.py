@@ -1,45 +1,44 @@
-# -*- coding:gbk -*-
 from ui.element.control import *
 from ui.element.ui_part import Independent
 from tools.system import check_path
-import webbrowser
+from webbrowser import open as weopen
 
 
 class M7AList:
     def __init__(self, widget, location):
-        # ÔËĞĞÁĞ±í´°¿Ú
+        # è¿è¡Œåˆ—è¡¨çª—å£
         self.scroll_list = Widget(widget, location)
-        self.label_m7a = Label(self.scroll_list, (70, 10, 120, 20), "ÈıÔÂÆßÖúÊÖ", 18)
+        self.label_m7a = Label(self.scroll_list, (70, 10, 120, 20), "ä¸‰æœˆä¸ƒåŠ©æ‰‹", 18)
         Line(widget, (215, 5, 3, 505), False)
 
 
 class M7AStack:
     def __init__(self, widget, location):
-        # ¹¦ÄÜ¶Ñµş´°¿Ú
+        # åŠŸèƒ½å †å çª—å£
         self.stack = Stack(widget, location)
-        # ¹¦ÄÜ¶Ñµş´°¿Ú
+        # åŠŸèƒ½å †å çª—å£
         self.stack = Widget(self.stack, (0, 0, 395, 515))
-        self.label_local = Label(self.stack, (0, 12, 220, 18), "ÉèÖÃÒ³Ãæ£ºÈıÔÂÆßÖúÊÖ ÔËĞĞ·½Ê½")
+        self.label_local = Label(self.stack, (0, 12, 220, 18), "è®¾ç½®é¡µé¢ï¼šä¸‰æœˆä¸ƒåŠ©æ‰‹ è¿è¡Œæ–¹å¼")
         Line(self.stack, (0, 41, 395, 3))
         
-        self.label_m7a_overall = Label(self.stack, (0, 45, 180, 27), "È«¾ÖÉèÖÃ£º")
-        self.label_start = Label(self.stack, (0, 80, 80, 27), "Æô¶¯Â·¾¶")
+        self.label_m7a_overall = Label(self.stack, (0, 45, 180, 27), "å…¨å±€è®¾ç½®ï¼š")
+        self.label_start = Label(self.stack, (0, 80, 80, 27), "å¯åŠ¨è·¯å¾„")
         self.line_start = Lineedit(self.stack, (0, 110, 385, 33))
         Line(self.stack, (0, 152, 395, 3))
 
-        self.label_team_tip = Label(self.stack, (0, 160, 220, 27), "¶ÀÁ¢ÔËĞĞÉèÖÃ£º")
+        self.label_team_tip = Label(self.stack, (0, 160, 220, 27), "ç‹¬ç«‹è¿è¡Œè®¾ç½®ï¼š")
         self.independent = Independent(self.stack, (0, 200, 350, 70), False)
-        self.button_m7a = Button(self.stack, (0, 280, 125, 30), "ÈıÔÂÆßÖúÊÖÏÂÔØ")
+        self.button_m7a = Button(self.stack, (0, 280, 125, 30), "ä¸‰æœˆä¸ƒåŠ©æ‰‹ä¸‹è½½")
         self.button_m7a.clicked.connect(self.open_m7a)
 
     @staticmethod
-    def open_m7a(self):
-        webbrowser.open("https://moesnow.github.io/March7thAssistant")
+    def open_m7a():
+        weopen("https://moesnow.github.io/March7thAssistant")
 
 
 class M7A:
     def __init__(self, stack, icon, main):
-        # ÈıÔÂÆßÖúÊÖ
+        # ä¸‰æœˆä¸ƒåŠ©æ‰‹
         self.widget_m7a = Widget()
         stack.addWidget(self.widget_m7a)
         self.button_m7a = (
@@ -66,22 +65,22 @@ class M7A:
 
     def input_config(self, _dir):
         config = {
-            "Ä£¿é": 4,
-            "¾²Òô": False,
-            "¹Ø±ÕÈí¼ş": False,
-            "Íê³Éºó": 0,
-            "SGA¹Ø±Õ": False
+            "æ¨¡å—": 4,
+            "é™éŸ³": False,
+            "å…³é—­è½¯ä»¶": False,
+            "å®Œæˆå": 0,
+            "SGAå…³é—­": False
         }
         config.update(_dir)
-        self.set.independent.check_mute.setChecked(config["¾²Òô"])
-        self.set.independent.combo_after.setCurrentIndex(config["Íê³Éºó"])
-        self.set.independent.check_kill_sga.setChecked(config["SGA¹Ø±Õ"])
+        self.set.independent.check_mute.setChecked(config["é™éŸ³"])
+        self.set.independent.combo_after.setCurrentIndex(config["å®Œæˆå"])
+        self.set.independent.check_kill_sga.setChecked(config["SGAå…³é—­"])
 
     def output_config(self):
         config = dict()
-        config["Ä£¿é"] = 4
-        config["¾²Òô"] = self.set.independent.check_mute.isChecked()
-        config["¹Ø±ÕÈí¼ş"] = True
-        config["Íê³Éºó"] = self.set.independent.combo_after.currentIndex()
-        config["SGA¹Ø±Õ"] = self.set.independent.check_kill_sga.isChecked()
+        config["æ¨¡å—"] = 4
+        config["é™éŸ³"] = self.set.independent.check_mute.isChecked()
+        config["å…³é—­è½¯ä»¶"] = True
+        config["å®Œæˆå"] = self.set.independent.combo_after.currentIndex()
+        config["SGAå…³é—­"] = self.set.independent.check_kill_sga.isChecked()
         return config

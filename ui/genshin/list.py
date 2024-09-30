@@ -1,28 +1,27 @@
-# -*- coding:gbk -*-
 from ui.element.control import *
 
 
 class GenshinList:
     def __init__(self, widget, location):
-        # ¹¦ÄÜÁĞ±í´°¿Ú
+        # åŠŸèƒ½åˆ—è¡¨çª—å£
         scroll = ScrollArea(widget, location)
         scroll.setFrameShape(QtWidgets.QFrame.Shape(0))
         self.widget = Widget(scroll, (0, 0, 215, 515))
-        # ÉèÖÃ¿Ø¼ş
-        self.label_genshin = Label(self.widget, (95, 10, 92, 20), "Ô­Éñ", 18)
+        # è®¾ç½®æ§ä»¶
+        self.label_genshin = Label(self.widget, (95, 10, 92, 20), "åŸç¥", 18)
         setpath = "assets/main_window/ui/set.png"
         self.set_genshin = PicButton(self.widget, (180, 10, 22, 22), setpath, (22, 22))
 
-        self.check_team = Check(self.widget, (15, 50, 140, 22), "ÇĞ»»¶ÓÎé")
-        self.check_disp = Check(self.widget, (15, 95, 140, 22), "Ì½Ë÷ÅÉÇ²")
-        self.check_trans = Check(self.widget, (15, 140, 140, 22), "²ÎÁ¿ÖÊ±äÒÇ")
-        self.check_fly = Check(self.widget, (15, 185, 140, 22), "×Ô¶¯¾§µû")
-        self.check_comp = Check(self.widget, (15, 230, 140, 22), "Å¨ËõÊ÷Ö¬")
-        self.check_pot = Check(self.widget, (15, 275, 140, 22), "³¾¸èºø")
-        self.check_mail = Check(self.widget, (15, 320, 140, 22), "ÁìÈ¡ÓÊ¼ş")
-        self.check_tree = Check(self.widget, (15, 365, 140, 22), "×Ô¶¯·¥Ä¾")
-        self.check_domain = Check(self.widget, (15, 410, 140, 22), "×Ô¶¯ÃØ¾³")
-        self.check_pass = Check(self.widget, (15, 455, 140, 22), "ÁìÈ¡¼ÍĞĞ")
+        self.check_team = Check(self.widget, (15, 50, 140, 22), "åˆ‡æ¢é˜Ÿä¼")
+        self.check_disp = Check(self.widget, (15, 95, 140, 22), "æ¢ç´¢æ´¾é£")
+        self.check_trans = Check(self.widget, (15, 140, 140, 22), "å‚é‡è´¨å˜ä»ª")
+        self.check_fly = Check(self.widget, (15, 185, 140, 22), "è‡ªåŠ¨æ™¶è¶")
+        self.check_comp = Check(self.widget, (15, 230, 140, 22), "æµ“ç¼©æ ‘è„‚")
+        self.check_pot = Check(self.widget, (15, 275, 140, 22), "å°˜æ­Œå£¶")
+        self.check_mail = Check(self.widget, (15, 320, 140, 22), "é¢†å–é‚®ä»¶")
+        self.check_tree = Check(self.widget, (15, 365, 140, 22), "è‡ªåŠ¨ä¼æœ¨")
+        self.check_domain = Check(self.widget, (15, 410, 140, 22), "è‡ªåŠ¨ç§˜å¢ƒ")
+        self.check_pass = Check(self.widget, (15, 455, 140, 22), "é¢†å–çºªè¡Œ")
 
         self.set_team = PicButton(self.widget, (180, 50, 22, 22), setpath, (22, 22))
         self.set_disp = PicButton(self.widget, (180, 95, 22, 22), setpath, (22, 22))

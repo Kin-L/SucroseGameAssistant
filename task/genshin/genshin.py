@@ -18,7 +18,7 @@ class Genshin(Task):
         wait(1000)
         self.tp_point()
         self.indicate("到达枫丹:\n  枫丹廷凯瑟琳锚点")
-        
+
     # 打开esc主界面
     def home(self):
         m = 0

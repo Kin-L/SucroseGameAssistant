@@ -1,4 +1,3 @@
-# -*- coding:gbk -*-
 from ..mix.main import Mix
 from ..klein.main import Klein
 from ..genshin.main import Genshin

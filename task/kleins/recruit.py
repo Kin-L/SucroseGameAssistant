@@ -1,8 +1,5 @@
 from tools.environment import *
 from ..default_task import Task
-import os
-import time
-import shutil
 
 
 class Recruit(Task):
@@ -39,7 +36,7 @@ class Recruit(Task):
                         _fund = 0
                         _expedite = 0
                         for i in range(3):
-                            sc = screenshot()
+                            sc = scshot()
                             # noinspection PyBroadException
                             try:
                                 _fund = int(ocr((1272, 56, 1406, 90), sc)[0].strip(" "))
@@ -94,7 +91,7 @@ class Recruit(Task):
     def receive_recruit(self, _p):
         click(_p)
         wait(2500)
-        sc = screenshot()
+        sc = scshot()
         nv = find_pic("assets/kleins/picture/recruit/N.png", (252, 444, 421, 553), sc)[1]
         rv = find_pic("assets/kleins/picture/recruit/R.png", (252, 444, 421, 553), sc)[1]
         srv = find_pic("assets/kleins/picture/recruit/SR.png", (252, 444, 421, 553), sc)[1]
@@ -103,14 +100,14 @@ class Recruit(Task):
         _list = (nv, rv, srv, rrv)
         max_val = max(_list)
         if max_val:
-            now_time = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
+            now_time = strftime("%Y-%m-%d %H-%M-%S", localtime())
             max_index = _list.index(max_val)
             if max_index == 0:
                 self.indicate(f"访募到N卡 {_name}")
             elif max_index == 1:
                 self.indicate(f"访募到R卡 {_name}")
             else:
-                shutil.copyfile(sc, f"personal/kleins/recruit/{now_time}.png")
+                copyfile(sc, f"personal/kleins/recruit/{now_time}.png")
                 if max_index == 2:
                     self.indicate(f"访募到SR卡 {_name}\n  可在文件夹“personal/kleins/recruit”中查看")
                 else:
@@ -120,11 +117,11 @@ class Recruit(Task):
             f.write(f"{now_time}  {r}  {_name}\n")
             f.close()
         else:
-            now_time = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
-            shutil.copyfile(sc, f"personal/kleins/recruit/{now_time}.png")
+            now_time = strftime("%Y-%m-%d %H-%M-%S", localtime())
+            copyfile(sc, f"personal/kleins/recruit/{now_time}.png")
             self.indicate(f"error:舍友访募未知错误 ({now_time}.png)")
             raise RuntimeError("舍友访募未知错误")
-        os.remove(sc)
+        del sc
         click((273, 903))
         wait(1500)
         click((273, 903))

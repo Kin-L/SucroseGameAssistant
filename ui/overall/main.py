@@ -1,7 +1,6 @@
 from .timer.main import Timer
 from ui.element.control import *
-import json
-import webbrowser
+from json import load
 
 
 class Overall:
@@ -23,12 +22,15 @@ class Overall:
         self.button_update_history = Button(self.widget, (325, 315, 80, 30), "更新日志")
         self.button_logger = Button(self.widget, (410, 315, 80, 30), "运行日志")
 
-        self.button_github = TransPicButton(self.widget, (500, 312, 30, 30), r"assets\main_window\ui\github.png", (30, 30))
-        self.button_gitee = TransPicButton(self.widget, (540, 312, 30, 30), r"assets\main_window\ui\gitee.png", (30, 30))
-        self.button_bilibili = TransPicButton(self.widget, (580, 312, 30, 30), r"assets\main_window\ui\bilibili.png", (30, 30))
+        self.button_github = TransPicButton(self.widget, (500, 312, 30, 30),
+                                            r"assets\main_window\ui\github.png", (30, 30))
+        self.button_gitee = TransPicButton(self.widget, (540, 312, 30, 30),
+                                           r"assets\main_window\ui\gitee.png", (30, 30))
+        self.button_bilibili = TransPicButton(self.widget, (580, 312, 30, 30),
+                                              r"assets\main_window\ui\bilibili.png", (30, 30))
 
     @staticmethod
     def get_ver():
         with open(r"assets\main_window\version.json", 'r', encoding='utf-8') as m:
-            _dir = json.load(m)
+            _dir = load(m)
             return _dir["version"]

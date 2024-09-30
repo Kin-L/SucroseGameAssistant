@@ -1,12 +1,11 @@
-# -*- coding:gbk -*-
 from tools.environment import *
 from tools.software import find_hwnd
 from .fight import Fight
 from .daily import Daily
 from .mail import Mail
 from .roll import Roll
-import os
-import traceback
+from traceback import format_exc
+from os.path import isfile, split, exists
 
 
 class TaskSnow(Fight, Daily, Mail, Roll):
@@ -16,229 +15,231 @@ class TaskSnow(Fight, Daily, Mail, Roll):
     def snow_start(self, task: type[dir]):
         _k = False
         self.task = task
-        print(task)
         env.OCR.enable()
-        self.indicate("¿ªÊ¼ÈÎÎñ:³¾°×½ûÇø")
+        self.indicate("å¼€å§‹ä»»åŠ¡:å°˜ç™½ç¦åŒº")
         self.snow_launch()
         # noinspection PyBroadException
         try:
             self.snow_log(60)
             click((829, 585))
-            wait(500)
+            wait(300)
             click((829, 585))
-            wait(500)
-            if self.task["¹¦ÄÜ0"]:
+            wait(300)
+            if self.task["åŠŸèƒ½0"]:
                 self.snow_fight()
-            if self.task["¹¦ÄÜ1"]:
+            if self.task["åŠŸèƒ½1"]:
                 self.snow_daily()
-            if self.task["¹¦ÄÜ2"]:
+            if self.task["åŠŸèƒ½2"]:
                 self.snow_mail()
-            if self.task["¹¦ÄÜ3"]:
+            if self.task["åŠŸèƒ½3"]:
                 self.snow_roll()
-            self.indicate("Ö´ĞĞÍê³É")
+            self.indicate("æ‰§è¡Œå®Œæˆ")
             env.OCR.disable()
         except Exception:
-            self.indicate("ÈÎÎñÖ´ĞĞÒì³£:³¾°×½ûÇø", log=False)
-            logger.error("ÈÎÎñÖ´ĞĞÒì³££º³¾°×½ûÇø\n%s" % traceback.format_exc())
+            self.indicate("ä»»åŠ¡æ‰§è¡Œå¼‚å¸¸:å°˜ç™½ç¦åŒº", log=False)
+            logger.error("ä»»åŠ¡æ‰§è¡Œå¼‚å¸¸ï¼šå°˜ç™½ç¦åŒº\n%s" % format_exc())
             _k = True
         env.OCR.disable()
-        if self.task["¹Ø±ÕÈí¼ş"]:
-            self.indicate("³¢ÊÔ¹Ø±ÕÓÎÏ·")
+        if self.task["å…³é—­è½¯ä»¶"]:
+            self.indicate("å°è¯•å…³é—­æ¸¸æˆ")
             s, n = 15, 2
             if env.soft.kill(s, n):
-                self.indicate("ÓÎÏ·ÒÑ¹Ø±Õ")
+                self.indicate("æ¸¸æˆå·²å…³é—­")
             else:
-                self.indicate(f"error:ÓÎÏ·¹Ø±Õ³¬Ê±({s * n}s)")
+                self.indicate(f"error:æ¸¸æˆå…³é—­è¶…æ—¶({s * n}s)")
                 raise RuntimeError("genshin exit error")
-        self.indicate("Íê³ÉÈÎÎñ:³¾°×½ûÇø")
+        self.indicate("å®Œæˆä»»åŠ¡:å°˜ç™½ç¦åŒº")
         return _k
 
     def snow_launch(self):
-        # Â·¾¶ĞŞÕı
-        env.set_soft(None, (0, "UnrealWindow", "³¾°×½ûÇø"))
-        _path = self.task["Æô¶¯"]["snow_path"]
-        if os.path.isfile(_path):
-            dire, name = os.path.split(_path)
+        # è·¯å¾„ä¿®æ­£
+        env.set_soft(None, (0, "UnrealWindow", "å°˜ç™½ç¦åŒº"))
+        _path = self.task["å¯åŠ¨"]["snow_path"]
+        if isfile(_path):
+            dire, name = split(_path)
             if name == "snow_launcher.exe":
                 env.soft.set_path(_path)
-                env.soft.set_hwnd_find(1, "wailsWindow", "³¾°×½ûÇøÆô¶¯Æ÷")
+                env.soft.set_hwnd_find(1, "wailsWindow", "å°˜ç™½ç¦åŒºå¯åŠ¨å™¨")
             elif name == "SeasunGame.exe":
                 env.soft.set_path(_path)
-                env.soft.set_hwnd_find(1, "Qt5159QWindowIcon", "Î÷É½¾ÓÆô¶¯Æ÷-³¾°×½ûÇø")
+                env.soft.set_hwnd_find(1, "Qt5159QWindowIcon", "è¥¿å±±å±…å¯åŠ¨å™¨-å°˜ç™½ç¦åŒº")
             else:
-                self.indicate("³¾°×½ûÇø£¬ÎŞĞ§Æô¶¯Â·¾¶")
-                raise ValueError("³¾°×½ûÇø:ÎŞĞ§Æô¶¯Â·¾¶")
+                self.indicate("å°˜ç™½ç¦åŒºï¼Œæ— æ•ˆå¯åŠ¨è·¯å¾„")
+                raise ValueError("å°˜ç™½ç¦åŒº:æ— æ•ˆå¯åŠ¨è·¯å¾„")
         else:
-            self.indicate("³¾°×½ûÇø£¬ÎŞĞ§Æô¶¯Â·¾¶")
-            raise ValueError("³¾°×½ûÇø:ÎŞĞ§Æô¶¯Â·¾¶")
-        # Æô¶¯ÓÎÏ·
+            self.indicate("å°˜ç™½ç¦åŒºï¼Œæ— æ•ˆå¯åŠ¨è·¯å¾„")
+            raise ValueError("å°˜ç™½ç¦åŒº:æ— æ•ˆå¯åŠ¨è·¯å¾„")
+        # å¯åŠ¨æ¸¸æˆ
         for u in range(2):
-            if env.soft.find_hwnd():
-                env.soft.foreground()
+            _value = env.soft.run(fls=False)
+            env.soft.compile_resolution = (1280, 749)
+            # env.soft.get_window_information(False)
+            env.mode(3)
+            if _value == 1:
+                self.indicate("å¯åŠ¨å™¨å·²æ‰“å¼€")
+            elif _value == 2:
+                self.indicate("å¯åŠ¨å™¨æ‰“å¼€æˆåŠŸ")
             else:
                 if env.soft.run(fls=False):
-                    self.indicate("Æô¶¯Æ÷´ò¿ª³É¹¦")
+                    self.indicate("å¯åŠ¨å™¨æ‰“å¼€æˆåŠŸ")
                 else:
-                    self.indicate("´ò¿ªÆô¶¯Æ÷³¬Ê±")
-                    raise RuntimeError("³¾°×½ûÇø:´ò¿ªÆô¶¯Æ÷³¬Ê±")
+                    self.indicate("æ‰“å¼€å¯åŠ¨å™¨è¶…æ—¶")
+                    raise RuntimeError("å°˜ç™½ç¦åŒº:æ‰“å¼€å¯åŠ¨å™¨è¶…æ—¶")
+            env.soft.foreground()
             wait(1000)
 
-            if self.task["Ô¤ÏÂÔØ"]:
-                _p, sim = find_pic(r"assets\snow\picture\pre-load.png")
-                if sim:
-                    click(_p)
-                    wait(1500)
-                    click_text("È·¶¨")
-                    wait(2000)
+            if self.task["é¢„ä¸‹è½½"]:
+                _value = ocr((781, 585, 950, 734))
+                if "ä¸‹" in _value:
+                    click_change((879, 668), (559, 317, 713, 391))
+                    wait(500)
+                    click_text("ç¡®å®š")
+                    self.indicate("å¼€å§‹é¢„ä¸‹è½½")
+                    wait(500)
                 else:
-                    self.indicate("ÔİÎŞÔ¤ÏÂÔØ")
+                    self.indicate("æš‚æ— é¢„ä¸‹è½½")
             if self.lauch_prepare():
-                for p in range(10):  # 0, "UnrealWindow", "³¾°×½ûÇø"
-                    _h = find_hwnd((1, None, "³¾°×½ûÇø"))
+                for p in range(10):  # 0, "UnrealWindow", "å°˜ç™½ç¦åŒº"
+                    _h = find_hwnd((0, "UnrealWindow", "å°˜ç™½ç¦åŒº"))
                     if _h:
-                        env.soft.set_hwnd_find(0, "UnrealWindow", "³¾°×½ûÇø")
+                        env.soft.set_hwnd_find(0, "UnrealWindow", "å°˜ç™½ç¦åŒº")
                         env.soft.hwnd = _h
+                        env.soft.run()
+                        env.soft.compile_resolution = (1920, 1080)
                         if env.mode(1):
                             env.soft.set_pid(env.soft.hwnd)
-                            self.indicate("ÓÎÏ·ÒÑÆô¶¯")
+                            self.indicate("æ¸¸æˆå·²å¯åŠ¨")
                             env.soft.foreground()
                             return True
                         else:
                             env.soft.foreground()
                             wait(3000)
                     else:
-                        env.soft.foreground()
                         wait(1000)
-                        click_text("¿ªÊ¼ÓÎÏ·")
-                        wait(2000)
-            raise RuntimeError("³¾°×½ûÇø:Æô¶¯³¬Ê±")
-        raise RuntimeError("³¾°×½ûÇø:Æô¶¯Òì³£")
+                        # env.soft.foreground()
+                        # wait(500)
+                        # click_text("å¼€å§‹æ¸¸æˆ", (1004, 646, 1151, 701))
+                        # wait(500)
+            raise RuntimeError("å°˜ç™½ç¦åŒº:å¯åŠ¨è¶…æ—¶")
+        raise RuntimeError("å°˜ç™½ç¦åŒº:å¯åŠ¨å¼‚å¸¸")
 
     def lauch_prepare(self):
         for i in range(120):
-            if find_hwnd((0, "UnrealWindow", "³¾°×½ûÇø")):
+            if find_hwnd((0, "UnrealWindow", "å°˜ç™½ç¦åŒº")):
                 return True
-            _list = ocr(mode=1)
-            for o in _list:
-                if res := text_match(o, "¿ªÊ¼ÓÎÏ·"):
-                    click(res)
-                    return True
-                elif res := text_match(o, "¼ì²é¸üĞÂ"):
-                    click(res)
+            _value = ocr((1004, 646, 1151, 701))
+            if "å¼€å§‹æ¸¸æˆ" in _value:
+                click_change((1073, 673), (1004, 646, 1151, 701))
+                wait(5000)
+                return True
+            elif "è·å–æ›´æ–°" in _value:
+                if self.task["æ›´æ–°"]:
+                    click_change((1073, 673), (718, 476, 821, 536))
+                    click_change((750, 499), (718, 476, 821, 536))
+                else:
+                    self.indicate("å°˜ç™½ç¦åŒº:éœ€è¦æ›´æ–°,å½“å‰æœªå‹¾é€‰è‡ªåŠ¨æ›´æ–°,ç»ˆæ­¢ä»»åŠ¡")
+                    raise RuntimeError("å°˜ç™½ç¦åŒº:éœ€è¦æ›´æ–°,å½“å‰æœªå‹¾é€‰è‡ªåŠ¨æ›´æ–°,ç»ˆæ­¢ä»»åŠ¡")
+            elif "æ£€æŸ¥æ›´æ–°" in _value:
+                for t in range(180):
+                    _value = ocr((578, 465, 749, 549))
+                    if "ç¡®å®š" in _value:
+                        click_change((639, 499), (578, 465, 749, 549))
+                        return False
                     wait(2000)
-                    break
-                elif res := text_match(o, "»ñÈ¡¸üĞÂ"):
-                    if self.task["¸üĞÂ"]:
-                        click(res)
-                        wait(2000)
-                        click_text("È·¶¨")
-                        wait(2000)
-                        break
-                    else:
-                        self.indicate("³¾°×½ûÇø:ĞèÒª¸üĞÂ,µ±Ç°Î´¹´Ñ¡×Ô¶¯¸üĞÂ,ÖÕÖ¹ÈÎÎñ")
-                        raise RuntimeError("³¾°×½ûÇø:ĞèÒª¸üĞÂ,µ±Ç°Î´¹´Ñ¡×Ô¶¯¸üĞÂ,ÖÕÖ¹ÈÎÎñ")
-                elif text_match(o, "¸üĞÂÍê³É"):
-                    click_text("È·¶¨")
-                    wait(2000)
-                    return False
-                elif text_match(o, "¸üĞÂÖĞ"):
-                    self.indicate("¸üĞÂÖĞ...")
-                    for t in range(180):
-                        wait(20000)
-                        if not click_text("¸üĞÂÖĞ"):
-                            break
-                        elif t == 179:
-                            raise RuntimeError("³¾°×½ûÇø:¸üĞÂ³¬Ê±")
-                    break
+                raise RuntimeError("å°˜ç™½ç¦åŒº:æ›´æ–°è¶…æ—¶")
+            elif "æ›´æ–°ä¸­" in _value:
+                pos = wait_text("å¼€å§‹æ¸¸æˆ", (1004, 646, 1151, 701), (2000, 100))
+                click_change(pos, (1004, 646, 1151, 701))
+                wait(5000)
+                return True
+            else:
+                print(env.soft.frame, env.soft.zoom)
+                print(screenshot((1004, 646, 1151, 701)))
+                raise RuntimeError("å°˜ç™½ç¦åŒº:æœªçŸ¥é”™è¯¯")
         return False
 
     def snow_log(self, second: int):
-        # µÇÂ¼&½øÈëÓÎÏ·
-        self.indicate("¿ªÊ¼Ê¶±ğÓÎÏ·×´Ì¬")
-        server = self.task["Æô¶¯"]["server"]
+        # ç™»å½•&è¿›å…¥æ¸¸æˆ
+        self.indicate("å¼€å§‹è¯†åˆ«æ¸¸æˆçŠ¶æ€")
+        server = self.task["å¯åŠ¨"]["server"]
+        started = False
         for i in range(second):
-            sc = screenshot()
-            if server == 0:
-                if "¿ªÊ¼ÓÎÏ·" in ocr((883, 920, 1049, 989))[0]:
-                    server = 2
-                    wait(300)
-                    if self.task["ÕËºÅÑ¡Ôñ"]:
-                        click((1864, 222))
-                        wait(1000)
-                        click((1033, 38))
-                        wait(800)
-                        click((1152, 522))
-                        wait(800)
-                        click_text(self.task["ÕËºÅÑ¡Ôñ"], (703, 462, 1216, 715))
-                        wait(800)
-                        click((964, 607))
-                        wait(800)
-                    for r in range(3):
-                        click((930, 630))
-                        wait(800)
-                    self.indicate("µÇÂ¼ÓÎÏ·")
-                    wait(5000)
-                    os.remove(sc)
-                    sc = screenshot()
-            elif server == 1:
-                if find_pic(r"assets\snow\picture\login2.png", (853, 369, 1055, 461), sc)[1] >= 0.6:
-                    click((964, 679))
-                    self.indicate("µÇÂ¼B·şÕËºÅ")
-                    wait(4000)
-                    os.remove(sc)
-                    sc = screenshot()
-            if "»ñµÃµÀ¾ß" in ocr((813, 45, 1099, 138), sc)[0]:
+            sc = scshot()
+            _list = ocr(template=sc, mode=1)
+            if not started:
+                if server == 0:
+                    if str_find("å¼€å§‹æ¸¸æˆ", _list):
+                        server = 2
+                        wait(300)
+                        if self.task["è´¦å·é€‰æ‹©"] and exists("license.txt"):
+                            click_change((1866, 219), (984, 16, 1089, 66))
+                            click_text("åˆ‡æ¢", (984, 16, 1089, 66))
+                            click_change((1150, 513),  (735, 554, 849, 589))
+                            pos = find_text(self.task["è´¦å·é€‰æ‹©"], (703, 462, 1216, 715))
+                            if pos:
+                                click_change(pos, (735, 554, 849, 589))
+                            else:
+                                raise RuntimeError("å°˜ç™½ç¦åŒº:è´¦æˆ·è¯†åˆ«é”™è¯¯")
+                            click_text("ç™»å½•", (904, 577, 1018, 641))
+                        click_change((930, 630), (883, 920, 1049, 989))
+                        self.indicate("ç™»å½•æ¸¸æˆ")
+                        wait(5000)
+                        started = True
+                        continue
+                elif server == 1:
+                    if find_pic(r"assets\snow\picture\login2.png", (853, 369, 1055, 461), sc)[1] >= 0.6:
+                        click((964, 679))
+                        self.indicate("ç™»å½•Bæœè´¦å·")
+                        wait(4000)
+                        started = True
+                        continue
+            if str_find("è·å¾—é“å…·", _list):
                 click((967, 909))
-                self.indicate("Ç©µ½³É¹¦")
-                os.remove(sc)
-                sc = screenshot()
+                self.indicate("ç­¾åˆ°æˆåŠŸ")
                 wait(2500)
-            if "Ê±¼ä" in ocr((368, 217, 482, 249), sc)[0]:
+                continue
+            if str_find("æ—¶é—´", _list):
                 click((991, 123))
-                os.remove(sc)
-                sc = screenshot()
                 wait(1500)
-            if "Î¬»¤" in ocr((1003, 419, 1190, 513), sc)[0]:
-                os.remove(sc)
-                raise RuntimeError("³¾°×½ûÇø:ÓÎÏ·Î¬»¤ÖĞ")
-            if "°æ±¾¹ıµÍ" in ocr((692, 414, 925, 513), sc)[0]:
-                os.remove(sc)
-                raise RuntimeError("³¾°×½ûÇø:°æ±¾¹ıµÍ")
-            if "·şÎñÆ÷ÔİÎ´¿ª·Å" in ocr((784, 418, 1148, 508), sc)[0]:
-                os.remove(sc)
-                raise RuntimeError("³¾°×½ûÇø:·şÎñÆ÷ÔİÎ´¿ª·Å")
-            if "ÈÎÎñ" in ocr((1455, 324, 1533, 380), sc)[0]:
+                continue
+            # if str_find("ç»´æŠ¤", _list):
+            #     raise RuntimeError("å°˜ç™½ç¦åŒº:æ¸¸æˆç»´æŠ¤ä¸­")
+            if str_find("ç‰ˆæœ¬è¿‡ä½", _list):
+                raise RuntimeError("å°˜ç™½ç¦åŒº:ç‰ˆæœ¬è¿‡ä½")
+            if str_find("æœåŠ¡å™¨æš‚æœªå¼€æ”¾", _list):
+                raise RuntimeError("å°˜ç™½ç¦åŒº:æœåŠ¡å™¨æš‚æœªå¼€æ”¾")
+            if str_find("ä»»åŠ¡", _list):
                 wait(300)
-                os.remove(sc)
-                sc = screenshot()
-                if "ÈÎÎñ" in ocr((1455, 324, 1533, 380), sc)[0]:
-                    self.indicate("¼ÓÔØµ½Ö÷½çÃæ")
-                    os.remove(sc)
+                sc = scshot()
+                if "ä»»åŠ¡" in ocr((1455, 324, 1533, 380), sc)[0]:
+                    self.indicate("åŠ è½½åˆ°ä¸»ç•Œé¢")
                     return True
-            if "µÈ¼¶ÌáÉı" in ocr((1076, 356, 1345, 448), sc)[0]:
+                else:
+                    continue
+            if str_find("ç­‰çº§æå‡", _list):
                 click((788, 1007))
                 wait(8000)
             while 1:
-                _p, sim = find_pic("assets/snow/picture/close.png", (1459, 122, 1805, 368), search_path=sc)
+                _p, sim = find_pic("assets/snow/picture/close.png", (1459, 122, 1805, 368), sc)
                 if sim >= 0.6:
                     click(_p)
                     wait(1500)
-                    os.remove(sc)
-                    sc = screenshot()
+                    
+                    sc = scshot()
                 else:
                     break
             while 1:
-                _p, sim = find_pic(r"assets\snow\picture\home.png", (1444, 0, 1921, 94), search_path=sc)
+                _p, sim = find_pic(r"assets\snow\picture\home.png", (1444, 0, 1921, 94), sc)
                 if sim >= 0.6:
                     click(_p)
                     wait(1500)
-                    os.remove(sc)
-                    sc = screenshot()
+                    
+                    sc = scshot()
                 else:
                     break
-            os.remove(sc)
+            
             wait(1500)
-        raise RuntimeError("³¾°×½ûÇø:µÇÂ¼³¬Ê±")
+        raise RuntimeError("å°˜ç™½ç¦åŒº:ç™»å½•è¶…æ—¶")
 
 
 if __name__ == '__main__':

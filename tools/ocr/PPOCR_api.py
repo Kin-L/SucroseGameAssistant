@@ -1,10 +1,10 @@
 # 调用 PaddleOCR-json.exe 的 Python Api
 # 项目主页：
 # https://github.com/hiroi-sora/PaddleOCR-json
-
-import os
-import socket  # 套接字
-import subprocess  # 进程，管道
+from os.path import join, abspath
+from os import pardir
+from socket import SOCK_STREAM, AF_INET, socket# 套接字
+from subprocess import  STARTUPINFO, STARTF_USESHOWWINDOW, SW_HIDE, Popen, PIPE, DEVNULL, CREATE_NEW_CONSOLE# 进程，管道
 from json import loads as jsonLoads, dumps as jsonDumps
 from sys import platform as sysPlatform  # popen静默模式
 from base64 import b64encode  # base64 编码
@@ -18,7 +18,7 @@ class PPOCR_pipe:
         `exePath`: 识别器`PaddleOCR_json.exe`的路径。\n
         `argument`: 启动参数，字典`{"键":值}`。参数说明见 https://github.com/hiroi-sora/PaddleOCR-json
         """
-        cwd = os.path.abspath(os.path.join(exePath, os.pardir))  # 获取exe父文件夹
+        cwd = abspath(join(exePath, pardir))  # 获取exe父文件夹
         # 处理启动参数
         if not argument is None:
             for key, value in argument.items():
@@ -29,14 +29,14 @@ class PPOCR_pipe:
         # 设置子进程启用静默模式，不显示控制台窗口
         startupinfo = None
         if "win32" in str(sysPlatform).lower():
-            startupinfo = subprocess.STARTUPINFO()
-            startupinfo.dwFlags = subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW
-            startupinfo.wShowWindow = subprocess.SW_HIDE
-        self.ret = subprocess.Popen(  # 打开管道
+            startupinfo = STARTUPINFO()
+            startupinfo.dwFlags = CREATE_NEW_CONSOLE | STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = SW_HIDE
+        self.ret = Popen(  # 打开管道
             exePath, cwd=cwd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,  # 丢弃stderr的内容
+            stdin=PIPE,
+            stdout=PIPE,
+            stderr=DEVNULL,  # 丢弃stderr的内容
             startupinfo=startupinfo  # 开启静默模式
         )
         # 启动子进程
@@ -161,7 +161,7 @@ class PPOCR_socket(PPOCR_pipe):
         writeStr = jsonDumps(writeDict, ensure_ascii=True, indent=None) + "\n"
         try:
             # 创建TCP连接
-            clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            clientSocket = socket(AF_INET, SOCK_STREAM)
             clientSocket.connect((self.ip, self.port))
             # 发送数据
             clientSocket.sendall(writeStr.encode())

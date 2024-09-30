@@ -1,9 +1,10 @@
 from ..module.main import Module
 from ..overall.main import Overall
 from .main_window import *
-import json
+from json import dump, load
 from tools.environment import *
-import traceback
+from traceback import format_exc
+from os import rename
 
 
 # 加载主窗口和函数
@@ -15,21 +16,21 @@ class MainBottom(MainWindow, Module, Overall):
             MainWindow.__init__(self)
         except Exception as err:
             message_box("主窗口加载异常(1/7):\n%s\n" % err)
-            logger.critical("主窗口加载异常(1/6):\n%s\n" % traceback.format_exc())
+            logger.critical("主窗口加载异常(1/6):\n%s\n" % format_exc())
             sys.exit(1)
         # 载入全局设置窗口
         try:
             self.overall = Overall(self.stack_setting)
         except Exception as err:
             message_box("全局设置窗口加载失败(2/7):\n%s\n" % err)
-            logger.critical("全局设置窗口加载失败(2/7):\n%s\n" % traceback.format_exc())
+            logger.critical("全局设置窗口加载失败(2/7):\n%s\n" % format_exc())
             sys.exit(1)
         # 载入模组设置窗口
         try:
             Module.__init__(self, self)
         except Exception as err:
             message_box("模组设置窗口加载失败(3/7):\n%s\n" % err)
-            logger.critical("模组设置窗口加载失败(3/7):\n%s\n" % traceback.format_exc())
+            logger.critical("模组设置窗口加载失败(3/7):\n%s\n" % format_exc())
             sys.exit(1)
 
     # 切换页面
@@ -50,6 +51,26 @@ class MainBottom(MainWindow, Module, Overall):
             self.button_config_lock.hide()
             self.button_config_unlock.show()
         self.state["locked"] = mode
+
+    # 配置重命名
+    def config_rename(self):
+        text_past = self.state["text"]
+        text_now = self.box_config_change.currentText()
+        prefix = self.state["plan"][text_past]
+        new_path = r"personal/config/%s.json" % (prefix + text_now)
+        if text_now == text_past:
+            pass
+        elif text_now in self.state["plan"]:
+            self.indicate("配置名重复：请键入其他名字", 3)
+            self.box_config_change.setCurrentText(text_past)
+        else:
+            rename(r"personal/config/%s.json" % (prefix + text_past), new_path)
+            self.overall.timer.overall_rename_item(text_past, text_now)
+            if prefix != "00" and self.state["mix"]["load"]:
+                self.mix.rename_item(text_past, text_now)
+            self.state["plan"][text_now] = self.state["plan"].pop(text_past)
+            self.state["text"] = text_now
+            self.indicate("配置更名：%s >>> %s" % (text_past, text_now), 3)
 
     # （加载并）切换模组设置页面
     def change_module(self, num):
@@ -78,7 +99,7 @@ class MainBottom(MainWindow, Module, Overall):
             config_dir = module.output_config()
         else:
             with open(self.get_file_path(text), 'r', encoding='utf-8') as c:
-                config_dir = json.load(c)
+                config_dir = load(c)
         return config_dir
 
     # 根据字典载入面板/根据字典和名称保存配置至文件
@@ -91,7 +112,7 @@ class MainBottom(MainWindow, Module, Overall):
             module.input_config(dictionary)
         else:
             with open(self.get_file_path(text), 'w', encoding='utf-8') as c:
-                json.dump(dictionary, c, ensure_ascii=False, indent=1)
+                dump(dictionary, c, ensure_ascii=False, indent=1)
 
     # 显示声明
     def show_statement(self):

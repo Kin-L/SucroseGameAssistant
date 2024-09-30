@@ -1,7 +1,5 @@
 from tools.environment import *
 from ..default_task import Task
-import os
-import json
 
 
 class Roll(Task):
@@ -31,9 +29,9 @@ class Roll(Task):
             "限定联络": [
             ]
         }
-        if os.path.exists(_path):
+        if exists(_path):
             with open(_path, 'r', encoding='utf-8') as m:
-                _dir = json.load(m)
+                _dir = load(m)
             current.update(_dir)
         _list = [360, 407, 452, 498, 543, 589, 634, 680, 725, 771]
         for i in ["定向联络", "常态联络", "初始联络", "限定联络"]:
@@ -48,7 +46,7 @@ class Roll(Task):
             _l = current[i]
             _nl = []
             for p in range(30):
-                sc = screenshot()
+                sc = scshot()
                 for y in _list:
                     time = ocr((544, y, 798, y + 37), sc)[0]
                     banner = ocr((836, y, 1011, y + 37), sc)[0]
@@ -62,7 +60,7 @@ class Roll(Task):
                     if _line not in _l:
                         _nl = [_line] + _nl
                 _text = ocr((903, 839, 1018, 884), sc)[0]
-                os.remove(sc)
+                del sc
                 _num = int(_text.split("/")[-1])
                 if p+1 == _num:
                     self.indicate("识别完成:" + i)
@@ -72,7 +70,7 @@ class Roll(Task):
                     wait(500)
             current[i] = _l+_nl
         with open("personal/kleins/roll/history.json", 'w', encoding='utf-8') as x:
-            json.dump(current, x, ensure_ascii=False, indent=1)
+            dump(current, x, ensure_ascii=False, indent=1)
         click((1753, 182))
         wait(800)
         click((153, 68))

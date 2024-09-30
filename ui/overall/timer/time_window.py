@@ -1,4 +1,3 @@
-# -*- coding:gbk -*-
 from qfluentwidgets import TimePicker
 from ui.element.control import *
 
@@ -9,8 +8,8 @@ class TimerWindow:
         widget = Widget(widget, location)
         # pic1 = Picture(widget, (0, 0, 1800, 1500), r"D:\Download\test0.png")
         self.time_item = 3
-        # ʱ����Ŀ����
-        self.label_item = Label(widget, (0, 0, 100, 30), "ʱ����Ŀ����")
+        # 时间条目控制
+        self.label_item = Label(widget, (0, 0, 100, 30), "时间条目增减")
 
         self.add = PicButton(widget, (110, 0, 30, 30),
                              r"assets/main_window/ui/add.png",
@@ -21,19 +20,19 @@ class TimerWindow:
         self.apply = PicButton(widget, (190, 0, 30, 30),
                                r"assets/main_window/ui/save.png",
                                (20, 20))
-        self.delete = Button(widget, (540, 0, 80, 30), "�����ʱ")
-        # ʱ����Ŀ��ǩ
-        self.label_execute = Label(widget, (35, 30, 50, 30), "ִ��")
-        self.label_timer = Label(widget, (205, 30, 50, 30), "��ʱ")
-        self.label_text = Label(widget, (415, 30, 80, 30), "����ѡ��")
-        self.label_awake = Label(widget, (565, 30, 60, 30), "����")
-        # ʱ����Ŀ�б�
+        self.delete = Button(widget, (540, 0, 80, 30), "清除定时")
+        # 时间条目标签
+        self.label_execute = Label(widget, (35, 30, 50, 30), "执行")
+        self.label_timer = Label(widget, (205, 30, 50, 30), "定时")
+        self.label_text = Label(widget, (415, 30, 80, 30), "配置选择")
+        self.label_awake = Label(widget, (565, 30, 60, 30), "唤醒")
+        # 时间条目列表
         self.scroll = ScrollArea(widget, (0, 65, 620, 162))
         self.widget = Widget(None, (0, 0, 620, 120))
         self.scroll.setWidget(self.widget)
         self.widget.setFixedHeight(120)
         # self.scroll_time_item.setFrameShape(QtWidgets.QFrame.Shape(0))
-        # ʱ����Ŀ��ť
+        # 时间条目按钮
         self.execute0 = Combobox(self.widget, (5, 5, 90, 30))
         self.execute1 = Combobox(self.widget, (5, 45, 90, 30))
         self.execute2 = Combobox(self.widget, (5, 85, 90, 30))
@@ -44,7 +43,7 @@ class TimerWindow:
         self.execute7 = Combobox(self.widget, (5, 285, 90, 30))
         self.execute8 = Combobox(self.widget, (5, 325, 90, 30))
         self.execute9 = Combobox(self.widget, (5, 365, 90, 30))
-        _list = ["����", "ÿ��", "��һ", "�ܶ�", "����", "����", "����", "����", "����"]
+        _list = ["禁用", "每日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"]
         self.execute0.addItems(_list)
         self.execute1.addItems(_list)
         self.execute2.addItems(_list)
@@ -99,13 +98,13 @@ class TimerWindow:
         self.awake8 = Check(self.widget, (570, 325, 30, 30), " ")
         self.awake9 = Check(self.widget, (570, 365, 30, 30), " ")
 
-        self.text0.addItem("<δѡ��>")
-        self.text1.addItem("<δѡ��>")
-        self.text2.addItem("<δѡ��>")
-        self.text3.addItem("<δѡ��>")
-        self.text4.addItem("<δѡ��>")
-        self.text5.addItem("<δѡ��>")
-        self.text6.addItem("<δѡ��>")
-        self.text7.addItem("<δѡ��>")
-        self.text8.addItem("<δѡ��>")
-        self.text9.addItem("<δѡ��>")
+        self.text0.addItem("<未选择>")
+        self.text1.addItem("<未选择>")
+        self.text2.addItem("<未选择>")
+        self.text3.addItem("<未选择>")
+        self.text4.addItem("<未选择>")
+        self.text5.addItem("<未选择>")
+        self.text6.addItem("<未选择>")
+        self.text7.addItem("<未选择>")
+        self.text8.addItem("<未选择>")
+        self.text9.addItem("<未选择>")

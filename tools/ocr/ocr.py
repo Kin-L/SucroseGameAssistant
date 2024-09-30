@@ -1,9 +1,9 @@
 from .PPOCR_api import GetOcrApi
 from PIL import Image
-import sys
-import os
-import io
+from io import BytesIO
 from cpufeature import CPUFeature
+from os.path import exists, join, abspath
+from sys import exit as sysexit
 
 
 class OCR:
@@ -12,19 +12,21 @@ class OCR:
         self.workdir = workdir
         if CPUFeature["AVX2"]:
             self.exe_name = "PaddleOCR-json_v.1.3.1(simplify)"
-            self.load_url = "https://gitee.com/huixinghen/SucroseGameAssistant/releases/download/ocr/PaddleOCR-json_v.1.3.1(simplify).zip"
+            self.load_url = ("https://gitee.com/huixinghen/SucroseGameAssistant/"
+                             "releases/download/ocr/PaddleOCR-json_v.1.3.1(simplify).zip")
             self.exe_path = r"3rd_package\PaddleOCR-json_v.1.3.1(simplify)\PaddleOCR-json.exe"
             self.logger.debug("CPU 支持 AVX2 指令集，使用 PaddleOCR-json")
         else:
             self.exe_name = "RapidOCR-json_v0.2.0(simplify)"
-            self.load_url = "https://gitee.com/huixinghen/SucroseGameAssistant/releases/download/ocr/RapidOCR-json_v0.2.0(simplify).zip"
+            self.load_url = ("https://gitee.com/huixinghen/SucroseGameAssistant/"
+                             "releases/download/ocr/RapidOCR-json_v0.2.0(simplify).zip")
             self.exe_path = r"3rd_package\RapidOCR-json_v0.2.0(simplify)\RapidOCR-json.exe"
             self.logger.debug("CPU 不支持 AVX2 指令集，使用 RapidOCR-json")
         self.running = None
 
     def check(self):
-        abs_path = os.path.join(self.workdir, self.exe_path)
-        if os.path.exists(abs_path):
+        abs_path = join(self.workdir, self.exe_path)
+        if exists(abs_path):
             return True
         else:
             return False
@@ -41,7 +43,7 @@ class OCR:
                 self.logger.info("请尝试重新下载或解压")
                 self.logger.info("若 Win7 报错计算机中丢失 VCOMP140.DLL,请安装 VC运行库")
                 self.logger.info("https://aka.ms/vs/17/release/vc_redist.x64.exe")
-                sys.exit(1)
+                sysexit(1)
         else:
             self.logger.debug("OCR早已启用")
 
@@ -79,10 +81,10 @@ class OCR:
             if isinstance(image, Image.Image):
                 pass
             elif isinstance(image, str):
-                return self.running.run(os.path.abspath(image))
+                return self.running.run(abspath(image))
             else:  # 默认为 np.ndarray，避免需要import numpy
                 image = Image.fromarray(image)
-            image_stream = io.BytesIO()
+            image_stream = BytesIO()
             image.save(image_stream, format="PNG")
             image_bytes = image_stream.getvalue()
             return self.running.runBytes(image_bytes)
@@ -105,10 +107,10 @@ class OCR:
         if isinstance(image, Image.Image):
             pass
         elif isinstance(image, str):
-            return self.running.run(os.path.abspath(image))
+            return self.running.run(abspath(image))
         else:  # 默认为 np.ndarray，避免需要import numpy
             image = Image.fromarray(image)
-        image_stream = io.BytesIO()
+        image_stream = BytesIO()
         image.save(image_stream, format="PNG")
         image_bytes = image_stream.getvalue()
         result = self.running.runBytes(image_bytes)

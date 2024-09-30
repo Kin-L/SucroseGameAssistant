@@ -1,6 +1,5 @@
 from tools.environment import *
 from ..default_task import Task
-import os
 
 
 class Network(Task):

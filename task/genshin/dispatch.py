@@ -1,6 +1,5 @@
 from tools.environment import *
 from .genshin import Genshin
-import os
 
 
 class Dispatch(Genshin):
@@ -115,9 +114,9 @@ class Dispatch(Genshin):
                                 clist += [y]
                             else:
                                 self.indicate("原神:派遣选择角色异常")
-                                os.remove(sc)
+                                remove(sc)
                                 raise RuntimeError("原神:派遣检查异常")
-                    os.remove(sc)
+                    remove(sc)
                     if alist:
                         y = alist[0]
                     elif blist:

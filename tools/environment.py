@@ -1,5 +1,16 @@
 from .operate import Operate
 from .system import *
+from numpy import ndarray
+from cv2 import imread
+from os.path import isfile, exists, split, splitext, join, basename
+from traceback import format_exc
+from os import listdir, remove
+from time import strftime, localtime
+from shutil import copyfile
+from json import load, dump
+from yaml import load as yload
+from yaml import dump as ydump
+from yaml import FullLoader
 
 
 def text_match(res, text, domain=(0, 0, 1920, 1080), border=False):
@@ -41,7 +52,8 @@ class Environment(Operate):
             return True
         elif mode_num == 1:
             if self.soft.hwnd:
-                if self.soft.get_window_information():
+                self.soft.foreground()
+                if self.soft.get_window_information(True):
                     self.frame, self.zoom = self.soft.frame, self.soft.zoom
                     self.logger.debug(f"mode 1: {self.frame}*{self.zoom}")
                     return True
@@ -54,6 +66,18 @@ class Environment(Operate):
             self.frame = (0, 0) + self.resolution_origin
             self.zoom = 1
             return True
+        elif mode_num == 3:
+            if self.soft.hwnd:
+                self.soft.foreground()
+                if self.soft.get_window_information(False):
+                    self.frame, self.zoom = self.soft.frame, self.soft.zoom
+                    self.logger.debug(f"mode 3: {self.frame}*{self.zoom}")
+                    return True
+                else:
+                    return False
+            else:
+                self.logger.error("未识别到软件/未开启软件")
+                return False
         else:
             self.logger.error("无效参数 mode_num")
             return False
@@ -124,12 +148,129 @@ class Environment(Operate):
             else:
                 raise RuntimeError("执行超时：clickto")
 
+    def click_to_pic(self, pos, target, zone="ALL", sim: float = 0.6,
+                     wait_time=(800, 10)):
+        if isinstance(target, ndarray):
+            _target = target
+        elif target:
+            if not isfile(target):
+                print("error: findpic 参数 small_pic 为无效路径。")
+                raise ValueError("error: findpic 参数 small_pic 为无效路径。")
+            else:
+                _target = imread(target)
+        else:
+            print("error: findpic 参数 small_pic 为无效路径。")
+            raise ValueError("error: findpic 参数 small_pic 为无效路径。")
+        while 1:
+            for i in range(wait_time[1]):
+                self.click(pos)
+                sleep(wait_time[0] / 1000)
+                p, s = self.find_pic(_target, zone)
+                if s >= sim:
+                    return p
+            if self.soft.isforeground():
+                raise RuntimeError("识别超时")
+            else:
+                self.soft.foreground()
+                self.logger.info("切换顶层窗口")
+
+    def click_to_text(self, pos, target: str, zone="ALL",
+                      wait_time=(800, 10)):
+        while 1:
+            for i in range(wait_time[1]):
+                self.click(pos)
+                sleep(wait_time[0] / 1000)
+                _list = self.ocr(zone, mode=1)
+                result = str_find(target, _list)
+                if result:
+                    return result
+            if self.soft.isforeground():
+                raise RuntimeError("识别超时")
+            else:
+                self.soft.foreground()
+                self.logger.info("切换顶层窗口")
+
+    def click_change(self, pos, zone="ALL", sim: float = 0.9,
+                     wait_time=(800, 10)):
+        bef = self.scshot(zone)
+        for i in range(wait_time[1]):
+            self.click(pos)
+            sleep(wait_time[0] / 1000)
+            aft = self.scshot(zone)
+            p, s = self.find_pic(bef, template=aft)
+            # print(s)
+            if s < sim:
+                return True
+            else:
+                bef = aft
+        raise RuntimeError("click_change点击超时")
+
+    def press_to_pic(self, key, target, zone="ALL", sim: float = 0.6,
+                     wait_time=(800, 10)):
+        if isinstance(target, ndarray):
+            _target = target
+        elif target:
+            if not isfile(target):
+                print("error: findpic 参数 small_pic 为无效路径。")
+                raise ValueError("error: findpic 参数 small_pic 为无效路径。")
+            else:
+                _target = imread(target)
+        else:
+            print("error: findpic 参数 small_pic 为无效路径。")
+            raise ValueError("error: findpic 参数 small_pic 为无效路径。")
+        while 1:
+            for i in range(wait_time[1]):
+                press(key)
+                sleep(wait_time[0] / 1000)
+                p, s = self.find_pic(_target, zone)
+                if s >= sim:
+                    return p
+            if self.soft.isforeground():
+                raise RuntimeError("识别超时")
+            else:
+                self.soft.foreground()
+                self.logger.info("切换顶层窗口")
+
+    def press_to_text(self, key, target: str, zone="ALL",
+                      wait_time=(800, 10)):
+        while 1:
+            for i in range(wait_time[1]):
+                press(key)
+                sleep(wait_time[0] / 1000)
+                _list = self.ocr(zone, mode=1)
+                result = str_find(target, _list)
+                if result:
+                    return result
+            if self.soft.isforeground():
+                raise RuntimeError("识别超时")
+            else:
+                self.soft.foreground()
+                self.logger.info("切换顶层窗口")
+
+    def press_change(self, key, zone="ALL", sim: float = 0.9,
+                     wait_time=(800, 10)):
+        bef = self.scshot(zone)
+        for i in range(wait_time[1]):
+            press(key)
+            sleep(wait_time[0] / 1000)
+            aft = self.scshot(zone)
+            p, s = self.find_pic(bef, template=aft)
+            # print(s)
+            if s < sim:
+                return True
+            else:
+                bef = aft
+        raise RuntimeError("click_change点击超时")
+
 
 env = Environment(1920, 1080)
 logger = env.logger
 axis_zoom, axis_translation, axis_change = env.axis_zoom, env.axis_translation, env.axis_change
 move, click, drag, roll, roll_h = env.move, env.click, env.drag, env.roll, env.roll_h
 press, keydown, keyup, key_add, wait = env.press, env.keydown, env.keyup, env.key_add, env.wait
-ocr, screenshot, find_pic, find_color, find_text = env.ocr, env.screenshot, env.find_pic, env.find_color, env.find_text
-center, click_pic, click_text, clickto, pressto = env.center, env.click_pic, env.click_text, env.clickto, env.pressto
-wait_pic, wait_text = env.wait_pic, env.wait_text
+screenshot, scshot = env.screenshot, env.scshot
+ocr, find_pic, find_color, find_text = env.ocr, env.find_pic, env.find_color, env.find_text
+click_pic, click_text, clickto, pressto = env.click_pic, env.click_text, env.clickto, env.pressto
+click_to_pic, click_to_text, click_change = env.click_to_pic, env.click_to_text, env.click_change
+press_to_pic, press_to_text, press_change = env.press_to_pic, env.press_to_text, env.press_change
+wait_pic, wait_text, match_text = env.wait_pic, env.wait_text, env.match_text

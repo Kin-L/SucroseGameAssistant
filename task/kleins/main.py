@@ -1,4 +1,3 @@
-# -*- coding:gbk -*-
 from tools.environment import *
 from .fight import Fight
 from .dispatch import Dispatch
@@ -9,8 +8,6 @@ from .reward import Reward
 from .network import Network
 from .mail import Mail
 from .roll import Roll
-import os
-import traceback
 
 
 class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail, Roll):
@@ -21,176 +18,170 @@ class TaskKleins(Fight, Dispatch, Review, Market, Recruit, Reward, Network, Mail
         _k = False
         self.task = task
         env.OCR.enable()
-        self.indicate("¿ªÊ¼ÈÎÎñ:»·ĞĞÂÃÉá")
+        self.indicate("å¼€å§‹ä»»åŠ¡:ç¯è¡Œæ—…èˆ")
         self.kleins_launch()
         # noinspection PyBroadException
         try:
             self.kleins_log(60)
-            # ´¥·¢ÉáÓÑ»¥¶¯
+            # è§¦å‘èˆå‹äº’åŠ¨
             click((969, 374))
             wait(500)
             click((969, 374))
             wait(500)
-            if self.task["¹¦ÄÜ0"]:
-                self.indicate("¿ªÊ¼:×÷Õ½")
+            if self.task["åŠŸèƒ½0"]:
+                self.indicate("å¼€å§‹:ä½œæˆ˜")
                 if self.kleins_fight():
                     _k = True
-                self.indicate("Íê³É:×÷Õ½")
-            if self.task["¹¦ÄÜ1"]:
-                self.indicate("¿ªÊ¼:ÏßÏÂ²É¹º")
+                self.indicate("å®Œæˆ:ä½œæˆ˜")
+            if self.task["åŠŸèƒ½1"]:
+                self.indicate("å¼€å§‹:çº¿ä¸‹é‡‡è´­")
                 self.kleins_dispatch()
-                self.indicate("Íê³É:ÏßÏÂ²É¹º")
-            if self.task["¹¦ÄÜ2"]:
-                self.indicate("¿ªÊ¼:Õ½Êõ»Ø¹Ë")
+                self.indicate("å®Œæˆ:çº¿ä¸‹é‡‡è´­")
+            if self.task["åŠŸèƒ½2"]:
+                self.indicate("å¼€å§‹:æˆ˜æœ¯å›é¡¾")
                 self.kleins_review()
-                self.indicate("Íê³É:Õ½Êõ»Ø¹Ë")
-            if self.task["¹¦ÄÜ3"]:
-                self.indicate("¿ªÊ¼:¼¯ÊĞÁìÈ¡")
+                self.indicate("å®Œæˆ:æˆ˜æœ¯å›é¡¾")
+            if self.task["åŠŸèƒ½3"]:
+                self.indicate("å¼€å§‹:é›†å¸‚é¢†å–")
                 self.kleins_get_market()
-                self.indicate("Íê³É:¼¯ÊĞÁìÈ¡")
-            if self.task["¹¦ÄÜ4"]:
-                self.indicate("¿ªÊ¼:ÉáÓÑ·ÃÄ¼")
+                self.indicate("å®Œæˆ:é›†å¸‚é¢†å–")
+            if self.task["åŠŸèƒ½4"]:
+                self.indicate("å¼€å§‹:èˆå‹è®¿å‹Ÿ")
                 self.kleins_recruit()
-                self.indicate("Íê³É:ÉáÓÑ·ÃÄ¼")
-            if self.task["¹¦ÄÜ5"]:
-                self.indicate("¿ªÊ¼:½ñÈÕ¹¤×÷")
+                self.indicate("å®Œæˆ:èˆå‹è®¿å‹Ÿ")
+            if self.task["åŠŸèƒ½5"]:
+                self.indicate("å¼€å§‹:ä»Šæ—¥å·¥ä½œ")
                 self.kleins_reward()
-                self.indicate("Íê³É:½ñÈÕ¹¤×÷")
-            if self.task["¹¦ÄÜ6"]:
-                self.indicate("¿ªÊ¼:¿¨ÃÅÉÌÍø")
+                self.indicate("å®Œæˆ:ä»Šæ—¥å·¥ä½œ")
+            if self.task["åŠŸèƒ½6"]:
+                self.indicate("å¼€å§‹:å¡é—¨å•†ç½‘")
                 self.kleins_market_network()
-                self.indicate("Íê³É:¿¨ÃÅÉÌÍø")
-            if self.task["¹¦ÄÜ7"]:
-                self.indicate("¿ªÊ¼:ÁìÈ¡ÓÊ¼ş")
+                self.indicate("å®Œæˆ:å¡é—¨å•†ç½‘")
+            if self.task["åŠŸèƒ½7"]:
+                self.indicate("å¼€å§‹:é¢†å–é‚®ä»¶")
                 self.kleins_get_mail()
-                self.indicate("Íê³É:ÁìÈ¡ÓÊ¼ş")
-            if self.task["¹¦ÄÜ8"]:
-                self.indicate("¿ªÊ¼:³é¿¨ÀúÊ·")
+                self.indicate("å®Œæˆ:é¢†å–é‚®ä»¶")
+            if self.task["åŠŸèƒ½8"]:
+                self.indicate("å¼€å§‹:æŠ½å¡å†å²")
                 self.kleins_get_roll()
-                self.indicate("Íê³É:³é¿¨ÀúÊ·")
+                self.indicate("å®Œæˆ:æŠ½å¡å†å²")
         except Exception:
-            self.indicate("ÈÎÎñÖ´ĞĞÒì³£:»·ĞĞÂÃÉá", log=False)
-            logger.error("ÈÎÎñÖ´ĞĞÒì³£:»·ĞĞÂÃÉá\n%s" % traceback.format_exc())
+            self.indicate("ä»»åŠ¡æ‰§è¡Œå¼‚å¸¸:ç¯è¡Œæ—…èˆ", log=False)
+            logger.error("ä»»åŠ¡æ‰§è¡Œå¼‚å¸¸:ç¯è¡Œæ—…èˆ\n%s" % format_exc())
             _k = True
         env.OCR.disable()
-        if self.task["¹Ø±ÕÈí¼ş"]:
-            self.indicate("³¢ÊÔ¹Ø±ÕÓÎÏ·")
+        if self.task["å…³é—­è½¯ä»¶"]:
+            self.indicate("å°è¯•å…³é—­æ¸¸æˆ")
             s, n = 15, 2
             if env.soft.kill(s, n):
-                self.indicate("ÓÎÏ·ÒÑ¹Ø±Õ")
+                self.indicate("æ¸¸æˆå·²å…³é—­")
             else:
-                self.indicate(f"error:ÓÎÏ·¹Ø±Õ³¬Ê±£¨{s * n}s£©")
+                self.indicate(f"error:æ¸¸æˆå…³é—­è¶…æ—¶ï¼ˆ{s * n}sï¼‰")
                 raise RuntimeError("kleins exit error")
-        self.indicate("Íê³ÉÈÎÎñ:»·ĞĞÂÃÉá")
+        self.indicate("å®Œæˆä»»åŠ¡:ç¯è¡Œæ—…èˆ")
         return _k
 
     def kleins_launch(self):
-        # Â·¾¶ĞŞÕı
-        env.set_soft(None, (1, "UnityWndClass", "»·ĞĞÂÃÉá"))
-        _path = self.task["Æô¶¯"]["game"]
-        if os.path.isfile(_path):
-            dire, name = os.path.split(_path)
-            if name == "»·ĞĞÂÃÉá.exe":
+        # è·¯å¾„ä¿®æ­£
+        env.set_soft(None, (1, "UnityWndClass", "ç¯è¡Œæ—…èˆ"))
+        _path = self.task["å¯åŠ¨"]["game"]
+        if isfile(_path):
+            dire, name = split(_path)
+            if name == "ç¯è¡Œæ—…èˆ.exe":
                 env.soft.set_path(_path)
             elif name == "kleins.exe":
-                path = dire + "/Games/»·ĞĞÂÃÉá.exe"
-                if os.path.isfile(path):
+                path = dire + "/Games/ç¯è¡Œæ—…èˆ.exe"
+                if isfile(path):
                     env.soft.set_path(path)
                 else:
-                    self.indicate("»·ĞĞÂÃÉá£¬ÎŞĞ§Æô¶¯Â·¾¶")
+                    self.indicate("ç¯è¡Œæ—…èˆï¼Œæ— æ•ˆå¯åŠ¨è·¯å¾„")
                     return 3
             else:
-                self.indicate("»·ĞĞÂÃÉá£¬ÎŞĞ§Æô¶¯Â·¾¶")
+                self.indicate("ç¯è¡Œæ—…èˆï¼Œæ— æ•ˆå¯åŠ¨è·¯å¾„")
                 return 3
         else:
-            self.indicate("»·ĞĞÂÃÉá£¬ÎŞĞ§Æô¶¯Â·¾¶")
+            self.indicate("ç¯è¡Œæ—…èˆï¼Œæ— æ•ˆå¯åŠ¨è·¯å¾„")
             return 3
-        # Æô¶¯ÓÎÏ·
+        # å¯åŠ¨æ¸¸æˆ
         cond = env.soft.run()
         if cond == 2:
-            self.indicate("ÓÎÏ·Æô¶¯³É¹¦")
-            self.indicate("µÈ´ı¼ÓÔØ,10Ãëºó¿ªÊ¼Ê¶±ğÓÎÏ·×´Ì¬")
+            self.indicate("æ¸¸æˆå¯åŠ¨æˆåŠŸ")
+            self.indicate("ç­‰å¾…åŠ è½½,10ç§’åå¼€å§‹è¯†åˆ«æ¸¸æˆçŠ¶æ€")
             wait(1000)
             env.soft.foreground()
             wait(9000)
         elif cond == 1:
-            self.indicate("ÓÎÏ·ÔçÒÑÆô¶¯")
+            self.indicate("æ¸¸æˆæ—©å·²å¯åŠ¨")
             env.soft.foreground()
             wait(1000)
         elif cond == 0:
-            self.indicate("ÓÎÏ·Æô¶¯³¬Ê±")
+            self.indicate("æ¸¸æˆå¯åŠ¨è¶…æ—¶")
             return 3
         env.mode(1)
 
     def kleins_log(self, second: int):
-        # µÇÂ¼&½øÈëÓÎÏ·
-        self.indicate("¿ªÊ¼Ê¶±ğÓÎÏ·×´Ì¬")
-        server = self.task["Æô¶¯"]["server"]
+        # ç™»å½•&è¿›å…¥æ¸¸æˆ
+        self.indicate("å¼€å§‹è¯†åˆ«æ¸¸æˆçŠ¶æ€")
+        server = self.task["å¯åŠ¨"]["server"]
         net = 1
         for i in range(second):
-            sc = screenshot()
+            sc = scshot()
             if server == 0:
-                if "¿ªÊ¼ÓÎÏ·" in ocr((870, 611, 1050, 655), sc)[0].replace(" ", ""):
+                if "å¼€å§‹æ¸¸æˆ" in ocr((870, 611, 1050, 655), sc)[0].replace(" ", ""):
                     wait(300)
                     click((930, 630))
-                    self.indicate("µÇÂ¼ÓÎÏ·")
+                    self.indicate("ç™»å½•æ¸¸æˆ")
                     wait(5000)
-                    os.remove(sc)
-                    sc = screenshot()
+                    sc = scshot()
             elif server == 1:
-                if "µÇÂ¼ÕËºÅ" in ocr((870, 611, 1050, 655), sc)[0].replace(" ", ""):
+                if "ç™»å½•è´¦å·" in ocr((870, 611, 1050, 655), sc)[0].replace(" ", ""):
                     wait(300)
                     click((960, 633))
-                    self.indicate("µÇÂ¼ÕËºÅ")
+                    self.indicate("ç™»å½•è´¦å·")
                     wait(1500)
-                    os.remove(sc)
-                    sc = screenshot()
+                    sc = scshot()
                 if find_pic(r"assets\kleins\picture\login2.png", (853, 369, 1055, 461), sc)[1] >= 0.6:
                     click((958, 679))
-                    self.indicate("µÇÂ¼ÓÎÏ·")
+                    self.indicate("ç™»å½•æ¸¸æˆ")
                     wait(5000)
-                    os.remove(sc)
-                    sc = screenshot()
-            if "Ç©µ½½±Àø" in ocr((832, 211, 1090, 313), sc)[0].replace(" ", ""):  # Ç©µ½½±Àø
+                    sc = scshot()
+            if "ç­¾åˆ°å¥–åŠ±" in ocr((832, 211, 1090, 313), sc)[0].replace(" ", ""):  # ç­¾åˆ°å¥–åŠ±
                 click((1469, 551))
                 wait(1500)
                 click((1789, 120))
-                self.indicate("Ç©µ½³É¹¦")
+                self.indicate("ç­¾åˆ°æˆåŠŸ")
                 wait(1000)
-                os.remove(sc)
-                sc = screenshot()
-            _p, sim = find_pic("assets/kleins/picture/close/close2.png", search_path=sc)
+                sc = scshot()
+            _p, sim = find_pic("assets/kleins/picture/close/close2.png", big_pic=sc)
             if sim >= 0.6:
                 click(_p)
                 wait(1500)
-                os.remove(sc)
-                sc = screenshot()
+                sc = scshot()
             if find_pic("assets/kleins/picture/home.png", (1739, 37, 1814, 98), sc)[1] >= 0.7:
                 wait(1500)
-                os.remove(sc)
-                sc = screenshot()
+                sc = scshot()
                 if find_pic("assets/kleins/picture/home.png", (1739, 37, 1814, 98), sc)[1] >= 0.7:
-                    self.indicate("¼ÓÔØµ½Ö÷½çÃæ")
-                    os.remove(sc)
+                    self.indicate("åŠ è½½åˆ°ä¸»ç•Œé¢")
+                    del sc
                     return 0
             if find_pic("assets/kleins/picture/rehome.png", (238, 27, 355, 105), sc)[1] >= 0.7:
                 click((295, 69))
                 wait(1500)
-                os.remove(sc)
-                self.indicate("¼ÓÔØµ½Ö÷½çÃæ")
+                del sc
+                self.indicate("åŠ è½½åˆ°ä¸»ç•Œé¢")
                 return 0
-            if "ÍøÂçÁ¬½Ó³¬Ê±" in ocr((748, 448, 1183, 524), sc)[0].replace(" ", ""):
-                self.indicate(f"error: ÍøÂçÁ¬½Ó³¬Ê±({net}´Î)")
+            if "ç½‘ç»œè¿æ¥è¶…æ—¶" in ocr((748, 448, 1183, 524), sc)[0].replace(" ", ""):
+                self.indicate(f"error: ç½‘ç»œè¿æ¥è¶…æ—¶({net}æ¬¡)")
                 if net < 4:
                     net += 1
                     click((1063, 710))
                     wait(10000)
                 else:
-                    os.remove(sc)
-                    raise RuntimeError("»·ĞĞÂÃÉá:ÍøÂçÁ¬½Ó³¬Ê±¶à´Î")
-            os.remove(sc)
+                    del sc
+                    raise RuntimeError("ç¯è¡Œæ—…èˆ:ç½‘ç»œè¿æ¥è¶…æ—¶å¤šæ¬¡")
+            del sc
             wait(1500)
-        raise RuntimeError("»·ĞĞÂÃÉá:Ê¶±ğÓÎÏ·×´Ì¬³¬Ê±")
+        raise RuntimeError("ç¯è¡Œæ—…èˆ:è¯†åˆ«æ¸¸æˆçŠ¶æ€è¶…æ—¶")
 
 
 if __name__ == '__main__':

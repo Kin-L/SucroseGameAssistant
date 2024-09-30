@@ -1,10 +1,11 @@
 from .main_up import MainUp
 from tools.environment import *
-import sys
+from sys import exit as sysexit
+from os import startfile
 from tools.software import *
 from PyQt5.QtGui import QPixmap
-import traceback
-import webbrowser
+from traceback import format_exc
+from webbrowser import open as weopen
 
 
 class MainTop(MainUp):
@@ -37,16 +38,18 @@ class MainTop(MainUp):
         self.overall.button_update.clicked.connect(self.load_update)
         self.overall.timer.delete.clicked.connect(self.timer_delete)
 
-        self.overall.button_update_history.clicked.connect(lambda: os.startfile(env.workdir + "/update_history.txt"))
-        self.overall.button_logger.clicked.connect(lambda: os.startfile(env.workdir + "/personal/logs"))
-        self.overall.button_github.clicked.connect(lambda: webbrowser.open("https://github.com/Kin-L/SucroseGameAssistant"))
-        self.overall.button_gitee.clicked.connect(lambda: webbrowser.open("https://gitee.com/huixinghen/SucroseGameAssistant"))
-        self.overall.button_bilibili.clicked.connect(lambda: webbrowser.open("https://space.bilibili.com/406315493"))
+        self.overall.button_update_history.clicked.connect(lambda: startfile(env.workdir + "/update_history.txt"))
+        self.overall.button_logger.clicked.connect(lambda: startfile(env.workdir + "/personal/logs"))
+        self.overall.button_github.clicked.connect(lambda: weopen("https://github.com/Kin-L/SucroseGameAssistant"))
+        self.overall.button_gitee.clicked.connect(lambda: weopen("https://gitee.com/huixinghen/SucroseGameAssistant"))
+        self.overall.button_bilibili.clicked.connect(lambda: weopen("https://space.bilibili.com/406315493"))
         # 配置操作
         self.button_config_delete.clicked.connect(self.delete_plan)
-        self.box_config_change.currentTextChanged.connect(self.config_change)
+        self.box_config_change.currentIndexChanged.connect(self.config_change)
+        self.box_config_change.editingFinished.connect(self.config_rename)
         self.button_config_lock.clicked.connect(lambda: self.set_config_lock(False))
         self.button_config_unlock.clicked.connect(lambda: self.set_config_lock(True))
+
         self.button_config_save.clicked.connect(self.save_config)
         self.button_start.clicked.connect(self.start)
         self.button_pause.clicked.connect(self.pause)
@@ -96,8 +99,8 @@ class MainTop(MainUp):
             self.kill.start()
             self.sga_run.start()
         except Exception:
-            logger.error("手动开始异常:\n%s\n" % traceback.format_exc())
-            sys.exit(1)
+            logger.error("手动开始异常:\n%s\n" % format_exc())
+            sysexit(1)
 
     def pause(self):
         # noinspection PyBroadException
@@ -112,5 +115,5 @@ class MainTop(MainUp):
             self.button_start.show()
             self.label_status.setPixmap(pixmap)
         except Exception:
-            logger.error("手动终止线程异常:\n%s\n" % traceback.format_exc())
-            sys.exit(1)
+            logger.error("手动终止线程异常:\n%s\n" % format_exc())
+            sysexit(1)

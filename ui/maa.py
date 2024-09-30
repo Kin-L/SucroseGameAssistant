@@ -1,20 +1,19 @@
-# -*- coding:gbk -*-
-import os
-import json
+from json import load
+from os.path import split, isfile
 from ui.element.control import *
 from ui.element.ui_part import Independent
-import webbrowser
+from webbrowser import open as weopen
 from tools.system import check_path
 
 
 class MAAList:
     def __init__(self, widget, location):
-        # ÔËĞĞÁĞ±í´°¿Ú
+        # è¿è¡Œåˆ—è¡¨çª—å£
         self.scroll_list = Widget(widget, location)
         self.label_maa = Label(self.scroll_list, (100, 10, 80, 20), "MAA", 18)
         Line(widget, (215, 5, 3, 505), False)
 
-        self.label_choose = Label(self.scroll_list, (5, 45, 110, 27), "Ñ¡ÔñMAA·½°¸")
+        self.label_choose = Label(self.scroll_list, (5, 45, 110, 27), "é€‰æ‹©MAAæ–¹æ¡ˆ")
         self.refresh = (
             TransPicButton(self.scroll_list, (110, 50, 20, 20),
                            "assets/main_window/ui/refresh.png", (20, 20)))
@@ -23,28 +22,28 @@ class MAAList:
 
 class MAAStack:
     def __init__(self, widget, location):
-        # ¹¦ÄÜ¶Ñµş´°¿Ú
+        # åŠŸèƒ½å †å çª—å£
         self.stack = Stack(widget, location)
-        # ¹¦ÄÜ¶Ñµş´°¿Ú
+        # åŠŸèƒ½å †å çª—å£
         self.stack = Widget(self.stack, (0, 0, 395, 515))
-        self.label_local = Label(self.stack, (0, 12, 220, 18), "ÉèÖÃÒ³Ãæ£ºMAA ÔËĞĞ·½Ê½")
+        self.label_local = Label(self.stack, (0, 12, 220, 18), "è®¾ç½®é¡µé¢ï¼šMAA è¿è¡Œæ–¹å¼")
         Line(self.stack, (0, 41, 395, 3))
 
-        self.label_maa_overall = Label(self.stack, (0, 45, 180, 27), "È«¾ÖÉèÖÃ£º")
+        self.label_maa_overall = Label(self.stack, (0, 45, 180, 27), "å…¨å±€è®¾ç½®ï¼š")
 
-        self.label_start = Label(self.stack, (0, 80, 80, 27), "Æô¶¯Â·¾¶")
+        self.label_start = Label(self.stack, (0, 80, 80, 27), "å¯åŠ¨è·¯å¾„")
         self.line_start = Lineedit(self.stack, (0, 110, 385, 33))
         Line(self.stack, (0, 152, 395, 3))
 
-        self.label_team_tip = Label(self.stack, (0, 160, 220, 27), "¶ÀÁ¢ÔËĞĞÉèÖÃ£º")
+        self.label_team_tip = Label(self.stack, (0, 160, 220, 27), "ç‹¬ç«‹è¿è¡Œè®¾ç½®ï¼š")
         self.independent = Independent(self.stack, (0, 200, 360, 70), True)
-        self.independent.check_kill_game.setText("Íê³Éºó¹Ø±ÕÃ÷ÈÕ·½ÖÛ")
+        self.independent.check_kill_game.setText("å®Œæˆåå…³é—­æ˜æ—¥æ–¹èˆŸ")
         Line(self.stack, (0, 280, 395, 3))
-        self.label_tools = Label(self.stack, (0, 285, 220, 27), "ÊµÓÃ¹¤¾ß£º")
+        self.label_tools = Label(self.stack, (0, 285, 220, 27), "å®ç”¨å·¥å…·ï¼š")
         self.button_wiki = Button(self.stack, (0, 320, 70, 30), "BWIKI")
-        self.button_mat = Button(self.stack, (80, 320, 70, 30), "Ò»Í¼Á÷")
-        self.button_turns = Button(self.stack, (160, 320, 100, 30), "ÅÅ°àÉú³ÉÆ÷")
-        self.button_maa = Button(self.stack, (270, 320, 90, 30), "MAAÏÂÔØ")
+        self.button_mat = Button(self.stack, (80, 320, 70, 30), "ä¸€å›¾æµ")
+        self.button_turns = Button(self.stack, (160, 320, 100, 30), "æ’ç­ç”Ÿæˆå™¨")
+        self.button_maa = Button(self.stack, (270, 320, 90, 30), "MAAä¸‹è½½")
 
 
 class MAA:
@@ -72,36 +71,36 @@ class MAA:
     def refresh(self):
         self.main.indicate("", 1)
         _path = self.set.line_start.text().strip("\"")
-        if os.path.isfile(_path):
-            gui_path = os.path.split(_path)[0] + "/config/gui.json"
+        if isfile(_path):
+            gui_path = split(_path)[0] + "/config/gui.json"
             with open(gui_path, 'r', encoding='utf-8') as g:
-                maa = json.load(g)
+                maa = load(g)
             _list = list(maa["Configurations"].keys())
             if "SGA-cache" in _list:
                 _list.remove("SGA-cache")
             self.list.combox.clear()
             self.list.combox.addItems(_list)
-        self.main.indicate("MAAÅäÖÃÁĞ±íÒÑË¢ĞÂ", 3)
+        self.main.indicate("MAAé…ç½®åˆ—è¡¨å·²åˆ·æ–°", 3)
 
     def open_wiki(self):
         self.main.indicate("", 1)
-        webbrowser.open("https://wiki.biligame.com/arknights/%E9%A6%96%E9%A1%B5")
-        self.main.indicate("´ò¿ªÍøÒ³: Ã÷ÈÕ·½ÖÛ BWIKI", 3)
+        weopen("https://wiki.biligame.com/arknights/%E9%A6%96%E9%A1%B5")
+        self.main.indicate("æ‰“å¼€ç½‘é¡µ: æ˜æ—¥æ–¹èˆŸ BWIKI", 3)
 
     def open_yituliu(self):
         self.main.indicate("", 1)
-        webbrowser.open("https://ytl.viktorlab.cn/")
-        self.main.indicate("´ò¿ªÍøÒ³: Ò»Í¼Á÷", 3)
+        weopen("https://ytl.viktorlab.cn/")
+        self.main.indicate("æ‰“å¼€ç½‘é¡µ: ä¸€å›¾æµ", 3)
 
     def open_turns(self):
         self.main.indicate("", 1)
-        webbrowser.open("https://ytl.viktorlab.cn/tools/schedule")
-        self.main.indicate("´ò¿ªÍøÒ³: ÅÅ°àÉú³ÉÆ÷", 3)
+        weopen("https://ytl.viktorlab.cn/tools/schedule")
+        self.main.indicate("æ‰“å¼€ç½‘é¡µ: æ’ç­ç”Ÿæˆå™¨", 3)
 
     def open_maa(self):
         self.main.indicate("", 1)
-        webbrowser.open("https://maa.plus/")
-        self.main.indicate("´ò¿ªÍøÒ³: MAA¹ÙÍø", 3)
+        weopen("https://maa.plus/")
+        self.main.indicate("æ‰“å¼€ç½‘é¡µ: MAAå®˜ç½‘", 3)
 
     def load_run(self, run):
         _dir = {
@@ -116,39 +115,39 @@ class MAA:
 
     def input_config(self, _dir):
         config = {
-            "Ä£¿é": 3,
-            "¾²Òô": False,
-            "¹Ø±ÕÈí¼ş": False,
-            "Íê³Éºó": 0,
-            "SGA¹Ø±Õ": False,
-            "ÅäÖÃÁĞ±í": [""],
-            "ÅäÖÃ": ""
+            "æ¨¡å—": 3,
+            "é™éŸ³": False,
+            "å…³é—­è½¯ä»¶": False,
+            "å®Œæˆå": 0,
+            "SGAå…³é—­": False,
+            "é…ç½®åˆ—è¡¨": [""],
+            "é…ç½®": ""
         }
         config.update(_dir)
-        self.set.independent.check_mute.setChecked(config["¾²Òô"])
-        self.set.independent.check_kill_game.setChecked(config["¹Ø±ÕÈí¼ş"])
-        self.set.independent.combo_after.setCurrentIndex(config["Íê³Éºó"])
-        self.set.independent.check_kill_sga.setChecked(config["SGA¹Ø±Õ"])
-        self.list.combox.addItems(config["ÅäÖÃÁĞ±í"])
+        self.set.independent.check_mute.setChecked(config["é™éŸ³"])
+        self.set.independent.check_kill_game.setChecked(config["å…³é—­è½¯ä»¶"])
+        self.set.independent.combo_after.setCurrentIndex(config["å®Œæˆå"])
+        self.set.independent.check_kill_sga.setChecked(config["SGAå…³é—­"])
+        self.list.combox.addItems(config["é…ç½®åˆ—è¡¨"])
         # noinspection PyBroadException
         try:
-            self.list.combox.setCurrentText(config["ÅäÖÃ"])
+            self.list.combox.setCurrentText(config["é…ç½®"])
         except Exception:
             self.list.combox.setCurrentIndex(0)
 
     def output_config(self):
         config = dict()
-        config["Ä£¿é"] = 3
-        config["¾²Òô"] = self.set.independent.check_mute.isChecked()
-        config["¹Ø±ÕÈí¼ş"] = self.set.independent.check_kill_game.isChecked()
-        config["Íê³Éºó"] = self.set.independent.combo_after.currentIndex()
-        config["SGA¹Ø±Õ"] = self.set.independent.check_kill_sga.isChecked()
+        config["æ¨¡å—"] = 3
+        config["é™éŸ³"] = self.set.independent.check_mute.isChecked()
+        config["å…³é—­è½¯ä»¶"] = self.set.independent.check_kill_game.isChecked()
+        config["å®Œæˆå"] = self.set.independent.combo_after.currentIndex()
+        config["SGAå…³é—­"] = self.set.independent.check_kill_sga.isChecked()
 
-        config["ÅäÖÃ"] = self.list.combox.currentText()
+        config["é…ç½®"] = self.list.combox.currentText()
         _num = self.list.combox.count()
         _list = []
         for i in range(_num):
             _list += [self.list.combox.itemText(i)]
         _item = self.list.combox.count()
-        config["ÅäÖÃÁĞ±í"] = _list
+        config["é…ç½®åˆ—è¡¨"] = _list
         return config
