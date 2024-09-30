@@ -84,6 +84,7 @@ class Genshin:
             "晶蝶2": False,
             "晶蝶3": False,
             "晶蝶4": False,
+            "每日奖励":False,
             "砍树次数": 0,
             "砍树0": False,
             "砍树1": False,
@@ -150,6 +151,8 @@ class Genshin:
         self.set.fly3.setChecked(config["晶蝶3"])
         self.set.fly4.setChecked(config["晶蝶4"])
 
+        self.set.daily_gift.setChecked(config["每日奖励"])
+
         self.set.CompactSpinBox.setValue(config["砍树次数"])
         self.set.tree0.setChecked(config["砍树0"])
         self.set.tree1.setChecked(config["砍树1"])
@@ -212,6 +215,8 @@ class Genshin:
         config["晶蝶2"] = self.set.fly2.isChecked()
         config["晶蝶3"] = self.set.fly3.isChecked()
         config["晶蝶4"] = self.set.fly4.isChecked()
+
+        config["每日奖励"] = self.set.daily_gift.isChecked()
 
         config["砍树次数"] = self.set.CompactSpinBox.value()
         config["砍树0"] = self.set.tree0.isChecked()

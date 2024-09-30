@@ -9,12 +9,17 @@ class Genshin(Task):
     def tp_fontaine1(self):
         self.home()
         self.indicate("前往枫丹:\n  枫丹廷凯瑟琳锚点")
-        self.tp_domain("深潮的余响")
-        clickto((1107, 786), 800, ("传送", (1320, 710, 1513, 988), 0))
+        self.open_sub("地图")
+        click((1839,1012)) #点击区域选择
+        wait(800)
+        click((1436,341)) #点击枫丹
+        wait(1000)
+        click((955,536)) #点击传送点
+        wait(1000)
         self.tp_point()
         self.indicate("到达枫丹:\n  枫丹廷凯瑟琳锚点")
-        
-    # 打开主界面
+
+    # 打开esc主界面
     def home(self):
         m = 0
         while m >= 0:
@@ -28,22 +33,23 @@ class Genshin(Task):
                 self.indicate("error:打开主界面超时\n")
                 raise RuntimeError("原神:打开主界面超时")
 
+    #检查游戏是否登录成功
     def world(self):
         i = 1
         while i > 0:
             i += 1
             wait(1000)
-            pos, val = find_pic(r"assets\genshin\picture\world.png", (57, 998, 179, 1075))
+            pos, val = find_pic(r"assets\genshin\picture\world.png", (25, 998, 179, 1075))
             if val >= 0.6:
                 i = 0
-                self.indicate("加载到世界")
+                self.indicate("已加载到世界")
             elif i == 90:
                 self.indicate("error:加载世界超时\n")
                 raise RuntimeError("原神:加载世界超时")
 
     # 从主界面打开子界面
     def open_sub(self, cho):
-        if click_text(cho, (117, 346, 742, 1052), once=False):
+        if click_text(cho, (117, 346, 742, 1052)):
             self.indicate("打开" + cho)
             wait(2500)
             return True
@@ -110,11 +116,12 @@ class Genshin(Task):
         else:
             return True
 
+    #打开ESC菜单
     def turn_world(self):
         m = 0
         while m >= 0:
             m += 1
-            pos, val = find_pic(r"assets\genshin\picture\world.png", (57, 998, 179, 1075))
+            pos, val = find_pic(r"assets\genshin\picture\world.png", (25, 998, 179, 1075))
             if val >= 0.6:
                 m = -1
             else:

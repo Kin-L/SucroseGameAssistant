@@ -140,7 +140,7 @@ class Concentrate:
         stack.addWidget(self.page_concentrate)
         # 添加控件
         self.label_concentrate = Label(self.page_concentrate, (0, 12, 180, 18), "设置页面：浓缩树脂")
-        self.label_concentrate_tip = Label(self.page_concentrate, (90, 80, 220, 27), "浓缩树脂 暂无配置项目。")
+        self.daily_gift = Check(self.page_concentrate, (0, 50, 400, 25), "领取凯瑟琳每日任务奖励（合成树脂四个以上）")
 
 
 class Pot:
@@ -197,17 +197,17 @@ class Tree:
 domain_dir = {
     "圣遗物":
         ["仲夏庭园", "铭记之谷", "孤云凌霄之处",
-            "无妄引咎密宫", "华池岩岫", "芬德尼尔之顶",
-            "山脊守望", "椛染之庭", "沉眠之庭",
-            "岩中幽谷", "缘觉塔", "赤金的城墟",
-            "熔铁的孤塞", "罪祸的终末", 
-            "临瀑之城", "虹灵的净土"],
+         "无妄引咎密宫", "华池岩岫", "芬德尼尔之顶",
+         "山脊守望", "椛染之庭", "沉眠之庭",
+         "岩中幽谷", "缘觉塔", "赤金的城墟",
+         "熔铁的孤塞", "罪祸的终末",
+         "临瀑之城", "虹灵的净土"],
     "天赋培养素材":
         ["忘却之峡", "太山府", "菫色之庭",
-            "昏识塔", "苍白的遗荣", "蕴火的幽墟"],
+         "昏识塔", "苍白的遗荣", "蕴火的幽墟"],
     "武器突破素材":
         ["塞西莉亚苗圃", "震雷连山密宫", "砂流之庭",
-            "有顶塔", "深潮的余响", "深古瞭望所"]}
+         "有顶塔", "深潮的余响", "深古瞭望所"]}
 
 
 class Domain:
@@ -240,7 +240,7 @@ class Domain:
 
     @staticmethod
     def open_BGI():
-        weopen("https://bgi.huiyadan.com/")
+        weopen.open("https://bgi.huiyadan.com/")
 
 
 class Pass:
