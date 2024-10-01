@@ -69,9 +69,8 @@ class Daily(Task):
                     click_text("开始", (858, 801, 1072, 875))
                     wait_text("完成", (929, 965, 1041, 1028))
                     self.indicate(f"完成个人故事扫荡 {i}")
-                    click_change((932, 993), (929, 965, 1041, 1028))
-                    wait(500)
-            click_change((1668, 49), (1646, 24, 1697, 72))
+                    press_to_pic("esc", r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+            click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
             wait(500)
         if self.task["拟境扫荡"]:
             click_change((1690, 470), (1552, 468, 1626, 515))
@@ -100,11 +99,9 @@ class Daily(Task):
                 click_change((137, 914), (107, 883, 179, 948))
                 click_change((1742, 1001), (1670, 971, 1830, 1022))
                 wait_text("获得道具", (809, 40, 1113, 147))
-                click_change((1383, 502), (809, 40, 1113, 147))
                 self.indicate("领取评测奖励")
-                click_change((1862, 87), (1846, 67, 1884, 105))
-                wait(500)
-            click_change((1668, 49), (1646, 24, 1697, 72))
+                press_to_pic("esc", r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+            click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
             wait(500)
         if self.task["商店购物"][0]:
             click_text("商店", (1756, 997, 1852, 1061))
@@ -146,7 +143,7 @@ class Daily(Task):
             click_change(pos, (1691, 981, 1818, 1053))
             wait_text("升", (869, 323, 1051, 408))
             self.indicate("武器升级一次")
-            click_change((1668, 49), (1646, 24, 1697, 72))
+            click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
             click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
             wait(500)
         if self.task["领取日常"]:
@@ -161,9 +158,8 @@ class Daily(Task):
             pos = find_text("领取", (55, 973, 197, 1023))
             if pos:
                 click_change(pos, (18, 952, 242, 1040))
-                wait_text("获得道具", (809, 40, 1113, 147))
-                self.indicate("领取日常奖励")
-                click_change(pos, (809, 40, 1113, 147))
+                click_to_pic(pos, r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+                self.indicate("领取周常奖励")
             click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
             wait(500)
         if self.task["领取凭证"] and find_color("yellow", (379, 557, 387, 566))[1]:

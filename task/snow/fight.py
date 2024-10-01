@@ -44,7 +44,7 @@ class Fight(Task):
                 wait(600)
                 click_change((1356, 837), (1257, 804, 1413, 864))
                 wait_text("获得道具", (809, 40, 1113, 147))
-                click_change((1383, 502), (930, 471, 985, 543))
+                press_to_text("esc", "任务", (1458, 330, 1529, 379))
                 self.indicate(f"使用限时试剂(中)")
                 used = True
             yt = ocr((558, 309, 778, 378), sc)[0]
@@ -57,7 +57,7 @@ class Fight(Task):
                 wait(600)
                 click_change((1356, 837), (1257, 804, 1413, 864))
                 wait_text("获得道具", (809, 40, 1113, 147))
-                click_change((1383, 502), (930, 471, 985, 543))
+                press_to_text("esc", "任务", (1458, 330, 1529, 379))
                 self.indicate(f"使用限时试剂(大)")
                 used = True
             if not used:
