@@ -5,6 +5,7 @@ from json import dump, load
 from tools.environment import *
 from traceback import format_exc
 from os import rename
+import sys
 
 
 # 加载主窗口和函数

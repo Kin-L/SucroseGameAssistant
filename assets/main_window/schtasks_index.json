@@ -42,9 +42,9 @@
   "  </Settings>\n",
   "  <Actions Context=\"Author\">\n",
   "    <Exec>\n",
-  "      <Command>D:\\Kin-project\\python-SGA/assets/main_window/bat_scr/start-SGA.vbs</Command>\n",
+  "      <Command>D:\\Kin-project\\SucroseGameAssistant/personal/bat/start-SGA.vbs</Command>\n",
   "      <Arguments>C:\\Windows\\System32\\wscript.exe</Arguments>\n",
-  "      <WorkingDirectory>D:\\Kin-project\\python-SGA/assets/main_window/bat_scr</WorkingDirectory>\n",
+  "      <WorkingDirectory>D:\\Kin-project\\SucroseGameAssistant/personal/bat</WorkingDirectory>\n",
   "    </Exec>\n",
   "  </Actions>\n",
   "</Task>"

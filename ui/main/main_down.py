@@ -6,6 +6,7 @@ from os import listdir, makedirs
 from time import localtime
 from datetime import datetime
 from tools.software import find_hwnd, close, get_pid
+from random import randint
 
 
 class MainDown(MainBottom):
@@ -55,6 +56,14 @@ class MainDown(MainBottom):
                 self.indicate("主配置文件损坏,从备份中恢复")
             self.config.update(config)
         # 获取设置及分类
+        if not exists("personal/config"):
+            makedirs("personal/config")
+        _listdir = listdir("personal/config")
+        if not _listdir:
+            newname = "默认配置" + str(randint(999, 10000))
+            copyfile(r"assets\main_window\default_config.json",
+                     r"personal\config\00%s.json" % newname)
+            _listdir = listdir("personal/config")
         for file in listdir("personal/config"):
             name, suffix = splitext(file)
             if suffix == ".json":
@@ -84,8 +93,6 @@ class MainDown(MainBottom):
             config_list += [self.box_config_change.itemText(i)]
         if _text in config_list:
             self.box_config_change.setCurrentText(_text)
-            # print(self.box_config_change.currentText())
-            # print(self.box_config_change.currentIndex())
             self.state["text"] = _text
             self.state["index"] = self.box_config_change.currentIndex()
         else:
@@ -98,10 +105,12 @@ class MainDown(MainBottom):
         if env.workdir != self.config["work_path"]:
             if not exists("cache"):
                 makedirs("cache")
+            if not exists("personal/bat"):
+                makedirs("personal/bat")
             self.config["work_path"] = env.workdir
             vbs_dir = "%s/personal/bat" % env.workdir
             vbs_path = "%s/personal/bat/start-SGA.vbs" % env.workdir
-            with open("personal/schtasks_index.json", 'r', encoding='utf-8') as m:
+            with open("assets/main_window/schtasks_index.json", 'r', encoding='utf-8') as m:
                 xml_dir = load(m)
             xml_list = xml_dir["part2"]
             xml_list[32] = "      <Command>" + vbs_path + "</Command>\n"
@@ -110,7 +119,7 @@ class MainDown(MainBottom):
             with open("personal/schtasks_index.json", 'w', encoding='utf-8') as x:
                 dump(xml_dir, x, ensure_ascii=False, indent=1)
 
-            f = open("personal/bat/start-SGA.bat", 'r', encoding='utf-8')
+            f = open("assets/main_window/bat_scr/start-SGA.bat", 'r', encoding='utf-8')
             start_list = f.readlines()
             f.close()
             start_list[5] = "start /d \"%s\" SGA.exe True\n" % env.workdir
@@ -118,7 +127,7 @@ class MainDown(MainBottom):
             f.writelines(start_list)
             f.close()
 
-            f = open("personal/bat/restart.bat", 'r', encoding='utf-8')
+            f = open("assets/main_window/bat_scr/restart.bat", 'r', encoding='utf-8')
             start_list = f.readlines()
             f.close()
             start_list[2] = "start /d \"%s\" SGA.exe\n" % env.workdir
@@ -126,15 +135,20 @@ class MainDown(MainBottom):
             f.writelines(start_list)
             f.close()
 
-            _path = "personal/bat/maa_create.bat"
-            if exists(_path):
-                f = open(_path, 'r', encoding='ansi')
-                bat_list = f.readlines()
-                f.close()
-                bat_list[1] = f" cd. > \"{env.workdir}/cache/maa_complete.txt\""
-                f = open(_path, 'w', encoding='ansi')
-                f.writelines(bat_list)
-                f.close()
+            f = open("assets/main_window/bat_scr/maa_create.bat", 'r', encoding='ansi')
+            bat_list = f.readlines()
+            f.close()
+            bat_list[1] = f" cd. > \"{env.workdir}/cache/maa_complete.txt\""
+            f = open("personal/bat/maa_create.bat", 'w', encoding='ansi')
+            f.writelines(bat_list)
+            f.close()
+
+            if not exists("personal/bat/restart.vbs"):
+                copyfile(r"assets/main_window/bat_scr/restart.vbs",
+                         "personal/bat/restart.vbs")
+            if not exists("personal/bat/start-SGA.vbs"):
+                copyfile(r"assets/main_window/bat_scr/restart.vbs",
+                         "personal/bat/start-SGA.vbs")
 
     # 保存主设置
     def save_main_data(self):
