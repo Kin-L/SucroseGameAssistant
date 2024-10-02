@@ -137,7 +137,7 @@ class Fight(Task):
             if pos:
                 click_change(pos, (966, 872, 1107, 1032))
                 wait_text("获得道具", (809, 40, 1113, 147))
-                click_change((1037, 951), (966, 872, 1107, 1032))
+                press_to_text("esc", "任务", (1458, 330, 1529, 379))
             if not self.task["后勤选择"][:-2] in ocr((164, 923, 350, 982))[0]:
                 click_text("小", (38, 890, 154, 1025))
                 wait_text("小", (825, 10, 1111, 129))
@@ -157,7 +157,7 @@ class Fight(Task):
             if pos:
                 click_change(pos, (966, 872, 1107, 1032))
                 wait_text("获得道具", (809, 40, 1113, 147))
-                click_change((1037, 951), (966, 872, 1107, 1032))
+                press_to_text("esc", "任务", (1458, 330, 1529, 379))
             if not self.task["后勤选择"][:-2] in ocr((164, 923, 350, 982))[0]:
                 click_text("小", (38, 890, 154, 1025))
                 wait_text("小", (825, 10, 1111, 129))

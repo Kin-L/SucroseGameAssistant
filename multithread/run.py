@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os.path
+from os import rename
 from ui.main.main_top import *
 from ui.element.control import *
 from traceback import format_exc
@@ -6,6 +8,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from task.main import TaskRun
 from os.path import join, basename, splitext
 from os import remove
+import sys
 
 
 class Kill(QThread):
@@ -48,7 +51,9 @@ class SGARun(QThread, TaskRun):
     def run(self):
         _k = False
         if not env.OCR.check():
-            self.indicate("OCR缺失,开始下载安装(下载可能较慢,可选择以下链接或按照使用说明进行手动下载：https://gitee.com/huixinghen/SucroseGameAssistant/releases https://wwp.lanzn.com/b033h9ybi 密码:1siv)")
+            self.indicate("OCR缺失,开始下载安装(下载可能较慢,可选择以下链接或按照使用说明进行手动下载："
+                          "https://gitee.com/huixinghen/SucroseGameAssistant/releases "
+                          "https://wwp.lanzn.com/b033h9ybi 密码:1siv)")
             if not self.install_ocr():
                 _k = True
         if not _k:
@@ -57,6 +62,14 @@ class SGARun(QThread, TaskRun):
                 if self.task_start(self.ui.task):
                     _k = True
             except Exception:
+                sc = screenshot()
+                import time
+                now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
+                new_path = f"personal/errorsc/{now}.png"
+                if not os.path.exists(r"personal/errorsc"):
+                    os.makedirs("personal/errorsc")
+                rename(sc, new_path)
+                logger.error(f"界面截图导出: {new_path}")
                 _k = True
                 logger.error("执行流程异常:\n%s" % format_exc())
         # noinspection PyBroadException
@@ -77,8 +90,9 @@ class SGARun(QThread, TaskRun):
             temp_path = join(env.workdir, "cache")
             temp_name = basename(env.OCR.exe_name + ".zip")
             load_path = join(temp_path, temp_name)
-            load = "https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/releases?page=1&per_page=20"
-            response = requests.get(load, timeout=10)
+            _load = ("https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/"
+                     "releases?page=1&per_page=20")
+            response = requests.get(_load, timeout=10)
             if response.status_code == 200:
                 urlretrieve(env.OCR.load_url, load_path)
                 self.indicate("下载完成,开始安装")
