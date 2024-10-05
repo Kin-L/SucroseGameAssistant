@@ -60,9 +60,15 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             if name == "snow_launcher.exe":
                 env.soft.set_path(_path)
                 env.soft.set_hwnd_find(1, "wailsWindow", "尘白禁区启动器")
+                _value = env.soft.run(fls=False)
+                _laucher = 1
+                env.soft.compile_resolution = (1280, 748)
             elif name == "SeasunGame.exe":
                 env.soft.set_path(_path)
                 env.soft.set_hwnd_find(1, "Qt5159QWindowIcon", "西山居启动器-尘白禁区")
+                _value = env.soft.run(fls=False)
+                _laucher = 2
+                env.soft.compile_resolution = (1280, 768)
             else:
                 self.indicate("尘白禁区，无效启动路径")
                 raise ValueError("尘白禁区:无效启动路径")
@@ -71,8 +77,6 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             raise ValueError("尘白禁区:无效启动路径")
         # 启动游戏
         for u in range(2):
-            _value = env.soft.run(fls=False)
-            env.soft.compile_resolution = (1280, 749)
             # env.soft.get_window_information(False)
             env.mode(3)
             if _value == 1:
@@ -88,7 +92,7 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             env.soft.foreground()
             wait(1000)
 
-            if self.task["预下载"]:
+            if self.task["预下载"] and _laucher == 1:
                 _value = ocr((781, 585, 950, 734))
                 if "下" in _value:
                     click_change((879, 668), (559, 317, 713, 391))
@@ -98,7 +102,7 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                     wait(500)
                 else:
                     self.indicate("暂无预下载")
-            if self.lauch_prepare():
+            if self.lauch_prepare(_laucher):
                 for p in range(10):  # 0, "UnrealWindow", "尘白禁区"
                     _h = find_hwnd((0, "UnrealWindow", "尘白禁区"))
                     if _h:
@@ -120,43 +124,95 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                         # wait(500)
                         # click_text("开始游戏", (1004, 646, 1151, 701))
                         # wait(500)
-            raise RuntimeError("尘白禁区:启动超时")
+            env.soft.kill()
+            env.soft.run(fls=False)
+            # raise RuntimeError("尘白禁区:启动超时")
         raise RuntimeError("尘白禁区:启动异常")
 
-    def lauch_prepare(self):
-        for i in range(120):
-            if find_hwnd((0, "UnrealWindow", "尘白禁区")):
-                return True
-            _value = ocr((1004, 646, 1151, 701))
-            if "开始游戏" in _value:
-                click_change((1073, 673), (1004, 646, 1151, 701))
-                wait(5000)
-                return True
-            elif "获取更新" in _value:
-                if self.task["更新"]:
-                    click_change((1073, 673), (718, 476, 821, 536))
-                    click_change((750, 499), (718, 476, 821, 536))
+    def lauch_prepare(self, _laucher):
+        if _laucher == 1:
+            error = 0
+            for i in range(120):
+                if find_hwnd((0, "UnrealWindow", "尘白禁区")):
+                    return True
+                _value = ocr((1004, 646, 1151, 701))[0]
+                if "开始游戏" in _value:
+                    click_change((1073, 673), (1004, 646, 1151, 701))
+                    wait(5000)
+                    return True
+                elif "获取更新" in _value:
+                    if self.task["更新"]:
+                        click_change((1073, 673), (718, 476, 821, 536))
+                        click_change((750, 499), (718, 476, 821, 536))
+                        error = 0
+                    else:
+                        self.indicate("尘白禁区:需要更新,当前未勾选自动更新,终止任务")
+                        raise RuntimeError("尘白禁区:需要更新,当前未勾选自动更新,终止任务")
+                elif "检查更新" in _value:
+                    for t in range(180):
+                        _v = ocr((1004, 646, 1151, 701))
+                        if "检查更新" in _v:
+                            wait(2000)
+                        else:
+                            break
+                        # _value1 = ocr((578, 465, 749, 549), sc)
+                        # _value2 = ocr((1004, 646, 1151, 701), sc)
+                        # del sc
+                        # if "确定" in _value1:
+                        #     click_change((639, 499), (578, 465, 749, 549))
+                    else:
+                        raise RuntimeError("尘白禁区:更新超时")
+                elif "更新中" in _value:
+                    pos = wait_text("开始游戏", (1004, 646, 1151, 701), (2000, 100))
+                    click_change(pos, (1004, 646, 1151, 701))
+                    wait(5000)
+                    return True
                 else:
-                    self.indicate("尘白禁区:需要更新,当前未勾选自动更新,终止任务")
-                    raise RuntimeError("尘白禁区:需要更新,当前未勾选自动更新,终止任务")
-            elif "检查更新" in _value:
-                for t in range(180):
-                    _value = ocr((578, 465, 749, 549))
-                    if "确定" in _value:
-                        click_change((639, 499), (578, 465, 749, 549))
-                        return False
+                    error += 1
+                    if error >= 5:
+                        print(_value)
+                        print(env.soft.frame, env.soft.zoom)
+                        print(screenshot((1004, 646, 1151, 701)))
+                        raise RuntimeError("尘白禁区:未知错误")
                     wait(2000)
-                raise RuntimeError("尘白禁区:更新超时")
-            elif "更新中" in _value:
-                pos = wait_text("开始游戏", (1004, 646, 1151, 701), (2000, 100))
-                click_change(pos, (1004, 646, 1151, 701))
-                wait(5000)
-                return True
-            else:
-                print(env.soft.frame, env.soft.zoom)
-                print(screenshot((1004, 646, 1151, 701)))
-                raise RuntimeError("尘白禁区:未知错误")
-        return False
+            return False
+        elif _laucher == 2:
+            error = 0
+            for i in range(120):
+                if find_hwnd((0, "UnrealWindow", "尘白禁区")):
+                    return True
+                _value = ocr((966, 693, 1200, 750))[0]
+                if "开始游戏" in _value:
+                    click_change((1087, 720), (966, 693, 1200, 750))
+                    wait(5000)
+                    return True
+                elif "更新" in _value:
+                    if self.task["更新"]:
+                        click_change((1087, 720), (966, 693, 1200, 750))
+                        for t in range(180):
+                            _v = ocr((966, 693, 1200, 750))
+                            if "正在更新" in _v:
+                                wait(2000)
+                            else:
+                                break
+                            # _value1 = ocr((578, 465, 749, 549), sc)
+                            # _value2 = ocr((1004, 646, 1151, 701), sc)
+                            # del sc
+                            # if "确定" in _value1:
+                            #     click_change((639, 499), (578, 465, 749, 549))
+                        else:
+                            raise RuntimeError("尘白禁区:更新超时")
+
+                    else:
+                        self.indicate("尘白禁区:需要更新,当前未勾选自动更新,终止任务")
+                        raise RuntimeError("尘白禁区:需要更新,当前未勾选自动更新,终止任务")
+                else:
+                    error += 1
+                    if error >= 5:
+                        print(env.soft.frame, env.soft.zoom)
+                        print(screenshot((1004, 646, 1151, 701)))
+                        raise RuntimeError("尘白禁区:未知错误")
+                    wait(2000)
 
     def snow_log(self, second: int):
         # 登录&进入游戏

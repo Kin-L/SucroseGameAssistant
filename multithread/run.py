@@ -90,8 +90,7 @@ class SGARun(QThread, TaskRun):
             temp_path = join(env.workdir, "cache")
             temp_name = basename(env.OCR.exe_name + ".zip")
             load_path = join(temp_path, temp_name)
-            _load = ("https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/"
-                     "releases?page=1&per_page=20")
+            _load = "https://github.moeyy.xyz/"
             response = requests.get(_load, timeout=10)
             if response.status_code == 200:
                 urlretrieve(env.OCR.load_url, load_path)

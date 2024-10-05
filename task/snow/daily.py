@@ -144,7 +144,6 @@ class Daily(Task):
             wait_text("升", (869, 323, 1051, 408))
             self.indicate("武器升级一次")
             click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
-            click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
             wait(500)
         if self.task["领取日常"]:
             click_text("任务", (1440, 311, 1555, 403))

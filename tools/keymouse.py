@@ -30,8 +30,11 @@ class KeyMouse(System):
         if (x, y) != (0, 0):
             x, y = self.axis_change(x, y)
             SetCursorPos((x, y))
+            sleep(0.01)
         mouse_event(2, x, y)
+        sleep(0.01)
         mouse_event(4, x, y)
+        sleep(0.01)
 
     def drag(self, pos, mov):
         xp, yp = self.axis_change(pos[0], pos[1])

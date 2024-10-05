@@ -6,12 +6,16 @@ class OCR:
     def __init__(self):
         if CPUFeature["AVX2"]:
             self.exe_name = "PaddleOCR-json_v.1.3.1(simplify)"
-            self.load_url = ""
+            self.load_url = ("https://github.moeyy.xyz/"
+                             "https://github.com/Kin-L/SucroseGameAssistant/releases/download/ocr/"
+                             "PaddleOCR-json_v.1.3.1.simplify.zip")
             self.exe_path = r"3rd_package\PaddleOCR-json_v.1.3.1(simplify)\PaddleOCR-json.exe"
             logger.debug("CPU 支持 AVX2 指令集，使用 PaddleOCR-json")
         else:
             self.exe_name = "RapidOCR-json_v0.2.0(simplify)"
-            self.load_url = ""
+            self.load_url = ("https://github.moeyy.xyz/"
+                             "https://github.com/Kin-L/SucroseGameAssistant/releases/download/ocr/"
+                             "RapidOCR-json_v0.2.0.simplify.zip")
             self.exe_path = r"3rd_package\RapidOCR-json_v0.2.0(simplify)\RapidOCR-json.exe"
             logger.debug("CPU 不支持 AVX2 指令集，使用 RapidOCR-json")
         if not isfile(join(env.workdir, self.exe_path)):
