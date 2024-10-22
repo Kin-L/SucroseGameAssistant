@@ -72,6 +72,7 @@ class Fight(Task):
                 wait(300)
                 click_text("材料")
                 wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
+                wait(500)
                 pos = find_text("深渊")
                 if pos:
                     click_change(pos, (1387, 945, 1599, 1075))
@@ -135,7 +136,7 @@ class Fight(Task):
             if pos:
                 click_change(pos, (966, 872, 1107, 1032))
                 wait_text("获得道具", (809, 40, 1113, 147))
-                press_to_text("esc", "任务", (1458, 330, 1529, 379))
+                press_to_text("esc", "小", (34, 959, 159, 1013))
             if not self.task["后勤选择"][:-2] in ocr((164, 923, 350, 982))[0]:
                 click_text("小", (38, 890, 154, 1025))
                 wait_text("小", (825, 10, 1111, 129))
@@ -151,19 +152,20 @@ class Fight(Task):
                     click_change(pos, (64, 1003, 225, 1057))
                     wait(800)
                     break
-            pos = find_text("接收", (977, 954, 1094, 1011))
+            pos = find_text("接收", (847, 988, 981, 1041))
             if pos:
                 click_change(pos, (966, 872, 1107, 1032))
                 wait_text("获得道具", (809, 40, 1113, 147))
-                press_to_text("esc", "任务", (1458, 330, 1529, 379))
-            if not self.task["后勤选择"][:-2] in ocr((164, 923, 350, 982))[0]:
+                press_to_text("esc", "小", (32, 995, 142, 1039))
+            if not (self.task["活动后勤选择"][:-2] in ocr((147, 962, 288, 1012))[0]):
                 click_text("小", (38, 890, 154, 1025))
                 wait_text("小", (825, 10, 1111, 129))
-                pos = find_text(self.task["后勤选择"][:-2], (158, 174, 903, 941))
+                print(self.task["活动后勤选择"][:-2])
+                pos = find_text(self.task["活动后勤选择"][:-2], (158, 174, 903, 941))
                 if not pos:
                     roll((679, 494), -35)
                     wait(500)
-                    pos = find_text(self.task["后勤选择"][:-2], (158, 174, 903, 941))
+                    pos = find_text(self.task["活动后勤选择"][:-2], (158, 174, 903, 941))
                 click_change(pos, (1488, 193, 1619, 237))
                 click_change((1823, 52), (1811, 40, 1846, 79))
         elif common == 7:
@@ -175,9 +177,10 @@ class Fight(Task):
                     click_change(pos, (64, 1003, 225, 1057))
                     wait(800)
                     break
-        roll((1002, 581), -55)
-        wait(500)
-        click_change((872, 607), (1387, 945, 1599, 1075))
+        if not (common in [6, 7]):
+            roll((1002, 581), -55)
+            wait(500)
+            click_change((872, 607), (1387, 945, 1599, 1075))
         wait_text("速战", (1387, 945, 1599, 1075))
         click_text("速战", (1387, 945, 1599, 1075))
         click((1280, 711))

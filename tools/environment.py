@@ -148,7 +148,7 @@ class Environment(Operate):
             else:
                 raise RuntimeError("执行超时：clickto")
 
-    def click_to_pic(self, pos, target, zone="ALL", sim: float = 0.6,
+    def click_to_pic(self, pos, target, zone="ALL", sim: float = 0.9,
                      wait_time=(800, 10)):
         if isinstance(target, ndarray):
             _target = target
@@ -205,7 +205,7 @@ class Environment(Operate):
                 bef = aft
         raise RuntimeError("click_change点击超时")
 
-    def press_to_pic(self, key, target, zone="ALL", sim: float = 0.6,
+    def press_to_pic(self, key, target, zone="ALL", sim: float = 0.9,
                      wait_time=(800, 10)):
         if isinstance(target, ndarray):
             _target = target

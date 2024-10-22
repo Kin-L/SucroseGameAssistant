@@ -77,7 +77,10 @@ class Fight:
              "沙叶小队",
              "金甲小队",
              "星朗小队",
-             "清乐小队"])
+             "清乐小队",
+             "掠影小队",
+             "射影小队",
+             "钢羽小队"])
 
 
 class Daily:
@@ -94,7 +97,7 @@ class Daily:
         self.character2 = Combobox(self.page_debris, (145, 110, 120, 40))
         self.character3 = Combobox(self.page_debris, (15, 155, 120, 40))
         self.character4 = Combobox(self.page_debris, (145, 155, 120, 40))
-        chara = ["未选择", "龙舌兰", "辉耀", "无限之视",
+        chara = ["未选择", "幽潮", "朝翼", "龙舌兰", "辉耀", "无限之视",
                  "瞬刻", "羽蜕", "悖谬", "豹豹", "蓝闪",
                  "魔术师", "藏锋", "溯影", "云篆", "辉夜",
                  "咎冠", "冬至", "狂猎", "雨燕", "缄默",

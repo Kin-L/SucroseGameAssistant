@@ -22,6 +22,8 @@ class Daily(Task):
                         _r = "冠"
                     elif i == "悖谬":
                         _r = "谬"
+                    elif i == "魔术师":
+                        _r = "术师"
                     else:
                         _r = i
                     _f = False
@@ -35,7 +37,9 @@ class Daily(Task):
                             if "0" in _str or "o" in _str or "O" in _str:
                                 self.indicate(f"今日已完成：角色 {i}")
                                 _f = True
-                            elif _str.count("2") == 2:
+                            elif "1" in _str or "i" in _str or "I" in _str:
+                                pass
+                            else:
                                 cl = True
                             break
                         elif o == 7:
