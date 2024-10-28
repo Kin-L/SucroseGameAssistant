@@ -6,6 +6,7 @@ class Condensed(Genshin):
     def genshin_make_condensed(self):
         for i in range(3):
             self.tp_fontaine1()
+            #走到合成台
             keydown("W")
             wait(4300)
             keyup("W")
@@ -18,6 +19,7 @@ class Condensed(Genshin):
             wait(1000)
             keyup("W")
             wait(300)
+
             if "合成" in ocr((1205, 502, 1315, 578))[0]:
                 self.indicate("到达合成台")
                 break
@@ -69,7 +71,7 @@ class Condensed(Genshin):
             self.indicate("无法合成浓缩树脂:缺少树脂或晶核")
         self.turn_world()
         if self.task["每日奖励"]:
-            if _n >= 4:
+            if _n >= 3:
                 self.indicate(f"合成浓缩树脂足够，尝试领取每日奖励")
                 self.daily_gift()
             else:
