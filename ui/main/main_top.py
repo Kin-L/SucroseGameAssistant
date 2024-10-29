@@ -54,12 +54,7 @@ class MainTop(MainUp):
         self.button_start.clicked.connect(self.start)
         self.button_pause.clicked.connect(self.pause)
         # 切换面板
-        self.mix.button_mix.clicked.connect(lambda: self.change_module(0))
-        self.kleins.button_klein.clicked.connect(lambda: self.change_module(1))
-        self.genshin.button_genshin.clicked.connect(lambda: self.change_module(2))
-        self.maa.button_maa.clicked.connect(lambda: self.change_module(3))
-        self.m7a.button_m7a.clicked.connect(lambda: self.change_module(4))
-        self.snow.button_snow.clicked.connect(lambda: self.change_module(5))
+        self.box_module_change.currentIndexChanged.connect(self.change_module)
         # 信息输出
         self.kill.send.connect(self.indicate)
         self.sga_run.send.connect(self.indicate)

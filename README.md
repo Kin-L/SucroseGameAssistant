@@ -4,7 +4,7 @@
 1.  砂糖代理（SGA），用于游戏等软件，SGA主体的功能是设置定时唤醒电脑，并定时执行各模块的相关功能，完成后睡眠，从而完成任务循环。  
 2.  目前已有功能模块：  
 环行旅舍(功能停止更新)  
-原神(功能停止更新)  
+原神(交由合作者@yuhui437不定期更新中)  
 MAA（明日方舟）(适配停止更新)  
 三月七助手（崩坏：星穹铁道）(适配停止更新)  
 尘白禁区(不定期更新中)
@@ -23,8 +23,10 @@ gitee： https://gitee.com/huixinghen/SucroseGameAssistant/releases
 手动更新方法：下载替换更新包，解压后将SGA文件夹与原SGA文件夹中同名文件夹进行合并并替换。  
 
     邮箱: 2805137028@qq.com  
-    bilibili站账号: 绘星痕  
+    bilibili站账号: 绘星痕（406315493）  
+    抖音：绘星痕（54796280232）  
     https://space.bilibili.com/406315493  
+    QQ群聊仅作bug反馈和交流使用，不完全公开。可以B站私信我或邮件联系我索要群聊号。  
 
 #### 安装教程
 
@@ -51,8 +53,3 @@ https://moesnow.github.io/March7thAssistant
 https://github.com/babalae/better-genshin-impact
 4.  SGA组合使用了MAA的功能  
 https://github.com/MaaAssistantArknights/MaaAssistantArknights
-
-#### 支持通道
-
-<img src="assets/main_window/ui/back/alipay.png" width = 35%>
-<img src="assets/main_window/ui/back/wechat.png" width = 40%>

@@ -5,12 +5,12 @@ from .stack import MixStack
 
 # 原神模组设置窗口
 class Mix:
-    def __init__(self, stack, icon, main):
+    def __init__(self, stack, main):
         # 连续任务
         self.widget_mix = Widget()
         stack.addWidget(self.widget_mix)
-        self.button_mix = PicButton(icon, (0, 0, 50, 50),
-                                    r"assets\main_window\ui\mix-icon.png", (50, 50))
+        self.button = Picture(main.widget_module, (0, 0, 50, 50),
+                                    r"assets\main_window\ui\mix-icon.png")
         self.list = None
         self.set = None
 

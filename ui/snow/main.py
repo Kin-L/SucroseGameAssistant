@@ -9,13 +9,14 @@ from tools.system import check_path
 
 # 尘白禁区模组设置窗口
 class Snow:
-    def __init__(self, stack, icon, main):
+    def __init__(self, stack, main):
         self.main = main
         self.widget_snow = Widget()
         stack.addWidget(self.widget_snow)
-        self.button_snow = (
-            PicButton(icon, (275, 0, 50, 50),
-                      r"assets\snow\picture\snow-icon.png", (50, 50)))
+        self.button = (
+            Picture(main.widget_module, (0, 0, 50, 50),
+                      r"assets\snow\picture\snow-icon.png"))
+        # self.button.dis
         self.list = None
         self.set = None
 

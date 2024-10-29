@@ -10,13 +10,12 @@ from tools.system import check_path
 
 # 原神模组设置窗口
 class Klein:
-    def __init__(self, stack, icon, main):
+    def __init__(self, stack, main):
         self.main = main
         self.widget_klein = Widget()
         stack.addWidget(self.widget_klein)
-        self.button_klein = (
-            PicButton(icon, (55, 0, 50, 50),
-                      r"assets\kleins\picture\klein-icon.png", (50, 50)))
+        self.button = Picture(main.widget_module, (0, 0, 50, 50),
+                      r"assets\kleins\picture\klein-icon.png")
         self.list = None
         self.set = None
 
