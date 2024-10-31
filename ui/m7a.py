@@ -37,13 +37,13 @@ class M7AStack:
 
 
 class M7A:
-    def __init__(self, stack, icon, main):
+    def __init__(self, stack, main):
         # 三月七助手
         self.widget_m7a = Widget()
         stack.addWidget(self.widget_m7a)
-        self.button_m7a = (
-            PicButton(icon, (220, 0, 50, 50), 
-                      r"assets\m7a\picture\M7A-icon.png", (50, 50)))
+        self.button = (
+            Picture(main.widget_module, (0, 0, 50, 50),
+                      r"assets\m7a\picture\M7A-icon.png"))
         self.list = None
         self.set = None
 

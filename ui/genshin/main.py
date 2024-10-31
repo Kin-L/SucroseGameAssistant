@@ -1,16 +1,15 @@
 from .list import GenshinList
 from .stack import GenshinStack
-from ui.element.control import Line, Widget, PicButton
+from ui.element.control import *
 from tools.system import check_path
 
 
 class Genshin:
-    def __init__(self, stack, icon, main):
+    def __init__(self, stack, main):
         self.widget_genshin = Widget()
         stack.addWidget(self.widget_genshin)
-        self.button_genshin = (
-            PicButton(icon, (110, 0, 50, 50),
-                      r"assets\genshin\picture\genshin-icon.png", (50, 50)))
+        self.button = Picture(main.widget_module, (0, 0, 50, 50),
+                      r"assets\genshin\picture\genshin-icon.png")
         self.list = None
         self.set = None
 

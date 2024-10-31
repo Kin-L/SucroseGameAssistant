@@ -9,14 +9,13 @@ class ModuleWindow:
         self.widget_module = Widget(None, (5, 0, 670, 570))
         main.stack_setting.addWidget(self.widget_module)
         # 模块按钮
-        self.scroll_list = ScrollArea(self.widget_module, (0, 0, 215, 65))
-        self.widget_icon = Widget(self.scroll_list, (0, 0, 325, 50))
-        self.widget_icon.setMinimumSize(325, 50)
-        self.scroll_list.setWidget(self.widget_icon)
-        self.scroll_list.setFrameShape(QtWidgets.QFrame.Shape(0))
+        self.box_module_change = ComboBox(self.widget_module)
+        self.box_module_change.setGeometry(QtCore.QRect(55, 8, 160, 35))
+        self.box_module_change.addItems(
+            ["连续任务", "环行旅舍", "原神", "MAA", "三月七助手", "尘白禁区"])
         # 配置切换列表
         self.box_config_change = EditableComboBox(self.widget_module)
-        self.box_config_change.setGeometry(QtCore.QRect(265, 9, 215, 30))
+        self.box_config_change.setGeometry(QtCore.QRect(265, 9, 215, 35))
         # self.box_config_change.setEnabled(False)
         # 开始暂停按钮
         self.button_config_delete = PicButton(self.widget_module, (225, 8, 35, 35),

@@ -47,13 +47,13 @@ class MAAStack:
 
 
 class MAA:
-    def __init__(self, stack, icon, main):
+    def __init__(self, stack, main):
         self.main = main
         # MAA
         self.widget_maa = Widget()
         stack.addWidget(self.widget_maa)
-        self.button_maa = PicButton(icon, (165, 0, 50, 50),
-                                    r"assets\maa\picture\MAA-icon.png", (50, 50))
+        self.button = Picture(main.widget_module, (0, 0, 50, 50),
+                                    r"assets\maa\picture\MAA-icon.png")
         self.list = None
         self.set = None
         

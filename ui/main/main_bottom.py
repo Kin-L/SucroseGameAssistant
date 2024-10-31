@@ -77,9 +77,11 @@ class MainBottom(MainWindow, Module, Overall):
     def change_module(self, num):
         name_list = self.state["name"]
         name = name_list[num]
+        module = eval(f"self.{name}")
         if not self.state[name]["load"]:
             module = eval(f"self.{name}")
             module.load_window()
+
             if num == 0:
                 module.load_single(self.state["single"])
             elif num < len(name_list):
@@ -87,6 +89,8 @@ class MainBottom(MainWindow, Module, Overall):
             self.state[name]["load"] = True
         else:
             pass
+        module.button.raise_()
+        self.box_module_change.setCurrentIndex(num)
         self.stack_module.setCurrentIndex(num)
 
     def get_file_path(self, text):

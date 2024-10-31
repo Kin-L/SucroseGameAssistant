@@ -10,10 +10,9 @@ from .module import ModuleWindow
 class Module(ModuleWindow):
     def __init__(self, main):
         super().__init__(main)
-        self.mix = Mix(self.stack_module, self.widget_icon, main)
-        self.kleins = Klein(self.stack_module, self.widget_icon, main)
-        self.genshin = Genshin(self.stack_module, self.widget_icon, main)
-        self.maa = MAA(self.stack_module, self.widget_icon, main)
-        self.m7a = M7A(self.stack_module, self.widget_icon, main)
-        self.snow = Snow(self.stack_module, self.widget_icon, main)
-
+        self.mix = Mix(self.stack_module, main)
+        self.kleins = Klein(self.stack_module, main)
+        self.genshin = Genshin(self.stack_module, main)
+        self.maa = MAA(self.stack_module, main)
+        self.m7a = M7A(self.stack_module, main)
+        self.snow = Snow(self.stack_module, main)
