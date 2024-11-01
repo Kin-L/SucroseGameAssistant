@@ -6,7 +6,7 @@ class Pass(Genshin):
     def genshin_pass(self):
         self.home()
         #打开纪行
-        if click_pic(r"assets\genshin\picture\go_pass.png",(117, 346, 742, 1052)):
+        if click_pic(r"assets\genshin\picture\gpass.png",(117, 346, 742, 1052)):
             for i in range(10):
                 if "纪行" in ocr((134, 24, 199, 70)) :
                     self.indicate("1")
