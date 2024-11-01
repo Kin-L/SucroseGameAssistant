@@ -6,20 +6,23 @@ class Pass(Genshin):
     def genshin_pass(self):
         self.home()
         #打开纪行
-        if self.open_sub("纪行"):
-            while 1:
-                if "纪行" in ocr((134, 24, 199, 70)) and "说明" not in ocr((134, 24, 199, 70)):
+        if click_pic(r"assets\genshin\picture\go_pass.png",(117, 346, 742, 1052)):
+            for i in range(10):
+                if "纪行" in ocr((134, 24, 199, 70)) :
+                    self.indicate("1")
                     break
                 else:
-                    for i in range(5):
-                        click((1781, 52))
-                        wait(200)
-                    wait(800)
+                    click((1781, 52))
+                    wait(300)
+                    self.indicate("2")
+                    click((1781, 52))
+                    wait(300)
 
             #进入纪行任务界面
             for i in range(3):
                 click((959, 50))
-                wait(500)
+                wait(100)
+                self.indicate("3")
 
             #领领取已完成的纪行任务
             if "领取" in ocr((1663, 939, 1824, 1018))[0]:
