@@ -1,11 +1,13 @@
 from tools.environment import *
 from .genshin import Genshin
+from .domain import Domain
 
 
 class Condensed(Genshin):
     def genshin_make_condensed(self):
         for i in range(3):
             self.tp_fontaine1()
+            #走到合成台
             keydown("W")
             wait(4300)
             keyup("W")
@@ -26,6 +28,8 @@ class Condensed(Genshin):
                 return True
             else:
                 self.indicate(f"error:合成树脂未知错误,开始重试第{i+1}/2次")
+
+        #打开合成台  
         press("F")
         wait(1000)
         click((960,950))
@@ -34,48 +38,57 @@ class Condensed(Genshin):
         wait(500)
         click((1339, 408))
         wait(600)
+
         if "浓缩树脂" in ocr((739, 178, 882, 227))[0]:
+            #当前状态识别
             num = int(ocr((996, 887, 1028, 924))[0].strip(" "))
             click((1618, 497))
-            wait(600)
+            wait(500)
             fly = int(ocr((1025, 917, 1134, 941))[0].split("/")[0])
             cons = int(ocr((1162, 917, 1269, 941))[0].split("/")[0])
             self.indicate(f"当前已有:\n"
-                          f"  晶核:{fly}个\n"
-                          f"  原粹树脂:{cons}/160\n"
-                          f"  浓缩树脂:{num}个")
-            _n = min(int(cons/40), fly, 5-num)
-            if _n:
-                """新版本自动选择能做的最大数量浓缩树脂，故注释掉
-                for i in range(_n-1):
-                    click((1611, 671))
-                    wait(400)
-                    """
+                        f"  晶核:{fly}个\n"
+                        f"  原粹树脂:{cons}/160\n"
+                        f"  浓缩树脂:{num}个")
+            _n = min(int(cons/40), fly, 5)
+            daygift = 0
+            if _n + num > 5 and self.task["功能8"]:
+                self.turn_world()
+                self.indicate("剩余浓缩树脂过多，将通过副本消耗掉")
+                self.genshin_domain()
+                self.team_change_to(1)
+                if cons >= 120:
+                    daygift = 1
+            elif _n:
                 ori = cons-_n*40
                 cond = num+_n
                 self.task["resin"] = [ori, cond]
                 self.indicate(f"本次合成浓缩树脂{_n}个\n"
-                              f"  原粹树脂: {cons} -> {ori}\n"
-                              f"  浓缩树脂: {num} -> {cond}")
+                            f"  原粹树脂: {cons} -> {ori}\n"
+                            f"  浓缩树脂: {num} -> {cond}")
                 click((1727, 1019))
                 wait(800)
                 click((1173, 786))
                 wait(200)
+                if _n >= 3:
+                    daygift = 1
             else:
-                self.indicate("浓缩树脂数量达到上限")
+                self.indicate("体力不足")
         else:
             click((1618, 497))
             wait(600)
             self.indicate("无法合成浓缩树脂:缺少树脂或晶核")
         self.turn_world()
+
         if self.task["每日奖励"]:
-            if _n >= 4:
+            if daygift:
                 self.indicate(f"合成浓缩树脂足够，尝试领取每日奖励")
                 self.daily_gift()
             else:
                 self.indicate(f"合成浓缩树脂不足，无法领取每日奖励")
         return False
 
+    #领取每日奖励
     def daily_gift(self):
         self.home()
         self.open_sub("冒险之证")

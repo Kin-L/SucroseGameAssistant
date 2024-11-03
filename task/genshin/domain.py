@@ -70,44 +70,9 @@ class Domain(Genshin):
         self.world()
         self.indicate(f"到达秘境:{_domain[0]} {_domain[1]}")
 
-        # 切换战斗队伍
-        def open_team():
-            self.home()
-            self.open_sub("队伍配置")
-            wait(1000)
-            for i in range(30):
-                if "队伍配置" in ocr((108, 23, 235, 77))[0]:
-                    self.indicate("进入到队伍配置界面")
-                    break
-                elif i == 29:
-                    self.indicate("error:加载队伍配置界面超时\n")
-                    raise RuntimeError("原神:加载队伍配置界面超时")
-                wait(500)
-            wait(500)
-        open_team()
-        if not self.isonline():
-            self.indicate("处于联机/尘歌壶模式,更换队伍前进行状态初始化")
-            self.tp_fontaine1()
-            open_team()
-            if self.isonline():
-                raise RuntimeError("处于联机模式,请退出联机后再试")
-        clickto((77, 1016), 800, ("管理队伍", (27, 17, 170, 75), 0))
-        roll((580, 224), 55)
-        wait(500)
-        if "出战" in ocr((564, 370, 646, 429))[0]:
-            pass
-        else:
-            click((580, 398))
-            wait(500)
-            click((328, 1016))
-            wait(800)
-            clickto((1557, 1020), 200, ("出战", (1637, 992, 1774, 1048), -1))
-        self.turn_world()
-        press("1")
-        wait(300)
-        press("1")
-        wait(300)
-        self.indicate("切换至战斗队伍")
+        # 切换战斗队伍(2号队)
+        self.team_change_to(2)
+        self.indicate("已切换至战斗队伍")
 
         if _domain[1] == "太山府":
             pass

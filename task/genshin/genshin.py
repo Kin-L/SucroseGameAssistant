@@ -5,20 +5,20 @@ from ..default_task import Task
 class Genshin(Task):
     def __init__(self):
         super().__init__()
-
+    
     def tp_fontaine1(self):
         self.home()
         self.indicate("前往枫丹:\n  枫丹廷凯瑟琳锚点")
         self.open_sub("地图")
         click((1839,1012)) #点击区域选择
-        wait(800)
-        click((1436,341)) #点击枫丹
-        wait(1000)
-        click((955,536)) #点击传送点
+        wait(500)
+        click_text("枫丹",(1293,83,1890,611)) #点击枫丹
+        wait(500)
+        click((959,539)) #点击传送点
         wait(1000)
         self.tp_point()
         self.indicate("到达枫丹:\n  枫丹廷凯瑟琳锚点")
-
+        
     # 打开esc主界面
     def home(self):
         m = 0
@@ -130,3 +130,30 @@ class Genshin(Task):
             if m == 15:
                 self.indicate("error:打开主界面超时\n")
                 raise RuntimeError("原神:打开主界面超时")
+            
+    #切换到第n支队伍
+    def team_change_to(self,n):
+        self.home()
+        self.open_sub("队伍配置")
+        if not self.isonline():
+            self.indicate("处于联机/尘歌壶模式,更换队伍前进行状态初始化")
+            self.tp_fontaine1()
+            self.open_sub("队伍配置")
+            if self.isonline():
+                raise RuntimeError("处于联机模式,请退出联机后再试")
+        clickto((77, 1016), 800, ("管理队伍", (27, 17, 170, 75), 0))
+        roll((580, 224), 80)
+        wait(500)
+        if "出战" in ocr((559, 180*n-15, 657, 90+180*n))[0]:
+            self.home()
+            return True
+        click((559, 180*n+30))
+        wait(300)
+        click((328, 1016))
+        wait(500)
+        click_change((1557, 1020), (1650, 997, 1746, 1042))
+        self.turn_world()
+        press("1")
+        wait(300)
+        press("1")
+        wait(300)

@@ -140,7 +140,7 @@ class Concentrate:
         stack.addWidget(self.page_concentrate)
         # 添加控件
         self.label_concentrate = Label(self.page_concentrate, (0, 12, 180, 18), "设置页面：浓缩树脂")
-        self.daily_gift = Check(self.page_concentrate, (0, 50, 400, 25), "领取凯瑟琳每日任务奖励（合成树脂四个以上）")
+        self.daily_gift = Check(self.page_concentrate, (0, 50, 400, 25), "领取凯瑟琳每日任务奖励（合成树脂三个以上）")
 
 
 class Pot:
