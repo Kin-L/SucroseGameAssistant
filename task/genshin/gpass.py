@@ -9,12 +9,10 @@ class Pass(Genshin):
         if click_pic(r"assets\genshin\picture\gpass.png",(117, 346, 742, 1052)):
             for i in range(10):
                 if "纪行" in ocr((134, 24, 199, 70)) :
-                    self.indicate("1")
                     break
                 else:
                     click((1781, 52))
                     wait(300)
-                    self.indicate("2")
                     click((1781, 52))
                     wait(300)
 
@@ -22,8 +20,7 @@ class Pass(Genshin):
             for i in range(3):
                 click((959, 50))
                 wait(100)
-                self.indicate("3")
-
+                
             #领领取已完成的纪行任务
             if "领取" in ocr((1663, 939, 1824, 1018))[0]:
                 click_text("领取" ,(1663, 939, 1824, 1018))
