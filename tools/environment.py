@@ -201,8 +201,6 @@ class Environment(Operate):
             # print(s)
             if s < sim:
                 return True
-            else:
-                bef = aft
         raise RuntimeError("click_change点击超时")
 
     def press_to_pic(self, key, target, zone="ALL", sim: float = 0.9,
@@ -258,8 +256,6 @@ class Environment(Operate):
             # print(s)
             if s < sim:
                 return True
-            else:
-                bef = aft
         raise RuntimeError("click_change点击超时")
 
 

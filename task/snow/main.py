@@ -1,5 +1,5 @@
 from tools.environment import *
-from tools.software import find_hwnd
+from tools.software import find_hwnd, get_pid, close
 from .fight import Fight
 from .daily import Daily
 from .mail import Mail
@@ -47,7 +47,11 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                 self.indicate("游戏已关闭")
             else:
                 self.indicate(f"error:游戏关闭超时({s * n}s)")
-                raise RuntimeError("genshin exit error")
+                raise RuntimeError("snow exit error")
+            if pid := get_pid("snow_launcher.exe"):
+                close(pid)
+            if pid := get_pid("SeasunGame.exe"):
+                close(pid)
         self.indicate("完成任务:尘白禁区")
         return _k
 
@@ -93,7 +97,7 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             wait(1000)
 
             if self.task["预下载"] and _laucher == 1:
-                _value = ocr((781, 585, 950, 734))
+                _value = ocr((781, 585, 950, 734))[0]
                 if "下" in _value:
                     click_change((879, 668), (559, 317, 713, 391))
                     wait(500)
@@ -125,16 +129,25 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                         # click_text("开始游戏", (1004, 646, 1151, 701))
                         # wait(500)
             env.soft.kill()
+            wait(4000)
             env.soft.run(fls=False)
             # raise RuntimeError("尘白禁区:启动超时")
         raise RuntimeError("尘白禁区:启动异常")
 
     def lauch_prepare(self, _laucher):
+
         if _laucher == 1:
             error = 0
-            for i in range(120):
+            num = 0
+            while num < 120:
+                num += 1
                 if find_hwnd((0, "UnrealWindow", "尘白禁区")):
                     return True
+                _value2 = ocr((398, 219, 893, 540))[0]
+                if "关闭" in _value2:
+                    pos = find_text("确定", (398, 219, 893, 540))
+                    click_change(pos, (398, 219, 893, 540))
+                    return False
                 _value = ocr((1004, 646, 1151, 701))[0]
                 if "开始游戏" in _value:
                     click_change((1073, 673), (1004, 646, 1151, 701))
@@ -149,19 +162,8 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                         self.indicate("尘白禁区:需要更新,当前未勾选自动更新,终止任务")
                         raise RuntimeError("尘白禁区:需要更新,当前未勾选自动更新,终止任务")
                 elif "检查更新" in _value:
-                    for t in range(180):
-                        _v = ocr((1004, 646, 1151, 701))
-                        if "检查更新" in _v:
-                            wait(2000)
-                        else:
-                            break
-                        # _value1 = ocr((578, 465, 749, 549), sc)
-                        # _value2 = ocr((1004, 646, 1151, 701), sc)
-                        # del sc
-                        # if "确定" in _value1:
-                        #     click_change((639, 499), (578, 465, 749, 549))
-                    else:
-                        raise RuntimeError("尘白禁区:更新超时")
+                    num -= 1
+                    wait(2000)
                 elif "更新中" in _value:
                     pos = wait_text("开始游戏", (1004, 646, 1151, 701), (2000, 100))
                     click_change(pos, (1004, 646, 1151, 701))
@@ -175,6 +177,7 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                         print(screenshot((1004, 646, 1151, 701)))
                         raise RuntimeError("尘白禁区:未知错误")
                     wait(2000)
+
             return False
         elif _laucher == 2:
             error = 0
@@ -190,7 +193,7 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                     if self.task["更新"]:
                         click_change((1087, 720), (966, 693, 1200, 750))
                         for t in range(180):
-                            _v = ocr((966, 693, 1200, 750))
+                            _v = ocr((966, 693, 1200, 750))[0]
                             if "正在更新" in _v:
                                 wait(2000)
                             else:
@@ -261,8 +264,10 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             # if str_find("维护", _list):
             #     raise RuntimeError("尘白禁区:游戏维护中")
             if str_find("版本过低", _list):
+                self.indicate("尘白禁区:版本过低")
                 raise RuntimeError("尘白禁区:版本过低")
             if str_find("服务器暂未开放", _list):
+                self.indicate("尘白禁区:服务器暂未开放")
                 raise RuntimeError("尘白禁区:服务器暂未开放")
             if str_find("任务", _list):
                 wait(300)

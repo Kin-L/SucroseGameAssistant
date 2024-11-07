@@ -15,7 +15,7 @@ key_map = {
         'SPACE': 32, 'SPACEBAR': 32, 'PGUP': 33, 'PAGEUP': 33, 'PGDN': 34, 'PAGEDOWN': 34, 'END': 35, 'HOME': 36,
         'LEFT': 37, 'UP': 38, 'RIGHT': 39, 'DOWN': 40, 'SELECT': 41, 'PRTSC': 42, 'PRINTSCREEN': 42, 'SYSRQ': 42,
         'SYSTEMREQUEST': 42, 'EXECUTE': 43, 'SNAPSHOT': 44, 'INSERT': 45, 'DELETE': 46, 'HELP': 47, 'WIN': 91,
-        'WINDOWS': 91, 'NMLK': 144,
+        'WINDOWS': 91, 'NMLK': 144, "VOLUMEMUTE": 173,
         'NUMLK': 144, 'NUMLOCK': 144, 'SCRLK': 145,
         '[': 219, ']': 221, '+': 107, '-': 109, '~': 192, '`': 192, "/": 111}
 

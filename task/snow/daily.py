@@ -183,16 +183,28 @@ class Daily(Task):
             wait_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
             wait(300)
             pos = find_text("任务")
+            cpos = (478, 1000)  # 漠北寻风
             if pos:
                 x, y = pos
                 click_change(pos, (x-10, y-10, x+10,  y+10))
                 pos = wait_text("领取", (0, 605, 578, 1080))
-                click_change(pos, (76, 1000, 220, 1045))
-                wait_text("获得道具", (809, 40, 1113, 147))
-                self.indicate("领取已完成的活动任务")
-                click_change(pos, (809, 40, 1113, 147))
+
             else:
-                self.indicate("未找到“任务”, 版本未适配")
+                click(cpos)
+                wait(1000)
+                pos = find_text("领取", (0, 605, 578, 1080))
+                if pos:
+                    pass
+                else:
+                    self.indicate("未找到“任务”, 版本未适配")
+                    click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+                    wait(500)
+                    self.indicate("检查完成：日常周常")
+                    return True
+            click_change(pos, (76, 1000, 220, 1045))
+            wait_text("获得道具", (809, 40, 1113, 147))
+            self.indicate("领取已完成的活动任务")
+            click_change(pos, (809, 40, 1113, 147))
             click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
             wait(500)
         self.indicate("检查完成：日常周常")

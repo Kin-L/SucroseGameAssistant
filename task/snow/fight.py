@@ -70,16 +70,32 @@ class Fight(Task):
                 click_change((1499, 538), (1402, 463, 1499, 505))
                 wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
                 wait(300)
-                click_text("材料")
+                pos = find_text("材料")
+                cpos = (222, 340)  # 漠北寻风
+                if pos:
+                    click_change(pos, (1732, 920, 1829, 1013))
+                else:
+                    click(cpos)
+                    wait(500)
+
                 wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
                 wait(500)
                 pos = find_text("深渊")
+                cpos = (1372, 370)  # 漠北寻风
                 if pos:
                     click_change(pos, (1387, 945, 1599, 1075))
+                    wait_text("速战", (1387, 945, 1599, 1075))
                 else:
-                    raise RuntimeError("感知扫荡识别错误")
-                # click((1646, 359))
-                wait_text("速战", (1387, 945, 1599, 1075))
+                    click(cpos)
+                    wait(1000)
+                    if "深渊" in ocr((1394, 76, 1843, 179))[0]:
+                        pass
+                    else:
+                        self.indicate("未找到“深渊”, 版本未适配")
+                        click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+                        wait(500)
+                        self.indicate("检查完成：感知扫荡")
+                        return True
                 click_text("速战", (1387, 945, 1599, 1075))
                 click((1280, 711))
                 wait(600)
