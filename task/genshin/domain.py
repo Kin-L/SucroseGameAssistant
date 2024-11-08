@@ -136,7 +136,7 @@ class Domain(Genshin):
         while 1:
             wait(5000)
             f = open(path, encoding='utf-8')
-            if "→ \"自动秘境结束\"" in f.readlines()[-2]:
+            if "→ \"自动秘境结束\"" in f.readlines()[-2] or "→ \"任务结束\"" in f.readlines()[-2]:
                 break
         # env.soft.kill()
         # 关闭BGI
