@@ -32,7 +32,7 @@ def get_process_name(hwnd):
     return pid, path
 
 
-# 根据类/标题查找窗口句柄11
+# 根据类/标题查找窗口句柄
 def find_hwnd(mode_cls_tit):
     mode, cls, tit = mode_cls_tit
     if mode:
