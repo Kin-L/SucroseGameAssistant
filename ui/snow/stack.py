@@ -98,7 +98,7 @@ class Daily:
         self.character2 = Combobox(self.page_debris, (145, 110, 120, 40))
         self.character3 = Combobox(self.page_debris, (15, 155, 120, 40))
         self.character4 = Combobox(self.page_debris, (145, 155, 120, 40))
-        chara = ["未选择", "烈兔",
+        chara = ["未选择", "驰掣",
                  "幽潮", "朝翼", "龙舌兰", "辉耀", "无限之视",
                  "瞬刻", "羽蜕", "悖谬", "豹豹", "蓝闪",
                  "魔术师", "藏锋", "溯影", "云篆", "辉夜",
