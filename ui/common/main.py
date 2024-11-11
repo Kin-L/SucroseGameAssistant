@@ -43,13 +43,15 @@ class Common:
             "启动路径": "",
             "附加命令": "",
             "开始前等待时间": "",
+            "启动判断进程名": "",
             "启动操作类型": 0,
             "启动操作内容": "",
+            "启动判断指定区域": "",
             "开始后等待时间": "",
-            "指定进程名": "",
+            "结束判断进程名": "",
             "结束判断类型": 0,
             "结束判断内容": "",
-            "指定区域": "",
+            "结束判断指定区域": "",
             "判断循环": ""
         }
         config.update(_dir)
@@ -62,14 +64,16 @@ class Common:
         self.set.line_extra.setText(config["附加命令"])
 
         self.set.line_fwait.setText(config["开始前等待时间"])
+        self.set.line_act_proc.setText(config["启动判断进程名"])
         self.set.choose_act.setCurrentIndex(config["启动操作类型"])
         self.set.line_act.setText(config["启动操作内容"])
+        self.set.line_act_zone.setText(config["结束判断指定区域"])
         self.set.line_await.setText(config["开始后等待时间"])
 
-        self.set.line_proc.setText(config["指定进程名"])
+        self.set.line_exit_proc.setText(config["结束判断进程名"])
         self.set.choose_exit.setCurrentIndex(config["结束判断类型"])
         self.set.line_exit.setText(config["结束判断内容"])
-        self.set.line_zone.setText(config["指定区域"])
+        self.set.line_exit_zone.setText(config["结束判断指定区域"])
         self.set.line_interval.setText(config["判断循环"])
 
     def output_config(self):
@@ -84,14 +88,16 @@ class Common:
         config["附加命令"] = self.set.line_extra.text()
 
         config["开始前等待时间"] = self.set.line_fwait.text()
+        config["启动判断进程名"] = self.set.line_act_proc.text()
         config["启动操作类型"] = self.set.choose_act.currentIndex()
         config["启动操作内容"] = self.set.line_act.text()
+        config["启动判断指定区域"] = self.set.line_act_zone.text()
         config["开始后等待时间"] = self.set.line_await.text()
 
-        config["指定进程名"] = self.set.line_proc.text()
+        config["结束判断进程名"] = self.set.line_exit_proc.text()
         config["结束判断类型"] = self.set.choose_exit.currentIndex()
         config["结束判断内容"] = self.set.line_exit.text()
-        config["指定区域"] = self.set.line_zone.text()
+        config["结束判断指定区域"] = self.set.line_exit_zone.text()
         config["判断循环"] = self.set.line_interval.text()
         return config
 

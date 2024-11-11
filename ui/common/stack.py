@@ -37,13 +37,17 @@ class Start:
 
         self.label_fwait = Label(self.page_start, (0, 55, 120, 18), "开始前等待时间：")
         self.line_fwait = Lineedit(self.page_start, (125, 50, 70, 30))
-        self.label_act = Label(self.page_start, (0, 85, 80, 27), "启动操作：")
-        self.choose_act = Combobox(self.page_start, (0, 115, 100, 30))
+        self.label_act_proc = Label(self.page_start, (0, 85, 100, 27), "指定进程名：")
+        self.line_act_proc = Lineedit(self.page_start, (0, 120, 385, 33))
+        self.label_act = Label(self.page_start, (0, 160, 80, 27), "启动操作：")
+        self.choose_act = Combobox(self.page_start, (0, 190, 100, 30))
         self.choose_act.addItems(["无", "点击文本", "点击图像", "快捷键"])
-        self.line_act = Lineedit(self.page_start, (0, 157, 385, 33))
-        self.button_folder = Button(self.page_start, (110, 115, 130, 30), "图像储存文件夹")
-        self.label_await = Label(self.page_start, (0, 205, 120, 18), "开始后等待时间：")
-        self.line_await = Lineedit(self.page_start, (125, 200, 70, 33))
+        self.line_act = Lineedit(self.page_start, (0, 233, 385, 33))
+        self.button_folder = Button(self.page_start, (110, 190, 130, 30), "图像储存文件夹")
+        self.label_act_zone = Label(self.page_start, (0, 280, 80, 27), "指定区域：")
+        self.line_act_zone = Lineedit(self.page_start, (0, 315, 180, 33))
+        self.label_await = Label(self.page_start, (0, 365, 120, 18), "开始后等待时间：")
+        self.line_await = Lineedit(self.page_start, (125, 360, 70, 33))
 
 
 class Exit:
@@ -56,15 +60,15 @@ class Exit:
 
         Line(self.page_exit, (0, 42, 395, 3))
 
-        self.label_proc = Label(self.page_exit, (0, 50, 100, 27), "指定进程名：")
-        self.line_proc = Lineedit(self.page_exit, (0, 85, 385, 33))
+        self.label_exit_proc = Label(self.page_exit, (0, 50, 100, 27), "指定进程名：")
+        self.line_exit_proc = Lineedit(self.page_exit, (0, 85, 385, 33))
         self.label_choose_exit = Label(self.page_exit, (0, 125, 80, 27), "结束判断：")
 
         self.choose_exit = Combobox(self.page_exit, (0, 160, 120, 30))
         self.choose_exit.addItems(["进程退出", "匹配到文本", "匹配到图像", "cpu利用率"])
         self.line_exit = Lineedit(self.page_exit, (0, 205, 385, 33))
-        self.label_zone = Label(self.page_exit, (0, 240, 80, 27), "指定区域：")
-        self.line_zone = Lineedit(self.page_exit, (0, 275, 180, 33))
+        self.label_exit_zone = Label(self.page_exit, (0, 240, 80, 27), "指定区域：")
+        self.line_exit_zone = Lineedit(self.page_exit, (0, 275, 180, 33))
         self.label_interval = Label(self.page_exit, (0, 310, 180, 27), "判断循环（间隔/次数）：")
         self.line_interval = Lineedit(self.page_exit, (0, 345, 180, 33))
 
