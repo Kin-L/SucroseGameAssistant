@@ -5,6 +5,7 @@ from tools.system import check_path
 
 
 class Genshin:
+
     def __init__(self, stack, main):
         self.widget_genshin = Widget()
         stack.addWidget(self.widget_genshin)
@@ -13,6 +14,7 @@ class Genshin:
         self.list = None
         self.set = None
 
+    #点击齿轮后跳转界面
     def load_window(self):
         self.list = GenshinList(self.widget_genshin, (0, 0, 215, 515))
         self.set = GenshinStack(self.widget_genshin, (225, 0, 410, 515))
@@ -21,14 +23,14 @@ class Genshin:
         self.list.set_disp.clicked.connect(lambda: self.set.stack.setCurrentIndex(2))
         self.list.set_trans.clicked.connect(lambda: self.set.stack.setCurrentIndex(3))
         self.list.set_fly.clicked.connect(lambda: self.set.stack.setCurrentIndex(4))
-        self.list.set_comp.clicked.connect(lambda: self.set.stack.setCurrentIndex(5))
+        self.list.set_daily.clicked.connect(lambda: self.set.stack.setCurrentIndex(5))
         self.list.set_pot.clicked.connect(lambda: self.set.stack.setCurrentIndex(6))
         self.list.set_mail.clicked.connect(lambda: self.set.stack.setCurrentIndex(7))
         self.list.set_tree.clicked.connect(lambda: self.set.stack.setCurrentIndex(8))
-        self.list.set_domain.clicked.connect(lambda: self.set.stack.setCurrentIndex(9))
-        self.list.set_pass.clicked.connect(lambda: self.set.stack.setCurrentIndex(10))
+        self.list.set_pass.clicked.connect(lambda: self.set.stack.setCurrentIndex(9))
         Line(self.widget_genshin, (215, 5, 3, 505), False)
 
+    #读取游戏运行相关参数并写到界面
     def load_run(self, run):
         _dir = {
             "server": 0,
@@ -42,6 +44,7 @@ class Genshin:
         self.set.line_bgi.setText(_dir["BGI"])
         self.set.line_bgi.setSelection(0, 0)
 
+    #读取界面信息并返回
     def get_run(self):
         _dir = {
             "server": self.set.combo_server.currentIndex(),
@@ -50,6 +53,7 @@ class Genshin:
         }
         return _dir
 
+    #读取游戏配置相关参数并写到界面
     def input_config(self, _dir):
         config = {
             "模块": 2,
@@ -115,12 +119,11 @@ class Genshin:
         self.list.check_disp.setChecked(config["功能1"])
         self.list.check_trans.setChecked(config["功能2"])
         self.list.check_fly.setChecked(config["功能3"])
-        self.list.check_comp.setChecked(config["功能4"])
+        self.list.check_daily.setChecked(config["功能4"])
         self.list.check_pot.setChecked(config["功能5"])
         self.list.check_mail.setChecked(config["功能6"])
         self.list.check_tree.setChecked(config["功能7"])
-        self.list.check_domain.setChecked(config["功能8"])
-        self.list.check_pass.setChecked(config["功能9"])
+        self.list.check_pass.setChecked(config["功能8"])
 
         self.set.area0.setCurrentIndex(config["派遣0"][0])
         self.set.area1.setCurrentIndex(config["派遣1"][0])
@@ -176,6 +179,7 @@ class Genshin:
         self.set.domain_change(self.set.domain_type, self.set.domain)
         self.set.domain.setCurrentText(config["秘境"][1])
 
+    #读取界面信息并返回
     def output_config(self):
         config = dict()
         config["模块"] = 2
