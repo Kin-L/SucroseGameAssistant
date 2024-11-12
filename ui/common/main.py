@@ -13,7 +13,7 @@ class Common:
         self.widget_common = Widget()
         stack.addWidget(self.widget_common)
         self.button = Picture(main.widget_module, (0, 0, 50, 50),
-                              r"assets\kleins\picture\klein-icon.png")  # common-icon
+                              r"assets\main_window\ui\common-icon.png")
         self.list = None
         self.set = None
 

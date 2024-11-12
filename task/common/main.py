@@ -35,6 +35,8 @@ class TaskCommon(Task):
     def __init__(self):
         super().__init__()
         self.proc = None
+        self.aproc = None
+        self.eproc = None
         self.hwnd = 0
         self.pid = 0
         self.fram = (0, 0, 0, 0)
@@ -49,10 +51,9 @@ class TaskCommon(Task):
             # 启动流程
             _p = task["启动路径"]
             _c = task["附加命令"]
-            self.proc = subprocess.Popen(f"start \"\" \"{_p}\" {_c}", shell=True)
-            self.pid = self.proc.pid
-            self.hwnd = find_hwnd_from_pid(self.proc.pid)
-            self.fram = win32gui.GetWindowRect(self.hwnd)
+            proc = subprocess.Popen(f"start \"\" \"{_p}\" {_c}", shell=True)
+            self.pid = proc.pid
+            self.proc = psutil.Process(self.pid)
 
             # 开始流程
             wait(task["开始前等待时间"])
@@ -63,10 +64,11 @@ class TaskCommon(Task):
                 add_press(task["启动操作内容"])
             else:
                 if task["启动判断进程名"]:
-                    pid = find_pid_from_name(task["启动判断进程名"])
+                    apid = find_pid_from_name(task["启动判断进程名"])
+                    self.aproc = psutil.Process(apid)
                 else:
-                    pid = self.pid
-                hwnd = find_hwnd_from_pid(pid)
+                    apid = self.pid
+                hwnd = find_hwnd_from_pid(apid)
                 fram = win32gui.GetWindowRect(hwnd)
                 if task["启动判断指定区域"]:
                     (x1, y1, x2, y2) = task["启动判断指定区域"]
@@ -91,10 +93,12 @@ class TaskCommon(Task):
 
             # 结束流程
             if task["结束判断进程名"]:
-                pid = find_pid_from_name(task["结束判断进程名"])
+                epid = find_pid_from_name(task["结束判断进程名"])
+                self.eproc = psutil.Process(epid)
+                self.eproc.is_running()
             else:
-                pid = self.pid
-            proc = psutil.Process(pid)
+                epid = self.pid
+            proc = psutil.Process(epid)
             num, sec = task["判断循环"]
             if task["结束判断类型"] == 0:
                 while 1:
@@ -113,7 +117,7 @@ class TaskCommon(Task):
                             else:
                                 break
                 else:
-                    hwnd = find_hwnd_from_pid(pid)
+                    hwnd = find_hwnd_from_pid(epid)
                     fram = win32gui.GetWindowRect(hwnd)
                     if task["结束判断指定区域"]:
                         (x1, y1, x2, y2) = task["结束判断指定区域"]
@@ -142,13 +146,22 @@ class TaskCommon(Task):
                                     sleep(sec)
                                 else:
                                     break
-            # 关闭进程
-
         except Exception:
             self.indicate("任务执行异常:通用执行", log=False)
             logger.error("任务执行异常:通用执行\n%s" % format_exc())
             _k = True
         env.mode(0)
+        env.OCR.disable()
+        if self.task["关闭软件"]:
+            if self.proc:
+                if self.proc.is_running():
+                    self.proc.kill()
+            if self.aproc:
+                if self.aproc.is_running():
+                    self.aproc.kill()
+            if self.eproc:
+                if self.eproc.is_running():
+                    self.eproc.kill()
         self.indicate("完成任务:通用执行")
         return _k
 
