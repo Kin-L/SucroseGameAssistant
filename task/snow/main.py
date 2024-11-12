@@ -25,12 +25,12 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             wait(300)
             click((829, 585))
             wait(300)
+            if self.task["功能2"]:
+                self.snow_mail()
             if self.task["功能0"]:
                 self.snow_fight()
             if self.task["功能1"]:
                 self.snow_daily()
-            if self.task["功能2"]:
-                self.snow_mail()
             if self.task["功能3"]:
                 self.snow_roll()
             self.indicate("执行完成")

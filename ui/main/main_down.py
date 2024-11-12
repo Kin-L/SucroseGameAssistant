@@ -1,5 +1,4 @@
 from .main_bottom import MainBottom
-from json import dump, load
 from tools.environment import *
 from os.path import splitext, exists
 from os import listdir, makedirs
@@ -38,6 +37,7 @@ class MainDown(MainBottom):
                 "server": 0,
                 "snow_path": ""
             },
+            "common": {},
             "update": False,
             "timer": {},
             "current": {"模块": 0}
@@ -45,10 +45,11 @@ class MainDown(MainBottom):
         self.state["version"] = self.overall.version
         self.state["hwnd"] = find_hwnd((True, "Qt5152QWindowIcon", "砂糖代理"))
         if exists("personal/main_config.json"):
+            # noinspection PyBroadException
             try:
                 with open("personal/main_config.json", 'r', encoding='utf-8') as c:
                     config = load(c)
-            except:
+            except Exception:
                 with open("personal/main_config_bak.json", 'r', encoding='utf-8') as c:
                     config = load(c)
                 with open("personal/main_config.json", 'w', encoding='utf-8') as c:

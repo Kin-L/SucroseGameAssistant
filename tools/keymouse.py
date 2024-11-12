@@ -2,6 +2,7 @@
 from win32api import mouse_event, SetCursorPos, keybd_event
 from win32con import KEYEVENTF_KEYUP
 from .system import *
+import pyautogui
 key_map = {
         "0": 48, "1": 49, "2": 50, "3": 51, "4": 52, "5": 53, "6": 54, "7": 55, "8": 56, "9": 57,
         'F1': 112, 'F2': 113, 'F3': 114, 'F4': 115, 'F5': 116, 'F6': 117, 'F7': 118, 'F8': 119,
@@ -95,6 +96,17 @@ class KeyMouse(System):
         keybd_event(key_num2, 0, 0, 0)  # a按下
         keybd_event(key_num2, 0, 0, 0)  # a抬起
         keybd_event(key_num1, 0, 0, 0)  # ctrl抬起
+
+    def add_press(self, _str):
+        keys = _str.split("+")
+        if len(keys) == 1:
+            self.press(_str)
+        elif len(keys) == 2:
+            [k1, k2] = keys
+            self.key_add(k1, k2)
+        elif len(keys) == 3:
+            [k1, k2, k3] = keys
+            pyautogui.hotkey(k1, k2, k3)
 
     @staticmethod
     def wait(t):
