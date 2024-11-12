@@ -24,6 +24,8 @@ class Daily(Task):
                         _r = "谬"
                     elif i == "魔术师":
                         _r = "术师"
+                    elif i == "驰掣":
+                        _r = "驰"
                     else:
                         _r = i
                     _f = False
