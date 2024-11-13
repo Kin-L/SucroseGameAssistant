@@ -13,8 +13,14 @@ from subprocess import run
 def get_pid(name):
     pids = process_iter()
     for pid in pids:
-        if pid.name() == name:
-            return pid.pid
+        # noinspection PyBroadException
+        try:
+            _name = pid.name()
+            _pid = pid.pid
+        except Exception:
+            continue
+        if _name == name:
+            return _pid
 
 
 # 正常关闭进程
