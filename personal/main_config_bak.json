@@ -5,7 +5,7 @@
  "genshin": {
   "server": 0,
   "game": "",
-  "BGI": "D:/game/BetterGI/BetterGI/BetterGI.exe"
+  "BGI": ""
  },
  "kleins": {
   "server": 0,
@@ -76,7 +76,7 @@
   "功能1": false,
   "功能2": false,
   "功能3": false,
-  "功能4": true,
+  "功能4": false,
   "功能5": false,
   "功能6": false,
   "功能7": false,
@@ -135,7 +135,7 @@
   "砍树18": false,
   "秘境": [
    "圣遗物",
-   "虹灵的净土"
+   "仲夏庭园"
   ]
  }
 }
