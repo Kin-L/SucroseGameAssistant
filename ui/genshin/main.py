@@ -69,7 +69,6 @@ class Genshin:
             "功能5": False,
             "功能6": False,
             "功能7": False,
-            "功能8": False,
             "功能9": False,
             "派遣0": [0, 0],
             "派遣1": [0, 0],
@@ -123,7 +122,7 @@ class Genshin:
         self.list.check_pot.setChecked(config["功能5"])
         self.list.check_mail.setChecked(config["功能6"])
         self.list.check_tree.setChecked(config["功能7"])
-        self.list.check_pass.setChecked(config["功能8"])
+        self.list.check_pass.setChecked(config["功能9"])
 
         self.set.area0.setCurrentIndex(config["派遣0"][0])
         self.set.area1.setCurrentIndex(config["派遣1"][0])
@@ -193,11 +192,10 @@ class Genshin:
         config["功能1"] = self.list.check_disp.isChecked()
         config["功能2"] = self.list.check_trans.isChecked()
         config["功能3"] = self.list.check_fly.isChecked()
-        config["功能4"] = self.list.check_comp.isChecked()
+        config["功能4"] = self.list.check_daily.isChecked()
         config["功能5"] = self.list.check_pot.isChecked()
         config["功能6"] = self.list.check_mail.isChecked()
         config["功能7"] = self.list.check_tree.isChecked()
-        config["功能8"] = self.list.check_domain.isChecked()
         config["功能9"] = self.list.check_pass.isChecked()
 
         config["派遣0"] = [self.set.area0.currentIndex(), self.set.mat0.currentIndex()]
