@@ -32,6 +32,8 @@ class Kill(QThread):
             self.ui.button_pause.hide()
             self.ui.button_start.show()
             self.ui.label_status.setPixmap(pixmap)
+            self.ui.state["wait_time"] = 5
+            self.ui.cycle.start()
         except Exception:
             logger.error("手动终止线程异常:\n%s\n" % format_exc())
             sys.exit(1)
@@ -176,6 +178,8 @@ class SGARun(QThread, TaskRun):
                 sys.exit(0)
             else:
                 self.indicate("SGA等待 电脑熄屏", 3)
+                self.ui.state["wait_time"] = 5
+                self.ui.cycle.start()
                 screen_off()
         elif self.ui.task["完成后"] == 2:
             wait(60000)
