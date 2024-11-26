@@ -89,12 +89,12 @@ class MAA:
 
     def open_yituliu(self):
         self.main.indicate("", 1)
-        weopen("https://ytl.viktorlab.cn/")
+        weopen("https://ark.yituliu.cn/")
         self.main.indicate("打开网页: 一图流", 3)
 
     def open_turns(self):
         self.main.indicate("", 1)
-        weopen("https://ytl.viktorlab.cn/tools/schedule")
+        weopen("https://ark.yituliu.cn/tools/schedule")
         self.main.indicate("打开网页: 排班生成器", 3)
 
     def open_maa(self):
