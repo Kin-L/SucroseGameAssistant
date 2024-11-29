@@ -4,17 +4,16 @@ from .team import Team
 from .dispatch import Dispatch
 from .transformer import Transformer
 from .crystalfly import CatchFly
-from .condensed import Condensed
+from .daily import Daily
 from .rambler import Rambler
 from .cut_tree.main import CutTree
-from .domain import Domain
 from .mail import Mail
 from .gpass import Pass
 
 
 class TaskGenshin(Team, Dispatch, Transformer,
-                  CatchFly, Condensed, Rambler,
-                  Mail, CutTree, Domain, Pass):
+                  CatchFly, Daily, Rambler,
+                  Mail, CutTree, Pass):
     def __init__(self):
         super().__init__()
 
@@ -47,11 +46,6 @@ class TaskGenshin(Team, Dispatch, Transformer,
                 if self.genshin_catch_fly():
                     _k = True
                 self.indicate("完成:自动晶蝶")
-            if self.task["功能4"]:
-                self.indicate("开始:浓缩树脂")
-                if self.genshin_make_condensed():
-                    _k = True
-                self.indicate("完成:浓缩树脂")
             if self.task["功能5"]:
                 self.indicate("开始:尘歌壶")
                 self.genshin_rambler()
@@ -66,8 +60,8 @@ class TaskGenshin(Team, Dispatch, Transformer,
                     _k = True
                 self.indicate("完成:自动伐木")
             if self.task["功能8"]:
-                self.indicate("开始:自动秘境")
-                if self.genshin_domain():
+                self.indicate("开始:体力日常")
+                if self.daily_activity():
                     _k = True
                 self.indicate("完成:自动秘境")
             if self.task["功能9"]:

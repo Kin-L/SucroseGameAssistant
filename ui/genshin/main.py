@@ -65,10 +65,10 @@ class Genshin:
             "功能1": False,
             "功能2": False,
             "功能3": False,
-            "功能4": False,
             "功能5": False,
             "功能6": False,
             "功能7": False,
+            "功能8": False,
             "功能9": False,
             "派遣0": [0, 0],
             "派遣1": [0, 0],
@@ -107,7 +107,10 @@ class Genshin:
             "砍树16": False,
             "砍树17": False,
             "砍树18": False,
-            "秘境": ["圣遗物", "仲夏庭院"]
+            "秘境": ["圣遗物", "仲夏庭院"],
+            "圣遗物分解":False,
+            "启用秘境":False,
+            "浓缩树脂": False,
         }
         config.update(_dir)
         self.set.independent.check_mute.setChecked(config["静音"])
@@ -118,10 +121,10 @@ class Genshin:
         self.list.check_disp.setChecked(config["功能1"])
         self.list.check_trans.setChecked(config["功能2"])
         self.list.check_fly.setChecked(config["功能3"])
-        self.list.check_daily.setChecked(config["功能4"])
         self.list.check_pot.setChecked(config["功能5"])
         self.list.check_mail.setChecked(config["功能6"])
         self.list.check_tree.setChecked(config["功能7"])
+        self.list.check_daily.setChecked(config["功能8"])
         self.list.check_pass.setChecked(config["功能9"])
 
         self.set.area0.setCurrentIndex(config["派遣0"][0])
@@ -153,6 +156,12 @@ class Genshin:
         self.set.fly4.setChecked(config["晶蝶4"])
 
         self.set.daily_gift.setChecked(config["每日奖励"])
+        self.set.make_condensed_resin.setChecked(config["浓缩树脂"])
+        self.set.domain_type.setCurrentText(config["秘境"][0])
+        self.set.domain_change(self.set.domain_type, self.set.domain)
+        self.set.domain.setCurrentText(config["秘境"][1])
+        self.set.artifact_break.setChecked(config["圣遗物分解"])
+        self.set.hid_domain.setChecked(config["启用秘境"])
 
         self.set.CompactSpinBox.setValue(config["砍树次数"])
         self.set.tree0.setChecked(config["砍树0"])
@@ -174,9 +183,7 @@ class Genshin:
         self.set.tree16.setChecked(config["砍树16"])
         self.set.tree17.setChecked(config["砍树17"])
         self.set.tree18.setChecked(config["砍树18"])
-        self.set.domain_type.setCurrentText(config["秘境"][0])
-        self.set.domain_change(self.set.domain_type, self.set.domain)
-        self.set.domain.setCurrentText(config["秘境"][1])
+
 
     #读取界面信息并返回
     def output_config(self):
@@ -192,10 +199,10 @@ class Genshin:
         config["功能1"] = self.list.check_disp.isChecked()
         config["功能2"] = self.list.check_trans.isChecked()
         config["功能3"] = self.list.check_fly.isChecked()
-        config["功能4"] = self.list.check_daily.isChecked()
         config["功能5"] = self.list.check_pot.isChecked()
         config["功能6"] = self.list.check_mail.isChecked()
         config["功能7"] = self.list.check_tree.isChecked()
+        config["功能8"] = self.list.check_daily.isChecked()
         config["功能9"] = self.list.check_pass.isChecked()
 
         config["派遣0"] = [self.set.area0.currentIndex(), self.set.mat0.currentIndex()]
@@ -218,6 +225,11 @@ class Genshin:
         config["晶蝶4"] = self.set.fly4.isChecked()
 
         config["每日奖励"] = self.set.daily_gift.isChecked()
+        config["浓缩树脂"] = self.set.make_condensed_resin.isChecked()
+        config["圣遗物分解"] = self.set.artifact_break.isChecked()
+        config["启用秘境"] = self.set.hid_domain.isChecked()
+        config["秘境"] = [self.set.domain_type.currentText(),
+                        self.set.domain.currentText()]
 
         config["砍树次数"] = self.set.CompactSpinBox.value()
         config["砍树0"] = self.set.tree0.isChecked()
@@ -239,6 +251,4 @@ class Genshin:
         config["砍树16"] = self.set.tree16.isChecked()
         config["砍树17"] = self.set.tree17.isChecked()
         config["砍树18"] = self.set.tree18.isChecked()
-        config["秘境"] = [self.set.domain_type.currentText(),
-                        self.set.domain.currentText()]
         return config

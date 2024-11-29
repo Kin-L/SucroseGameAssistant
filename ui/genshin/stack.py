@@ -140,22 +140,24 @@ class Daily:
         stack.addWidget(self.page_Daily)
         # 添加控件
         self.label_concentrate = Label(self.page_Daily, (0, 12, 180, 18), "设置页面：体力日常")
-        self.daily_gift = Check(self.page_Daily, (0, 50, 400, 25), "领取凯瑟琳每日任务奖励")
 
-        self.label_domain = Check(self.page_Daily, (0, 75, 180, 18), "通过秘境消耗体力")
+        self.make_condensed_resin = Check(self.page_Daily, (0, 50, 400, 25), "合成浓缩树脂")
+        self.daily_gift = Check(self.page_Daily, (0, 75, 400, 25), "领取凯瑟琳每日任务奖励")
 
-        self.label_bgi = Label(self.page_Daily, (0, 120, 180, 18), "BGI路径")
-        self.line_bgi = Lineedit(self.page_Daily, (0, 140, 385, 33))
+        self.hid_domain = Check(self.page_Daily, (0, 100, 180, 18), "启用秘境")
+        self.label_bgi = Label(self.page_Daily, (0, 140, 80, 25), "BGI路径")
+        self.button_BGI = Button(self.page_Daily, (150, 140, 80, 25), "BGI下载")
+        self.line_bgi = Lineedit(self.page_Daily, (0, 170, 385, 33))
 
-        self.label_domain_select = Label(self.page_Daily, (0, 175, 180, 18), "秘境选择")
-        self.domain_type = Combobox(self.page_Daily, (0, 195, 130, 50))
-        self.domain = Combobox(self.page_Daily, (140, 195, 240, 50))
+        self.label_domain_select = Label(self.page_Daily, (0, 210, 180, 18), "秘境选择")
+        self.domain_type = Combobox(self.page_Daily, (0, 235, 130, 50))
+        self.domain = Combobox(self.page_Daily, (140, 235, 240, 50))
+        self.artifact_break = Check(self.page_Daily, (0, 290, 400, 25), "分解圣遗物（打完圣遗物秘境后）")
 
         self.domain_type.addItems(["圣遗物", "天赋培养素材", "武器突破素材"])
         self.domain.addItems(domain_dir["圣遗物"])
 
         self.domain_type.currentIndexChanged.connect(lambda: self.domain_change(self.domain_type, self.domain))
-        self.button_BGI = Button(self.page_Daily, (0, 250, 80, 30), "BGI下载")
         self.button_BGI.clicked.connect(self.open_BGI)
 
     @staticmethod
