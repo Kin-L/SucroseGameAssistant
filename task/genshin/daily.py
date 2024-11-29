@@ -14,26 +14,25 @@ class Daily(Genshin):
                 n = self.genshin_make_condensed(ori,num)
             elif num == 5:
                 self.indicate("浓缩树脂已满，无法合成浓缩树脂")
+                n = 0
             elif ori < 40:
                 self.indicate("体力不足，无法合成浓缩树脂")
-
-            if self.task["每日奖励"] and n >= 3:
-                self.daily_gift
-                if self.task["启用秘境"]:
-                    self.genshin_domain()
-            elif self.task["每日奖励"] and ori >= 120:
-                if self.task["启用秘境"]:
-                    self.genshin_domain()
-                    self.daily_gift
-        else:
-            if self.task["启用秘境"]:
-                self.genshin_domain()
-                
-        if daygift:
-            self.indicate(f"合成浓缩树脂足够，尝试领取每日奖励")
+                n = 0
+            else:
+                self.indicate("合成浓缩树脂出错")
+                return False
+        if self.task["每日奖励"] and n >= 3:
             self.daily_gift()
+            jiangli = 1
         else:
-            self.indicate(f"合成浓缩树脂不足，无法领取每日奖励")
+            jiangli = 0
+        if self.task["启用秘境"]:
+            self.genshin_domain()
+        if self.task["每日奖励"] and ori >= 120 and jiangli == 0:
+            self.daily_gift
+        else:
+            self.indicate("消耗体力不足，无法领取每日奖励")
+
         return False
     
     # 检查树脂
