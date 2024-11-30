@@ -50,7 +50,7 @@ class Genshin(Task):
     # 从主界面打开子界面
     def open_sub(self, cho):
         if click_text(cho, (117, 346, 742, 1052)):
-            self.indicate("打开" + cho)
+            #self.indicate("打开" + cho)
             wait(2500)
             return True
         else:
@@ -116,7 +116,7 @@ class Genshin(Task):
         else:
             return True
 
-    #打开ESC菜单
+    #退出ESC菜单
     def turn_world(self):
         m = 0
         while m >= 0:
@@ -145,7 +145,7 @@ class Genshin(Task):
         roll((580, 224), 80)
         wait(500)
         if "出战" in ocr((559, 180*n-15, 657, 90+180*n))[0]:
-            self.home()
+            self.turn_world()
             return True
         click((559, 180*n+30))
         wait(300)
