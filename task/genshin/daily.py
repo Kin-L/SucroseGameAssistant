@@ -140,6 +140,8 @@ class Daily(Genshin):
         if (x, y) == (0, 0):
             self.indicate("未识别到每日任务完成")
             click((1345,800))
+        elif "今日奖励已领取" in ocr((447,812,677,890))[0]:
+            self.indicate("今日奖励已领取")
         else:
             self.indicate("开始领取每日任务奖励")
             click((x, y))
