@@ -3,9 +3,10 @@ from task.genshin.main import TaskGenshin
 from task.kleins.main import TaskKleins
 from task.m7a.main import TaskM7A
 from task.snow.main import TaskSnow
+from task.common.main import TaskCommon
 
 
-class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow):
+class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon):
     def task_start(self, task):
         _k = False
         print(task)
@@ -45,6 +46,10 @@ class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow):
         elif task["模块"] == 5:
             TaskSnow.__init__(self)
             if self.snow_start(task):
+                _k = True
+        elif task["模块"] == 6:
+            TaskCommon.__init__(self)
+            if self.common_start(task):
                 _k = True
         else:
             self.indicate("error:未知模块。")
