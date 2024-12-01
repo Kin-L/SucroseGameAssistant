@@ -113,11 +113,11 @@ class Daily(Genshin):
         self.home()
         self.open_sub("冒险之证")
         click((291,343)) #点击每日任务页面
-        wait(800)
+        wait(1200)
         click((1552,753)) #完成每日任务
-        wait(1000)
+        wait(800)
         click((1552,753))
-        wait(1000)
+        wait(800)
         click((593,851)) #点击领取奖励跳转到地图
         wait(1500)
         self.indicate("前往凯瑟琳")
@@ -248,7 +248,7 @@ class Daily(Genshin):
         self.indicate("BGI自动秘境运行完成")
         self.home()
         #分解圣遗物
-        if self.task["圣遗物分解"] and self.task["秘境"][1] == "圣遗物":
+        if self.task["圣遗物分解"] and self.task["秘境"][0] == "圣遗物":
             self.open_sub("背包")
             wait(200)
             click((637.47))

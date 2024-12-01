@@ -146,6 +146,8 @@ class Genshin(Task):
         wait(500)
         if "出战" in ocr((559, 180*n-15, 657, 90+180*n))[0]:
             self.turn_world()
+            press("1")
+            wait(300)
             return True
         click((559, 180*n+30))
         wait(300)
