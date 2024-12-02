@@ -32,17 +32,16 @@ class Daily(Genshin):
             self.daily_gift
         else:
             self.indicate("消耗体力不足，无法领取每日奖励")
-
         return False
     
     # 检查树脂
     def check_resin(self):
         self.home()
         self.open_sub("背包")
-        wait(2000)
+        wait(500)
         self.check_overdue()
         click((1247, 54))
-        wait(800)
+        wait(500)
         sc = scshot()
         #检查浓缩树脂
         (x, y), val = find_pic(r"assets\genshin\picture\valu_tools\nssz.png",(110, 112, 1273, 805), sc)
@@ -51,13 +50,15 @@ class Daily(Genshin):
         else:
             num = 0
         #检查原粹树脂
+        self.home()
         self.open_sub("冒险之证")
         click((300, 440))
-        wait(800)
+        wait(500)
         ori = int((ocr((1368, 200, 1462, 236))[0].split("/")[0]).strip(" "))
         self.indicate(f"当前树脂：\n"
                       f"  原粹树脂: {ori} 个\n"
                       f"  浓缩树脂: {num} 个") 
+        self.home()
         return (ori,num)
 
     #合成浓缩树脂
@@ -88,8 +89,10 @@ class Daily(Genshin):
         #打开合成台  
         press("F")
         wait(1000)
+        click((900,500))
+        wait(1000)
         #识别浓缩树脂是否能做
-        if "浓缩树脂" in ocr((739, 178, 882, 227))[0]:
+        if "浓缩树脂" in ocr((1256,103, 1428,152))[0]:
             fly = int(ocr((1025, 917, 1134, 941))[0].split("/")[0])
             _n = min(int(ori/40), fly, 5-num)
             if _n:
@@ -102,6 +105,7 @@ class Daily(Genshin):
                 wait(800)
                 click((1173, 786))
                 wait(200)
+                self.home()
                 return _n
         else:
             wait(600)
@@ -118,6 +122,10 @@ class Daily(Genshin):
         wait(800)
         click((1552,753))
         wait(800)
+        if "今日奖励已领取" in ocr((447,812,677,890))[0]:
+            self.indicate("今日奖励已领取")
+            self.home()
+            return False
         click((593,851)) #点击领取奖励跳转到地图
         wait(1500)
         self.indicate("前往凯瑟琳")
@@ -140,16 +148,11 @@ class Daily(Genshin):
         if (x, y) == (0, 0):
             self.indicate("未识别到每日任务完成")
             click((1345,800))
-        elif "今日奖励已领取" in ocr((447,812,677,890))[0]:
-            self.indicate("今日奖励已领取")
         else:
             self.indicate("开始领取每日任务奖励")
-            click((x, y))
-            wait(2000)
-            click((x, y))
-            wait(1000)
-            click((x , y))
-            wait(1000)
+            for i in range (5):
+                click((x, y))
+                wait(800)
             self.indicate("每日任务完成，每日奖励已领取")
 
     #打秘境
