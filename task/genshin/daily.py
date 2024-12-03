@@ -243,7 +243,8 @@ class Daily(Genshin):
         while 1:
             wait(5000)
             f = open(path, encoding='utf-8')
-            if "→ \"自动秘境结束\"" in f.readlines()[-2] or "→ \"任务结束\"" in f.readlines()[-2]:
+            lines = f.readlines()
+            if len(lines) >= 2 and ("→ \"自动秘境结束\"" in lines[-2] or "→ \"任务结束\"" in lines[-2]):
                 break
         # env.soft.kill()
         # 关闭BGI
@@ -254,20 +255,21 @@ class Daily(Genshin):
         self.home()
         #分解圣遗物
         if self.task["圣遗物分解"] and self.task["秘境"][0] == "圣遗物":
+            self.home()
             self.open_sub("背包")
             wait(200)
-            click((637.47))
+            click((637,47))
             wait(200)
-            click_text("分解",(534,985,776,1046))
+            click_text("分解",(602,972,758,1059))
             wait(1000)
             click_text("快速选择",(185,981,431,1051))
             wait(500)
             for i in range(4):
-                click((270,10+70*i))
+                click((270,153+70*i))
                 wait(200)
             click_text("确认选择",(270,987,439,1049))
             wait(500)
-            click_text("分解",(1654,979,1816,1044))
+            click((1733,1013))
             wait(800)
             click_text("进行分解",(1101,734,1292,800))
             wait(1000)
