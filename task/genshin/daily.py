@@ -96,10 +96,10 @@ class Daily(Genshin):
             fly = int(ocr((1025, 917, 1134, 941))[0].split("/")[0])
             _n = min(int(ori/40), fly, 5-num)
             if _n:
-                ori = ori - _n*40
+                ori2 = ori - _n*40
                 cond = num + _n
                 self.indicate(f"本次合成浓缩树脂{_n}个\n"
-                            f"  原粹树脂: {ori} -> {ori}\n"
+                            f"  原粹树脂: {ori} -> {ori2}\n"
                             f"  浓缩树脂: {num} -> {cond}")
                 click((1727, 1019))
                 wait(800)
@@ -154,6 +154,7 @@ class Daily(Genshin):
                 click((x, y))
                 wait(800)
             self.indicate("每日任务完成，每日奖励已领取")
+        self.home()
 
     #打秘境
     def genshin_domain(self):
