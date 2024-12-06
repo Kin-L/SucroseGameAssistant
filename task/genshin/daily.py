@@ -29,6 +29,7 @@ class Daily(Genshin):
         if self.task["启用秘境"]:
             self.genshin_domain()
         if self.task["每日奖励"] and ori >= 120 and jiangli == 0:
+            self.team_change_to(1)
             self.daily_gift
         else:
             self.indicate("消耗体力不足，无法领取每日奖励")
