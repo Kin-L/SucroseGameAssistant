@@ -30,10 +30,14 @@ def message_box(text):
 
 # 查询静音状态
 def get_mute():
-    devices = AudioUtilities.GetSpeakers()
-    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-    volume = cast(interface, POINTER(IAudioEndpointVolume))
-    return volume.GetMute()
+    # noinspection PyBroadException
+    try:
+        devices = AudioUtilities.GetSpeakers()
+        interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+        volume = cast(interface, POINTER(IAudioEndpointVolume))
+        return volume.GetMute()
+    except Exception:
+        return 0
 
 
 # 切换静音状态

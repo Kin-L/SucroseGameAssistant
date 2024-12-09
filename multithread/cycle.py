@@ -6,6 +6,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from task.main import TaskRun
 from pyautogui import press as papress
 from time import sleep
+import sys
 
 
 class Cycle(QThread, TaskRun):

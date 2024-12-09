@@ -6,7 +6,7 @@ from task.snow.main import TaskSnow
 from task.common.main import TaskCommon
 
 
-class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow,TaskCommon):
+class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon):
     def task_start(self, task):
         _k = False
         print(task)
