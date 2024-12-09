@@ -133,14 +133,42 @@ class Fly:
         self.fly4 = Check(self.page_fly, (0, 275, 140, 22), "稻妻平海砦")
 
 
-class Concentrate:
+class Daily:
     def __init__(self, stack):
         # 初始化窗口
-        self.page_concentrate = Widget(stack)
-        stack.addWidget(self.page_concentrate)
+        self.page_Daily = Widget(stack)
+        stack.addWidget(self.page_Daily)
         # 添加控件
-        self.label_concentrate = Label(self.page_concentrate, (0, 12, 180, 18), "设置页面：浓缩树脂")
-        self.daily_gift = Check(self.page_concentrate, (0, 50, 400, 25), "领取凯瑟琳每日任务奖励（合成树脂三个以上）")
+        self.label_concentrate = Label(self.page_Daily, (0, 12, 180, 18), "设置页面：体力日常")
+
+        self.make_condensed_resin = Check(self.page_Daily, (0, 50, 400, 25), "合成浓缩树脂")
+        self.daily_gift = Check(self.page_Daily, (0, 75, 400, 25), "领取凯瑟琳每日任务奖励")
+
+        self.hid_domain = Check(self.page_Daily, (0, 100, 180, 18), "启用秘境")
+        self.label_bgi = Label(self.page_Daily, (0, 140, 80, 25), "BGI路径")
+        self.button_BGI = Button(self.page_Daily, (150, 140, 80, 25), "BGI下载")
+        self.line_bgi = Lineedit(self.page_Daily, (0, 170, 385, 33))
+
+        self.label_domain_select = Label(self.page_Daily, (0, 210, 180, 18), "秘境选择")
+        self.domain_type = Combobox(self.page_Daily, (0, 235, 130, 50))
+        self.domain = Combobox(self.page_Daily, (140, 235, 240, 50))
+        self.artifact_break = Check(self.page_Daily, (0, 290, 400, 25), "分解圣遗物（打完圣遗物秘境后）")
+
+        self.domain_type.addItems(["圣遗物", "天赋培养素材", "武器突破素材"])
+        self.domain.addItems(domain_dir["圣遗物"])
+
+        self.domain_type.currentIndexChanged.connect(lambda: self.domain_change(self.domain_type, self.domain))
+        self.button_BGI.clicked.connect(self.open_BGI)
+
+    @staticmethod
+    def domain_change(fa, fm):
+        fm.clear()
+        fm.addItems(domain_dir[fa.currentText()])
+
+    @staticmethod
+    def open_BGI():
+        weopen.open("https://bgi.huiyadan.com/")
+
 
 
 class Pot:
@@ -210,37 +238,8 @@ domain_dir = {
          "有顶塔", "深潮的余响", "深古瞭望所"]}
 
 
-class Domain:
-    def __init__(self, stack):
-        # 初始化窗口
-        self.page_domain = Widget(stack)
-        stack.addWidget(self.page_domain)
-        # 添加控件
-        self.label_domain = Label(self.page_domain, (0, 12, 180, 18), "设置页面：自动秘境")
-        self.line_domain0 = Line(self.page_domain, (0, 40, 395, 3))
 
-        self.label_bgi = Label(self.page_domain, (0, 50, 180, 18), "BGI路径")
-        self.line_bgi = Lineedit(self.page_domain, (0, 80, 385, 33))
 
-        self.label_domain_select = Label(self.page_domain, (0, 125, 180, 18), "秘境选择")
-        self.domain_type = Combobox(self.page_domain, (0, 160, 130, 50))
-        self.domain = Combobox(self.page_domain, (140, 160, 240, 50))
-
-        self.domain_type.addItems(["圣遗物", "天赋培养素材", "武器突破素材"])
-        self.domain.addItems(domain_dir["圣遗物"])
-
-        self.domain_type.currentIndexChanged.connect(lambda: self.domain_change(self.domain_type, self.domain))
-        self.button_BGI = Button(self.page_domain, (0, 220, 80, 30), "BGI下载")
-        self.button_BGI.clicked.connect(self.open_BGI)
-
-    @staticmethod
-    def domain_change(fa, fm):
-        fm.clear()
-        fm.addItems(domain_dir[fa.currentText()])
-
-    @staticmethod
-    def open_BGI():
-        weopen.open("https://bgi.huiyadan.com/")
 
 
 class Pass:
@@ -253,7 +252,7 @@ class Pass:
         self.label_pass_tip = Label(self.page_pass, (90, 80, 220, 27), "领取纪行 暂无配置项目。")
 
 
-class GenshinStack(Local, Team, Disp, Trans, Fly, Concentrate, Pot, Mail, Tree, Domain, Pass):
+class GenshinStack(Local, Team, Disp, Trans, Fly, Daily, Pot, Mail, Tree, Pass):
     def __init__(self, widget, location):
         # 功能堆叠窗口
         self.stack = Stack(widget, location)
@@ -262,9 +261,8 @@ class GenshinStack(Local, Team, Disp, Trans, Fly, Concentrate, Pot, Mail, Tree, 
         Disp.__init__(self, self.stack)
         Trans.__init__(self, self.stack)
         Fly.__init__(self, self.stack)
-        Concentrate.__init__(self, self.stack)
+        Daily.__init__(self, self.stack)
         Pot.__init__(self, self.stack)
         Mail.__init__(self, self.stack)
         Tree.__init__(self, self.stack)
-        Domain.__init__(self, self.stack)
         Pass.__init__(self, self.stack)

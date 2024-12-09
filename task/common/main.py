@@ -56,7 +56,8 @@ class TaskCommon(Task):
             self.proc = psutil.Process(self.pid)
 
             # 开始流程
-            wait(task["开始前等待时间"])
+            if task["开始前等待时间"] :
+                wait(task["开始前等待时间"])
             env.OCR.enable()
             if task["启动操作类型"] == 0:
                 pass
@@ -89,7 +90,8 @@ class TaskCommon(Task):
                         self.indicate("未识别到目标图像")
                         raise RuntimeError("通用执行:未识别到目标图像")
                     click(pos)
-            wait(task["开始后等待时间"])
+            if task["开始后等待时间"] :
+                wait(task["开始后等待时间"])
 
             # 结束流程
             if task["结束判断进程名"]:

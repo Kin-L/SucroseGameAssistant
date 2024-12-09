@@ -35,8 +35,8 @@ class Start:
 
         Line(self.page_start, (0, 42, 395, 3))
 
-        self.label_fwait = Label(self.page_start, (0, 55, 120, 18), "开始前等待时间：")
-        self.line_fwait = Lineedit(self.page_start, (125, 50, 70, 30))
+        self.label_fwait = Label(self.page_start, (0, 55, 150, 18), "开始前等待时间(秒)：")
+        self.line_fwait = Lineedit(self.page_start, (150, 50, 70, 30))
         self.label_act_proc = Label(self.page_start, (0, 85, 100, 27), "指定进程名：")
         self.line_act_proc = Lineedit(self.page_start, (0, 120, 385, 33))
         self.label_act = Label(self.page_start, (0, 160, 80, 27), "启动操作：")
