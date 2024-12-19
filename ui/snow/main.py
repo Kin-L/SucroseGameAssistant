@@ -32,6 +32,8 @@ class Snow:
         self.set.button_wiki.clicked.connect(self.open_wiki)
         # self.set.button_arrange.clicked.connect(self.roll_arrange)
         self.set.button_open_roll.clicked.connect(self.open_roll_directory)
+        self.set.button_snow_list1.clicked.connect(self.open_list_file)
+        self.set.button_snow_list2.clicked.connect(self.open_list_file)
         Line(self.widget_snow, (215, 5, 3, 505), False)
 
     def load_run(self, run):
@@ -180,6 +182,10 @@ class Snow:
     def open_roll_directory(self):
         startfile(env.workdir + "/personal/snow/roll")
         self.main.indicate("打开文件夹: 共鸣记录", 1)
+
+    def open_list_file(self):
+        startfile(env.workdir + "/assets/snow/list.json")
+        self.main.indicate("打开文件: 自定义文件", 1)
 
     def open_wiki(self):
         weopen("https://wiki.biligame.com/sonw/%E9%A6%96%E9%A1%B5")

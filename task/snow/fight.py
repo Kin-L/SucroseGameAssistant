@@ -2,6 +2,7 @@ from tools.environment import *
 from ..default_task import Task
 
 
+
 class Fight(Task):
     def __init__(self):
         super().__init__()
@@ -62,10 +63,16 @@ class Fight(Task):
                 click_change((1055, 35), (1031, 17, 1078, 53))
                 self.indicate(f"暂无限时试剂可用")
             del sc
-        cons = int(ocr((901, 12, 1028, 60))[0].replace(" ", "")[:-4])
-
+        sc = scshot()
+        _str = ocr((901, 12, 1028, 60), sc)[0].replace(" ", "")[:-4]
+        try:
+            cons = int(_str)
+        except ValueError:
+            self.indicate(f"感知数量识别异常")
+            _path = errorsc_save(sc)
+            logger.error(f"截图导出: {_path}")
+            return 0
         if self.task["行动选择"] == 8:
-            cons = int(ocr((901, 12, 1028, 60))[0].replace(" ", "")[:-4])
             if cons >= 30:
                 click_change((1499, 538), (1402, 463, 1499, 505))
                 wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))

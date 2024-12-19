@@ -1,7 +1,7 @@
 from .operate import Operate
 from .system import *
 from numpy import ndarray
-from cv2 import imread
+from cv2 import imread, imwrite
 from os.path import isfile, exists, split, splitext, join, basename
 from traceback import format_exc
 from os import listdir, remove
@@ -11,6 +11,22 @@ from json import load, dump
 from yaml import load as yload
 from yaml import dump as ydump
 from yaml import FullLoader
+from os import rename
+import os
+import numpy as np
+
+
+def errorsc_save(sc):
+    import time
+    now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
+    new_path = f"personal/errorsc/{now}.png"
+    if not os.path.exists(r"personal/errorsc"):
+        os.makedirs("personal/errorsc")
+    if isinstance(sc, np.ndarray):
+        imwrite(new_path, sc)
+    else:
+        rename(sc, new_path)
+    return new_path
 
 
 def text_match(res, text, domain=(0, 0, 1920, 1080), border=False):

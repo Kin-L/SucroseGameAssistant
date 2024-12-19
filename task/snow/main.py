@@ -146,8 +146,9 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                 _value2 = ocr((398, 219, 893, 540))[0]
                 if "关闭" in _value2:
                     pos = find_text("确定", (398, 219, 893, 540))
-                    click_change(pos, (398, 219, 893, 540))
-                    return False
+                    if pos:
+                        click_change(pos, (398, 219, 893, 540))
+                        return False
                 _value = ocr((1004, 646, 1151, 701))[0]
                 if "开始游戏" in _value:
                     click_change((1073, 673), (1004, 646, 1151, 701))

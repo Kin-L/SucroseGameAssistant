@@ -1,6 +1,7 @@
 from os.path import exists
 from ui.element.ui_part import Independent
 from ui.element.control import *
+from json import load
 
 
 class Local:
@@ -66,22 +67,16 @@ class Fight:
              "达摩小队",
              "凯夫曼小队"])
         self.logistics1 = Combobox(self.page_fight, (185, 305, 160, 40))
+        _path = r"assets\snow\list.json"
+        with open(_path, 'r', encoding='utf-8') as g:
+            _dir = load(g)
         self.logistics1.addItems(
-            ["明夷小队",
-             "秋津小队",
-             "阿玛纳小队",
-             "心园小队",
-             "伊莱小队",
-             "极光小队",
-             "祖灵小队",
-             "沙叶小队",
-             "金甲小队",
-             "星朗小队",
-             "清乐小队",
-             "掠影小队",
-             "射影小队",
-             "钢羽小队",
-             "超视小队"])
+            _dir["活动后勤"])
+
+        self.label_diy = Label(self.page_fight, (200, 275, 180, 18), "活动后勤自定义添加")
+        self.button_snow_list1 = (
+            TransPicButton(self.page_fight, (170, 275, 30, 30),
+                           "assets/main_window/ui/directory.png", (25, 25)))
 
 
 class Daily:
@@ -98,14 +93,11 @@ class Daily:
         self.character2 = Combobox(self.page_debris, (145, 110, 120, 40))
         self.character3 = Combobox(self.page_debris, (15, 155, 120, 40))
         self.character4 = Combobox(self.page_debris, (145, 155, 120, 40))
-        chara = ["未选择", "驰掣",
-                 "幽潮", "朝翼", "龙舌兰", "辉耀", "无限之视",
-                 "瞬刻", "羽蜕", "悖谬", "豹豹", "蓝闪",
-                 "魔术师", "藏锋", "溯影", "云篆", "辉夜",
-                 "咎冠", "冬至", "狂猎", "雨燕", "缄默",
-                 "小金鱼", "小太阳", "观测者", "黄金狮子", "养生专家",
-                 "猫猫", "星期三", "姐姐大人", "双面", "旧日王牌",
-                 "绷带小组", "不予显示", "四手"]
+        _path = r"assets\snow\list.json"
+        with open(_path, 'r', encoding='utf-8') as g:
+            _dir = load(g)
+
+        chara = ["未选择"]+_dir["个人故事"]
         self.character1.addItems(chara)
         self.character2.addItems(chara)
         self.character3.addItems(chara)
@@ -123,6 +115,11 @@ class Daily:
         self.check_daily = Check(self.page_debris, (15, 375, 140, 22), "领取日常")
         self.check_daily2 = Check(self.page_debris, (15, 410, 140, 22), "领取凭证")
         self.check_daily3 = Check(self.page_debris, (15, 445, 180, 22), "领取活动每日")
+
+        self.label_character = Label(self.page_debris, (200, 50, 180, 18), "角色选择自定义添加")
+        self.button_snow_list2 = (
+            TransPicButton(self.page_debris, (170, 50, 30, 30),
+                           "assets/main_window/ui/directory.png", (25, 25)))
 
 
 class Mail:

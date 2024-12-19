@@ -41,6 +41,7 @@ class MainWindow:  # FramelessWindow
 
         # 信息栏显示信息
     def indicate(self, msg, mode=2, his=True, log=True):
+        logger.basicConfig
         if mode == 0:  # 清空信息栏
             self.box_info.clear()
         elif mode == 1:  # 时间前缀的信息头部追加
