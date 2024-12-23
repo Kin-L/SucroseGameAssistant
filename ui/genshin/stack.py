@@ -34,7 +34,7 @@ class Team:
         # 添加控件
         self.label_team = Label(self.page_team, (0, 12, 180, 18), "设置页面：切换队伍")
         self.label_team_tip = Label(self.page_team, (0, 80, 400, 200),
-                                    "第一次使用请亲手配置队伍,为SGA保留左边/上边第一个\n队伍为跑图队伍。队伍需求：\n  (1)1号位为任意成女体型角色(如丽莎,雷电将军）,武器、\n天赋、队伍共鸣不应有加速buff\n  (2)2号位为草元素主角或纳西妲,用于捕捉晶蝶的机关\n触发\n  (3)队伍中应有早柚,瑶瑶等角色,用于捕捉晶蝶。\n\n如使用自动秘境功能请将队伍配置在二号队伍位置")
+                                    "第一次使用请亲手配置队伍,为SGA保留左边/上边第一个\n队伍为跑图队伍。队伍需求：\n  (1)1号位为任意成女体型角色(如丽莎,雷电将军）,武器、\n天赋、队伍共鸣不应有加速buff\n  (2)2号位为草元素主角或纳西妲,用于捕捉晶蝶的机关\n触发\n  (3)队伍中应有早柚,瑶瑶等角色,用于捕捉晶蝶。(4)四号位为法器角色，用于参量质变仪的触发（推荐芭芭拉）\n\n如使用自动秘境功能请将队伍配置在二号队伍位置")
 
 
 dispatch_dir = {
@@ -112,12 +112,14 @@ class Trans:
         stack.addWidget(self.page_trans)
         # 添加控件
         self.label_trans = Label(self.page_trans, (0, 12, 200, 18), "设置页面：参量质变仪")
-        self.LineEdit0 = Lineedit(self.page_trans, (0, 50, 385, 33))
-        self.LineEdit1 = Lineedit(self.page_trans, (0, 100, 385, 33))
-        self.LineEdit2 = Lineedit(self.page_trans, (0, 150, 385, 33))
-        self.LineEdit3 = Lineedit(self.page_trans, (0, 200, 385, 33))
-        self.LineEdit4 = Lineedit(self.page_trans, (0, 250, 385, 33))
+        self.meterial_choose = Label(self.page_trans, (0, 35, 400, 40), "材料选择（先用第一种，用完了补充第二种，一种材料\n先消耗低品质的，再消耗高品质的）")
+        self.meterial_choose1 = Combobox(self.page_trans, (0, 80, 160, 30))
+        self.meterial_choose2 = Combobox(self.page_trans, (180, 80, 160, 30))
+        self.meterial_choose1.addItems(trans_meterials)
+        self.meterial_choose2.addItems(trans_meterials)
+        self.meterial_tip = Label(self.page_trans, (0, 450, 350, 18), "更多材料选择请联系作者")
 
+trans_meterials=["未选择","牛头人号角","愚人众徽记","丘丘人面具","盗宝团鸦印","史莱姆凝液"]
 
 class Fly:
     def __init__(self, stack):
