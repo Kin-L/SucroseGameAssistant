@@ -111,12 +111,12 @@ def pack(_d, _v, full=False):
 
 # 更新包自动打包脚本
 if __name__ == '__main__':
-    _ver = "v2.3.1.2"
+    _ver = "v2.3.2"
     file_dir = {
         "update_history.txt": "",
         # "README.md": "",
-        # "assets": "",
-        "assets/main_window/version.json": "",
+        "assets": "",
+        # "assets/main_window/version.json": "",
         "multithread": "_internal",
         "tools": "_internal",
         "ui": "_internal",
