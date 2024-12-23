@@ -1,13 +1,15 @@
 from tools.environment import *
 from .genshin import Genshin
-import os
+import os , time
 
 
 class Transformer(Genshin):
     def genshin_transformer(self):
-        if not os.path.isfile(self.task['参量质变仪0']):
-            self.indicate("error:\n  参量质变仪材料设置不正确")
+        if self.task['参量质变仪1'] == 0 and self.task['参量质变仪2'] == 0 :
+            self.indicate("error:\n  参量质变仪材料未设置")
             return True
+        
+        #检查参量质变仪时间
         self.home()
         self.indicate("检查参量质变仪")
         self.open_sub("背包")
@@ -18,8 +20,8 @@ class Transformer(Genshin):
         (x, y), val = find_pic(r"assets\genshin\picture\lit_tools\para_trans.png", (109, 113, 1275, 459))
         if val <= 0.8:
             self.indicate("参量质变仪（未找到/冷却中）")
-            click((1840, 47))
-            wait(1500)
+            self.home()
+            return 0
         else:
             _t = ocr((x-58, y-55, x+58, y+55))[0]
             for i in ["天", "时", "分", "秒"]:
@@ -28,78 +30,90 @@ class Transformer(Genshin):
                     self.home()
                     return 0
             self.indicate("参量质变仪可用")
-            click((x, y))
-            wait(800)
-            _p, val = find_pic(r"assets\genshin\picture\lit_tools\para_retrieve.png", (1645, 971, 1769, 1058))
-            if val >= 0.6:
-                click(_p)
-                wait(1500)
-            self.home()
-            self.tp_domain("菫色之庭")
-            click((1669, 1009))
-            wait(500)
-            self.world()
-            keydown("A")
-            wait(2100)
-            keyup("A")
-            wait(500)
-            keydown("W")
-            wait(2100)
-            keyup("W")
-            wait(500)
-            self.home()
-            self.open_sub("背包")
-            click((1053, 48))
-            wait(800)
-            _p, val = find_pic(r"assets\genshin\picture\lit_tools\para_trans.png", (109, 113, 1275, 459))
+
+        click((x, y))
+        wait(800)
+        _p, val = find_pic(r"assets\genshin\picture\lit_tools\para_retrieve.png", (1645, 971, 1769, 1058))
+        if val >= 0.6:
             click(_p)
-            wait(800)
-            click((1694, 1022))
             wait(1500)
-            click((1633, 549))
-            wait(1000)
-            press("F")
-            wait(2000)
-            for i in range(5):
-                mat = self.task[f'参量质变仪{i}']
-                if os.path.isfile(mat):
-                    c = os.path.splitext(mat)[0]
-                    c, b = os.path.split(c)
-                    a = os.path.split(c)[1]
-                    self.indicate("尝试添加材料:\n  " + b)
-                    _p, val = find_pic(f"assets/genshin/picture/{a}/{a}.png", (456, 0, 1450, 94))
-                    click(_p)
-                    wait(800)
-                    _p, val = find_pic(mat, (104, 107, 1282, 955))
-                    click(_p)
-                    wait(800)
-                    click((454, 1021))
-                    wait(800)
-                    res = find_color("red", (1338, 979, 1560, 1056))[1]
-                    if res:
-                        self.indicate("参量质变仪还未装满")
-                    else:
-                        click((1703, 1020))
-                        wait(800)
-                        click((1178, 757))
-                        wait(1000)
-                        self.indicate("参量质变仪已装满")
-                        break
+        self.home()
+        self.tp_domain1
+        self.home()
+        self.open_sub("背包")
+        click((1053, 48))
+        wait(800)
+        _p, val = find_pic(r"assets\genshin\picture\lit_tools\para_trans.png", (109, 113, 1275, 459))
+        click(_p)
+        wait(800)
+        click((1694, 1022))
+        wait(1500)
+        click((1633, 549))
+        wait(1000)
+        
+        #打开质变仪
+        press("F")
+        wait(2000)
+        #材料目录
+        meterial_pic_name = ["bugle","insignia","mask","raven_insignia","slime"]
+        self.indicate("尝试添加第一种材料")
+        for m in range(1,3):
+            pic_dir1 = r"assets/genshin/picture/develop_tools/"+meterial_pic_name[self.task["参量质变仪1"]]+f"{m}"+".png"
+            self.indicate(pic_dir1)
+            _p, val = find_pic(pic_dir1, (100,104,1279,815))
+            if val <= 0.8:
+                self.indicate(f"第一种材料品质{m}未找到")
+                continue
+            click(_p)
+            wait(500)
+            click((462,1026)) #点击最大数量
+            res = find_color("red", (1338, 979, 1560, 1056))[1]
+            if res == 0:
+                pass
+            else:
+                self.indicate("第一种材料当前品质数量不足，正在寻找更高品质")
+        if res != 0:
+            self.indicate("第一种材料不足，正在添加第二种材料")
+            for n in range(1,3):
+                pic_dir2 = "assets/genshin/picture/develop_tools/"+meterial_pic_name[self.task["参量质变仪2"]]+f"{n}"+".png"    
+                _p, val = find_pic(pic_dir2, (100,104,1279,815))
+                if val <= 0.8:
+                    self.indicate(f"第二种材料品质{n}未找到")
+                    continue
+                click(_p)
+                wait(500)
+                click((454, 1021))
+                res1 = find_color("red", (1338, 979, 1560, 1056))[1]
+                if res1 == 0:
+                    pass
                 else:
-                    self.indicate("参量质变仪未装满")
-                    click((1840, 47))
-                    wait(1500)
-                    return True
-            self.indicate("参量质变仪充能中")
-            for i in range(15):
-                wait(2000)
-                pos, val = find_pic(r"assets\genshin\picture\acquire.png", (871, 242, 1050, 339))
-                if val >= 0.6:
-                    break
-                elif i == 14:
-                    self.indicate("等待参量质变仪使用超时(30s)\n")
-                    return True
-            click((961, 804))
-            self.indicate("参量质变仪使用成功")
-            self.home()
+                    self.indicate("第一种材料当前品质数量不足，正在寻找更高品质")
+            if res1 == 0:
+                self.indicate("材料不足，请重新设置材料")
+                self.home()
+                return 0
+            
+        self.indicate("参量质变仪已装满")
+        click((1703, 1020))
+        wait(800)
+        click((1178, 757))
+        wait(1000)
+        self.indicate("参量质变仪充能中")
+        press("4")
+        for i in range(20):
+            for j in range(3):
+                click((50,50))
+                wait(200)
+            pos, val = find_pic(r"assets\genshin\picture\acquire.png", (871, 242, 1050, 339))
+            if val >= 0.6:
+                break
+            elif i == 20:
+                self.indicate("参量质变仪充能超时\n")
+                return True
+        click((961, 804))
+        self.indicate("参量质变仪使用成功")
+        self.home()
+        self.turn_world()
+        press("1")
+        self.home()
         return False
