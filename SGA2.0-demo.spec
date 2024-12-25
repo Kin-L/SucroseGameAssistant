@@ -1,6 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 from os import path
-# pyinstaller SGA2.0-demo1.0.spec
+# pyinstaller SGA2.0-demo.spec
 
 a = Analysis(
     ['SGA2.0-demo.py'],
