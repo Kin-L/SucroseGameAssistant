@@ -54,7 +54,15 @@ class Daily(Task):
                             wait(800)
                     if _f:
                         continue
-                    _num = int(ocr((1459, 27, 1540, 77))[0].split("/")[0])
+                    sc = scshot()
+                    _str = ocr((1459, 27, 1540, 77))[0].split("/")[0]
+                    try:
+                        _num = int(_str)
+                    except ValueError:
+                        self.indicate(f"记忆嵌片数量识别异常")
+                        _path = errorsc_save(sc)
+                        logger.error(f"截图导出: {_path}")
+                        return 0
                     if _num == 0 and self.task["个人故事"][1] and _u < 2:
                         _u += 1
                         click_change((1566, 51), (1547, 38, 1584, 69))

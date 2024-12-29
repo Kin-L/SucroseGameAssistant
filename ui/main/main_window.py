@@ -2,6 +2,7 @@ from ui.element.control import *
 from ui.element.ui_part import *
 from time import strftime, localtime
 from tools.environment import logger
+from datetime import datetime
 
 
 # 主窗口
@@ -41,16 +42,19 @@ class MainWindow:  # FramelessWindow
 
         # 信息栏显示信息
     def indicate(self, msg, mode=2, his=True, log=True):
-        logger.basicConfig
         if mode == 0:  # 清空信息栏
             self.box_info.clear()
         elif mode == 1:  # 时间前缀的信息头部追加
+            date = datetime.now().strftime("%Y-%m-%d")
+            if date != logger.date:
+                logger.new_handler(date)
             now_time = strftime("%Y-%m-%d", localtime())
             self.box_info.append(now_time)
             if his:
                 txt = open(r"personal\history.txt", 'a+', encoding='utf-8')
                 txt.write(now_time + "\n")
         elif mode == 2:  # 时间前缀的信息持续追加
+
             _t = strftime("%H:%M:%S ", localtime()) + msg
             _t = _t.replace("\n", "\n         ")
             self.box_info.append(_t)
@@ -60,6 +64,7 @@ class MainWindow:  # FramelessWindow
                 txt.write(_t + "\n")
             if log:
                 logger.info(msg.replace("\n", "\n                   "))
+
         elif mode == 3:  # 信息段落结尾
             _t = strftime("%H:%M:%S ", localtime()) + msg
             _t = _t.replace("\n", "\n         ")

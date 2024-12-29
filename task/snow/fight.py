@@ -2,7 +2,6 @@ from tools.environment import *
 from ..default_task import Task
 
 
-
 class Fight(Task):
     def __init__(self):
         super().__init__()
