@@ -76,11 +76,8 @@ class Genshin:
             "派遣3": [0, 0],
             "派遣4": [0, 0],
             "再次派遣": False,
-            "参量质变仪0": "",
-            "参量质变仪1": "",
-            "参量质变仪2": "",
-            "参量质变仪3": "",
-            "参量质变仪4": "",
+            "参量质变仪1":"未选择",
+            "参量质变仪2":"未选择",
             "晶蝶0": False,
             "晶蝶1": False,
             "晶蝶2": False,
@@ -144,11 +141,8 @@ class Genshin:
         self.set.mat4.setCurrentIndex(config["派遣4"][1])
         self.set.redisp.setChecked(config["再次派遣"])
 
-        self.set.LineEdit0.setText(config["参量质变仪0"])
-        self.set.LineEdit1.setText(config["参量质变仪1"])
-        self.set.LineEdit2.setText(config["参量质变仪2"])
-        self.set.LineEdit3.setText(config["参量质变仪3"])
-        self.set.LineEdit4.setText(config["参量质变仪4"])
+        self.set.meterial_choose1.setCurrentText(config["参量质变仪1"])
+        self.set.meterial_choose2.setCurrentText(config["参量质变仪2"])
         self.set.fly0.setChecked(config["晶蝶0"])
         self.set.fly1.setChecked(config["晶蝶1"])
         self.set.fly2.setChecked(config["晶蝶2"])
@@ -212,11 +206,8 @@ class Genshin:
         config["派遣4"] = [self.set.area4.currentIndex(), self.set.mat4.currentIndex()]
         config["再次派遣"] = self.set.redisp.isChecked()
 
-        config["参量质变仪0"] = self.set.LineEdit0.text()
-        config["参量质变仪1"] = self.set.LineEdit1.text()
-        config["参量质变仪2"] = self.set.LineEdit2.text()
-        config["参量质变仪3"] = self.set.LineEdit3.text()
-        config["参量质变仪4"] = self.set.LineEdit4.text()
+        config["参量质变仪1"] = self.set.meterial_choose1.currentIndex()
+        config["参量质变仪2"] = self.set.meterial_choose2.currentIndex()
 
         config["晶蝶0"] = self.set.fly0.isChecked()
         config["晶蝶1"] = self.set.fly1.isChecked()

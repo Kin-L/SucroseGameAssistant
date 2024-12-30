@@ -21,20 +21,17 @@ class Daily(Genshin):
             else:
                 self.indicate("合成浓缩树脂出错")
                 return False
+        jiangli = 0
         if self.task["每日奖励"] and n >= 3:
             self.daily_gift()
             jiangli = 1
-        else:
-            jiangli = 0
         if self.task["启用秘境"]:
             self.genshin_domain()
         if jiangli == 0 :
             if self.task["每日奖励"] and ori >= 120:
-                self.team_change_to(1)
                 self.daily_gift
-            elif jiangli == 0:
+            else:
                 self.indicate("消耗体力不足，无法领取每日奖励")
-
         return False
     
     # 检查树脂
@@ -256,6 +253,7 @@ class Daily(Genshin):
         if pid is not None:
             close(pid)
         self.indicate("BGI自动秘境运行完成")
+        wait(1000)
         self.home()
         #分解圣遗物
         if self.task["圣遗物分解"] and self.task["秘境"][0] == "圣遗物":
