@@ -117,6 +117,7 @@ class Trans:
         self.meterial_choose2 = Combobox(self.page_trans, (180, 80, 160, 30))
         self.meterial_choose1.addItems(trans_meterials)
         self.meterial_choose2.addItems(trans_meterials)
+        self.team_tip = Label(self.page_trans, (0, 150, 350, 18), "请确保1号队的四号位为法器角色")
         self.meterial_tip = Label(self.page_trans, (0, 450, 350, 18), "更多材料选择请联系作者")
 
 trans_meterials=["未选择","牛头人号角","愚人众徽记","丘丘人面具","盗宝团鸦印","史莱姆凝液"]

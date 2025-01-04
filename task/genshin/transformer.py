@@ -38,7 +38,7 @@ class Transformer(Genshin):
             click(_p)
             wait(1500)
         self.home()
-        self.tp_domain1
+        self.tp_fontaine1()
         self.home()
         self.open_sub("背包")
         click((1053, 48))
@@ -58,8 +58,7 @@ class Transformer(Genshin):
         meterial_pic_name = ["bugle","insignia","mask","raven_insignia","slime"]
         self.indicate("尝试添加第一种材料")
         for m in range(1,3):
-            pic_dir1 = r"assets/genshin/picture/develop_tools/"+meterial_pic_name[self.task["参量质变仪1"]]+f"{m}"+".png"
-            self.indicate(pic_dir1)
+            pic_dir1 = os.path.join("assets", "genshin", "picture", "develop_tools", meterial_pic_name[self.task["参量质变仪1"]] + f"{m}" + ".png")
             _p, val = find_pic(pic_dir1, (100,104,1279,815))
             if val <= 0.8:
                 self.indicate(f"第一种材料品质{m}未找到")
@@ -67,6 +66,7 @@ class Transformer(Genshin):
             click(_p)
             wait(500)
             click((462,1026)) #点击最大数量
+            wait(500)
             res = find_color("red", (1338, 979, 1560, 1056))[1]
             if res == 0:
                 pass
@@ -75,7 +75,7 @@ class Transformer(Genshin):
         if res != 0:
             self.indicate("第一种材料不足，正在添加第二种材料")
             for n in range(1,3):
-                pic_dir2 = "assets/genshin/picture/develop_tools/"+meterial_pic_name[self.task["参量质变仪2"]]+f"{n}"+".png"    
+                pic_dir2 = os.path.join("assets", "genshin", "picture", "develop_tools", meterial_pic_name[self.task["参量质变仪2"]] + f"{n}" + ".png")    
                 _p, val = find_pic(pic_dir2, (100,104,1279,815))
                 if val <= 0.8:
                     self.indicate(f"第二种材料品质{n}未找到")
@@ -83,6 +83,7 @@ class Transformer(Genshin):
                 click(_p)
                 wait(500)
                 click((454, 1021))
+                wait(500)
                 res1 = find_color("red", (1338, 979, 1560, 1056))[1]
                 if res1 == 0:
                     pass
@@ -100,14 +101,13 @@ class Transformer(Genshin):
         wait(1000)
         self.indicate("参量质变仪充能中")
         press("4")
-        for i in range(20):
-            for j in range(3):
-                click((50,50))
-                wait(200)
+        for i in range(60):
+            click((50,50))
+            wait(500)
             pos, val = find_pic(r"assets\genshin\picture\acquire.png", (871, 242, 1050, 339))
             if val >= 0.6:
                 break
-            elif i == 20:
+            elif i == 60:
                 self.indicate("参量质变仪充能超时\n")
                 return True
         click((961, 804))
