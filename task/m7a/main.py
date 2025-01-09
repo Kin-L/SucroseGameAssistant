@@ -1,7 +1,7 @@
 from ..default_task import Task
 from tools.environment import *
 from tools.software import get_pid, close, find_hwnd
-
+from ruamel.yaml import YAML
 
 class TaskM7A(Task):
     def __init__(self):
@@ -33,14 +33,18 @@ class TaskM7A(Task):
                 raise ValueError("三月七助手,无效启动路径")
             env.set_soft(None, [True, "ConsoleWindowClass", "m7a"])
             env.soft.set_path(_path)
+
             # 修改M7A运行设置
-            config_yaml = split(_path)[0] + "/config.yaml"
+            config_yaml = os.path.join(split(_path)[0],"config.yaml")
+            yaml = YAML()
+            yaml.preserve_quotes = True
             with open(config_yaml, 'r', encoding='utf-8') as f:
-                _dir = yload(stream=f, Loader=FullLoader)
+                _dir = yaml.load(f)
             current = _dir["after_finish"]
             _dir["after_finish"] = "Exit"
             with open(config_yaml, 'w', encoding='utf-8', ) as f:
-                ydump(_dir, f, encoding='utf-8', allow_unicode=True)
+                yaml.dump(_dir, f)
+
             # 运行-结束
             _run = env.soft.run(fls=False, tit="m7a")
             if _run:
@@ -57,12 +61,22 @@ class TaskM7A(Task):
             else:
                 self.indicate("三月七助手启动失败")
                 _k = True
+
             # 修改回M7A运行设置
+            yaml = YAML()
+            yaml.preserve_quotes = True
             with open(config_yaml, 'r', encoding='utf-8') as f:
-                _dir = yload(stream=f, Loader=FullLoader)
+                _dir = yaml.load(f)
             _dir["after_finish"] = current
             with open(config_yaml, 'w', encoding='utf-8', ) as f:
-                ydump(_dir, f, encoding='utf-8', allow_unicode=True)
+                yaml.dump(_dir, f)
+            
+            # MAA关闭
+            pid = get_pid("March7th Assistant.exe")
+            if pid is not None:
+                self.indicate("三月七助手已启动,准备重启")
+                close(pid)
+
         except Exception:
             self.indicate("任务执行异常:三月七助手", log=False)
             logger.error("任务执行异常:三月七助手\n%s" % format_exc())
