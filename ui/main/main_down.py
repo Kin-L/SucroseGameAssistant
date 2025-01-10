@@ -38,6 +38,7 @@ class MainDown(MainBottom):
                 "snow_path": ""
             },
             "common": {},
+            "presstrigger": {},
             "update": False,
             "timer": {},
             "current": {"模块": 0}

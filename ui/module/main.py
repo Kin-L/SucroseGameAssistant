@@ -5,6 +5,7 @@ from ..maa import MAA
 from ..m7a import M7A
 from ..snow.main import Snow
 from ..common.main import Common
+from ..presstrigger.main import PressTrigger
 from .module import ModuleWindow
 
 
@@ -18,3 +19,4 @@ class Module(ModuleWindow):
         self.m7a = M7A(self.stack_module, main)
         self.snow = Snow(self.stack_module, main)
         self.common = Common(self.stack_module, main)
+        self.presstrigger = PressTrigger(self.stack_module, main)

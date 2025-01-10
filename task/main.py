@@ -4,9 +4,13 @@ from task.kleins.main import TaskKleins
 from task.m7a.main import TaskM7A
 from task.snow.main import TaskSnow
 from task.common.main import TaskCommon
+from task.presstrigger.main import TaskTrigger
 
 
-class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon):
+class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon, TaskTrigger):
+    def __init__(self):
+        super(TaskRun, self).__init__()
+
     def task_start(self, task):
         _k = False
         print(task)
@@ -50,6 +54,10 @@ class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon):
         elif task["模块"] == 6:
             TaskCommon.__init__(self)
             if self.common_start(task):
+                _k = True
+        elif task["模块"] == 7:
+            TaskTrigger.__init__(self)
+            if self.trigger_start(task):
                 _k = True
         else:
             self.indicate("error:未知模块。")

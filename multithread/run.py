@@ -25,14 +25,19 @@ class Kill(QThread):
             keyboard.wait("ctrl+/")
             self.ui.state["wait_time"] = 5
             foreground(self.ui.state["hwnd"])
+            # noinspection PyBroadException
+            try:
+                self.ui.sga_run.trigger.kill()
+            except Exception:
+                pass
             self.ui.sga_run.terminate()
+
             pixmap = QPixmap(r"assets/main_window/ui/ico/2.png")
             self.indicate("手动终止", 3)
             env.OCR.disable()
             self.ui.button_pause.hide()
             self.ui.button_start.show()
             self.ui.label_status.setPixmap(pixmap)
-            self.ui.state["wait_time"] = 5
             self.ui.cycle.start()
         except Exception:
             logger.error("手动终止线程异常:\n%s\n" % format_exc())
@@ -49,6 +54,7 @@ class SGARun(QThread, TaskRun):
     def __init__(self, ui):  # mode true:集成运行 false:独立运行
         super(SGARun, self).__init__()
         self.ui = ui
+        # self.trigger = None
 
     def run(self):
         _k = False

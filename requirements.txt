@@ -19,3 +19,5 @@ colorama
 requests
 cpufeature
 numpy
+pynput
+playsound3

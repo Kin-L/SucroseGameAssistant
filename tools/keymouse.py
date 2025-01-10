@@ -1,6 +1,6 @@
 # import pywintypes
 from win32api import mouse_event, SetCursorPos, keybd_event
-from win32con import KEYEVENTF_KEYUP
+from win32con import KEYEVENTF_KEYUP, MOUSEEVENTF_LEFTDOWN
 from .system import *
 import pyautogui
 key_map = {
@@ -18,7 +18,10 @@ key_map = {
         'SYSTEMREQUEST': 42, 'EXECUTE': 43, 'SNAPSHOT': 44, 'INSERT': 45, 'DELETE': 46, 'HELP': 47, 'WIN': 91,
         'WINDOWS': 91, 'NMLK': 144, "VOLUMEMUTE": 173,
         'NUMLK': 144, 'NUMLOCK': 144, 'SCRLK': 145,
-        '[': 219, ']': 221, '+': 107, '-': 109, '~': 192, '`': 192, "/": 111}
+        '[': 219, ']': 221, '+': 107, '-': 109, '~': 192, '`': 192, "/": 191,
+        ',': 188, '.': 190, "\\": 220, "'": 222, ";": 186, "*": 106}
+click_down_map = {"LCLICK": 2, "RCLICK": 8, "MCLICK": 32}
+click_up_map = {"LCLICK": 4, "RCLICK": 16, "MCLICK": 64}
 
 
 class KeyMouse(System):
@@ -87,6 +90,23 @@ class KeyMouse(System):
     def keyup(key):
         key_num = key_map[key.upper()]
         keybd_event(key_num, 0, KEYEVENTF_KEYUP, 0)
+
+    @staticmethod
+    def clickdown(click):
+        _num = click_down_map[click]
+        mouse_event(_num)
+        sleep(0.01)
+
+    @staticmethod
+    def clickup(click):
+        _num = click_up_map[click]
+        mouse_event(_num)
+        sleep(0.01)
+
+    @staticmethod
+    def moveto(xy):
+        x, y = xy
+        SetCursorPos(x, y)
 
     @staticmethod
     def key_add(key1, key2):

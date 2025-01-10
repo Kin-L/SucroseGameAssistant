@@ -115,8 +115,9 @@ if __name__ == '__main__':
     file_dir = {
         "update_history.txt": "",
         # "README.md": "",
-        "assets": "",
-        # "assets/main_window/version.json": "",
+        # "assets": "",
+        "assets/main_window/version.json": "assets/main_window",
+        "assets/snow/list.json": "assets/snow",
         "multithread": "_internal",
         "tools": "_internal",
         "ui": "_internal",

@@ -102,6 +102,11 @@ class MainTop(MainUp):
         try:
             self.state["wait_time"] = 5
             foreground(self.state["hwnd"])
+            # noinspection PyBroadException
+            try:
+                self.sga_run.trigger.kill()
+            except Exception:
+                pass
             self.sga_run.terminate()
             pixmap = QPixmap(r"assets/main_window/ui/ico/2.png")
             self.indicate("手动终止", 3)
@@ -109,6 +114,8 @@ class MainTop(MainUp):
             self.button_pause.hide()
             self.button_start.show()
             self.label_status.setPixmap(pixmap)
+            self.kill.terminate()
+            self.cycle.start()
         except Exception:
             logger.error("手动终止线程异常:\n%s\n" % format_exc())
             sysexit(1)
