@@ -1,0 +1,62 @@
+-----<<<热键规则>>>-----
+1、所有热键不区分大小写，使用"+"号充当组合键的连接，不需要输入引号。请自行规避热键冲突或未知的热键bug
+2、禁用/启用热键 仅允许键盘的单键或组合键。如："w", ",", "8", "alt+w","ctrl+alt+9"
+3、触发热键 允许键盘的单键或组合键以及鼠标的单键和键盘修饰键与鼠标单键的组合键。如："s", ",", "8", "ctrl+a","ctrl+alt+j","rclick","ctrl+rclick"
+4、连点/按下键 允许键盘的单键或组合键以及鼠标的单键和键盘修饰键与鼠标单键的组合键。如："s", ",", "8", "ctrl+a","ctrl+alt+j","rclick","ctrl+rclick"
+5、间隔时间、重复次数需要输入整数。间隔时间单位为毫秒。
+6、重复次数小于1时无限循环（仅用于脚本模式）
+7、触发模式：长按模式为长按时持续触发，释放结束。短按模式为短按一次触发，再短按一次结束。
+8、连点模式：连点模式为触发状态下，进行无限连点，可设置间隔时间。长按模式为触发状态下，键位持续保持按下状态。
+脚本模式为为触发状态下，循环执行选定的脚本方案。
+9、脚本模式 一行一个步骤，不允许空行。
+
+禁用/启用热键 与 触发热键 键盘允许值：
+"F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8",
+"F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16",
+"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+"A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+"K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+"U", "V", "W", "X", "Y", "Z",
+"SHIFT", "CTRL", "ALT", "WINDOWS",
+"LEFT SHIFT", "LEFT CTRL", "LEFT ALT", "LEFT WINDOWS",
+"RIGHT SHIFT", "RIGHT CTRL", "RIGHT ALT", "RIGHT WINDOWS",
+"ENTER", "TAB", "BACKSPACE",
+"LEFT", "UP", "RIGHT", "DOWN", "PAGEUP", "PAGEDOWN", "END", "HOME",
+"CAPSLOCK", "ESC", "NUMLOCK", "PAUSE", "SPACE", "INSERT", "DELETE",
+"PRINTSCREEN", "VOLUMEMUTE", "DECIMAL",
+"[", "]", "+", "-", "~", "`", "/", ',', '.', "\", "'", ";", "*"
+
+触发热键 鼠标允许值：（鼠标左键右键中间侧键）
+"LCLICK", "RCLICK", "MCLICK", 'X1CLICK', 'X2CLICK'
+
+连点/按下键 键盘允许值：
+"F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8",
+"F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16",
+"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+"A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+"K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+"U", "V", "W", "X", "Y", "Z",
+"SHIFT", "CTRL", "ALT", "WINDOWS",
+"ENTER", "TAB", "BACKSPACE",
+"LEFT", "UP", "RIGHT", "DOWN", "PAGEUP", "PAGEDOWN", "END", "HOME",
+"CAPSLOCK", "ESC", "NUMLOCK", "PAUSE", "SPACE", "INSERT", "DELETE",
+"PRINTSCREEN", "VOLUMEMUTE", "DECIMAL",
+"[", "]", "+", "-", "~", "`", "/", ',', '.', "\", "'", ";", "*"
+
+连点/按下键 键盘允许值：
+"LCLICK", "RCLICK", "MCLICK"
+	
+脚本模式 
+1、键盘允许键值同上
+2、moveto为鼠标移动到坐标未知
+3、wait为等待，单位为ms毫秒
+脚本输入示例：
+clickdown: rclick
+clickup: rclick
+clickdown: lclick
+clickup: rclick
+clickdown: mclick
+clickup: mclick
+moveto: 1920,1080
+keydown: w
+keyup: w

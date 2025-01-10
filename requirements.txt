@@ -19,3 +19,5 @@ requests
 cpufeature
 numpy
 ruamel.yaml
+pynput
+playsound3
