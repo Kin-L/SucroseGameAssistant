@@ -52,47 +52,71 @@ class Transformer(Genshin):
         wait(1000)
         
         #打开质变仪
+        wait(8000)
         press("F")
-        wait(2000)
+        wait(1000)
         #材料目录
         meterial_pic_name = ["bugle","insignia","mask","raven_insignia","slime"]
-        self.indicate("尝试添加第一种材料")
-        for m in range(1,3):
-            pic_dir1 = os.path.join("assets", "genshin", "picture", "develop_tools", meterial_pic_name[self.task["参量质变仪1"]] + f"{m}" + ".png")
-            _p, val = find_pic(pic_dir1, (100,104,1279,815))
-            if val <= 0.8:
-                self.indicate(f"第一种材料品质{m}未找到")
-                continue
-            click(_p)
-            wait(500)
-            click((462,1026)) #点击最大数量
-            wait(500)
-            res = find_color("red", (1338, 979, 1560, 1056))[1]
-            if res == 0:
-                pass
-            else:
-                self.indicate("第一种材料当前品质数量不足，正在寻找更高品质")
-        if res != 0:
-            self.indicate("第一种材料不足，正在添加第二种材料")
-            for n in range(1,3):
-                pic_dir2 = os.path.join("assets", "genshin", "picture", "develop_tools", meterial_pic_name[self.task["参量质变仪2"]] + f"{n}" + ".png")    
-                _p, val = find_pic(pic_dir2, (100,104,1279,815))
-                if val <= 0.8:
-                    self.indicate(f"第二种材料品质{n}未找到")
-                    continue
+        res = 1
+        if self.task["参量质变仪1"] == 0:
+            self.indicate("第一种材料未设置")
+        else:
+            self.indicate("尝试添加第一种材料")
+            for m in range(1,4):
+                pic_dir1 = os.path.join("assets", "genshin", "picture", "develop_tools", meterial_pic_name[self.task["参量质变仪1"]-1] + f"{m}" +".png")
+                for o in range(3):
+                    _p, val = find_pic(pic_dir1, (100,104,1279,815))
+                    if val <= 0.8:
+                        if o == 2:
+                            self.indicate(f"第一种材料品质{m}未找到")
+                            roll((960,540), 100)
+                            continue
+                        else:
+                            roll((960,540), -36)
+                            wait(500)
+                wait(500)
                 click(_p)
                 wait(500)
-                click((454, 1021))
-                wait(500)
-                res1 = find_color("red", (1338, 979, 1560, 1056))[1]
-                if res1 == 0:
-                    pass
+                click((462,1026)) #点击最大数量
+                wait(1000)
+                res = find_color("red", (1338, 979, 1560, 1056))[1]
+                if res == 0:
+                    break
                 else:
                     self.indicate("第一种材料当前品质数量不足，正在寻找更高品质")
-            if res1 == 0:
-                self.indicate("材料不足，请重新设置材料")
+        
+        if res != 0 :
+            if self.task["参量质变仪2"] == 0:
+                self.indicate("第二种材料未设置,材料不足，停止质变")
                 self.home()
                 return 0
+            else:
+                self.indicate("第一种材料不足，正在添加第二种材料")
+                for n in range(1,4):
+                    pic_dir2 = os.path.join("assets", "genshin", "picture", "develop_tools", meterial_pic_name[self.task["参量质变仪2"]-1] +f"{n}" +".png")    
+                    for o in range(3):
+                        _p, val = find_pic(pic_dir2, (100,104,1279,815))
+                        if val <= 0.8:
+                            if o == 2:
+                                self.indicate(f"第二种材料品质{n}未找到")
+                                roll((960,540), 100)
+                                continue
+                            else:
+                                roll((960,540), -36)
+                                wait(500)
+                    click(_p)
+                    wait(1000)
+                    click((454, 1021))
+                    wait(500)
+                    res1 = find_color("red", (1338, 979, 1560, 1056))[1]
+                    if res1 == 0:
+                        break
+                    else:
+                        self.indicate("第二种材料当前品质数量不足，正在寻找更高品质")
+                if res1 != 0:
+                    self.indicate("材料不足，请重新设置材料")
+                    self.home()
+                    return 0
             
         self.indicate("参量质变仪已装满")
         click((1703, 1020))
@@ -103,7 +127,7 @@ class Transformer(Genshin):
         press("4")
         for i in range(60):
             click((50,50))
-            wait(500)
+            wait(1500)
             pos, val = find_pic(r"assets\genshin\picture\acquire.png", (871, 242, 1050, 339))
             if val >= 0.6:
                 break
