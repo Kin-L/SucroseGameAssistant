@@ -41,7 +41,13 @@ class Local:
         _list = os.listdir("personal/ptscript")
         _nl = []
         for i in _list:
-            _nl += [os.path.splitext(i)[0]]
+            [name, ext] = os.path.splitext(i)
+            if ext == ".txt":
+                _nl += [name]
+        if not _nl:
+            copyfile(r"assets\presstrigger\脚本示例.txt",
+                     r"personal/ptscript\脚本示例.txt")
+            _nl += ["脚本示例"]
         self.choose_sc.addItems(_nl)
         self.label_scn = Label(self.page_local, (10, 320, 180, 27), "重复次数：")
         self.line_scn = Lineedit(self.page_local, (130, 320, 80, 33))

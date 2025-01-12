@@ -1,0 +1,12 @@
+keydown:w
+wait:2000
+keyup:w
+wait:500
+clickdown:lclick
+wait:1500
+clickup:lclick
+wait:2000
+moveto:500,500
+wait:1000
+moveto:1000,1000
+wait:1000

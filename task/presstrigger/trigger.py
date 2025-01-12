@@ -2,6 +2,7 @@
 import keyboard
 from .clicker import *
 import pynput
+import datetime
 trigger_map = {"LCLICK": 'LEFT', "RCLICK": 'RIGHT', "MCLICK": 'MIDDLE',
                'X1CLICK': 'X1', 'X2CLICK': 'X2',
                "0": 48, "1": 49, "2": 50, "3": 51, "4": 52, "5": 53, "6": 54, "7": 55, "8": 56, "9": 57,
@@ -24,6 +25,15 @@ trigger_map = {"LCLICK": 'LEFT', "RCLICK": 'RIGHT', "MCLICK": 'MIDDLE',
 trigger_mouse_list = ["LCLICK", "RCLICK", "MCLICK", 'X1CLICK', 'X2CLICK']
 
 
+class ClickUp(QThread):
+    def __init__(self, _click):
+        super().__init__()
+        self.click = _click
+
+    def run(self):
+        clickup(self.click)
+
+
 class Trigger(QThread):
     send = pyqtSignal(str, int, bool, bool)
 
@@ -42,46 +52,65 @@ class Trigger(QThread):
         self.trigger_start_click = None
         self.trigger_stop_click = None
         self.trigger_switch_click = None
+        self.mode_clicker = None
+        self.clicker_list = None
 
     def on_click1(self, x, y, button, pressed):
-        if [button.name, pressed] == self.trigger_start_click:
+        click_event = [button.name, pressed]
+        if click_event == self.trigger_start_click:
             if keyboard.is_pressed(self.trigger_modify):
                 self.clicker.start()
-        elif [button.name, pressed] == self.trigger_stop_click:
+        elif click_event == self.trigger_stop_click:
             if self.clicker.isRunning():
-                self.clicker.kill()
+                self.click_kill1()
 
     def on_click2(self, x, y, button, pressed):
-        if [button.name, pressed] == self.trigger_switch_click:
+        click_event = [button.name, pressed]
+        if click_event == self.trigger_switch_click:
             if keyboard.is_pressed(self.trigger_modify):
                 if self.clicker.isRunning():
-                    self.clicker.kill()
+                    self.click_kill1()
                 else:
                     self.clicker.start()
 
     def on_click3(self, x, y, button, pressed):
-        if [button.name, pressed] == self.trigger_start_click:
+        click_event = [button.name, pressed]
+        if click_event == self.trigger_start_click:
             self.clicker.start()
-        elif [button.name, pressed] == self.trigger_stop_click:
+        elif click_event == self.trigger_stop_click:
             if self.clicker.isRunning():
-                self.clicker.kill()
+                self.click_kill1()
 
     def on_click4(self, x, y, button, pressed):
         if [button.name, pressed] == self.trigger_switch_click:
             if self.clicker.isRunning():
-                self.clicker.kill()
+                self.click_kill1()
             else:
                 self.clicker.start()
+    
+    def click_kill(self):
+        self.clicker.terminate()
+        if self.mode_clicker != "脚本模式":
+            for i in self.clicker_list:
+                if i in clicker_mouse_list:
+                    clickup(i)
+                else:
+                    keyup(i)
 
-    def switcher(self):
-        if self.clicker.isRunning():
-            self.clicker.kill()
-        else:
-            self.clicker.start()
+    def click_kill1(self):
+        self.clicker.terminate()
+        if self.mode_clicker != "脚本模式":
+            for i in self.clicker_list:
+                if i in clicker_mouse_list:
+                    a = ClickUp(i)
+                    a.start()
+                else:
+                    keyup(i)
 
     def run(self):
         trigger_list = self.task["triggerkey"].strip(" ").upper().split("+")
-        print(trigger_list)
+        self.clicker_list = self.task["clickerkey"].strip(" ").upper().split("+")
+        self.mode_clicker = self.task["ClickerMode"]
         for i in trigger_list:
             i.strip(" ")
             if i in trigger_mouse_list:
@@ -93,7 +122,6 @@ class Trigger(QThread):
             else:
                 self.trigger_modify = ""
         self.mode_trigger = self.task["TriggerMode"]
-        print(self.trigger_click)
         if self.trigger_click:
             if self.trigger_modify:
                 if self.mode_trigger == "长按模式":
@@ -115,28 +143,33 @@ class Trigger(QThread):
                     self.trigger_switch_click = [trigger_map[self.trigger_click].lower(), True]
                     self.mouse_listener = pynput.mouse.Listener(on_click=self.on_click4)
                     self.mouse_listener.start()
-            keyboard.wait()
+            self.mouse_listener.join()
         else:
             trigger_key = self.task["triggerkey"]
+            trigger_key_list = trigger_key.strip(" ").upper().split("+")
+            finalkey = trigger_key_list[-1].strip(" ")
             if self.mode_trigger == "长按模式":  # 长按
                 def on_release_callback(event):
                     if self.clicker.isRunning():
-                        self.clicker.kill()
-
-                trigger_key_list = trigger_key.strip(" ").upper().split("+")
-                finalkey = trigger_key_list[-1].strip(" ")
+                        self.click_kill()
                 keyboard.on_release_key(finalkey, on_release_callback)
                 while 1:
                     keyboard.wait(trigger_key)
                     self.clicker.start()
             else:  # 短按
-                keyboard.on_release_key(trigger_key, self.switcher)
-                keyboard.wait()
+                def switcher():
+                    if self.clicker.isRunning():
+                        self.click_kill()
+                    else:
+                        self.clicker.start()
+                while 1:
+                    keyboard.wait(trigger_key)
+                    switcher()
 
     def kill(self):
         if self.trigger_click:
             if self.mouse_listener.running:
                 self.mouse_listener.stop()
         if self.clicker.isRunning():
-            self.clicker.kill()
+            self.click_kill()
         self.terminate()

@@ -2,6 +2,7 @@
 import time
 from PyQt5.QtCore import QThread, pyqtSignal
 from tools.environment import *
+import keyboard
 clicker_mouse_list = ["LCLICK", "RCLICK", "MCLICK"]
 from win32api import mouse_event, keybd_event
 click_map = {"LCLICK": (2, 4), "RCLICK": (8, 16), "MCLICK": (32, 64)}
@@ -48,9 +49,9 @@ class Clicker(QThread):
             if cf:
                 _n1, _n2 = click_map[self.clicker_list[0]]
                 while 1:
-                    mouse_event(_n1)
+                    mouse_event(_n1, 0, 0)
                     sleep(0.01)
-                    mouse_event(_n2)
+                    mouse_event(_n2, 0, 0)
                     sleep(_t)
             else:
                 if len(self.clicker_list) == 1:
@@ -93,17 +94,10 @@ class Clicker(QThread):
             else:
                 for i in range(self.task["runnum"]):
                     self.sc_run()
+        keyboard.wait()
 
     def sc_run(self):
         sc_list = self.task["script"]
         for func, value in sc_list:
             eval(func)(value)
 
-    def kill(self):
-        if self.mode_clicker != "脚本模式":
-            for i in self.clicker_list:
-                if i in clicker_mouse_list:
-                    clickup(i)
-                else:
-                    keyup(i)
-        self.terminate()

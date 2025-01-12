@@ -93,20 +93,19 @@ class KeyMouse(System):
 
     @staticmethod
     def clickdown(click):
-        _num = click_down_map[click]
-        mouse_event(_num)
+        _num = click_down_map[click.upper()]
+        mouse_event(_num, 0, 0)
         sleep(0.01)
 
     @staticmethod
     def clickup(click):
-        _num = click_up_map[click]
-        mouse_event(_num)
+        _num = click_up_map[click.upper()]
+        mouse_event(_num, 0, 0)
         sleep(0.01)
 
     @staticmethod
     def moveto(xy):
-        x, y = xy
-        SetCursorPos(x, y)
+        SetCursorPos(xy)
 
     @staticmethod
     def key_add(key1, key2):

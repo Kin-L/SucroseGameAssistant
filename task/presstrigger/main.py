@@ -96,10 +96,10 @@ class TaskTrigger(Task):
                 false_flag = True
 
         if self.task["ClickerMode"] == "脚本模式":
-            if not self.task["script_name"]:
+            if not self.task["scriptname"]:
                 self.indicate(f"无效脚本名")
                 return 0
-            script_name = self.task["script_name"]
+            script_name = self.task["scriptname"]
             sc_path = f"personal/ptscript/{script_name}.txt"
             if os.path.exists(sc_path):
                 txt = open(sc_path, 'r', encoding='utf-8')
@@ -112,7 +112,7 @@ class TaskTrigger(Task):
                             func_name = _list[0].strip(" ")
                             func_value = _list[1].strip(" ")
                             if func_name in ["clickdown", "clickup"]:
-                                if func_value in clicker_mouse_list:
+                                if func_value.upper() in clicker_mouse_list:
                                     sc_list += [[func_name, func_value]]
                                     continue
                             elif func_name == "moveto":
@@ -122,7 +122,7 @@ class TaskTrigger(Task):
                                         sc_list += [[func_name, (int(value_list[0]), int(value_list[1]))]]
                                         continue
                             elif func_name in ["keydown", "keyup"]:
-                                if func_value in clicker_key_list:
+                                if func_value.upper() in clicker_key_list:
                                     sc_list += [[func_name, func_value]]
                                     continue
                             elif func_name == "wait":
