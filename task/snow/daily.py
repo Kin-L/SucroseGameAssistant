@@ -31,7 +31,7 @@ class Daily(Task):
                     _f = False
                     cl = False
                     for o in range(8):
-                        pos = find_text(_r, (0, 731, 1920, 858))
+                        pos = find_text(_r, (0, 731, 1417, 858))
                         if pos:
                             (_x, _y) = pos
                             _str = ocr((_x+267, 177,  _x+447, 233))[0]
