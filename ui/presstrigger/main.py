@@ -56,9 +56,9 @@ class PressTrigger:
             "triggerkey": "",
             "ClickerMode": "连点模式",
             "clickerkey": "",
-            "interval": 0.0,
+            "interval": 0,
             "scriptname": "",
-            "runnum": ""
+            "runnum": 0
         }
         config.update(_dir)
         self.set.independent.check_mute.setChecked(config["静音"])
@@ -92,9 +92,15 @@ class PressTrigger:
         config["triggerkey"] = self.set.line_trigger.text()
         config["ClickerMode"] = self.set.choose_clicker_mode.currentText()
         config["clickerkey"] = self.set.line_clicker.text()
-        config["interval"] = int(self.set.line_interval.text())
+        if self.set.line_interval.text():
+            config["interval"] = int(self.set.line_interval.text())
+        else:
+            config["interval"] = 0
         config["scriptname"] = self.set.choose_sc.currentText()
-        config["runnum"] = int(self.set.line_scn.text())
+        if self.set.line_scn.text():
+            config["runnum"] = int(self.set.line_scn.text())
+        else:
+            config["runnum"] = 0
         return config
 
     def open_folder(self):
