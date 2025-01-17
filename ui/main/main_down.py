@@ -39,6 +39,7 @@ class MainDown(MainBottom):
             },
             "common": {},
             "presstrigger": {},
+            "zzz": {},
             "update": False,
             "timer": {},
             "current": {"模块": 0}

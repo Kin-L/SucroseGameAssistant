@@ -7,6 +7,7 @@ from ..snow.main import Snow
 from ..common.main import Common
 from ..presstrigger.main import PressTrigger
 from .module import ModuleWindow
+from ..zzz import zzz
 
 
 class Module(ModuleWindow):
@@ -20,3 +21,4 @@ class Module(ModuleWindow):
         self.snow = Snow(self.stack_module, main)
         self.common = Common(self.stack_module, main)
         self.presstrigger = PressTrigger(self.stack_module, main)
+        self.zzz = zzz(self.stack_module, main)
