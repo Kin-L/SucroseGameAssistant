@@ -95,6 +95,9 @@ class SGARun(QThread, TaskRun):
             from urllib.request import urlretrieve
             import requests
             import json
+            if not os.path.exists(r"cache"):
+                _path = env.workdir + "/cache"
+                os.makedirs(_path)
             temp_path = join(env.workdir, "cache")
             temp_name = basename(env.OCR.exe_name + ".zip")
             load_path = join(temp_path, temp_name)

@@ -63,53 +63,58 @@ class Fight(Task):
                 self.indicate(f"暂无限时试剂可用")
             del sc
         sc = scshot()
-        _str = ocr((901, 12, 1028, 60), sc)[0].replace(" ", "")[:-4]
+        _str1 = ocr((901, 12, 1028, 60), sc)[0]
+        _str2 = _str1.replace(" ", "")[:-4]
         try:
-            cons = int(_str)
+            cons = int(_str2)
         except ValueError:
             self.indicate(f"感知数量识别异常")
             _path = errorsc_save(sc)
             logger.error(f"截图导出: {_path}")
+            logger.error(f"_str1: {_str1}")
             return 0
         if self.task["行动选择"] == 8:
             if cons >= 30:
-                click_change((1499, 538), (1402, 463, 1499, 505))
-                wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
-                wait(300)
-                pos = find_text("材料")
-                cpos = (222, 340)  # 漠北寻风
-                if pos:
-                    click_change(pos, (1732, 920, 1829, 1013))
-                else:
-                    click(cpos)
-                    wait(500)
-
-                wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
-                wait(500)
-                pos = find_text("深渊")
-                cpos = (1372, 370)  # 漠北寻风
-                if pos:
-                    click_change(pos, (1387, 945, 1599, 1075))
-                    wait_text("速战", (1387, 945, 1599, 1075))
-                else:
-                    click(cpos)
-                    wait(1000)
-                    if "深渊" in ocr((1394, 76, 1843, 179))[0]:
-                        pass
+                if ocr((1378, 420, 1460, 457))[0]:
+                    click_change((1499, 538), (1402, 463, 1499, 505))
+                    wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
+                    wait(300)
+                    pos = find_text("材料")
+                    cpos = (222, 340)  # 漠北寻风
+                    if pos:
+                        click_change(pos, (1732, 920, 1829, 1013))
                     else:
-                        self.indicate("未找到“深渊”, 版本未适配")
-                        click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+                        click(cpos)
                         wait(500)
-                        self.indicate("检查完成：感知扫荡")
-                        return True
-                click_text("速战", (1387, 945, 1599, 1075))
-                click((1280, 711))
-                wait(600)
-                click_text("开始", (858, 801, 1072, 875))
-                press_to_pic("esc", r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
-                self.indicate(f"扫荡活动材料关卡完成")
-                click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
-                wait(500)
+
+                    wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
+                    wait(500)
+                    pos = find_text("深渊")
+                    cpos = (1372, 370)  # 漠北寻风
+                    if pos:
+                        click_change(pos, (1387, 945, 1599, 1075))
+                        wait_text("速战", (1387, 945, 1599, 1075))
+                    else:
+                        click(cpos)
+                        wait(1000)
+                        if "深渊" in ocr((1394, 76, 1843, 179))[0]:
+                            pass
+                        else:
+                            self.indicate("未找到“深渊”, 版本未适配")
+                            click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+                            wait(500)
+                            self.indicate("检查完成：感知扫荡")
+                            return True
+                    click_text("速战", (1387, 945, 1599, 1075))
+                    click((1280, 711))
+                    wait(600)
+                    click_text("开始", (858, 801, 1072, 875))
+                    press_to_pic("esc", r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+                    self.indicate(f"扫荡活动材料关卡完成")
+                    click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+                    wait(500)
+                else:
+                    self.indicate(f"本期活动已关闭")
             else:
                 self.indicate(f"感知不足30：{cons}")
         else:
