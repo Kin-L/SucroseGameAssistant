@@ -10,6 +10,7 @@ class Fight(Task):
         self.indicate("开始检查：感知扫荡")
         if self.task["感知互赠"]:
             click_change((326, 484), (317, 475, 340, 497))
+            wait(500)
             if "收" in ocr((1705, 993, 1880, 1066))[0]:
                 click_text("收", (1705, 993, 1880, 1066))
                 wait(2000)
@@ -80,7 +81,7 @@ class Fight(Task):
                     wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
                     wait(300)
                     pos = find_text("材料")
-                    cpos = (222, 340)  # 漠北寻风
+                    cpos = (284, 547)  # 夙圆心行
                     if pos:
                         click_change(pos, (1732, 920, 1829, 1013))
                     else:
@@ -90,7 +91,7 @@ class Fight(Task):
                     wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
                     wait(500)
                     pos = find_text("深渊")
-                    cpos = (1372, 370)  # 漠北寻风
+                    cpos = (1558, 372)  # 夙圆心行
                     if pos:
                         click_change(pos, (1387, 945, 1599, 1075))
                         wait_text("速战", (1387, 945, 1599, 1075))

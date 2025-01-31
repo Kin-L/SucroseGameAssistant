@@ -55,8 +55,8 @@ class Daily(Task):
                     if _f:
                         continue
                     sc = scshot()
-                    _str1 = ocr((1459, 27, 1540, 77))[0]
-                    _str2 = _str1.split("/")[0]
+                    _str1 = ocr((1459, 27, 1540, 77), sc)[0]
+                    _str2 = numfind(_str1.split("/")[0])
                     try:
                         _num = int(_str2)
                     except ValueError:

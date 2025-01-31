@@ -6,6 +6,7 @@ from .mail import Mail
 from .roll import Roll
 from traceback import format_exc
 from os.path import isfile, split, exists
+import subprocess
 
 
 class TaskSnow(Fight, Daily, Mail, Roll):
@@ -77,8 +78,49 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                 self.indicate("尘白禁区，无效启动路径")
                 raise ValueError("尘白禁区:无效启动路径")
         else:
-            self.indicate("尘白禁区，无效启动路径")
-            raise ValueError("尘白禁区:无效启动路径")
+            if self.task["启动"]["server"] == 2:
+                _h = find_hwnd((0, "UnrealWindow", "尘白禁区"))
+                if _h:
+                    env.soft.hwnd = _h
+                    env.soft.run()
+                    env.soft.compile_resolution = (1920, 1080)
+                    for i in range(10):
+                        if env.mode(1):
+                            env.soft.set_pid(env.soft.hwnd)
+                            self.indicate("游戏已启动")
+                            env.soft.foreground()
+                            return True
+                        else:
+                            env.soft.foreground()
+                            wait(3000)
+                else:
+                    if self.task["启动"]["snow_path"]:
+                        _path = self.task["启动"]["snow_path"]
+                    else:
+                        _path = "steam://rungameid/578080"
+                    for i in range(3):
+                        subprocess.Popen(f"start {_path}", shell=True)
+                        for p in range(120):
+                            wait(1000)
+                            _h = find_hwnd((0, "UnrealWindow", "尘白禁区"))
+                            if _h:
+                                env.soft.hwnd = _h
+                                env.soft.run()
+                                env.soft.compile_resolution = (1920, 1080)
+                                if env.mode(1):
+                                    env.soft.set_pid(env.soft.hwnd)
+                                    self.indicate("游戏已启动")
+                                    env.soft.foreground()
+                                    return True
+                                else:
+                                    env.soft.foreground()
+                                    wait(3000)
+                            else:
+                                wait(1000)
+                raise RuntimeError("尘白禁区:启动超时")
+            else:
+                self.indicate("尘白禁区，无效启动路径")
+                raise ValueError("尘白禁区:无效启动路径")
         # 启动游戏
         for u in range(2):
             # env.soft.get_window_information(False)

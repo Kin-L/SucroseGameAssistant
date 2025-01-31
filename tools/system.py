@@ -109,6 +109,14 @@ def str_find(target, _list):
     return False
 
 
+def numfind(_str):
+    _s = ""
+    for i in _str:
+        if i in "0123456789":
+            _s += i
+    return _s
+
+
 class System:
     def __init__(self):
         # 启用日志

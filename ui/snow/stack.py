@@ -16,7 +16,7 @@ class Local:
         self.label_snow_overall = Label(self.page_local, (0, 50, 180, 27), "全局设置：")
         self.label_start = Label(self.page_local, (0, 90, 80, 27), "服务器")  # 启动路径 /
         self.combo_server = Combobox(self.page_local, (80, 90, 100, 32))
-        self.combo_server.addItems(["官服", "B服"])
+        self.combo_server.addItems(["官服", "B服", "国际服"])
         self.label_start = Label(self.page_local, (0, 130, 80, 27), "启动路径")
         self.line_start = Lineedit(self.page_local, (0, 160, 385, 33))
 

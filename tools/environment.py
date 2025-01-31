@@ -217,6 +217,10 @@ class Environment(Operate):
             # print(s)
             if s < sim:
                 return True
+        _path1 = errorsc_save(bef)
+        _path2 = errorsc_save(aft)
+        logger.error(f"截图导出bef: {_path1}")
+        logger.error(f"截图导出aft: {_path2}")
         raise RuntimeError("click_change点击超时")
 
     def press_to_pic(self, key, target, zone="ALL", sim: float = 0.9,
