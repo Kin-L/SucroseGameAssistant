@@ -2,7 +2,8 @@ from ui.element.control import *
 from ui.element.ui_part import Independent
 from tools.system import check_path
 from webbrowser import open as weopen
-
+from tools.environment import *
+from task.default_task import Task
 
 class M7AList:
     def __init__(self, widget, location):
@@ -24,21 +25,46 @@ class M7AStack:
         self.label_m7a_overall = Label(self.stack, (0, 45, 350, 40), "使用说明：本模块支持三月七助手和星穹铁道一\n                  条龙两种脚本")
         self.label_start = Label(self.stack, (0, 80, 80, 27), "启动路径")
         self.line_start = Lineedit(self.stack, (0, 110, 385, 33))
-        Line(self.stack, (0, 152, 395, 3))
+        self.button_open_path = Button(self.stack, (0, 150, 150, 30), "打开脚本修改设置")
+        self.button_open_path.clicked.connect(self.open_path)
+        Line(self.stack, (0, 185, 395, 3))
 
-        self.label_team_tip = Label(self.stack, (0, 160, 220, 27), "独立运行设置：")
-        self.independent = Independent(self.stack, (0, 200, 350, 70), False)
-        self.button_m7a = Button(self.stack, (0, 280, 125, 30), "三月七助手下载")
-        self.button_SROD = Button(self.stack, (130, 280, 125, 30), "星穹铁道一条龙下载")
+        self.label_team_tip = Label(self.stack, (0, 190, 220, 27), "独立运行设置：")
+        self.independent = Independent(self.stack, (0, 220, 350, 70), False)
+        self.button_m7a = Button(self.stack, (0, 300, 125, 30), "三月七助手下载")
+        self.button_SROD = Button(self.stack, (130, 300, 150, 30), "星穹铁道一条龙下载")
         self.button_m7a.clicked.connect(self.open_m7a)
-        self.button_SROD.clicked.connect(self.open_SROD)
+        self.button_SROD.clicked.connect(self.open_sr)
 
     @staticmethod
     def open_m7a():
         weopen("https://moesnow.github.io/March7thAssistant")
 
-    def open_SROD():
+    @staticmethod
+    def open_sr():
         weopen("https://github.com/DoctorReid/StarRailOneDragon")
+
+    def open_path(self):
+        _path = self.line_start.text()
+        if isfile(_path):
+            dire, name = split(_path)
+            if "March7th" in name:
+                _path = dire + "/March7th Assistant.exe"
+            elif "OneDragon" in name:
+                    _path = dire + "/OneDragon Launcher.exe"
+            else:
+                Task.indicate("无效启动路径")
+                raise ValueError("崩坏：星穹铁道助手,无效启动路径")
+        else:
+            Task.indicate("无效启动路径")
+            raise ValueError("崩坏：星穹铁道助手,无效启动路径")
+        env.set_soft(None, (0, "UnityWndClass", "崩坏：星穹铁道助手"))
+        env.soft.set_path(_path)
+        _run = env.soft.run(fls=False, tit="m7a")
+        if _run:
+            pass
+        else:
+            Task.indicate("崩坏：星穹铁道助手启动失败")
 
 
 class M7A:
