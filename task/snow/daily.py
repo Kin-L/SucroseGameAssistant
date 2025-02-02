@@ -122,10 +122,12 @@ class Daily(Task):
         if self.task["商店购物"][0]:
             click_text("商店", (1756, 997, 1852, 1061))
             wait_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+            roll((1241, 380), 20)
+            wait(500)
             for i in [self.task["商店购物"][1], self.task["商店购物"][2]]:
                 _f = False
-                if i == "芳烃塑料×3":
-                    i = "芳烃塑料"
+                if "×" in i:
+                    i = i.split("×")[0]
                     _f = True
 
                 pos = find_text(i, (323, 213, 1860, 1003))

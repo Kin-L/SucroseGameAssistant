@@ -72,13 +72,16 @@ class MainTop(MainUp):
         self.update.mode = 1
         self.update.start()
 
-    def start(self):
+    def start(self, _task=None):
         # noinspection PyBroadException
         try:
             self.cycle.terminate()
             self.save_main_data()
             self.indicate("", 0)
-            self.task = self.get_config_run()
+            if _task:
+                self.task = _task
+            else:
+                self.task = self.get_config_run()
             self.task["name"] = ""
             self.task["current_mute"] = get_mute()
             if self.task["静音"] and not self.task["current_mute"]:

@@ -94,12 +94,8 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                             env.soft.foreground()
                             wait(3000)
                 else:
-                    if self.task["启动"]["snow_path"]:
-                        _path = self.task["启动"]["snow_path"]
-                    else:
-                        _path = "steam://rungameid/578080"
-                    for i in range(3):
-                        subprocess.Popen(f"start {_path}", shell=True)
+                    for i in range(3):  # steam://rungameid/431960 steam://rungameid/2668080
+                        subprocess.Popen(f"start steam://rungameid/2668080", shell=True)
                         for p in range(120):
                             wait(1000)
                             _h = find_hwnd((0, "UnrealWindow", "尘白禁区"))

@@ -20,3 +20,5 @@ class SnowList:
         self.set_daily = PicButton(scroll, (180, 95, 22, 22), setpath, (22, 22))
         self.set_mail = PicButton(scroll, (180, 140, 22, 22), setpath, (22, 22))
         self.set_roll = PicButton(scroll, (180, 185, 22, 22), setpath, (22, 22))
+
+        self.button_start = Button(scroll, (70, 225, 80, 35), "启动游戏")

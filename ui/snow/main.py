@@ -34,6 +34,37 @@ class Snow:
         self.set.button_open_roll.clicked.connect(self.open_roll_directory)
         self.set.button_snow_list1.clicked.connect(self.open_list_file)
         self.set.button_snow_list2.clicked.connect(self.open_list_file)
+        _task = {"模块": 5,
+                 "预下载": True,
+                 "更新": True,
+                 "静音": False,
+                 "关闭软件": False,
+                 "完成后": 0,
+                 "SGA关闭": False,
+                 "账号选择": "",
+                 "功能0": False,
+                 "功能1": False,
+                 "功能2": True,
+                 "功能3": False,
+                 "感知互赠": False,
+                 "每日配给": False,
+                 "使用试剂": False,
+                 "行动选择": 8,
+                 "后勤选择": "天岩户小队",
+                 "活动后勤选择": "祖灵小队",
+                 "个人故事": [False, False, "未选择", "未选择", "未选择", "未选择"],
+                 "拟境扫荡": False,
+                 "商店购物": [False, "新手战斗记录", "初级职级认证"],
+                 "武器升级": False,
+                 "领取日常": False,
+                 "领取凭证": False,
+                 "活动每日": False,
+                 "共鸣记录": [False, False, False, False, False, False, False, False],
+                 '启动': {'server': 0, 'snow_path': ''},
+                 'name': '',
+                 'current_mute': 0}
+        _task = self.main.add_path(_task)
+        self.list.button_start.clicked.connect(lambda: self.main.start(_task))
         Line(self.widget_snow, (215, 5, 3, 505), False)
 
     def load_run(self, run):

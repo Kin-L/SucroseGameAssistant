@@ -49,6 +49,7 @@ class Fight:
 
         self.label_mat = Label(self.page_fight, (15, 195, 80, 18), "剩余感知")
         self.mat = Combobox(self.page_fight, (15, 225, 180, 40))
+        self.mat.setMaxVisibleItems(5)
         self.mat.addItems(
             ["通用银", "角色经验素材", "武器经验素材",
              "武器突破素材", "角色神经素材", "后勤获取",
@@ -57,6 +58,7 @@ class Fight:
 
         self.label_logistics = Label(self.page_fight, (15, 275, 80, 18), "后勤选择")
         self.logistics = Combobox(self.page_fight, (15, 305, 160, 40))
+        self.logistics.setMaxVisibleItems(5)
         self.logistics.addItems(
             ["底比斯小队",
              "芬尼亚小队",
@@ -67,6 +69,7 @@ class Fight:
              "达摩小队",
              "凯夫曼小队"])
         self.logistics1 = Combobox(self.page_fight, (185, 305, 160, 40))
+        self.logistics1.setMaxVisibleItems(8)
         _path = r"assets\snow\list.json"
         with open(_path, 'r', encoding='utf-8') as g:
             _dir = load(g)
@@ -93,6 +96,10 @@ class Daily:
         self.character2 = Combobox(self.page_debris, (145, 110, 120, 40))
         self.character3 = Combobox(self.page_debris, (15, 155, 120, 40))
         self.character4 = Combobox(self.page_debris, (145, 155, 120, 40))
+        self.character1.setMaxVisibleItems(8)
+        self.character2.setMaxVisibleItems(8)
+        self.character3.setMaxVisibleItems(8)
+        self.character4.setMaxVisibleItems(8)
         _path = r"assets\snow\list.json"
         with open(_path, 'r', encoding='utf-8') as g:
             _dir = load(g)
@@ -106,10 +113,26 @@ class Daily:
         self.check_imitate = Check(self.page_debris, (15, 210, 140, 22), "拟境扫荡")
 
         self.check_market = Check(self.page_debris, (15, 255, 220, 22), "通过商店购物一次完成每日")
+        self.button_tips = Button(self.page_debris, (240, 255, 22, 22), "!")
+        self.button_tips.setToolTip('常规物资商店并不划算，建议在通用银溢出后再用来置换资源')
         self.box_market1 = Combobox(self.page_debris, (15, 285, 160, 40))
         self.box_market2 = Combobox(self.page_debris, (180, 285, 160, 40))
-        self.box_market1.addItems(["新手战斗记录", "初级职级认证", "芳烃塑料", "芳烃塑料×3"])
-        self.box_market2.addItems(["新手战斗记录", "初级职级认证", "芳烃塑料", "芳烃塑料×3"])
+        _list = ["光纤轴突", "光纤轴突×5",
+                 "合成颗粒", "合成颗粒×5",
+                 "芳烃塑料", "芳烃塑料×3",
+                 "单极纤维", "单极纤维×2",
+                 "通用强化套件", "通用强化套件×5",
+                 "新手战斗记录", "新手战斗记录×5",
+                 "初级职级认证", "初级职级认证×5",
+                 "优选强化套件", "优选强化套件×3",
+                 "普通战斗记录", "普通战斗记录×3",
+                 "优秀战斗记录", "优秀战斗记录×2",
+                 "高级职级认证", "高级职级认证×2"
+                 ]
+        self.box_market1.addItems(_list)
+        self.box_market1.setMaxVisibleItems(8)
+        self.box_market2.addItems(_list)
+        self.box_market2.setMaxVisibleItems(8)
         self.check_weapon = Check(self.page_debris, (15, 340, 220, 22), "通过武器升级一次完成每日")
 
         self.check_daily = Check(self.page_debris, (15, 375, 140, 22), "领取日常")
