@@ -19,6 +19,11 @@ class Local:
         self.combo_server.addItems(["官服", "B服", "国际服"])
         self.label_start = Label(self.page_local, (0, 130, 80, 27), "启动路径")
         self.line_start = Lineedit(self.page_local, (0, 160, 385, 33))
+        self.line_start.setToolTip('官/B服填写启动器绝对路径，国际服填写游戏主目录‘SNOWBREAK’')
+        self.line_start.installEventFilter(
+            ToolTipFilter(self.line_start,
+                          showDelay=200,
+                          position=ToolTipPosition.TOP))
 
         Line(self.page_local, (0, 202, 395, 3))
 
@@ -115,6 +120,10 @@ class Daily:
         self.check_market = Check(self.page_debris, (15, 255, 220, 22), "通过商店购物一次完成每日")
         self.button_tips = Button(self.page_debris, (240, 255, 22, 22), "!")
         self.button_tips.setToolTip('常规物资商店并不划算，建议在通用银溢出后再用来置换资源')
+        self.button_tips.installEventFilter(
+            ToolTipFilter(self.button_tips,
+                          showDelay=200,
+                          position=ToolTipPosition.TOP))
         self.box_market1 = Combobox(self.page_debris, (15, 285, 160, 40))
         self.box_market2 = Combobox(self.page_debris, (180, 285, 160, 40))
         _list = ["光纤轴突", "光纤轴突×5",

@@ -6,6 +6,7 @@ from .stack import SnowStack
 from ui.element.control import *
 from tools.environment import env
 from tools.system import check_path
+from json import load
 
 
 # 尘白禁区模组设置窗口
@@ -71,8 +72,19 @@ class Snow:
 
         _path = self.main.config["snow"]["snow_path"]
         if os.path.exists(_path):
-            _dir, _name = os.path.split(_path)
-            _file = os.path.join(_dir, "data/localization.txt")
+            _d, _name = os.path.split(_path)
+            if _name in ["snow_launcher.exe", "SeasunGame.exe"]:
+                _pref = os.path.join(_d, "preference.json")
+                with open(_pref, 'r', encoding='utf-8') as f:
+                    _json = load(f)
+                _dir = _json["dataPath"]
+            elif _name == "SNOWBREAK":
+                _dir = _d
+            else:
+                self.main.indicate("开关错误：未知路径", 1)
+                self.list.button_switch.setChecked(False)
+                return False
+            _file = os.path.join(_dir, "localization.txt")
             with open(_file, 'r', encoding='utf-8') as f:
                 _line = f.readline()
             if _line.count("=") == 1:
@@ -239,12 +251,23 @@ class Snow:
     def switcher(self, checked):
         _path = self.main.config["snow"]["snow_path"]
         if os.path.exists(_path):
-            _dir, _name = os.path.split(_path)
+            _d, _name = os.path.split(_path)
+            if _name in ["snow_launcher.exe", "SeasunGame.exe"]:
+                _pref = os.path.join(_d, "preference.json")
+                with open(_pref, 'r', encoding='utf-8') as f:
+                    _json = load(f)
+                _dir = _json["dataPath"]
+            elif _name == "SNOWBREAK":
+                _dir = _d
+            else:
+                self.main.indicate("开关错误：未知路径", 1)
+                self.list.button_switch.setChecked(False)
+                return False
         else:
             self.main.indicate("开关错误：请先填写游戏路径", 1)
             self.list.button_switch.setChecked(False)
             return False
-        _file = os.path.join(_dir, "data/localization.txt")
+        _file = os.path.join(_dir, "localization.txt")
         if checked:
             with open(_file, 'w', encoding='utf-8') as f:
                 f.writelines("localization = 1")

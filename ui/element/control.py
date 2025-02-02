@@ -1,6 +1,6 @@
 from qfluentwidgets import (SmoothScrollArea, StrongBodyLabel,
-                            PushButton, ToolButton, TransparentToolButton,
-                            CheckBox, ComboBox, LineEdit, SwitchButton,
+                            PushButton, ToolButton, TransparentToolButton, ToolTipPosition,
+                            CheckBox, ComboBox, LineEdit, SwitchButton, ToolTipFilter,
                             setFont)
 from PyQt5 import QtCore, QtWidgets, QtGui
 
