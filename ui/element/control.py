@@ -1,6 +1,6 @@
 from qfluentwidgets import (SmoothScrollArea, StrongBodyLabel,
                             PushButton, ToolButton, TransparentToolButton,
-                            CheckBox, ComboBox, LineEdit,
+                            CheckBox, ComboBox, LineEdit, SwitchButton,
                             setFont)
 from PyQt5 import QtCore, QtWidgets, QtGui
 
@@ -120,3 +120,10 @@ class Line(QtWidgets.QFrame):
             self.setFrameShape(QtWidgets.QFrame.HLine)
         else:
             self.setFrameShape(QtWidgets.QFrame.VLine)
+
+
+class Swicher(SwitchButton):
+    def __init__(self, widget, location):
+        (x, y, w, h) = location
+        super().__init__(widget)
+        self.setGeometry(QtCore.QRect(x, y, w, h))

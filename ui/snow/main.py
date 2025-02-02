@@ -1,3 +1,4 @@
+import os.path
 from os import startfile
 from webbrowser import open as weopen
 from .list import SnowList
@@ -15,7 +16,7 @@ class Snow:
         stack.addWidget(self.widget_snow)
         self.button = (
             Picture(main.widget_module, (0, 0, 50, 50),
-                      r"assets\snow\picture\snow-icon.png"))
+                    r"assets\snow\picture\snow-icon.png"))
         # self.button.dis
         self.list = None
         self.set = None
@@ -65,7 +66,20 @@ class Snow:
                  'current_mute': 0}
         _task = self.main.add_path(_task)
         self.list.button_start.clicked.connect(lambda: self.main.start(_task))
+        self.list.button_switch.checkedChanged.connect(self.switcher)
         Line(self.widget_snow, (215, 5, 3, 505), False)
+
+        _path = self.main.config["snow"]["snow_path"]
+        if os.path.exists(_path):
+            _dir, _name = os.path.split(_path)
+            _file = os.path.join(_dir, "data/localization.txt")
+            with open(_file, 'r', encoding='utf-8') as f:
+                _line = f.readline()
+            if _line.count("=") == 1:
+                if "1" in _line:
+                    self.list.button_switch.setChecked(True)
+                else:
+                    self.list.button_switch.setChecked(False)
 
     def load_run(self, run):
         _dir = {
@@ -221,6 +235,22 @@ class Snow:
     def open_wiki(self):
         weopen("https://wiki.biligame.com/sonw/%E9%A6%96%E9%A1%B5")
         self.main.indicate("打开网页: 尘白禁区 BWIKI", 1)
+
+    def switcher(self, checked):
+        _path = self.main.config["snow"]["snow_path"]
+        if os.path.exists(_path):
+            _dir, _name = os.path.split(_path)
+        else:
+            self.main.indicate("开关错误：请先填写游戏路径", 1)
+            self.list.button_switch.setChecked(False)
+            return False
+        _file = os.path.join(_dir, "data/localization.txt")
+        if checked:
+            with open(_file, 'w', encoding='utf-8') as f:
+                f.writelines("localization = 1")
+        else:
+            with open(_file, 'w', encoding='utf-8') as f:
+                f.writelines("localization = 0")
 
     def roll_arrange(self):
         import json

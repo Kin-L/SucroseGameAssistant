@@ -22,3 +22,7 @@ class SnowList:
         self.set_roll = PicButton(scroll, (180, 185, 22, 22), setpath, (22, 22))
 
         self.button_start = Button(scroll, (70, 225, 80, 35), "启动游戏")
+
+        self.button_switch = Swicher(scroll, (30, 470, 100, 35))
+        self.button_switch.setOffText("小开关未开启")
+        self.button_switch.setOnText("小开关已开启")
