@@ -16,9 +16,11 @@ import os
 import numpy as np
 
 
-def errorsc_save(sc):
+def errorsc_save(sc, name = ""):
     import time
     now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
+    if name:
+        now = name + now
     new_path = f"personal/errorsc/{now}.png"
     if not os.path.exists(r"personal/errorsc"):
         os.makedirs("personal/errorsc")

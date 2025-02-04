@@ -122,7 +122,7 @@ class Daily(Task):
         if self.task["商店购物"][0]:
             click_text("商店", (1756, 997, 1852, 1061))
             wait_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
-            roll((1241, 380), 20)
+            roll((1241, 380), -20)
             wait(500)
             for i in [self.task["商店购物"][1], self.task["商店购物"][2]]:
                 _f = False
@@ -136,9 +136,7 @@ class Daily(Task):
                     if _f:
                         click_change((1832, 853), (1545, 834, 1582, 874))
                     break
-            click_change((1782, 1014), (1738, 988, 1827, 1041))
-            wait_text("获得道具", (809, 40, 1113, 147))
-            click_change((96, 969), (809, 40, 1113, 147))
+            click_to_pic((1782, 1014), r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
             self.indicate("商店购物一次")
             press_to_text("esc", "任务", (1458, 330, 1529, 379))
             wait(500)
@@ -172,7 +170,8 @@ class Daily(Task):
                 click_to_pic(pos, r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
                 self.indicate("领取日常奖励")
                 wait(500)
-            click_change((101, 257), (273, 979, 432, 1040))
+            click((101, 257))
+            wait(800)
             pos = find_text("领取", (55, 973, 197, 1023))
             if pos:
                 click_change(pos, (18, 952, 242, 1040))
