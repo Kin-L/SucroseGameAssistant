@@ -21,14 +21,14 @@ class zzzStack:
         self.label_local = Label(self.stack, (0, 12, 220, 18), "设置页面：")
         Line(self.stack, (0, 41, 395, 3))
         
-        self.label_zzz_overall = Label(self.stack, (0, 45, 350, 40), "使用说明：本模块支持绝区零一条龙运行，请确保您已正确安装并配置好相关软件。")
+        self.label_zzz_overall = Label(self.stack, (0, 45, 360, 40), "使用说明：本模块支持绝区零一条龙运行，请确保\n                  您已正确安装并配置好相关软件。")
         self.label_start = Label(self.stack, (0, 80, 80, 27), "启动路径")
         self.line_start = Lineedit(self.stack, (0, 110, 385, 33))
         Line(self.stack, (0, 152, 395, 3))
 
         self.label_team_tip = Label(self.stack, (0, 160, 220, 27), "独立运行设置：")
         self.independent = Independent(self.stack, (0, 200, 350, 70), False)
-        self.button_zzz = Button(self.stack, (0, 280, 125, 30), "绝区零一条龙下载")
+        self.button_zzz = Button(self.stack, (0, 280, 140, 30), "绝区零一条龙下载")
         self.button_zzz.clicked.connect(self.open_zzz)
     @staticmethod
     def open_zzz():

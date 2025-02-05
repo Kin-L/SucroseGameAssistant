@@ -14,7 +14,7 @@ class Taskzzz(Task):
         # noinspection PyBroadException
         try:
             #判断路径
-            _path = self.task["启动"]["m7a_path"]
+            _path = self.task["启动"]["zzz_path"]
             if isfile(_path):
                 dire, name = split(_path)
                 if name == "OneDragon Scheduler.exe":

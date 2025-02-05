@@ -25,7 +25,7 @@ class M7AStack:
         self.label_m7a_overall = Label(self.stack, (0, 45, 350, 40), "使用说明：本模块支持三月七助手和星穹铁道一\n                  条龙两种脚本")
         self.label_start = Label(self.stack, (0, 80, 80, 27), "启动路径")
         self.line_start = Lineedit(self.stack, (0, 110, 385, 33))
-        self.button_open_path = Button(self.stack, (0, 150, 150, 30), "打开脚本修改设置")
+        #self.button_open_path = Button(self.stack, (0, 150, 150, 30), "打开脚本修改设置")
         self.button_open_path.clicked.connect(self.open_path)
         Line(self.stack, (0, 185, 395, 3))
 
