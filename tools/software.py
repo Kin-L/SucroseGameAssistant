@@ -190,6 +190,9 @@ class Software:
                 ShowWindow(self.hwnd, SW_RESTORE)
                 sleep(0.2)
             if current_hwnd != self.hwnd:
-                SetForegroundWindow(self.hwnd)
+                try:
+                    SetForegroundWindow(self.hwnd)
+                except Exception:
+                    pass
                 sleep(0.2)
         return False
