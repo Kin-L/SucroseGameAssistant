@@ -6,6 +6,7 @@ from .mail import Mail
 from .roll import Roll
 from traceback import format_exc
 from os.path import isfile, split, exists
+import subprocess
 
 
 class TaskSnow(Fight, Daily, Mail, Roll):
@@ -58,6 +59,42 @@ class TaskSnow(Fight, Daily, Mail, Roll):
     def snow_launch(self):
         # 路径修正
         env.set_soft(None, (0, "UnrealWindow", "尘白禁区"))
+        if self.task["启动"]["server"] == 2:
+            _h = find_hwnd((0, "UnrealWindow", "尘白禁区"))
+            if _h:
+                env.soft.hwnd = _h
+                env.soft.run()
+                env.soft.compile_resolution = (1920, 1080)
+                for i in range(10):
+                    if env.mode(1):
+                        env.soft.set_pid(env.soft.hwnd)
+                        self.indicate("游戏已启动")
+                        env.soft.foreground()
+                        return True
+                    else:
+                        env.soft.foreground()
+                        wait(3000)
+            else:
+                for i in range(3):  # steam://rungameid/431960 steam://rungameid/2668080
+                    subprocess.Popen(f"start steam://rungameid/2668080", shell=True)
+                    for p in range(120):
+                        wait(1000)
+                        _h = find_hwnd((0, "UnrealWindow", "Snowbreak: Containment Zone"))    # Snowbreak: Containment Zone
+                        if _h:
+                            env.soft.hwnd = _h
+                            env.soft.run()
+                            env.soft.compile_resolution = (1920, 1080)
+                            if env.mode(1):
+                                env.soft.set_pid(env.soft.hwnd)
+                                self.indicate("游戏已启动")
+                                env.soft.foreground()
+                                return True
+                            else:
+                                env.soft.foreground()
+                                wait(3000)
+                        else:
+                            wait(1000)
+            raise RuntimeError("尘白禁区:启动超时")
         _path = self.task["启动"]["snow_path"]
         if isfile(_path):
             dire, name = split(_path)
@@ -229,7 +266,7 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             if not started:
                 if server == 0:
                     if str_find("开始游戏", _list):
-                        server = 2
+                        server = 3
                         wait(300)
                         if self.task["账号选择"] and exists("license.txt"):
                             click_change((1866, 219), (984, 16, 1089, 66))
@@ -251,6 +288,15 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                         click((964, 679))
                         self.indicate("登录B服账号")
                         wait(4000)
+                        started = True
+                        continue
+                elif server == 2:
+                    if str_find("开始游戏", _list):
+                        server = 3
+                        wait(300)
+                        click_change((930, 630), (883, 920, 1049, 989))
+                        self.indicate("登录游戏")
+                        wait(5000)
                         started = True
                         continue
             if str_find("获得道具", _list):

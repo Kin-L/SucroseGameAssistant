@@ -55,12 +55,14 @@ class Daily(Task):
                     if _f:
                         continue
                     sc = scshot()
-                    _str = ocr((1459, 27, 1540, 77))[0].split("/")[0]
+                    _str1 = ocr((1459, 27, 1540, 77), sc)[0]
+                    _str2 = numfind(_str1.split("/")[0])
                     try:
-                        _num = int(_str)
+                        _num = int(_str2)
                     except ValueError:
                         self.indicate(f"记忆嵌片数量识别异常")
                         _path = errorsc_save(sc)
+                        logger.error(f":_str {_str1}")
                         logger.error(f"截图导出: {_path}")
                         return 0
                     if _num == 0 and self.task["个人故事"][1] and _u < 2:
@@ -120,10 +122,12 @@ class Daily(Task):
         if self.task["商店购物"][0]:
             click_text("商店", (1756, 997, 1852, 1061))
             wait_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+            roll((1241, 380), -20)
+            wait(500)
             for i in [self.task["商店购物"][1], self.task["商店购物"][2]]:
                 _f = False
-                if i == "芳烃塑料×3":
-                    i = "芳烃塑料"
+                if "×" in i:
+                    i = i.split("×")[0]
                     _f = True
 
                 pos = find_text(i, (323, 213, 1860, 1003))
@@ -132,9 +136,7 @@ class Daily(Task):
                     if _f:
                         click_change((1832, 853), (1545, 834, 1582, 874))
                     break
-            click_change((1782, 1014), (1738, 988, 1827, 1041))
-            wait_text("获得道具", (809, 40, 1113, 147))
-            click_change((96, 969), (809, 40, 1113, 147))
+            click_to_pic((1782, 1014), r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
             self.indicate("商店购物一次")
             press_to_text("esc", "任务", (1458, 330, 1529, 379))
             wait(500)
@@ -167,7 +169,9 @@ class Daily(Task):
                 click_change(pos, (18, 952, 242, 1040))
                 click_to_pic(pos, r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
                 self.indicate("领取日常奖励")
-            click_change((101, 257), (312, 891, 431, 941))
+                wait(500)
+            click((101, 257))
+            wait(800)
             pos = find_text("领取", (55, 973, 197, 1023))
             if pos:
                 click_change(pos, (18, 952, 242, 1040))
@@ -189,32 +193,35 @@ class Daily(Task):
             press_to_text("esc", "任务", (1458, 330, 1529, 379))
             wait(500)
         if self.task["活动每日"]:
-            click_change((1499, 538), (1402, 463, 1499, 505))
-            wait_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
-            wait(300)
-            pos = find_text("任务")
-            cpos = (478, 1000)  # 漠北寻风
-            if pos:
-                x, y = pos
-                click_change(pos, (x-10, y-10, x+10,  y+10))
-                pos = wait_text("领取", (0, 605, 578, 1080))
-
-            else:
-                click(cpos)
-                wait(1000)
-                pos = find_text("领取", (0, 605, 578, 1080))
+            if ocr((1378, 420, 1460, 457))[0]:
+                click_change((1499, 538), (1402, 463, 1499, 505))
+                wait_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+                wait(300)
+                pos = find_text("任务")
+                cpos = (478, 1000)  # 漠北寻风
                 if pos:
-                    pass
+                    x, y = pos
+                    click_change(pos, (x-10, y-10, x+10,  y+10))
+                    pos = wait_text("领取", (0, 605, 578, 1080))
+
                 else:
-                    self.indicate("未找到“任务”, 版本未适配")
-                    press_to_text("esc", "任务", (1458, 330, 1529, 379))
-                    wait(500)
-                    self.indicate("检查完成：日常周常")
-                    return True
-            click_change(pos, (76, 1000, 220, 1045))
-            wait_text("获得道具", (809, 40, 1113, 147))
-            self.indicate("领取已完成的活动任务")
-            click_change(pos, (809, 40, 1113, 147))
-            press_to_text("esc", "任务", (1458, 330, 1529, 379))
-            wait(500)
+                    click(cpos)
+                    wait(1000)
+                    pos = find_text("领取", (0, 605, 578, 1080))
+                    if pos:
+                        pass
+                    else:
+                        self.indicate("未找到“任务”, 版本未适配")
+                        press_to_text("esc", "任务", (1458, 330, 1529, 379))
+                        wait(500)
+                        self.indicate("检查完成：日常周常")
+                        return True
+                click_change(pos, (76, 1000, 220, 1045))
+                wait_text("获得道具", (809, 40, 1113, 147))
+                self.indicate("领取已完成的活动任务")
+                click_change(pos, (809, 40, 1113, 147))
+                press_to_text("esc", "任务", (1458, 330, 1529, 379))
+                wait(500)
+            else:
+                self.indicate(f"本期活动已关闭")
         self.indicate("检查完成：日常周常")

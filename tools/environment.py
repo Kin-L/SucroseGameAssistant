@@ -16,9 +16,11 @@ import os
 import numpy as np
 
 
-def errorsc_save(sc):
+def errorsc_save(sc, name = ""):
     import time
     now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
+    if name:
+        now = name + now
     new_path = f"personal/errorsc/{now}.png"
     if not os.path.exists(r"personal/errorsc"):
         os.makedirs("personal/errorsc")
@@ -217,6 +219,10 @@ class Environment(Operate):
             # print(s)
             if s < sim:
                 return True
+        _path1 = errorsc_save(bef)
+        _path2 = errorsc_save(aft)
+        logger.error(f"截图导出bef: {_path1}")
+        logger.error(f"截图导出aft: {_path2}")
         raise RuntimeError("click_change点击超时")
 
     def press_to_pic(self, key, target, zone="ALL", sim: float = 0.9,

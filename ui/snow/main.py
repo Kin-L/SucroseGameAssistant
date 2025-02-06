@@ -1,3 +1,4 @@
+import os.path
 from os import startfile
 from webbrowser import open as weopen
 from .list import SnowList
@@ -5,6 +6,7 @@ from .stack import SnowStack
 from ui.element.control import *
 from tools.environment import env
 from tools.system import check_path
+from json import load
 
 
 # 尘白禁区模组设置窗口
@@ -15,7 +17,7 @@ class Snow:
         stack.addWidget(self.widget_snow)
         self.button = (
             Picture(main.widget_module, (0, 0, 50, 50),
-                      r"assets\snow\picture\snow-icon.png"))
+                    r"assets\snow\picture\snow-icon.png"))
         # self.button.dis
         self.list = None
         self.set = None
@@ -34,7 +36,62 @@ class Snow:
         self.set.button_open_roll.clicked.connect(self.open_roll_directory)
         self.set.button_snow_list1.clicked.connect(self.open_list_file)
         self.set.button_snow_list2.clicked.connect(self.open_list_file)
+        _task = {"模块": 5,
+                 "预下载": True,
+                 "更新": True,
+                 "静音": False,
+                 "关闭软件": False,
+                 "完成后": 0,
+                 "SGA关闭": False,
+                 "账号选择": "",
+                 "功能0": False,
+                 "功能1": False,
+                 "功能2": True,
+                 "功能3": False,
+                 "感知互赠": False,
+                 "每日配给": False,
+                 "使用试剂": False,
+                 "行动选择": 8,
+                 "后勤选择": "天岩户小队",
+                 "活动后勤选择": "祖灵小队",
+                 "个人故事": [False, False, "未选择", "未选择", "未选择", "未选择"],
+                 "拟境扫荡": False,
+                 "商店购物": [False, "新手战斗记录", "初级职级认证"],
+                 "武器升级": False,
+                 "领取日常": False,
+                 "领取凭证": False,
+                 "活动每日": False,
+                 "共鸣记录": [False, False, False, False, False, False, False, False],
+                 '启动': {'server': 0, 'snow_path': ''},
+                 'name': '',
+                 'current_mute': 0}
+        _task = self.main.add_path(_task)
+        self.list.button_start.clicked.connect(lambda: self.main.start(_task))
+        self.list.button_switch.checkedChanged.connect(self.switcher)
         Line(self.widget_snow, (215, 5, 3, 505), False)
+
+        _path = self.main.config["snow"]["snow_path"]
+        if os.path.exists(_path):
+            _d, _name = os.path.split(_path)
+            if _name in ["snow_launcher.exe", "SeasunGame.exe"]:
+                _pref = os.path.join(_d, "preference.json")
+                with open(_pref, 'r', encoding='utf-8') as f:
+                    _json = load(f)
+                _dir = _json["dataPath"]
+            elif _name == "SNOWBREAK":
+                _dir = _d
+            else:
+                self.main.indicate("开关错误：未知路径", 1)
+                self.list.button_switch.setChecked(False)
+                return False
+            _file = os.path.join(_dir, "localization.txt")
+            with open(_file, 'r', encoding='utf-8') as f:
+                _line = f.readline()
+            if _line.count("=") == 1:
+                if "1" in _line:
+                    self.list.button_switch.setChecked(True)
+                else:
+                    self.list.button_switch.setChecked(False)
 
     def load_run(self, run):
         _dir = {
@@ -190,6 +247,33 @@ class Snow:
     def open_wiki(self):
         weopen("https://wiki.biligame.com/sonw/%E9%A6%96%E9%A1%B5")
         self.main.indicate("打开网页: 尘白禁区 BWIKI", 1)
+
+    def switcher(self, checked):
+        _path = self.main.config["snow"]["snow_path"]
+        if os.path.exists(_path):
+            _d, _name = os.path.split(_path)
+            if _name in ["snow_launcher.exe", "SeasunGame.exe"]:
+                _pref = os.path.join(_d, "preference.json")
+                with open(_pref, 'r', encoding='utf-8') as f:
+                    _json = load(f)
+                _dir = _json["dataPath"]
+            elif _name == "SNOWBREAK":
+                _dir = _d
+            else:
+                self.main.indicate("开关错误：未知路径", 1)
+                self.list.button_switch.setChecked(False)
+                return False
+        else:
+            self.main.indicate("开关错误：请先填写游戏路径", 1)
+            self.list.button_switch.setChecked(False)
+            return False
+        _file = os.path.join(_dir, "localization.txt")
+        if checked:
+            with open(_file, 'w', encoding='utf-8') as f:
+                f.writelines("localization = 1")
+        else:
+            with open(_file, 'w', encoding='utf-8') as f:
+                f.writelines("localization = 0")
 
     def roll_arrange(self):
         import json
