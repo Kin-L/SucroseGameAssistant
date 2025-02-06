@@ -26,7 +26,7 @@ class M7AStack:
         self.label_start = Label(self.stack, (0, 80, 80, 27), "启动路径")
         self.line_start = Lineedit(self.stack, (0, 110, 385, 33))
         #self.button_open_path = Button(self.stack, (0, 150, 150, 30), "打开脚本修改设置")
-        self.button_open_path.clicked.connect(self.open_path)
+        #self.button_open_path.clicked.connect(self.open_path)
         Line(self.stack, (0, 185, 395, 3))
 
         self.label_team_tip = Label(self.stack, (0, 190, 220, 27), "独立运行设置：")
