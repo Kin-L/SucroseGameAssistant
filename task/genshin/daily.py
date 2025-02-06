@@ -29,7 +29,7 @@ class Daily(Genshin):
             self.genshin_domain()
         if jiangli == 0 :
             if self.task["每日奖励"] and ori >= 120:
-                self.daily_gift
+                self.daily_gift()
             else:
                 self.indicate("消耗体力不足，无法领取每日奖励")
         return False
