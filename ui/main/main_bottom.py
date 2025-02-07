@@ -129,5 +129,6 @@ class MainBottom(MainWindow, Module, Overall):
                "    5、卸载/删除SGA前请“清除定时”，否则您的电脑可能仍会出现“睡眠”状态中自启的情况。\n" \
                "    6、关于SGA使用方法和项目详情，可查看SGA文件夹中的说明文件的详细说明，" \
                "和SGA各子界面的帮助按钮的精简提示，或参考B站账号:绘星痕 的SGA介绍和演示视频。\n" \
+               "    7、SGA在win10上开发，在win11和win7上可能遇到更多无法解决的bug。\n" \
                "------------------------------"
         self.box_info.append(note)
