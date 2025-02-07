@@ -79,7 +79,7 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                     subprocess.Popen(f"start steam://rungameid/2668080", shell=True)
                     for p in range(120):
                         wait(1000)
-                        _h = find_hwnd((0, "UnrealWindow", "Snowbreak: Containment Zone"))    # Snowbreak: Containment Zone
+                        _h = find_hwnd((0, "UnrealWindow", "Snowbreak: Containment Zone"))
                         if _h:
                             env.soft.hwnd = _h
                             env.soft.run()

@@ -26,3 +26,14 @@ class SnowList:
         self.button_switch = Swicher(scroll, (30, 470, 100, 35))
         self.button_switch.setOffText("小开关未开启")
         self.button_switch.setOnText("小开关已开启")
+
+        # 临时功能
+        self.button_tem = Button(scroll, (70, 280, 120, 35), "开始验证战场")
+        self.combo_tem = Combobox(scroll, (70, 320, 120, 32))
+        self.combo_tem.addItems(["简单", "普通", "困难", "险恶"])
+        self.button_tem.setToolTip('请进入验证战场页面，自行配置好队伍和buff，辰星放一号位')
+        self.button_tem.installEventFilter(
+            ToolTipFilter(self.button_tem,
+                          showDelay=200,
+                          position=ToolTipPosition.TOP))
+
