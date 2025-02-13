@@ -14,7 +14,7 @@ class Monitor(QThread):
 
     def run(self):
         try:
-            self.indicate("开始验证战场")
+            self.indicate("开始临时任务")
             env.OCR.enable()
             _h = find_hwnd((0, "UnrealWindow", "尘白禁区"))
             if not _h:
@@ -24,6 +24,19 @@ class Monitor(QThread):
                     self.ui.temkill.terminate()
                     self.terminate()
             foreground(_h)
+            if self.num == 4:
+                while 1:
+                    _sc = scshot()
+                    _t1 = ocr((1392, 96, 1517, 150), _sc)[0]
+                    if "关卡" in _t1:
+                        click((1738, 997))
+                        wait(3000)
+                    else:
+                        click((955, 507))
+                        wait(500)
+                        click((961, 991))
+                        wait(500)
+                        continue
             _list = ocr(mode=1)
             result = str_find("试用队员", _list)
             if result:
@@ -134,7 +147,7 @@ class TemKill(QThread):
                 self.ui.text_monitor.trigger.terminate()
             if self.ui.text_monitor.isRunning():
                 self.ui.text_monitor.terminate()
-            self.indicate("停止验证战场任务")
+            self.indicate("停止临时任务")
         except Exception:
             self.indicate("关闭线程错误")
 

@@ -38,10 +38,10 @@ class SnowList:
                           position=ToolTipPosition.TOP))
 
         # 临时功能
-        self.button_tem = Button(scroll, (70, 280, 120, 35), "开始验证战场")
+        self.button_tem = Button(scroll, (70, 280, 120, 35), "开始临时任务")
         self.combo_tem = Combobox(scroll, (70, 320, 120, 32))
-        self.combo_tem.addItems(["简单", "普通", "困难", "险恶"])
-        self.button_tem.setToolTip('请进入验证战场页面，自行配置好队伍和buff\n辰星放一号位，选够三个队友推荐辰星幽潮豹豹')
+        self.combo_tem.addItems(["简单", "普通", "困难", "险恶", "异星守护"])
+        self.button_tem.setToolTip('请进入验证战场页面，自行配置好队伍和buff\n辰星放一号位，选够三个队友推荐辰星幽潮豹豹\n异星守护自行进入页面，配置队友')
         self.button_tem.installEventFilter(
             ToolTipFilter(self.button_tem,
                           showDelay=200,
