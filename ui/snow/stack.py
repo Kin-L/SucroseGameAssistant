@@ -17,6 +17,11 @@ class Local:
         self.label_start = Label(self.page_local, (0, 90, 80, 27), "服务器")  # 启动路径 /
         self.combo_server = Combobox(self.page_local, (80, 90, 100, 32))
         self.combo_server.addItems(["官服", "B服", "国际服"])
+        self.combo_server.setToolTip('国际服需要提前手动开启加速器')
+        self.combo_server.installEventFilter(
+            ToolTipFilter(self.combo_server,
+                          showDelay=200,
+                          position=ToolTipPosition.TOP))
         self.label_start = Label(self.page_local, (0, 130, 80, 27), "启动路径")
         self.line_start = Lineedit(self.page_local, (0, 160, 385, 33))
         self.line_start.setToolTip('官/B服填写启动器绝对路径，国际服填写游戏主目录‘SNOWBREAK’')

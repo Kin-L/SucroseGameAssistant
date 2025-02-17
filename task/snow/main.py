@@ -79,7 +79,7 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                     subprocess.Popen(f"start steam://rungameid/2668080", shell=True)
                     for p in range(120):
                         wait(1000)
-                        _h = find_hwnd((0, "UnrealWindow", "Snowbreak: Containment Zone"))    # Snowbreak: Containment Zone
+                        _h = find_hwnd((0, "UnrealWindow", "Snowbreak: Containment Zone"))
                         if _h:
                             env.soft.hwnd = _h
                             env.soft.run()
@@ -278,7 +278,7 @@ class TaskSnow(Fight, Daily, Mail, Roll):
                             else:
                                 raise RuntimeError("尘白禁区:账户识别错误")
                             click_text("登录", (904, 577, 1018, 641))
-                        click_change((930, 630), (883, 920, 1049, 989))
+                        click_text("开始游戏", (883, 920, 1049, 989))
                         self.indicate("登录游戏")
                         wait(5000)
                         started = True

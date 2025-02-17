@@ -2,13 +2,21 @@
 
 #### 介绍
 1.  砂糖代理（SGA），用于游戏等软件，SGA主体的功能是设置定时唤醒电脑，并定时执行各模块的相关功能，完成后睡眠，从而完成任务循环。  
+
+    目前SGA最佳推荐环境为win10，游戏窗口分辨率1920*1080。其他系统win11，win7可能出现我无法解决的bug。其他分辨率的识别能力下降，可能遇到功能异常。
+
+####  目前作者只更新尘白禁区模块和SGA主体已经新功能的开发，其余模块若无合作者接手将无限期停更。
+####  原神模块暂交由@yuhui437，并感谢其对于崩铁助手与绝区零助手的贡献
+####  欢迎新的合作者参与对其他模块进行更新适配。
 2.  目前已有功能模块：  
 环行旅舍(功能停止更新)  
 原神(交由合作者@yuhui437不定期更新中)  
 MAA（明日方舟）(适配停止更新)  
 三月七助手（崩坏：星穹铁道）(适配停止更新)  
-尘白禁区(不定期更新中)
+尘白禁区(不定期更新中)  
 通用执行(测试阶段，功能不稳定)
+连点器(不定期更新中)  
+绝区零助手(由合作者@yuhui437完成)  
 3.  SGA视频演示/介绍，SGA使用说明，项目说明文档完善中。
 
 4.  SGA2.0项目开源免费，源代码将同时更新于:  
@@ -23,6 +31,10 @@ gitee： https://gitee.com/huixinghen/SucroseGameAssistant/releases
 更新包：https://gitee.com/huixinghen/SucroseGameAssistant/releases  
 手动更新方法：下载替换更新包，解压后将SGA文件夹与原SGA文件夹中同名文件夹进行合并并替换。  
 
+OCR组件手动下载链接：  
+gitee： https://gitee.com/huixinghen/SucroseGameAssistant/releases/tag/ocr  
+蓝奏云（推荐）： https://wwp.lanzn.com/b033h9ybi 密码:1siv  
+
     邮箱: 2805137028@qq.com  
     bilibili站账号: 绘星痕（406315493）  
     抖音：绘星痕（54796280232）  
@@ -31,7 +43,9 @@ gitee： https://gitee.com/huixinghen/SucroseGameAssistant/releases
 
 #### 安装教程
 
-从网盘链接或者群聊获取压缩包，解压可用，需要管理员权限，第一次使用时会自动下载OCR组件
+从网盘链接获取压缩包，解压可用，需要管理员权限，第一次使用时会自动下载OCR组件  
+视频教程：https://www.bilibili.com/video/BV18kKAeYE2t  
+详细使用说明见压缩包中“Instructions.docx”文件，该文件可能不是最新版本，部分内容仅供参考。  
 
 #### 使用说明
 

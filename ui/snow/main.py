@@ -36,6 +36,51 @@ class Snow:
         self.set.button_open_roll.clicked.connect(self.open_roll_directory)
         self.set.button_snow_list1.clicked.connect(self.open_list_file)
         self.set.button_snow_list2.clicked.connect(self.open_list_file)
+
+        self.list.button_start.clicked.connect(self.rapid_start_game)
+        self.list.button_switch.checkedChanged.connect(self.switcher)
+        Line(self.widget_snow, (215, 5, 3, 505), False)
+
+        # tem
+        self.list.button_tem.clicked.connect(self.start_tem)
+
+        _path = self.main.config["snow"]["snow_path"]
+        if os.path.exists(_path):
+            _d, _name = os.path.split(_path)
+            if _name == "snow_launcher.exe":
+                _pref = os.path.join(_d, "preference.json")
+                if os.path.exists(_pref):
+                    with open(_pref, 'r', encoding='utf-8') as f:
+                        _json = load(f)
+                else:
+                    self.main.indicate("开关错误：启动器目录结构异常", 3)
+                    self.list.button_switch.setChecked(False)
+                    return False
+                _dir = _json["dataPath"]
+            elif _name == "SeasunGame.exe":
+                _dir = os.path.join(_d, "data")
+            elif _name == "SNOWBREAK":
+                _dir = _d
+            else:
+                self.main.indicate("开关错误：未知路径", 1)
+                self.list.button_switch.setChecked(False)
+                return False
+            _file = os.path.join(_dir, "localization.txt")
+            if os.path.exists(_file):
+                with open(_file, 'r', encoding='utf-8') as f:
+                    _line = f.readline()
+            else:
+                self.main.indicate("开关错误：小开关文件缺失", 1)
+                self.list.button_switch.setChecked(False)
+                return False
+            if _line.count("=") == 1:
+                if "1" in _line:
+                    self.list.button_switch.setChecked(True)
+                else:
+                    self.list.button_switch.setChecked(False)
+
+    def rapid_start_game(self):
+        self.main.save_main_data()
         _task = {"模块": 5,
                  "预下载": True,
                  "更新": True,
@@ -66,32 +111,18 @@ class Snow:
                  'name': '',
                  'current_mute': 0}
         _task = self.main.add_path(_task)
-        self.list.button_start.clicked.connect(lambda: self.main.start(_task))
-        self.list.button_switch.checkedChanged.connect(self.switcher)
-        Line(self.widget_snow, (215, 5, 3, 505), False)
+        self.main.start(_task)
 
-        _path = self.main.config["snow"]["snow_path"]
-        if os.path.exists(_path):
-            _d, _name = os.path.split(_path)
-            if _name in ["snow_launcher.exe", "SeasunGame.exe"]:
-                _pref = os.path.join(_d, "preference.json")
-                with open(_pref, 'r', encoding='utf-8') as f:
-                    _json = load(f)
-                _dir = _json["dataPath"]
-            elif _name == "SNOWBREAK":
-                _dir = _d
-            else:
-                self.main.indicate("开关错误：未知路径", 1)
-                self.list.button_switch.setChecked(False)
-                return False
-            _file = os.path.join(_dir, "localization.txt")
-            with open(_file, 'r', encoding='utf-8') as f:
-                _line = f.readline()
-            if _line.count("=") == 1:
-                if "1" in _line:
-                    self.list.button_switch.setChecked(True)
-                else:
-                    self.list.button_switch.setChecked(False)
+    def start_tem(self):
+        from task.snow.temtask import Monitor, TemKill
+        _num = self.list.combo_tem.currentIndex()
+        self.text_monitor = Monitor(self, _num)
+        self.temkill = TemKill(self)
+        self.text_monitor.send.connect(self.main.indicate)
+        self.temkill.send.connect(self.main.indicate)
+        self.text_monitor.start()
+        self.temkill.start()
+        # self.trigger.start()
 
     def load_run(self, run):
         _dir = {
@@ -252,22 +283,33 @@ class Snow:
         _path = self.main.config["snow"]["snow_path"]
         if os.path.exists(_path):
             _d, _name = os.path.split(_path)
-            if _name in ["snow_launcher.exe", "SeasunGame.exe"]:
+            if _name == "snow_launcher.exe":
                 _pref = os.path.join(_d, "preference.json")
-                with open(_pref, 'r', encoding='utf-8') as f:
-                    _json = load(f)
+                if os.path.exists(_pref):
+                    with open(_pref, 'r', encoding='utf-8') as f:
+                        _json = load(f)
+                else:
+                    self.main.indicate("开关错误：启动器目录结构异常", 3)
+                    self.list.button_switch.setChecked(False)
+                    return False
                 _dir = _json["dataPath"]
+            elif _name == "SeasunGame.exe":
+                _dir = os.path.join(_d, "data")
             elif _name == "SNOWBREAK":
                 _dir = _d
             else:
-                self.main.indicate("开关错误：未知路径", 1)
+                self.main.indicate("开关错误：未知路径", 3)
                 self.list.button_switch.setChecked(False)
                 return False
         else:
-            self.main.indicate("开关错误：请先填写游戏路径", 1)
+            self.main.indicate("开关错误：请先填写游戏路径", 3)
             self.list.button_switch.setChecked(False)
             return False
         _file = os.path.join(_dir, "localization.txt")
+        if not os.path.exists(_file):
+            self.main.indicate("开关错误：小开关文件缺失", 3)
+            self.list.button_switch.setChecked(False)
+            return False
         if checked:
             with open(_file, 'w', encoding='utf-8') as f:
                 f.writelines("localization = 1")

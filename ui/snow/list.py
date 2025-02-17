@@ -22,7 +22,28 @@ class SnowList:
         self.set_roll = PicButton(scroll, (180, 185, 22, 22), setpath, (22, 22))
 
         self.button_start = Button(scroll, (70, 225, 80, 35), "启动游戏")
+        self.button_start.setToolTip('快捷启动游戏，不执行任务')
+        self.button_start.installEventFilter(
+            ToolTipFilter(self.button_start,
+                          showDelay=200,
+                          position=ToolTipPosition.TOP))
 
         self.button_switch = Swicher(scroll, (30, 470, 100, 35))
         self.button_switch.setOffText("小开关未开启")
         self.button_switch.setOnText("小开关已开启")
+        self.button_switch.setToolTip('使用西山居启动器，需要将游戏安装在启动器目录下')
+        self.button_switch.installEventFilter(
+            ToolTipFilter(self.button_switch,
+                          showDelay=200,
+                          position=ToolTipPosition.TOP))
+
+        # 临时功能
+        self.button_tem = Button(scroll, (70, 280, 120, 35), "开始临时任务")
+        self.combo_tem = Combobox(scroll, (70, 320, 120, 32))
+        self.combo_tem.addItems(["简单", "普通", "困难", "险恶", "异星守护"])
+        self.button_tem.setToolTip('请进入验证战场页面，自行配置好队伍和buff\n辰星放一号位，选够三个队友推荐辰星幽潮豹豹\n异星守护自行进入页面，配置队友')
+        self.button_tem.installEventFilter(
+            ToolTipFilter(self.button_tem,
+                          showDelay=200,
+                          position=ToolTipPosition.TOP))
+
