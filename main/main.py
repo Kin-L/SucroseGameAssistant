@@ -14,11 +14,10 @@ else:
     logger.info("================SGA开始启动================")
     import keyboard
     from time import sleep
-    from main.tools.environment import env
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtCore import Qt
     from sys import argv
-    from main.ui.main.main import MainWindows
+    from .ui.main import MainWindows
     # 唤醒屏幕
     keyboard.press("numlock")
     keyboard.release("numlock")

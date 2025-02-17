@@ -1,6 +1,6 @@
-from ..control import (PicButton, Button, Stack,
-                       Combobox, TransPicButton, Widget)
-from ..ui_part import TaskWidgt
+from main.ui.control import (PicButton, Button, Stack,
+                             Combobox, TransPicButton, Widget)
+from main.ui.ui_part import TaskWidgt
 
 
 # 模组设置窗口
