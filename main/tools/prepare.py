@@ -6,11 +6,12 @@ from pyuac import isUserAdmin
 from time import sleep
 from win32api import MessageBox
 from win32con import MB_OK
+from main.tools.logger import logger
 
 
 class Prepare:
-    def __init__(self, _logger):
-        self.logger = _logger
+    def __init__(self):
+        self.logger = logger
         self.hwnd = 0
 
     # 获取管理员权限
@@ -31,7 +32,8 @@ class Prepare:
     def find_hwnd(self, mode_cls_tit):
         mode, cls, tit = mode_cls_tit
         if mode:
-            return FindWindow(cls, tit)
+            self.hwnd = FindWindow(cls, tit)
+            return self.hwnd
         else:
             hwnd_list = []
             EnumWindows(lambda _hwnd, _hwnd_list: _hwnd_list.append(_hwnd), hwnd_list)

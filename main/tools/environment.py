@@ -6,8 +6,8 @@ from cpufeature import CPUFeature
 
 
 class Environment(Prepare):
-    def __init__(self, _logger):
-        super().__init__(_logger)
+    def __init__(self):
+        super().__init__()
         # 记录SGA本次启动时间
         self.start_time = localtime()
         # 记录并检查SGA本次工作目录
@@ -32,6 +32,8 @@ class Environment(Prepare):
         self.resolution_now = (now_wid, now_hig)
         self.zoom_desktop = round(ori_wid / now_wid, 2)
 
+
+env = Environment()
 
 if __name__ == '__main__':
     path = getcwd()

@@ -113,4 +113,4 @@ class Logger:
         self.logger.removeHandler(self.console_handler)
 
 
-
+logger = Logger().get_logger()

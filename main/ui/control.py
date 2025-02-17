@@ -1,7 +1,7 @@
 from qfluentwidgets import (SmoothScrollArea, StrongBodyLabel,
                             PushButton, ToolButton, TransparentToolButton,
                             CheckBox, ComboBox, LineEdit, SwitchButton,
-                            setFont)
+                            setFont, TimePicker)
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 
@@ -123,6 +123,13 @@ class Line(QtWidgets.QFrame):
 
 
 class Swicher(SwitchButton):
+    def __init__(self, widget, location):
+        (x, y, w, h) = location
+        super().__init__(widget)
+        self.setGeometry(QtCore.QRect(x, y, w, h))
+
+
+class Timepicker(TimePicker):
     def __init__(self, widget, location):
         (x, y, w, h) = location
         super().__init__(widget)
