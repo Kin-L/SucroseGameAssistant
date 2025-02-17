@@ -64,6 +64,7 @@ class TaskM7A(Task):
         _run = env.soft.run(fls=False, tit="m7a")
         if _run:
             self.indicate("三月七助手运行中...")
+            wait(100000)
             while 1:
                 wait(10000)
                 if not find_hwnd((1, "UnityWndClass", "崩坏：星穹铁道")):
@@ -74,9 +75,9 @@ class TaskM7A(Task):
             self.indicate("三月七助手启动失败")
             return True
         # M7A关闭
-        pid = get_pid("PaddleOCR-json.exe")
+        pid = get_pid("March7th Assistant.exe")
         if pid is not None:
-            self.indicate("关闭三月七助手")
+            self.indicate("关闭三月七助手窗口")
             close(pid)
     
     def od(self, _path):
@@ -101,6 +102,7 @@ class TaskM7A(Task):
         _run = env.soft.run(fls=False, tit="OneDragon")
         if _run:
             self.indicate("星铁一条龙运行中...")
+            wait(100000)
             while 1:
                 wait(10000)
                 if not find_hwnd((1, "UnityWndClass", "崩坏：星穹铁道")):

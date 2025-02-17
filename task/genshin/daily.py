@@ -253,7 +253,7 @@ class Daily(Genshin):
         if pid is not None:
             close(pid)
         self.indicate("BGI自动秘境运行完成")
-        wait(1000)
+        wait(5000)
         self.home()
         #分解圣遗物
         if self.task["圣遗物分解"] and self.task["秘境"][0] == "圣遗物":
