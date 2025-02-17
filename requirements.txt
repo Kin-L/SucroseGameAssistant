@@ -1,0 +1,8 @@
+--index https://mirrors.aliyun.com/pypi/simple
+PyQt-Fluent-Widgets
+colorama
+requests
+pyuac
+keyboard
+cpufeature
+PyQt5
