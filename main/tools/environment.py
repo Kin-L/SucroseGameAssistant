@@ -1,13 +1,20 @@
-from main.tools.prepare import Prepare
 from os import getcwd
 from time import localtime
 from ctypes import windll
 from cpufeature import CPUFeature
+from win32api import MessageBox
+from win32con import MB_OK, SW_RESTORE
+from win32gui import (FindWindow, EnumWindows, GetClassName,
+                      GetWindowText, IsIconic, ShowWindow,
+                      SetForegroundWindow, GetForegroundWindow)
+from time import sleep
+from main.tools.logger import logger
 
 
-class Environment(Prepare):
+class Environment:
     def __init__(self):
-        super().__init__()
+        self.logger = logger
+        self.hwnd = 0
         # 记录SGA本次启动时间
         self.start_time = localtime()
         # 记录并检查SGA本次工作目录
@@ -20,6 +27,50 @@ class Environment(Prepare):
         self.resolution_now = None
         self.zoom_desktop = None
         self.get_resolution_zoom()
+
+    @staticmethod
+    def send_messagebox(_str):
+        MessageBox(0, _str, "砂糖代理", MB_OK)
+
+    def find_hwnd(self, mode_cls_tit):
+        mode, cls, tit = mode_cls_tit
+        if mode:
+            self.hwnd = FindWindow(cls, tit)
+            return self.hwnd
+        else:
+            hwnd_list = []
+            EnumWindows(lambda _hwnd, _hwnd_list: _hwnd_list.append(_hwnd), hwnd_list)
+            for hwnd in hwnd_list:
+                # noinspection PyBroadException
+                try:
+                    class_name = GetClassName(hwnd)
+                    title = GetWindowText(hwnd)
+                    if cls in class_name and tit in title:
+                        self.hwnd = hwnd
+                        return hwnd
+                except Exception:
+                    continue
+            self.logger.info(f"未找到窗口句柄：{mode, cls, tit}")
+            return 0
+
+    def foreground(self):
+        for i in range(10):
+            current_hwnd = GetForegroundWindow()
+            if current_hwnd == self.hwnd:
+                self.logger.debug(f"SGA窗口唤起成功")
+                return True
+            if IsIconic(self.hwnd):
+                ShowWindow(self.hwnd, SW_RESTORE)
+                sleep(0.2)
+            if current_hwnd != self.hwnd:
+                # noinspection PyBroadException
+                try:
+                    SetForegroundWindow(self.hwnd)
+                except Exception:
+                    self.logger.debug(f"SGA窗口唤起异常：SetForegroundWindow")
+                sleep(0.2)
+        self.logger.debug(f"SGA窗口唤起失败")
+        return False
 
     def get_resolution_zoom(self):
         user32 = windll.user32

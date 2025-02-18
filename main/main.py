@@ -5,12 +5,12 @@ from main.tools.prepare import Prepare
 # 检测SGA窗口
 sga_prepare = Prepare()
 if sga_prepare.find_hwnd((1, "Qt5152QWindowIcon", "砂糖代理")):
-    logger.info("SGA早已启动")
     sga_prepare.foreground()
     exit(0)
 else:
     # 准备SGA启动环境
     del sga_prepare
+    print("")
     logger.info("================SGA开始启动================")
     import keyboard
     from time import sleep
@@ -31,6 +31,7 @@ QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
 application = QApplication(argv)
 sga_ui = MainWindows()
 application.exec_()
+logger.info("==================SGA关闭=================\n\n")
 
 if __name__ == "__main__":
     pass

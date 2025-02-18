@@ -6,3 +6,4 @@ pyuac
 keyboard
 cpufeature
 PyQt5
+colorlog
