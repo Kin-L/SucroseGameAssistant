@@ -22,13 +22,18 @@ class MainWidget(QWidget):
 
 
 class TaskWidgt:
-    def __init__(self, _module, _pic_path):
+    def __init__(self, _module, _pic_path, name_prefix):
         self.button = Picture(_module.widget, (0, 0, 50, 50), _pic_path)
         self.button.hide()
         self.widget = Widget()
         _module.stack_module.addWidget(self.widget)
         self.list = None
         self.set = None
+        _name, _prefix = name_prefix
+        from main.tools.environment import env
+        env.name = env.name + [_name]
+        env.prefix = env.prefix + [_prefix]
+        env.load = env.load + [False]
 
 
 class OverallButton(ToggleToolButton):

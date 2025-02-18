@@ -33,9 +33,18 @@ class Logger:
         )
         self.console_handler.setFormatter(color_formatter)
         self.logger.addHandler(self.console_handler)
+        self.logger.new_handler = self.new_handler
 
     def get_logger(self):
         return self.logger
+
+    def new_handler(self, date):
+        self.logger.date = date
+        self.logger.removeHandler(self.file_handler)
+        self.file_handler = FileHandler(rf"personal\logs\{date}.log", encoding="utf-8")  # midnight
+        file_formatter = Formatter('%(asctime)s | %(levelname)s | %(message)s', datefmt="%H:%M:%S")
+        self.file_handler.setFormatter(file_formatter)
+        self.logger.addHandler(self.file_handler)
 
 
 logger = Logger().get_logger()

@@ -1,6 +1,7 @@
 from main.ui.control import (PicButton, Button, Stack,
                              Combobox, TransPicButton, Widget)
 from main.ui.ui_part import TaskWidgt
+from main.tools.environment import env
 
 
 # 模组设置窗口
@@ -32,12 +33,13 @@ class ModuleWindow:
         self.button_start = Button(self.widget, (565, 8, 55, 35), "开始")
         # 堆叠窗口
         self.stack_module = Stack(self.widget, (0, 65, 670, 515))
-        self.mix = TaskWidgt(self, r"assets\main_window\icon\mix-icon.png")
-        self.klein = TaskWidgt(self, r"assets\main_window\icon\klein-icon.png")
-        self.genshin = TaskWidgt(self, r"assets\snow\picture\snow-icon.png")
-        self.maa = TaskWidgt(self, r"assets\main_window\icon\MAA-icon.png")
-        self.m7a = TaskWidgt(self, r"assets\main_window\icon\M7A-icon.png")
-        self.snow = TaskWidgt(self, r"assets\snow\picture\snow-icon.png")
-        self.common = TaskWidgt(self, r"assets\main_window\icon\snow-icon.png")
-        self.presstrigger = TaskWidgt(self, r"assets\main_window\icon\presstrigger-icon.png")
-        self.zzz = TaskWidgt(self, r"assets\main_window\icon\zzz_logo.png")
+        self.mix = TaskWidgt(self, r"assets\main_window\icon\mix-icon.png", ("mix", "00"))
+        self.klein = TaskWidgt(self, r"assets\main_window\icon\klein-icon.png", ("kleins", "01"))
+        self.genshin = TaskWidgt(self, r"assets\snow\picture\snow-icon.png", ("genshin", "02"))
+        self.maa = TaskWidgt(self, r"assets\main_window\icon\MAA-icon.png", ("maa", "03"))
+        self.m7a = TaskWidgt(self, r"assets\main_window\icon\M7A-icon.png", ("m7a", "04"))
+        self.snow = TaskWidgt(self, r"assets\snow\picture\snow-icon.png", ("snow", "05"))
+        self.common = TaskWidgt(self, r"assets\main_window\icon\snow-icon.png", ("common", "06"))
+        self.presstrigger = TaskWidgt(self, r"assets\main_window\icon\presstrigger-icon.png", ("presstrigger", "07"))
+        self.zzz = TaskWidgt(self, r"assets\main_window\icon\zzz_logo.png", ("zzz", "08"))
+        env.version = "v3.X.X"

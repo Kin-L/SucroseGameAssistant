@@ -17,7 +17,6 @@ else:
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtCore import Qt
     from sys import argv
-    from .ui.main import MainWindows
     # 唤醒屏幕
     keyboard.press("numlock")
     keyboard.release("numlock")
@@ -29,7 +28,11 @@ QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPo
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
 QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
 application = QApplication(argv)
-sga_ui = MainWindows()
+if True:
+    from main.ui.mainwindows import main_windows
+    mw = main_windows
+    from main.ui.main import main_connect
+    main_connect()
 application.exec_()
 logger.info("==================SGA关闭=================\n\n")
 

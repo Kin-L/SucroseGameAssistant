@@ -27,6 +27,7 @@ class Environment:
         self.resolution_now = None
         self.zoom_desktop = None
         self.get_resolution_zoom()
+        self.state = {}
 
     @staticmethod
     def send_messagebox(_str):
@@ -84,7 +85,25 @@ class Environment:
         self.zoom_desktop = round(ori_wid / now_wid, 2)
 
 
-env = Environment()
+class SGAEnvironment(Environment):
+    def __init__(self):
+        super().__init__()
+        self.version = ""
+        self.config = ""
+        self.lock = True
+        self.timer = {}
+        self.current = {}
+        self.update = False
+        self.setting = 0
+        self.serial = []
+        self.single = []
+        self.plan = []
+        self.name = []
+        self.prefix = []
+        self.load = []
+
+
+env = SGAEnvironment()
 
 if __name__ == '__main__':
     path = getcwd()
