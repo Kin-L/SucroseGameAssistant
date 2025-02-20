@@ -4,9 +4,16 @@ from main.tools.environment import env
 
 def load_main_config():
     # 加载全局设置内容
-    from main.ui.overall.timer.connect import timer_add_items, timer_load_set
-    timer_add_items(env.config_name)
-    timer_load_set(env.timer)
+    from main.ui.overall.timer.connect import timer_load_items, timer_load_set
+    timer_load_items(env.config_name)
+    # noinspection PyBroadException
+    try:
+        timer_load_set(env.timer)
+    except Exception:
+        mw.indicate("定时配置损坏,进行重置")
+        mw.sendbox(mode=3)
+        env.main_config = {}
+        timer_load_set()
     mw.overall.auto_update.setChecked(env.update)
     mw.overall.label_version.setText(env.version)
     # 加载模组设置
@@ -24,8 +31,25 @@ def load_main_config():
     else:
         mw.module.button_config_lock.hide()
         mw.module.button_config_unlock.show()
-    if isinstance(env.current, dict):
+    # noinspection PyBroadException
+    try:
+        # noinspection PyBroadException
+        try:
+            num = env.current["模块"]
+        except Exception:
+            num = 0
+        mw.module.load_module_window(num)
         mw.module.load_module_config(env.current)
+    except Exception:
+        mw.indicate("记忆配置损坏,进行重置")
+        mw.sendbox(mode=3)
+        env.main_config = {}
+        mw.module.load_module_window(0)
+        mw.module.load_module_config()
+    if env.main_config:
+        import json
+        with open("personal/main_config_bak.json", 'w', encoding='utf-8') as c:
+            json.dump(env.main_config, c, ensure_ascii=False, indent=1)
     # 运行路径变化时，基础文件初始化
     if env.workdir != env.current_work_path:
         pass
@@ -33,12 +57,17 @@ def load_main_config():
 
 def function_connect():
     # 主面板操作
-    from main.ui.mainwindow.connect import change_interface, open_log_dir
+    from main.ui.mainwindow.connect import change_interface, open_log_dir, exit_prepare
     from main.ui.module.connect import (change_lock, delete_plan, config_change,
                                         config_rename, config_box_add, change_module_stack,
                                         save_config)
+    from main.ui.overall.timer.connect import item_change, timer_delete, apply_timer
+    from main.ui.overall.connect import update_check_change
+    from webbrowser import open as weopen
+    import atexit
     mw.main.button_set_home.toggled.connect(change_interface)
     mw.main.button_history.clicked.connect(open_log_dir)
+    atexit.register(exit_prepare)
     mw.module.button_config_lock.clicked.connect(change_lock)
     mw.module.button_config_unlock.clicked.connect(change_lock)
     mw.module.button_config_delete.clicked.connect(delete_plan)
@@ -47,6 +76,15 @@ def function_connect():
     mw.module.button_config_add.clicked.connect(config_box_add)
     mw.module.box_module_change.currentIndexChanged.connect(change_module_stack)
     mw.module.button_config_save.clicked.connect(save_config)
+
+    mw.overall.button_github.clicked.connect(lambda: weopen("https://github.com/Kin-L/SucroseGameAssistant"))
+    mw.overall.button_gitee.clicked.connect(lambda: weopen("https://gitee.com/huixinghen/SucroseGameAssistant"))
+    mw.overall.button_bilibili.clicked.connect(lambda: weopen("https://space.bilibili.com/406315493"))
+    mw.overall.auto_update.toggled.connect(update_check_change)
+    mw.overall.timer.add.clicked.connect(lambda: item_change(True))
+    mw.overall.timer.deduce.clicked.connect(lambda: item_change(False))
+    mw.overall.timer.delete.clicked.connect(timer_delete)
+    mw.overall.timer.apply.clicked.connect(apply_timer)
 
 
 def get_file_path(text):
@@ -77,31 +115,6 @@ def send_config_dir(dictionary, text="current"):
         with open(mw.get_file_path(text), 'w', encoding='utf-8') as c:
             dump(dictionary, c, ensure_ascii=False, indent=1)
 
-
-# 保存主设置
-def save_main_data(mw):
-    mw.config["timer"] = mw.overall.timer.save_set()
-    mw.config["config"] = mw.state["text"]
-    mw.config["lock"] = mw.state["locked"]
-    mw.config["current"] = mw.get_config_dir()
-    mw.config["update"] = mw.overall.auto_update.isChecked()
-    for text in mw.state["name"][1:]:
-        if mw.state[text]["load"]:
-            module = eval(f"mw.{text}")
-            mw.config[text] = module.get_run()
-    with open("personal/main_config.json", 'w', encoding='utf-8') as c:
-        dump(mw.config, c, ensure_ascii=False, indent=1)
-    with open("personal/main_config_bak.json", 'w', encoding='utf-8') as c:
-        dump(mw.config, c, ensure_ascii=False, indent=1)
-
-def exit_save(mw):
-    mw.save_main_data()
-    while 1:
-        v = get_pid("PaddleOCR-json.exe")
-        if v:
-            close(v)
-        else:
-            break
 
 def add_path(config_dir):
     _name = mw.state["name"][config_dir["模块"]]

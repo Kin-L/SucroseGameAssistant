@@ -53,24 +53,34 @@ class ModuleWindow:
                     self.maa, self.m7a, self.snow,
                     self.common, self.presstrigger]
 
-    def load_module_config(self, _dict):
-        num = _dict["模块"]
+    def load_module_window(self, num):
         if num == 0:
-            from main.ui.module.mix import MixList, MixStack, mix_input_config, mix_box_refresh
+            from main.ui.module.mix import MixList, MixStack, mix_box_refresh
             if not env.load[num]:
                 self.mix.list = MixList(self.mix.widget)
                 self.mix.set = MixStack(self.mix.widget)
                 env.load[num] = True
             mix_box_refresh(env.config_name)
-            mix_input_config(_dict)
         elif num == 5:
-            from main.ui.module.snow.configwr import snow_input_config
             if not env.load[num]:
                 from main.ui.module.snow.list import SnowList
                 from main.ui.module.snow.stack import SnowStack
                 self.snow.list = SnowList(self.snow.widget)
                 self.snow.set = SnowStack(self.snow.widget)
                 env.load[num] = True
+        else:
+            raise ValueError("load_module_window:传入值不在允许范围")
+
+    def load_module_config(self, _dict=None):
+        if _dict:
+            num = _dict["模块"]
+        else:
+            num = 0
+        if num == 0:
+            from main.ui.module.mix import mix_input_config
+            mix_input_config(_dict)
+        elif num == 5:
+            from main.ui.module.snow.configwr import snow_input_config
             snow_input_config(_dict)
         self.box_module_change.setCurrentIndex(num)
 

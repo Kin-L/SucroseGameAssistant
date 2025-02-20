@@ -31,9 +31,7 @@ def main_connect():
         logger.critical("状态链接失败(6/7):\n%s\n" % format_exc())
         sysexit(1)
     # try:
-    #     # 全局设置:退出前保存 & 每10秒自动保存
-    #     import atexit
-    #     atexit.register(sga_ui.exit_save)
+
     #     if sga_ui.config["update"]:
     #         sga_ui.check_update(2)
     #     sga_ui.cycle.start()

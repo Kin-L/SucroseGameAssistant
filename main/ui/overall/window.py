@@ -11,7 +11,7 @@ class OverallWindow:
         Line(self.widget, (0, 43, 620, 3))
         self.timer = TimerWindow(self.widget, (0, 60, 620, 300))
         Line(self.widget, (0, 300, 620, 3))
-        self.auto_update = Check(self.widget, (0, 310, 150, 40), "自动检查并更新")
+        self.auto_update = Check(self.widget, (0, 310, 150, 40), "自动更新")
         self.button_check = Button(self.widget, (135, 315, 80, 30), "检查更新")
         self.button_update = Button(self.widget, (135, 315, 80, 30), "开始更新")
         self.button_update.hide()

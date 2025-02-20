@@ -1,9 +1,5 @@
 from main.mainwindows import main_windows as mw
-
-
-def snow_input_config(_dir):
-    _snow = mw.module.snow
-    config = {
+_snow_dir = {
         "模块": 5,
         "预下载": False,
         "更新": False,
@@ -32,51 +28,56 @@ def snow_input_config(_dir):
         "活动每日": False,
         "共鸣记录": [False, False, False, False, False, False, False, False]
     }
-    config.update(_dir)
-    _snow.set.local.check_preload.setChecked(config["预下载"])
-    _snow.set.local.check_update.setChecked(config["更新"])
-    _snow.set.local.independent.check_mute.setChecked(config["静音"])
-    _snow.set.local.independent.check_kill_game.setChecked(config["关闭软件"])
-    _snow.set.local.independent.combo_after.setCurrentIndex(config["完成后"])
-    _snow.set.local.independent.check_kill_sga.setChecked(config["SGA关闭"])
-    _snow.set.local.line_account.setText(config["账号选择"])
+
+
+def snow_input_config(_dir):
+    if not _dir:
+        _dir = _snow_dir
+    _snow = mw.module.snow
+    _snow.set.local.check_preload.setChecked(_dir["预下载"])
+    _snow.set.local.check_update.setChecked(_dir["更新"])
+    _snow.set.local.independent.check_mute.setChecked(_dir["静音"])
+    _snow.set.local.independent.check_kill_game.setChecked(_dir["关闭软件"])
+    _snow.set.local.independent.combo_after.setCurrentIndex(_dir["完成后"])
+    _snow.set.local.independent.check_kill_sga.setChecked(_dir["SGA关闭"])
+    _snow.set.local.line_account.setText(_dir["账号选择"])
     _snow.set.local.line_account.setSelection(0, 0)
 
-    _snow.list.check_fight.setChecked(config["功能0"])
-    _snow.list.check_daily.setChecked(config["功能1"])
-    _snow.list.check_mail.setChecked(config["功能2"])
-    _snow.list.check_roll.setChecked(config["功能3"])
+    _snow.list.check_fight.setChecked(_dir["功能0"])
+    _snow.list.check_daily.setChecked(_dir["功能1"])
+    _snow.list.check_mail.setChecked(_dir["功能2"])
+    _snow.list.check_roll.setChecked(_dir["功能3"])
 
-    _snow.set.fight.check_share.setChecked(config["感知互赠"])
-    _snow.set.fight.check_supply.setChecked(config["每日配给"])
-    _snow.set.fight.check_reagent.setChecked(config["使用试剂"])
-    _snow.set.fight.mat.setCurrentIndex(config["行动选择"])
-    _snow.set.fight.logistics.setCurrentText(config["后勤选择"])
-    _snow.set.fight.logistics1.setCurrentText(config["活动后勤选择"])
+    _snow.set.fight.check_share.setChecked(_dir["感知互赠"])
+    _snow.set.fight.check_supply.setChecked(_dir["每日配给"])
+    _snow.set.fight.check_reagent.setChecked(_dir["使用试剂"])
+    _snow.set.fight.mat.setCurrentIndex(_dir["行动选择"])
+    _snow.set.fight.logistics.setCurrentText(_dir["后勤选择"])
+    _snow.set.fight.logistics1.setCurrentText(_dir["活动后勤选择"])
 
-    _snow.set.daily.check_character.setChecked(config["个人故事"][0])
-    _snow.set.daily.check_supplement.setChecked(config["个人故事"][1])
-    _snow.set.daily.character1.setCurrentText(config["个人故事"][2])
-    _snow.set.daily.character2.setCurrentText(config["个人故事"][3])
-    _snow.set.daily.character3.setCurrentText(config["个人故事"][4])
-    _snow.set.daily.character4.setCurrentText(config["个人故事"][5])
+    _snow.set.daily.check_character.setChecked(_dir["个人故事"][0])
+    _snow.set.daily.check_supplement.setChecked(_dir["个人故事"][1])
+    _snow.set.daily.character1.setCurrentText(_dir["个人故事"][2])
+    _snow.set.daily.character2.setCurrentText(_dir["个人故事"][3])
+    _snow.set.daily.character3.setCurrentText(_dir["个人故事"][4])
+    _snow.set.daily.character4.setCurrentText(_dir["个人故事"][5])
 
-    _snow.set.daily.check_imitate.setChecked(config["拟境扫荡"])
-    _snow.set.daily.check_market.setChecked(config["商店购物"][0])
-    _snow.set.daily.box_market1.setCurrentText(config["商店购物"][1])
-    _snow.set.daily.box_market2.setCurrentText(config["商店购物"][2])
-    _snow.set.daily.check_weapon.setChecked(config["武器升级"])
-    _snow.set.daily.check_daily.setChecked(config["领取日常"])
-    _snow.set.daily.check_daily2.setChecked(config["领取凭证"])
-    _snow.set.daily.check_daily3.setChecked(config["活动每日"])
-    _snow.set.roll.check_roll0.setChecked(config["共鸣记录"][0])
-    _snow.set.roll.check_roll1.setChecked(config["共鸣记录"][1])
-    _snow.set.roll.check_roll2.setChecked(config["共鸣记录"][2])
-    _snow.set.roll.check_roll3.setChecked(config["共鸣记录"][3])
-    _snow.set.roll.check_roll4.setChecked(config["共鸣记录"][4])
-    _snow.set.roll.check_roll5.setChecked(config["共鸣记录"][5])
-    _snow.set.roll.check_roll6.setChecked(config["共鸣记录"][6])
-    _snow.set.roll.check_opensheet.setChecked(config["共鸣记录"][7])
+    _snow.set.daily.check_imitate.setChecked(_dir["拟境扫荡"])
+    _snow.set.daily.check_market.setChecked(_dir["商店购物"][0])
+    _snow.set.daily.box_market1.setCurrentText(_dir["商店购物"][1])
+    _snow.set.daily.box_market2.setCurrentText(_dir["商店购物"][2])
+    _snow.set.daily.check_weapon.setChecked(_dir["武器升级"])
+    _snow.set.daily.check_daily.setChecked(_dir["领取日常"])
+    _snow.set.daily.check_daily2.setChecked(_dir["领取凭证"])
+    _snow.set.daily.check_daily3.setChecked(_dir["活动每日"])
+    _snow.set.roll.check_roll0.setChecked(_dir["共鸣记录"][0])
+    _snow.set.roll.check_roll1.setChecked(_dir["共鸣记录"][1])
+    _snow.set.roll.check_roll2.setChecked(_dir["共鸣记录"][2])
+    _snow.set.roll.check_roll3.setChecked(_dir["共鸣记录"][3])
+    _snow.set.roll.check_roll4.setChecked(_dir["共鸣记录"][4])
+    _snow.set.roll.check_roll5.setChecked(_dir["共鸣记录"][5])
+    _snow.set.roll.check_roll6.setChecked(_dir["共鸣记录"][6])
+    _snow.set.roll.check_opensheet.setChecked(_dir["共鸣记录"][7])
 
 
 def snow_collect_config():

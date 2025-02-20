@@ -26,9 +26,7 @@ class MixStack:
         self.independent = Independent(self.widget, (0, 50, 350, 70), False)
 
 
-def mix_input_config(_dir):
-    _mix = mw.module.mix
-    config = {
+_mix_dir = {
         "模块": 0,
         "配置0": {
             "name": "<未选择>"
@@ -50,16 +48,21 @@ def mix_input_config(_dir):
         "完成后": 0,
         "SGA关闭": False,
     }
-    config.update(_dir)
-    _mix.list.combobox_mix_config0.setCurrentText(config["配置0"]["name"])
-    _mix.list.combobox_mix_config1.setCurrentText(config["配置1"]["name"])
-    _mix.list.combobox_mix_config2.setCurrentText(config["配置2"]["name"])
-    _mix.list.combobox_mix_config3.setCurrentText(config["配置3"]["name"])
-    _mix.list.combobox_mix_config4.setCurrentText(config["配置4"]["name"])
 
-    _mix.set.independent.check_mute.setChecked(config["静音"])
-    _mix.set.independent.combo_after.setCurrentIndex(config["完成后"])
-    _mix.set.independent.check_kill_sga.setChecked(config["SGA关闭"])
+
+def mix_input_config(_dir=None):
+    if not _dir:
+        _dir = _mix_dir
+    _mix = mw.module.mix
+    _mix.list.combobox_mix_config0.setCurrentText(_dir["配置0"]["name"])
+    _mix.list.combobox_mix_config1.setCurrentText(_dir["配置1"]["name"])
+    _mix.list.combobox_mix_config2.setCurrentText(_dir["配置2"]["name"])
+    _mix.list.combobox_mix_config3.setCurrentText(_dir["配置3"]["name"])
+    _mix.list.combobox_mix_config4.setCurrentText(_dir["配置4"]["name"])
+
+    _mix.set.independent.check_mute.setChecked(_dir["静音"])
+    _mix.set.independent.combo_after.setCurrentIndex(_dir["完成后"])
+    _mix.set.independent.check_kill_sga.setChecked(_dir["SGA关闭"])
 
 
 def mix_collect_config():

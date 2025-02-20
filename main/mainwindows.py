@@ -75,7 +75,7 @@ class MainWindows:
             "update": False,
             "lock": True,
             "config": "",
-            "current": {"模块": 0}
+            "current": {}
         }
         from json import load, dump
         if exists(r"personal/main_config.json"):
@@ -83,17 +83,19 @@ class MainWindows:
             try:
                 with open(r"personal/main_config.json", 'r', encoding='utf-8') as c:
                     config = load(c)
+                env.main_config = config
             except Exception:
-                # noinspection PyBroadException
-                try:
-                    with open(r"personal/main_config_bak.json", 'r', encoding='utf-8') as c:
-                        config = load(c)
-                    with open(r"personal/main_config.json", 'w', encoding='utf-8') as c:
-                        dump(config, c, ensure_ascii=False, indent=1)
-                    self.indicate("主配置文件损坏,从备份中恢复")
-                except Exception:
-                    config = _config
-                    self.indicate("备份配置文件损坏,主配置文件重置")
+                if exists(r"personal/main_config_bak.json"):
+                    # noinspection PyBroadException
+                    try:
+                        with open(r"personal/main_config_bak.json", 'r', encoding='utf-8') as c:
+                            config = load(c)
+                        with open(r"personal/main_config.json", 'w', encoding='utf-8') as c:
+                            dump(config, c, ensure_ascii=False, indent=1)
+                        self.indicate("主配置文件损坏,从备份中恢复")
+                    except Exception:
+                        config = _config
+                        self.indicate("主配置&备份配置文件损坏,主配置文件重置")
         else:
             config = _config
         # noinspection PyBroadException
@@ -104,10 +106,9 @@ class MainWindows:
             env.lock = config["lock"]
             env.config = config["config"]
             env.current = config["current"]
-            if not env.current["模块"] in list(range(len(env.name))):
-                env.current["模块"] = 0
         except Exception:
             self.indicate("配置文件损坏,主配置文件重置")
+            env.main_config = {}
             env.current_work_path = _config["current_work_path"]
             env.timer = _config["timer"]
             env.update = _config["update"]

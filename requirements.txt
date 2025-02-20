@@ -7,3 +7,4 @@ keyboard
 cpufeature
 PyQt5
 colorlog
+psutil

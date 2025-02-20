@@ -90,6 +90,7 @@ class SGAEnvironment(Environment):
         super().__init__()
         self.version = ""
         self.current_work_path = ""
+        self.main_config = {}
         self.timer = {}
         self.update = False
         self.lock = True

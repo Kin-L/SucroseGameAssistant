@@ -68,13 +68,12 @@ def read_config_dir(_text):
 
 # 选择方案改变
 def config_change():
+    env.config = mw.module.box_config_change.currentText()
     if env.lock:
         mw.sendbox(mode=1)
-        _text = mw.module.box_config_change.currentText()
         try:
-            mw.module.load_module_config(read_config_dir(_text))
-            env.config = _text
-            mw.sendbox(f"切换配置:{_text}", mode=2)
+            mw.module.load_module_config(read_config_dir(env.config))
+            mw.sendbox(f"切换配置:{env.config}", mode=2)
         except Exception as e:
             logger.error("切换配置异常:\n%s\n" % format_exc())
             mw.sendbox(f"切换配置异常:{e}", mode=2)
@@ -110,8 +109,8 @@ def config_box_refresh():
                 continue
             env.config_name += [name]
             env.config_type += [_config["模块"]]
-    from main.ui.overall.timer.connect import timer_add_items
-    timer_add_items(env.config_name)
+    from main.ui.overall.timer.connect import timer_load_items
+    timer_load_items(env.config_name)
     mw.module.box_config_change.disconnect()
     mw.module.box_config_change.clear()
     mw.module.box_config_change.addItems(env.config_name)
