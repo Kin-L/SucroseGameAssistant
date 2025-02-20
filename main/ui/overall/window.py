@@ -1,6 +1,6 @@
 from main.ui.control import (Button, Widget, TransPicButton,
                              Label, Line, Check)
-from .timer_window import TimerWindow
+from main.ui.overall.timer.window import TimerWindow
 
 
 class OverallWindow:
@@ -19,7 +19,6 @@ class OverallWindow:
         self.label_version = Label(self.widget, (225, 310, 120, 40), f"版本号 3.5.X", 14)
 
         self.button_update_history = Button(self.widget, (325, 315, 80, 30), "更新日志")
-        self.button_logger = Button(self.widget, (410, 315, 80, 30), "运行日志")
 
         self.button_github = TransPicButton(self.widget, (500, 312, 30, 30),
                                             r"assets\main_window\button\github.png", (30, 30))

@@ -14,7 +14,6 @@ class MainWidget(QWidget):
         self.setWindowTitle("砂糖代理")
         self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
         self.setFixedSize(self.width(), self.height())
-        import main.ui.SGA_icon
         self.setWindowIcon(QIcon(":/SGA.ico"))
         palette = QPalette()
         palette.setColor(QPalette.Background, QColor(255, 255, 255))
@@ -40,14 +39,14 @@ class OverallButton(ToggleToolButton):
     def __init__(self, widget):
         super().__init__(widget)
         self.setIcon(r"assets\main_window\button\set.png")
-        self.setGeometry(QRect(635, 0, 56, 56))
+        self.setGeometry(QRect(595, 0, 35, 35))
         self.setIconSize(QSize(25, 25))
 
 
 class InfoBox(QTextBrowser):
     def __init__(self, widget):
         super().__init__(widget)
-        self.setGeometry(QRect(635, 60, 270, 515))
+        self.setGeometry(QRect(635, 0, 270, 575))
         self.setStyleSheet("QTextBrowser { font-size: 14px; }")
         self.moveCursor(self.textCursor().Start)  # <font color='red'>
         notify = "使用须知:\n" \

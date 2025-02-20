@@ -89,15 +89,15 @@ class SGAEnvironment(Environment):
     def __init__(self):
         super().__init__()
         self.version = ""
-        self.config = ""
-        self.lock = True
+        self.current_work_path = ""
         self.timer = {}
-        self.current = {}
         self.update = False
-        self.setting = 0
-        self.serial = []
-        self.single = []
-        self.plan = []
+        self.lock = True
+        self.config = ""
+        self.current = {}
+        self.setting = 1
+        self.config_name = []
+        self.config_type = []
         self.name = []
         self.prefix = []
         self.load = []

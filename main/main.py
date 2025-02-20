@@ -29,9 +29,9 @@ QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
 QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
 application = QApplication(argv)
 if True:
-    from main.ui.mainwindows import main_windows
+    from main.mainwindows import main_windows
     mw = main_windows
-    from main.ui.main import main_connect
+    from main.mainconnect import main_connect
     main_connect()
 application.exec_()
 logger.info("==================SGA关闭=================\n\n")

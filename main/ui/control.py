@@ -1,7 +1,7 @@
 from qfluentwidgets import (SmoothScrollArea, StrongBodyLabel,
                             PushButton, ToolButton, TransparentToolButton,
                             CheckBox, ComboBox, LineEdit, SwitchButton,
-                            setFont, TimePicker)
+                            setFont, TimePicker, ToolTipFilter, ToolTipPosition)
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 
@@ -134,3 +134,10 @@ class Timepicker(TimePicker):
         (x, y, w, h) = location
         super().__init__(widget)
         self.setGeometry(QtCore.QRect(x, y, w, h))
+
+
+def tips(control, text):
+    control.setToolTip(text)
+    control.installEventFilter(
+        ToolTipFilter(control, showDelay=200,
+                      position=ToolTipPosition.TOP))

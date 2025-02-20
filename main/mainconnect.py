@@ -1,19 +1,21 @@
 from sys import argv
 from main.tools.logger import logger
 from main.tools.environment import env
-from .mainwindows import main_windows as mw
+from main.mainwindows import main_windows as mw
 from traceback import format_exc
 from sys import exit as sysexit
+from main.ui.connect import load_main_config, function_connect
 
 
 def main_connect():
-    # # 加载主配置
-    # try:
-    #     sga_ui.load_main_config()
-    # except Exception as err:
-    #     env.send_messagebox("主配置加载失败(4/7):\n%s\n" % err)
-    #     logger.critical("主配置加载失败(4/7):\n%s\n" % format_exc())
-    #     sysexit(1)
+    # 加载主配置
+    try:
+        mw.read_main_config()
+        load_main_config()
+    except Exception as err:
+        env.send_messagebox("主配置加载失败(4/7):\n%s\n" % err)
+        logger.critical("主配置加载失败(4/7):\n%s\n" % format_exc())
+        sysexit(1)
     # try:
     #     sga_ui.thread_load()
     # except Exception as err:
@@ -21,13 +23,13 @@ def main_connect():
     #     logger.critical("线程加载失败(5/7):\n%s\n" % format_exc())
     #     sysexit(1)
     # # 功能链接
-    # try:
-    #     # 功能键链接
-    #     sga_ui.function_connect()
-    # except Exception as err:
-    #     env.send_messagebox("状态链接失败(6/7):\n%s\n" % err)
-    #     logger.critical("状态链接失败(6/7):\n%s\n" % format_exc())
-    #     sysexit(1)
+    try:
+        # 功能键链接
+        function_connect()
+    except Exception as err:
+        env.send_messagebox("状态链接失败(6/7):\n%s\n" % err)
+        logger.critical("状态链接失败(6/7):\n%s\n" % format_exc())
+        sysexit(1)
     # try:
     #     # 全局设置:退出前保存 & 每10秒自动保存
     #     import atexit
