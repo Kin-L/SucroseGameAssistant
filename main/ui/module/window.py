@@ -65,17 +65,28 @@ class ModuleWindow:
             if not env.load[num]:
                 from main.ui.module.snow.list import SnowList
                 from main.ui.module.snow.stack import SnowStack
+                from main.ui.module.snow.connect import snow_connect
                 self.snow.list = SnowList(self.snow.widget)
                 self.snow.set = SnowStack(self.snow.widget)
                 env.load[num] = True
+                # noinspection PyBroadException
+                try:
+                    self.snow.set.local.combo_server.setCurrentIndex(env.launch["snow_server"])
+                    self.snow.set.local.label_start.setText(env.launch["snow_path"])
+                except Exception:
+                    env.launch["snow_server"] = 0
+                    env.launch["snow_path"] = ""
+                snow_connect()
         else:
             raise ValueError("load_module_window:传入值不在允许范围")
+        self.stack_module.setCurrentIndex(num)
 
     def load_module_config(self, _dict=None):
         if _dict:
             num = _dict["模块"]
         else:
             num = 0
+        self.load_module_window(num)
         if num == 0:
             from main.ui.module.mix import mix_input_config
             mix_input_config(_dict)

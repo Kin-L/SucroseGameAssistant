@@ -46,7 +46,7 @@ _mix_dir = {
         "静音": False,
         "关闭软件": True,
         "完成后": 0,
-        "SGA关闭": False,
+        "SGA关闭": False
     }
 
 

@@ -1,5 +1,6 @@
 from main.mainwindows import main_windows as mw
 from main.tools.environment import env
+import json
 
 
 def load_main_config():
@@ -47,12 +48,51 @@ def load_main_config():
         mw.module.load_module_window(0)
         mw.module.load_module_config()
     if env.main_config:
-        import json
         with open("personal/main_config_bak.json", 'w', encoding='utf-8') as c:
             json.dump(env.main_config, c, ensure_ascii=False, indent=1)
     # 运行路径变化时，基础文件初始化
     if env.workdir != env.current_work_path:
-        pass
+        basis_file_init()
+
+
+def basis_file_init():
+    from os import makedirs, path
+    from shutil import copyfile
+    if not path.exists("cache"):
+        makedirs("cache")
+    if not path.exists("personal/script"):
+        makedirs("personal/script")
+    with open("assets/main_window/schtasks_index.json", 'r', encoding='utf-8') as m:
+        xml_dir = json.load(m)
+    xml_list = xml_dir["part2"]
+    xml_list[32] = f"      <Command>{env.workdir}\\SGA.exe</Command>\n"
+    xml_list[34] = "      <WorkingDirectory>" + env.workdir + "</WorkingDirectory>\n"
+    xml_dir["part2"] = xml_list
+    with open("personal/schtasks_index.json", 'w', encoding='utf-8') as x:
+        json.dump(xml_dir, x, ensure_ascii=False, indent=1)
+
+    f = open("assets/main_window/script/restart.bat", 'r', encoding='utf-8')
+    start_list = f.readlines()
+    f.close()
+    start_list[2] = "start /d \"%s\" SGA.exe\n" % env.workdir
+    f = open("personal/script/restart.bat", 'w', encoding='utf-8')
+    f.writelines(start_list)
+    f.close()
+
+    f = open("assets/main_window/script/maa_create.bat", 'r', encoding='ansi')
+    bat_list = f.readlines()
+    f.close()
+    bat_list[1] = f" cd. > \"{env.workdir}/cache/maa_complete.txt\""
+    f = open("personal/script/maa_create.bat", 'w', encoding='ansi')
+    f.writelines(bat_list)
+    f.close()
+
+    if not path.exists("personal/script/restart.vbs"):
+        copyfile(r"assets/main_window/script/restart.vbs",
+                 "personal/script/restart.vbs")
+    if not path.exists("personal/script/start-SGA.vbs"):
+        copyfile(r"assets/main_window/script/restart.vbs",
+                 "personal/script/start-SGA.vbs")
 
 
 def function_connect():
@@ -62,7 +102,7 @@ def function_connect():
                                         config_rename, config_box_add, change_module_stack,
                                         save_config)
     from main.ui.overall.timer.connect import item_change, timer_delete, apply_timer
-    from main.ui.overall.connect import update_check_change
+    from main.ui.overall.connect import update_check_change, open_update_history
     from webbrowser import open as weopen
     import atexit
     mw.main.button_set_home.toggled.connect(change_interface)
@@ -81,60 +121,12 @@ def function_connect():
     mw.overall.button_gitee.clicked.connect(lambda: weopen("https://gitee.com/huixinghen/SucroseGameAssistant"))
     mw.overall.button_bilibili.clicked.connect(lambda: weopen("https://space.bilibili.com/406315493"))
     mw.overall.auto_update.toggled.connect(update_check_change)
+    mw.overall.button_update_history.clicked.connect(open_update_history)
     mw.overall.timer.add.clicked.connect(lambda: item_change(True))
     mw.overall.timer.deduce.clicked.connect(lambda: item_change(False))
     mw.overall.timer.delete.clicked.connect(timer_delete)
     mw.overall.timer.apply.clicked.connect(apply_timer)
 
-
-def get_file_path(text):
-    return "personal/config/%s.json" % (mw.state["plan"][text] + text)
-
-
-def get_config_dir(text="current"):
-    if text == "current":
-        _num = mw.stack_module.currentIndex()
-        _text = mw.state["name"][_num]
-        module = eval(f"mw.{_text}")
-        config_dir = module.output_config()
-    else:
-        with open(mw.get_file_path(text), 'r', encoding='utf-8') as c:
-            config_dir = load(c)
-    return config_dir
-
-
-# 根据字典载入面板/根据字典和名称保存配置至文件
-def send_config_dir(dictionary, text="current"):
-    if text == "current":
-        _num = dictionary["模块"]
-        mw.change_module(_num)
-        _text = mw.state["name"][_num]
-        module = eval(f"mw.{_text}")
-        module.input_config(dictionary)
-    else:
-        with open(mw.get_file_path(text), 'w', encoding='utf-8') as c:
-            dump(dictionary, c, ensure_ascii=False, indent=1)
-
-
-def add_path(config_dir):
-    _name = mw.state["name"][config_dir["模块"]]
-    config_dir["启动"] = mw.config[_name]
-    return config_dir
-
-# 获取运行信息
-def get_config_run(text="current"):
-    config_dir = mw.get_config_dir(text)
-    if config_dir["模块"] == 0:
-        for i in range(5):
-            _name = config_dir["配置%s" % i]["name"]
-            if _name == "<未选择>":
-                continue
-            else:
-                _dir = mw.get_config_dir(_name)
-                config_dir["配置%s" % i].update(mw.add_path(_dir))
-    else:
-        config_dir = mw.add_path(config_dir)
-    return config_dir
 
 def thread_load(mw):
     from multithread.cycle import Cycle

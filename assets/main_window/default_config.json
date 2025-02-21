@@ -5,10 +5,8 @@
  "配置2": {"name": "未选择"},
  "配置3": {"name": "未选择"},
  "配置4": {"name": "未选择"},
- "运行": [
-  false,
-  false,
-  false,
-  false
- ]
+ "静音": false,
+ "关闭软件": true,
+ "完成后": 0,
+ "SGA关闭": false
 }

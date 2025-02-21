@@ -25,7 +25,6 @@ class Local:
         self.label_start = Label(self.page_local, (0, 130, 80, 27), "启动路径")
         self.line_start = Lineedit(self.page_local, (0, 160, 385, 33))
         tips(self.line_start, '官/B服填写启动器绝对路径，国际服填写游戏主目录‘SNOWBREAK’')
-
         Line(self.page_local, (0, 202, 395, 3))
 
         self.label_team_tip = Label(self.page_local, (0, 210, 220, 27), "独立运行设置：")

@@ -154,8 +154,7 @@ def config_rename():
 # （加载并）切换模组设置页面
 def change_module_stack():
     _num = mw.module.box_module_change.currentIndex()
-    mw.module.load_module_config({"模块": _num})
-    mw.module.stack_module.setCurrentIndex(_num)
+    mw.module.load_module_window(_num)
 
 
 # 保存当前界面设置信息

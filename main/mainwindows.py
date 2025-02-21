@@ -75,7 +75,8 @@ class MainWindows:
             "update": False,
             "lock": True,
             "config": "",
-            "current": {}
+            "current": {},
+            "launch": {}
         }
         from json import load, dump
         if exists(r"personal/main_config.json"):
@@ -106,6 +107,7 @@ class MainWindows:
             env.lock = config["lock"]
             env.config = config["config"]
             env.current = config["current"]
+            env.launch = config["launch"]
         except Exception:
             self.indicate("配置文件损坏,主配置文件重置")
             env.main_config = {}
@@ -115,6 +117,7 @@ class MainWindows:
             env.lock = _config["lock"]
             env.config = _config["config"]
             env.current = _config["current"]
+            env.launch = _config["launch"]
         # 获取设置及分类
         if not exists("personal/config"):
             makedirs("personal/config")

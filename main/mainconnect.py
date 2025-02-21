@@ -44,12 +44,9 @@ def main_connect():
         mw.main.label_shelter.hide()
         mw.main.widget.show()
         env.find_hwnd((1, "Qt5152QWindowIcon", "砂糖代理"))
-        if len(argv) > 1:
-            if argv[1] == "True":
-                pass
-            else:
-                env.foreground()
-        else:
+        if len(argv) <= 1:
+            env.foreground()
+        elif argv[1] != "True":
             env.foreground()
     except Exception as err:
         env.send_messagebox("窗口显现失败(8/8):\n%s\n" % err)

@@ -16,3 +16,11 @@ def load_update():
 
 def update_check_change():
     env.update = mw.overall.auto_update.isChecked()
+
+
+def open_update_history():
+    from os import startfile
+    startfile(env.workdir + "/update.txt")
+    mw.sendbox(mode=1)
+    mw.sendbox("打开更新日志")
+    mw.sendbox(mode=3)

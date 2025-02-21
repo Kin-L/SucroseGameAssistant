@@ -96,6 +96,10 @@ class SGAEnvironment(Environment):
         self.lock = True
         self.config = ""
         self.current = {}
+        self.launch = {}
+        self.wait_time = 1
+        self.current_mute = None
+        self.now_config = {}
         self.setting = 1
         self.config_name = []
         self.config_type = []

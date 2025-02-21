@@ -5,7 +5,7 @@ from subprocess import run as cmd_run
 from time import localtime, strptime, strftime
 _timer_dir = {
             "item_num": 3,
-            "execute": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+            "execute": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             "time": ["06:30:00", "12:30:00", "21:30:00",
                      "23:35:00", "11:07:00", "11:07:00",
                      "11:07:00", "11:07:00", "11:08:00",
@@ -174,7 +174,7 @@ def check_timer():
                 _text = _text_list[num].currentText()
                 if _text != "<未选择>":
                     return _text
-    return 0
+    return ""
 
 
 # 应用定时
@@ -216,9 +216,9 @@ def apply_timer():
                 f = open(xml_path, 'w', encoding='utf-16')
                 f.writelines(auto)
                 f.close()
-                cmd_run("schtasks.exe /create /tn SGA-auto /xml \"%s\" /f" % xml_path)
+                cmd_run("schtasks.exe /create /tn SGA-auto /xml \"%s\" /f" % xml_path, shell=True)
             else:
-                cmd_run("schtasks.exe /DELETE /tn SGA-auto /f")
+                cmd_run("schtasks.exe /DELETE /tn SGA-auto /f", shell=True)
             if awake:
                 _p2 = xml_dir["part2"]
                 _p2[22] = f"<WakeToRun>true</WakeToRun>"
