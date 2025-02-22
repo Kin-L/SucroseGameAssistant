@@ -1,3 +1,4 @@
+import keyboard
 from PyQt5.QtCore import QThread, pyqtSignal
 from tools.environment import *
 from tools.software import find_hwnd
@@ -6,7 +7,7 @@ from tools.software import find_hwnd
 class Monitor(QThread):
     send = pyqtSignal(str, int, bool, bool)
 
-    def __init__(self, ui, _num):  # mode true:集成运行 false:独立运行
+    def __init__(self, ui, _num):
         super().__init__()
         self.ui = ui
         self.num = _num
@@ -15,15 +16,27 @@ class Monitor(QThread):
     def run(self):
         try:
             self.indicate("开始临时任务")
+            keyboard.add_hotkey("ctrl+/", self.stop)
             env.OCR.enable()
-            _h = find_hwnd((0, "UnrealWindow", "尘白禁区"))
+            p1 = (0, "UnrealWindow", "尘白禁区")
+            p2 = (0, "UnrealWindow", "Snowbreak: Containment Zone")
+            _h = find_hwnd(p1)
             if not _h:
-                _h = find_hwnd((0, "UnrealWindow", "Snowbreak: Containment Zone"))
+                _h = find_hwnd(p2)
                 if not _h:
                     self.indicate("未识别到窗口")
-                    self.ui.temkill.terminate()
+                    env.OCR.disable()
                     self.terminate()
-            foreground(_h)
+                else:
+                    _p = p2
+            else:
+                _p = p1
+            env.set_soft(self.ui.set.line_start.text(), _p)
+            env.soft.hwnd = _h
+            env.soft.run()
+            env.soft.compile_resolution = (1920, 1080)
+            env.mode(3)
+            env.soft.foreground()
             if self.num == 4:
                 while 1:
                     _sc = scshot()
@@ -93,7 +106,7 @@ class Monitor(QThread):
                         if self.trigger.isRunning():
                             self.trigger.terminate()
                         click_text("退出", (896, 946, 1004, 1018))
-                        wait_text("难度选择", (73, 8, 328, 92), wait_time=(1000, 30))
+                        wait_text("选", (73, 8, 328, 92), wait_time=(1000, 30))
                         break
                     wait(500)
         except:
@@ -102,6 +115,12 @@ class Monitor(QThread):
 
     def indicate(self, msg: str, mode=2, his=True, log=True):
         self.send.emit(msg, mode, his, log)
+
+    def stop(self):
+        env.OCR.disable()
+        self.indicate("临时任务终止")
+        self.terminate()
+        keyboard.remove_all_hotkeys()
 
 
 class TemTrigger(QThread):

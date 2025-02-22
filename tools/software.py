@@ -1,11 +1,10 @@
-from os import kill
+from subprocess import run as cmd_run
 from os.path import isfile, split
 from time import sleep
 from win32con import PROCESS_ALL_ACCESS, SW_RESTORE
 from win32gui import (FindWindow, EnumWindows, GetClassName, GetWindowText,
                       GetClientRect, ClientToScreen, IsIconic, ShowWindow, SetForegroundWindow, GetForegroundWindow)
 from psutil import process_iter
-from signal import SIGTERM
 from subprocess import run
 
 
@@ -15,17 +14,25 @@ def get_pid(name):
     for pid in pids:
         # noinspection PyBroadException
         try:
-            _name = pid.name()
-            _pid = pid.pid
+            if pid.name() == name:
+                return pid.pid
         except Exception:
             continue
-        if _name == name:
-            return _pid
+    return 0
 
 
-# 正常关闭进程
-def close(pid, sig=SIGTERM):
-    kill(pid, sig)
+# 关闭进程
+def close(_v):
+    if isinstance(_v, int):
+        # 根据pid杀死进程
+        process = 'taskill /f /pid %s' % _v
+        cmd_run(process)
+    elif isinstance(_v, str):
+        # 根据进程名杀死进程
+        pro = 'taskill /f /im %s' % _v
+        cmd_run(pro)
+    else:
+        raise ValueError(f"close异常传输值：{_v}")
 
 
 # 获取进程pid及路径

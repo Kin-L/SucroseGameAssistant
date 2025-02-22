@@ -117,11 +117,11 @@ class Snow:
         from task.snow.temtask import Monitor, TemKill
         _num = self.list.combo_tem.currentIndex()
         self.text_monitor = Monitor(self, _num)
-        self.temkill = TemKill(self)
+        # self.temkill = TemKill(self)
         self.text_monitor.send.connect(self.main.indicate)
-        self.temkill.send.connect(self.main.indicate)
+        # self.temkill.send.connect(self.main.indicate)
         self.text_monitor.start()
-        self.temkill.start()
+        # self.temkill.start()
         # self.trigger.start()
 
     def load_run(self, run):

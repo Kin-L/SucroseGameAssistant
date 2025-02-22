@@ -22,7 +22,8 @@ class TaskSnow(Fight, Daily, Mail, Roll):
             # noinspection PyBroadException
             try:
                 self.snow_launch()
-                self.snow_log(60)
+                if self.snow_log(60):
+                    break
             except RuntimeError("尘白禁区:登录超时"):
                 self.indicate("尝试关闭游戏")
                 s, n = 15, 2
