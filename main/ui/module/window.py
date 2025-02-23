@@ -48,7 +48,7 @@ class ModuleWindow:
         self.common = TaskWidgt(self, r"assets\main_window\icon\snow-icon.png")
         self.presstrigger = TaskWidgt(self, r"assets\main_window\icon\presstrigger-icon.png")
         self.zzz = TaskWidgt(self, r"assets\main_window\icon\zzz_logo.png")
-        sme.version = "v3.X.X"
+        sme.version = "v3.0.0"
         sme.name = [self.mix, self.klein, self.genshin, self.maa,
                     self.m7a, self.snow, self.common, self.presstrigger
                     ]

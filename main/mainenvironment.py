@@ -1,6 +1,4 @@
 from main.tools.environment import Environment, logger
-from main.thread.main import SGAThread
-import keyboard
 
 
 class SGAEnvironment(Environment):
@@ -20,49 +18,24 @@ class SGAEnvironment(Environment):
         self.current_mute = bool  # 静音状态
         self.now_config = dict  # 执行任务的配置
         self.setting = 1  # 主界面面板状态
+        self.download = None
         self.config_name, self.config_type = [], []  # 配置状态
         self.name, self.load = [], []  # 模块状态
         # 循环线程 任务线程 更新线程
         self.thread = None
         self.hotkeystop = None
-        self.hotkeystop.enable = self.hotkeystop_enable
-        self.hotkeystop.disable = self.hotkeystop_disable
+        self.ocr = None
 
     def thread_load(self):
+        from main.thread.main import SGAThread, HotKeyStop
+        from main.tools.ocr.main import OCR
+        self.hotkeystop = HotKeyStop()
+        self.ocr = OCR(logger, self.workdir, self.cpu_feature)
         if self.update:
             self.thread = SGAThread("autoupdate")
         else:
             self.thread = SGAThread("cycle")
         self.thread.start()
-
-    def hotkeystop_enable(self):
-        keyboard.add_hotkey("ctrl+/", self.thread_stop)
-
-    @staticmethod
-    def hotkeystop_disable():
-        # noinspection PyBroadException
-        try:
-            keyboard.remove_hotkey("ctrl+/")
-        except Exception:
-            logger.debug("快捷键功能未建立：ctrl+/")
-
-    def thread_stop(self):
-        keyboard.remove_hotkey("ctrl+/")
-        if self.thread.isRunning():
-            self.thread.terminate()
-            from time import sleep
-            from datetime import datetime
-            _now = datetime.now()
-            if sme.last_runtime == _now.strftime("%Y-%m-%d %H:%M"):
-                from main.ui.mainwindow.connect import save_env_data
-                _num = (60 - int(_now.strftime("%S"))) // 15 + 1
-                for i in range(_num):
-                    sleep(15)
-                    save_env_data()
-            self.thread = SGAThread("cycle")
-            self.thread.start()
-        else:
-            logger.debug("线程早已关闭")
 
     def logger_environment_info(self):
         _str = (f"\n运行环境:\n"

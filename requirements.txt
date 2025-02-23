@@ -11,3 +11,4 @@ psutil
 comtypes
 pycaw
 win10toast
+pillow

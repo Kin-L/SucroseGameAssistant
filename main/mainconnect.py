@@ -25,7 +25,6 @@ def main_connect():
         sysexit(1)
     try:
         # 窗口显现
-        smw.main.label_shelter.hide()
         smw.main.widget.show()
         sme.find_hwnd((1, "Qt5152QWindowIcon", "砂糖代理"))
         if len(argv) <= 1:
