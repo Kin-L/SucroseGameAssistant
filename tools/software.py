@@ -5,7 +5,6 @@ from win32con import PROCESS_ALL_ACCESS, SW_RESTORE
 from win32gui import (FindWindow, EnumWindows, GetClassName, GetWindowText,
                       GetClientRect, ClientToScreen, IsIconic, ShowWindow, SetForegroundWindow, GetForegroundWindow)
 from psutil import process_iter
-from subprocess import run
 
 
 # 从exe名称获取pid
@@ -25,12 +24,12 @@ def get_pid(name):
 def close(_v):
     if isinstance(_v, int):
         # 根据pid杀死进程
-        process = 'taskill /f /pid %s' % _v
-        cmd_run(process)
+        process = 'taskkill /f /pid %s' % _v
+        cmd_run(process, shell=True)
     elif isinstance(_v, str):
         # 根据进程名杀死进程
-        pro = 'taskill /f /im %s' % _v
-        cmd_run(pro)
+        pro = 'taskkill /f /im %s' % _v
+        cmd_run(pro, shell=True)
     else:
         raise ValueError(f"close异常传输值：{_v}")
 
@@ -123,7 +122,7 @@ class Software:
                 if fls:
                     cmd = cmd + " -popupwindow"
                 for n in range(num):
-                    run(cmd, shell=True)
+                    cmd_run(cmd, shell=True)
                     # run("start /d \"" + self.dir + "\" " + self.name + " -popupwindow", shell=True)
                     for i in range(second):
                         sleep(1)
@@ -145,6 +144,7 @@ class Software:
     def kill(self, second=10, num=2):
         if self.hwnd:
             for n in range(num):
+                print(self.pid)
                 close(self.pid)
                 for i in range(second):
                     sleep(1)
