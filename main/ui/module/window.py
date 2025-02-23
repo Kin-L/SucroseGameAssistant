@@ -2,7 +2,7 @@ from main.ui.control import (PicButton, Button, Stack,
                              Combobox, Widget, QtCore)
 from qfluentwidgets import EditableComboBox
 from main.ui.ui_part import TaskWidgt
-from main.tools.environment import env
+from main.mainenvironment import sme
 
 
 # 模组设置窗口
@@ -39,43 +39,43 @@ class ModuleWindow:
         self.box_module_change.addItems(
             ["连续任务", "环行旅舍", "原神", "MAA", "崩铁助手", "尘白禁区", "通用执行", "连点器", "绝区零助手"])
 
-        self.mix = TaskWidgt(self, r"assets\main_window\icon\mix-icon.png", ("mix", "00"))
-        self.klein = TaskWidgt(self, r"assets\main_window\icon\klein-icon.png", ("kleins", "01"))
-        self.genshin = TaskWidgt(self, r"assets\snow\picture\snow-icon.png", ("genshin", "02"))
-        self.maa = TaskWidgt(self, r"assets\main_window\icon\MAA-icon.png", ("maa", "03"))
-        self.m7a = TaskWidgt(self, r"assets\main_window\icon\M7A-icon.png", ("m7a", "04"))
-        self.snow = TaskWidgt(self, r"assets\snow\picture\snow-icon.png", ("snow", "05"))
-        self.common = TaskWidgt(self, r"assets\main_window\icon\snow-icon.png", ("common", "06"))
-        self.presstrigger = TaskWidgt(self, r"assets\main_window\icon\presstrigger-icon.png", ("presstrigger", "07"))
-        self.zzz = TaskWidgt(self, r"assets\main_window\icon\zzz_logo.png", ("zzz", "08"))
-        env.version = "v3.X.X"
-        env.name = [self.mix, self.klein, self.genshin,
-                    self.maa, self.m7a, self.snow,
-                    self.common, self.presstrigger]
+        self.mix = TaskWidgt(self, r"assets\main_window\icon\mix-icon.png")
+        self.klein = TaskWidgt(self, r"assets\main_window\icon\klein-icon.png")
+        self.genshin = TaskWidgt(self, r"assets\snow\picture\snow-icon.png")
+        self.maa = TaskWidgt(self, r"assets\main_window\icon\MAA-icon.png")
+        self.m7a = TaskWidgt(self, r"assets\main_window\icon\M7A-icon.png")
+        self.snow = TaskWidgt(self, r"assets\snow\picture\snow-icon.png")
+        self.common = TaskWidgt(self, r"assets\main_window\icon\snow-icon.png")
+        self.presstrigger = TaskWidgt(self, r"assets\main_window\icon\presstrigger-icon.png")
+        self.zzz = TaskWidgt(self, r"assets\main_window\icon\zzz_logo.png")
+        sme.version = "v3.X.X"
+        sme.name = [self.mix, self.klein, self.genshin, self.maa,
+                    self.m7a, self.snow, self.common, self.presstrigger
+                    ]
 
     def load_module_window(self, num):
         if num == 0:
             from main.ui.module.mix import MixList, MixStack, mix_box_refresh
-            if not env.load[num]:
+            if not sme.load[num]:
                 self.mix.list = MixList(self.mix.widget)
                 self.mix.set = MixStack(self.mix.widget)
-                env.load[num] = True
-            mix_box_refresh(env.config_name)
+                sme.load[num] = True
+            mix_box_refresh()
         elif num == 5:
-            if not env.load[num]:
+            if not sme.load[num]:
                 from main.ui.module.snow.list import SnowList
                 from main.ui.module.snow.stack import SnowStack
                 from main.ui.module.snow.connect import snow_connect
                 self.snow.list = SnowList(self.snow.widget)
                 self.snow.set = SnowStack(self.snow.widget)
-                env.load[num] = True
+                sme.load[num] = True
                 # noinspection PyBroadException
                 try:
-                    self.snow.set.local.combo_server.setCurrentIndex(env.launch["snow_server"])
-                    self.snow.set.local.label_start.setText(env.launch["snow_path"])
+                    self.snow.set.local.combo_server.setCurrentIndex(sme.launch["snow_server"])
+                    self.snow.set.local.label_start.setText(sme.launch["snow_path"])
                 except Exception:
-                    env.launch["snow_server"] = 0
-                    env.launch["snow_path"] = ""
+                    _dict = {"snow_server": 0, "snow_path": ""}
+                    sme.launch.update(_dict)
                 snow_connect()
         else:
             raise ValueError("load_module_window:传入值不在允许范围")
@@ -106,5 +106,3 @@ class ModuleWindow:
         else:
             _dict = {}
         return _dict
-
-

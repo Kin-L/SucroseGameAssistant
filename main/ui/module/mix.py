@@ -1,7 +1,7 @@
 from main.ui.control import (Widget, Combobox, ScrollArea,
                              QtWidgets, Label, Line)
 from main.ui.ui_part import Independent
-from main.mainwindows import main_windows as mw
+from main.mainwindows import smw as mw
 
 
 class MixList:
@@ -26,7 +26,7 @@ class MixStack:
         self.independent = Independent(self.widget, (0, 50, 350, 70), False)
 
 
-_mix_dir = {
+mix_dir_template = {
         "模块": 0,
         "配置0": {
             "name": "<未选择>"
@@ -52,7 +52,7 @@ _mix_dir = {
 
 def mix_input_config(_dir=None):
     if not _dir:
-        _dir = _mix_dir
+        _dir = mix_dir_template
     _mix = mw.module.mix
     _mix.list.combobox_mix_config0.setCurrentText(_dir["配置0"]["name"])
     _mix.list.combobox_mix_config1.setCurrentText(_dir["配置1"]["name"])
@@ -86,16 +86,20 @@ def mix_collect_config():
     return config
 
 
-def mix_box_refresh(filelist):
-    _filelist = ["<未选择>"] + filelist
+def mix_box_refresh():
+    from main.mainenvironment import sme
+    _list = ["<未选择>"]
+    for i in range(len(sme.config_type)):
+        if sme.config_type[i]:
+            _list += [sme.config_name[i]]
     _mix = mw.module.mix.list
     _mix.combobox_mix_config0.clear()
     _mix.combobox_mix_config1.clear()
     _mix.combobox_mix_config2.clear()
     _mix.combobox_mix_config3.clear()
     _mix.combobox_mix_config4.clear()
-    _mix.combobox_mix_config0.addItems(_filelist)
-    _mix.combobox_mix_config1.addItems(_filelist)
-    _mix.combobox_mix_config2.addItems(_filelist)
-    _mix.combobox_mix_config3.addItems(_filelist)
-    _mix.combobox_mix_config4.addItems(_filelist)
+    _mix.combobox_mix_config0.addItems(_list)
+    _mix.combobox_mix_config1.addItems(_list)
+    _mix.combobox_mix_config2.addItems(_list)
+    _mix.combobox_mix_config3.addItems(_list)
+    _mix.combobox_mix_config4.addItems(_list)

@@ -1,6 +1,4 @@
-from os import getcwd
 from time import localtime
-from ctypes import windll
 from cpufeature import CPUFeature
 from win32api import MessageBox
 from win32con import MB_OK, SW_RESTORE
@@ -9,6 +7,7 @@ from win32gui import (FindWindow, EnumWindows, GetClassName,
                       SetForegroundWindow, GetForegroundWindow)
 from time import sleep
 from main.tools.logger import logger
+from os import getcwd
 
 
 class Environment:
@@ -22,12 +21,10 @@ class Environment:
         if " " in self.workdir:
             self.send_messagebox("SGA安装目录请勿带空格")
         self.cpu_feature = CPUFeature["AVX2"]
-        # 获取电脑缩放和分辨率
-        self.resolution_origin = None
-        self.resolution_now = None
-        self.zoom_desktop = None
-        self.get_resolution_zoom()
-        self.state = {}
+        # 获取电脑显示器信息
+        self.monitors = []
+        self.getmonitors()
+        self.platform = self.get_platform()
 
     @staticmethod
     def send_messagebox(_str):
@@ -73,42 +70,28 @@ class Environment:
         self.logger.debug(f"SGA窗口唤起失败")
         return False
 
-    def get_resolution_zoom(self):
-        user32 = windll.user32
-        now_wid = user32.GetSystemMetrics(0)
-        now_hig = user32.GetSystemMetrics(1)
-        user32.SetProcessDPIAware()
-        ori_wid = user32.GetSystemMetrics(0)
-        ori_hig = user32.GetSystemMetrics(1)
-        self.resolution_origin = (ori_wid, ori_hig)
-        self.resolution_now = (now_wid, now_hig)
-        self.zoom_desktop = round(ori_wid / now_wid, 2)
+    def getmonitors(self):
+        from screeninfo import get_monitors
+        for i, monitor in enumerate(get_monitors(), start=1):
+            self.monitors += [[i, (monitor.width, monitor.height),
+                              (monitor.x, monitor.y)]]
 
-
-class SGAEnvironment(Environment):
-    def __init__(self):
-        super().__init__()
-        self.version = ""
-        self.current_work_path = ""
-        self.main_config = {}
-        self.timer = {}
-        self.update = False
-        self.lock = True
-        self.config = ""
-        self.current = {}
-        self.launch = {}
-        self.wait_time = 1
-        self.current_mute = None
-        self.now_config = {}
-        self.setting = 1
-        self.config_name = []
-        self.config_type = []
-        self.name = []
-        self.prefix = []
-        self.load = []
-
-
-env = SGAEnvironment()
-
-if __name__ == '__main__':
-    path = getcwd()
+    @staticmethod
+    def get_platform():
+        import platform
+        system = platform.system()
+        release = platform.release()
+        version = platform.version()
+        if system == "Windows":
+            if release == "10":
+                build_number = int(version.split('.')[2])  # 获取构建版本号
+                if build_number >= 22000:
+                    return "Windows 11"
+                else:
+                    return "Windows 10"
+            elif release == "7":
+                return "Windows 7"
+            else:
+                return f"Windows-未知版本:{release}-Version: {version}）"
+        else:
+            return system

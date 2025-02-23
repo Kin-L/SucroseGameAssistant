@@ -1,13 +1,13 @@
 from PyQt5.QtCore import QTime
-from main.mainwindows import main_windows as mw
-from main.tools.environment import env, logger
+from main.mainwindows import smw, logger
+from main.mainenvironment import sme
 from subprocess import run as cmd_run
-from time import localtime, strptime, strftime
-_timer_dir = {
+from time import localtime, mktime, strftime
+timer_dir_template = {
             "item_num": 3,
             "execute": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             "time": ["06:30:00", "12:30:00", "21:30:00",
-                     "23:35:00", "11:07:00", "11:07:00",
+                     "11:07:00", "11:07:00", "11:07:00",
                      "11:07:00", "11:07:00", "11:08:00",
                      "11:08:00", ],
             "text": ["<未选择>", "<未选择>", "<未选择>",
@@ -19,32 +19,12 @@ _timer_dir = {
                       False, False, False,
                       False]
         }
-_timer = mw.overall.timer
-_execute_list = [_timer.execute0, _timer.execute1,
-                 _timer.execute2, _timer.execute3,
-                 _timer.execute4, _timer.execute5,
-                 _timer.execute6, _timer.execute7,
-                 _timer.execute8, _timer.execute9]
-_text_list = [_timer.text0, _timer.text1,
-              _timer.text2, _timer.text3,
-              _timer.text4, _timer.text5,
-              _timer.text6, _timer.text7,
-              _timer.text8, _timer.text9]
-_awake_list = [_timer.awake0, _timer.awake1,
-               _timer.awake2, _timer.awake3,
-               _timer.awake4, _timer.awake5,
-               _timer.awake6, _timer.awake7,
-               _timer.awake8, _timer.awake9]
-_timer_list = [_timer.timer0, _timer.timer1,
-               _timer.timer2, _timer.timer3,
-               _timer.timer4, _timer.timer5,
-               _timer.timer6, _timer.timer7,
-               _timer.timer8, _timer.timer9]
+_timer = smw.overall.timer
 
 
 def timer_load_set(_dir=None):
     if not _dir:
-        _dir = _timer_dir
+        _dir = timer_dir_template
     # 加载定时设置
     _timer.widget.setFixedHeight(40 * _dir["item_num"])
     _execute = _dir["execute"]
@@ -94,32 +74,15 @@ def timer_load_set(_dir=None):
 
 
 def timer_save_set():
-    _dir = dict()
-    _dir["item_num"] = _timer.time_item
-    _dir["execute"] = [_timer.execute0.currentIndex(), _timer.execute1.currentIndex(), 
-                       _timer.execute2.currentIndex(), _timer.execute3.currentIndex(), 
-                       _timer.execute4.currentIndex(), _timer.execute5.currentIndex(), 
-                       _timer.execute6.currentIndex(), _timer.execute7.currentIndex(), 
-                       _timer.execute8.currentIndex(), _timer.execute9.currentIndex()]
-    _dir["time"] = [_timer.timer0.getTime().toString(), _timer.timer1.getTime().toString(), 
-                    _timer.timer2.getTime().toString(), _timer.timer3.getTime().toString(), 
-                    _timer.timer4.getTime().toString(), _timer.timer5.getTime().toString(), 
-                    _timer.timer6.getTime().toString(), _timer.timer7.getTime().toString(), 
-                    _timer.timer8.getTime().toString(), _timer.timer9.getTime().toString()]
-    _dir["text"] = [_timer.text0.currentText(), _timer.text1.currentText(), 
-                    _timer.text2.currentText(), _timer.text3.currentText(), 
-                    _timer.text4.currentText(), _timer.text5.currentText(), 
-                    _timer.text6.currentText(), _timer.text7.currentText(), 
-                    _timer.text8.currentText(), _timer.text9.currentText()]
-    _dir["awake"] = [_timer.awake0.isChecked(), _timer.awake1.isChecked(), 
-                     _timer.awake2.isChecked(), _timer.awake3.isChecked(), 
-                     _timer.awake4.isChecked(), _timer.awake5.isChecked(), 
-                     _timer.awake6.isChecked(), _timer.awake7.isChecked(), 
-                     _timer.awake8.isChecked(), _timer.awake9.isChecked()]
+    _dir = sme.timer
+    _list = []
+    for i in sme.timer["time"]:
+        _list += strftime("%H:%M:%S", i)
+    _dir["time"] = _list
     return _dir
 
 
-def timer_load_items(filelist):
+def timer_box_refresh(filelist):
     _filelist = ["<未选择>"] + filelist
     # 加载已有方案选项
     _timer.text0.clear()
@@ -146,32 +109,31 @@ def timer_load_items(filelist):
 
 def item_change(add: bool):
     if add:
-        if env.timer["item_num"] < 10:
-            env.timer["item_num"] += 1
-            mw.overall.timer.widget.setFixedHeight(40 * env.timer["item_num"])
+        if sme.timer["item_num"] < 10:
+            sme.timer["item_num"] += 1
+            smw.overall.timer.widget.setFixedHeight(40 * sme.timer["item_num"])
         else:
-            mw.sendbox(mode=1)
-            mw.sendbox("条目数已达上限：10", mode=2)
-            mw.sendbox(mode=3)
+            smw.sendbox(mode=1)
+            smw.sendbox("条目数已达上限：10", mode=2)
+            smw.sendbox(mode=3)
     else:
-        if env.timer["item_num"] > 3:
-            env.timer["item_num"] -= 1
-            mw.overall.timer.widget.setFixedHeight(40 * env.timer["item_num"])
+        if sme.timer["item_num"] > 3:
+            sme.timer["item_num"] -= 1
+            smw.overall.timer.widget.setFixedHeight(40 * sme.timer["item_num"])
         else:
-            mw.sendbox(mode=1)
-            mw.sendbox("条目数达下限：3", mode=2)
-            mw.sendbox(mode=3)
+            smw.sendbox(mode=1)
+            smw.sendbox("条目数达下限：3", mode=2)
+            smw.sendbox(mode=3)
 
 
 def check_timer():
     now_time = localtime()
-    for num in range(env.timer["item_num"]):
-        execute = _execute_list[num].currentIndex()
-        time_str = _timer_list[num].getTime().toString()
-        timetuple = strptime(time_str, "%H:%M:%S").timetuple()
+    for num in range(sme.timer["item_num"]):
+        execute = sme.timer["execute"][num]
+        timetuple = sme.timer["time"][num].timetuple()
         if execute in [now_time[6] + 2, 1]:
             if now_time[3:5] == timetuple[3:5]:
-                _text = _text_list[num].currentText()
+                _text = sme.timer["text"][num]
                 if _text != "<未选择>":
                     return _text
     return ""
@@ -179,17 +141,17 @@ def check_timer():
 
 # 应用定时
 def apply_timer():
-    mw.sendbox(mode=1)
+    smw.sendbox(mode=1)
     try:
+        sme.timer = timer_save_set()
         import json
-        from datetime import timedelta, datetime
         with open(r"personal\schtasks_index.json", 'r', encoding='utf-8') as x:
             xml_dir = json.load(x)
         auto, awake = [], []
-        for num in range(env.timer["item_num"]):
-            daily = _execute_list[num].currentIndex()
-            _text = _text_list[num].currentIndex()
-            _awake = _awake_list[num].isChecked()
+        for num in range(sme.timer["item_num"]):
+            daily = sme.timer["execute"][num]
+            _text = sme.timer["text"][num]
+            _awake = sme.timer["awake"][num]
             if daily and _text != "<未选择>":
                 if daily == 1:
                     _item = xml_dir["daily"]
@@ -199,9 +161,7 @@ def apply_timer():
                         ["", "", "Monday", "Tuesday", "Wednesday", "Thursday",
                          "Friday", "Saturday", "Sunday"][daily]
                     _item[5] = "          <" + week + " />\n"
-                _str = _timer_list[num].getTime().toString()
-                pydatetime = datetime.strptime(_str, "%H:%M:%S") - timedelta(minutes=2)
-                wake_time = strftime("%H:%M", pydatetime.timetuple())
+                wake_time = strftime("%H:%M", localtime(mktime(sme.timer["time"][num])-120))
                 _item[1] = f"      <StartBoundary>2023-09-20T{wake_time}</StartBoundary>\n"
                 if _awake:
                     awake += _item
@@ -230,21 +190,21 @@ def apply_timer():
                 cmd_run(f"schtasks.exe /create /tn SGA-awake /xml \"{xml_path}\" /f", shell=True)
             else:
                 cmd_run("schtasks.exe /DELETE /tn SGA-awake /f", shell=True)
-            mw.sendbox("更新定时任务，并应用唤醒", mode=2)
+            smw.sendbox("更新定时任务，并应用唤醒", mode=2)
         else:
             cmd_run("schtasks.exe /DELETE /tn SGA-auto /f", shell=True)
             cmd_run("schtasks.exe /DELETE /tn SGA-awake /f", shell=True)
-            mw.sendbox("取消唤醒", mode=2)
+            smw.sendbox("取消唤醒", mode=2)
     except Exception as e:
         from traceback import format_exc
         logger.error("应用定时异常:\n%s\n" % format_exc())
-        mw.sendbox(f"应用定时异常：{e}", mode=2)
-    mw.sendbox(mode=3)
+        smw.sendbox(f"应用定时异常：{e}", mode=2)
+    smw.sendbox(mode=3)
 
 
 def timer_delete():
-    mw.sendbox(mode=1)
+    smw.sendbox(mode=1)
     cmd_run("schtasks.exe /DELETE /tn SGA-auto /f", shell=True)
     cmd_run("schtasks.exe /DELETE /tn SGA-awake /f", shell=True)
-    mw.sendbox("清除定时", mode=2)
-    mw.sendbox(mode=3)
+    smw.sendbox("清除定时", mode=2)
+    smw.sendbox(mode=3)

@@ -1,18 +1,12 @@
-import os.path
-import json
 from main.ui.overall.window import OverallWindow
 from main.ui.module.window import ModuleWindow
 from sys import exit as sysexit
 from traceback import format_exc
-from main.tools.environment import env
+from main.mainenvironment import sme
 from main.tools.logger import logger
 from main.ui.mainwindow.window import MainWindow
 from time import strftime, localtime
 from datetime import datetime
-from os.path import exists, splitext
-from os import listdir, makedirs
-from random import randint
-from shutil import copyfile
 
 
 class MainWindows:
@@ -22,23 +16,24 @@ class MainWindows:
         try:
             self.main = MainWindow()
         except Exception as err:
-            env.send_messagebox("主窗口加载异常(1/7):\n%s\n" % err)
-            logger.critical("主窗口加载异常(1/7):\n%s\n" % format_exc())
+            sme.send_messagebox("主窗口加载异常(1/6):\n%s\n" % err)
+            logger.critical("主窗口加载异常(1/6):\n%s\n" % format_exc())
             sysexit(1)
         # 载入全局设置窗口
         try:
             self.overall = OverallWindow(self.main.stack_setting)
         except Exception as err:
-            env.send_messagebox("全局设置窗口加载失败(2/7):\n%s\n" % err)
-            logger.critical("全局设置窗口加载失败(2/7):\n%s\n" % format_exc())
+            sme.send_messagebox("全局设置窗口加载失败(2/6):\n%s\n" % err)
+            logger.critical("全局设置窗口加载失败(2/6):\n%s\n" % format_exc())
             sysexit(1)
         # 载入模组设置窗口
         try:
             self.module = ModuleWindow(self.main.stack_setting)
             self.main.stack_setting.setCurrentIndex(1)
+            self.overall.label_version.setText(sme.version)
         except Exception as err:
-            env.send_messagebox("模组设置窗口加载失败(3/7):\n%s\n" % err)
-            logger.critical("模组设置窗口加载失败(3/7):\n%s\n" % format_exc())
+            sme.send_messagebox("模组设置窗口加载失败(3/6):\n%s\n" % err)
+            logger.critical("模组设置窗口加载失败(3/6):\n%s\n" % format_exc())
             sysexit(1)
 
     def sendbox(self, msg="", mode=0):
@@ -68,82 +63,9 @@ class MainWindows:
         self.main.box_info.ensureCursorVisible()
         logger.info(msg)
 
-    def read_main_config(self):
-        _config = {
-            "current_work_path": "",
-            "timer": {},
-            "update": False,
-            "lock": True,
-            "config": "",
-            "current": {},
-            "launch": {}
-        }
-        from json import load, dump
-        if exists(r"personal/main_config.json"):
-            # noinspection PyBroadException
-            try:
-                with open(r"personal/main_config.json", 'r', encoding='utf-8') as c:
-                    config = load(c)
-                env.main_config = config
-            except Exception:
-                if exists(r"personal/main_config_bak.json"):
-                    # noinspection PyBroadException
-                    try:
-                        with open(r"personal/main_config_bak.json", 'r', encoding='utf-8') as c:
-                            config = load(c)
-                        with open(r"personal/main_config.json", 'w', encoding='utf-8') as c:
-                            dump(config, c, ensure_ascii=False, indent=1)
-                        self.indicate("主配置文件损坏,从备份中恢复")
-                    except Exception:
-                        config = _config
-                        self.indicate("主配置&备份配置文件损坏,主配置文件重置")
-        else:
-            config = _config
-        # noinspection PyBroadException
-        try:
-            env.current_work_path = config["current_work_path"]
-            env.timer = config["timer"]
-            env.update = config["update"]
-            env.lock = config["lock"]
-            env.config = config["config"]
-            env.current = config["current"]
-            env.launch = config["launch"]
-        except Exception:
-            self.indicate("配置文件损坏,主配置文件重置")
-            env.main_config = {}
-            env.current_work_path = _config["current_work_path"]
-            env.timer = _config["timer"]
-            env.update = _config["update"]
-            env.lock = _config["lock"]
-            env.config = _config["config"]
-            env.current = _config["current"]
-            env.launch = _config["launch"]
-        # 获取设置及分类
-        if not exists("personal/config"):
-            makedirs("personal/config")
-        _listdir = listdir("personal/config")
-        if not _listdir:
-            newname = "默认配置" + str(randint(999, 10000))
-            copyfile(r"assets\main_window\default_config.json",
-                     r"personal\config\%s.json" % newname)
-            _listdir = listdir("personal/config")
-        _dir = os.path.join(env.workdir, "personal/config")
-        for file in listdir(_dir):
-            name, suffix = splitext(file)
-            if suffix == ".json":
-                _path = os.path.join(_dir, file)
-                # noinspection PyBroadException
-                try:
-                    with open(_path, 'r', encoding='utf-8') as c:
-                        _config = json.load(c)
-                    if _config["模块"] < len(env.name):
-                        pass
-                    else:
-                        continue
-                except Exception:
-                    continue
-                env.config_name += [name]
-                env.config_type += [_config["模块"]]
+    @staticmethod
+    def logger_version():
+        logger.info(f"用户窗口构建完成，SGA版本:{sme.version}")
 
 
-main_windows = MainWindows()
+smw = MainWindows()

@@ -1,35 +1,35 @@
-from main.mainwindows import main_windows as mw
-from main.tools.environment import env
+from main.mainwindows import smw
+from main.mainenvironment import sme
 
     
 # 切换页面
 def change_interface():
-    if env.setting:
-        mw.main.stack_setting.setCurrentIndex(0)
-        env.setting = 0
+    if sme.setting:
+        smw.main.stack_setting.setCurrentIndex(0)
+        sme.setting = 0
     else:
-        mw.main.stack_setting.setCurrentIndex(1)
-        env.setting = 1
+        smw.main.stack_setting.setCurrentIndex(1)
+        sme.setting = 1
 
 
 def open_log_dir():
     from os import startfile
-    startfile(env.workdir + "/personal/logs")
-    mw.sendbox(mode=1)
-    mw.sendbox("打开日志文件夹")
-    mw.sendbox(mode=3)
+    startfile(sme.workdir + "/personal/logs")
+    smw.sendbox(mode=1)
+    smw.sendbox("打开日志文件夹")
+    smw.sendbox(mode=3)
 
 
 def save_env_data():
     import json
     _config = dict()
-    _config["current_work_path"] = env.current_work_path
-    _config["timer"] = env.timer
-    _config["update"] = env.update
-    _config["lock"] = env.lock
-    _config["config"] = env.config
-    _config["current"] = env.current
-    _config["launch"] = env.launch
+    _config["current_work_path"] = sme.current_work_path
+    _config["timer"] = sme.timer
+    _config["update"] = sme.update
+    _config["lock"] = sme.lock
+    _config["config"] = sme.config
+    _config["current"] = sme.current
+    _config["launch"] = sme.launch
     with open("personal/main_config.json", 'w', encoding='utf-8') as c:
         json.dump(_config, c, ensure_ascii=False, indent=1)
 
@@ -37,9 +37,9 @@ def save_env_data():
 # 全局设置:退出前保存 & 每10秒自动保存
 def exit_prepare():
     from main.tools.system import get_pid, close
-    env.current = mw.module.collect_module_config()
+    sme.current = smw.module.collect_module_config()
     save_env_data()
-    if env.cpu_feature:
+    if sme.cpu_feature:
         _ocr_name = "PaddleOCR-json.exe"
     else:
         _ocr_name = "RapidOCR-json.exe"

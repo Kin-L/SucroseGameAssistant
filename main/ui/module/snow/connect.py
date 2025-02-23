@@ -1,25 +1,26 @@
-from main.mainwindows import main_windows as mw
-from main.tools.environment import env
+from main.mainwindows import smw
+from main.mainenvironment import sme
 from subprocess import run as cmd_run
 from webbrowser import open as weopen
 from os import makedirs, path
-_sonw = mw.module.snow
+_sonw = smw.module.snow
 
 
 def combo_server_change():
-    env.launch["snow_server"] = _sonw.set.local.combo_server.currentIndex()
+    sme.launch["snow_server"] = _sonw.set.local.combo_server.currentIndex()
 
 
 def line_start_change():
     _text = _sonw.set.local.line_start.text()
     _text.strip("\"")
     if not _text:
-        env.launch["snow_path"] = ""
+        sme.launch["snow_path"] = ""
     elif not path.exists(_text):
-        mw.sendbox(f"路径不存在：{_text}")
-        mw.sendbox(mode=3)
+        smw.sendbox(mode=1)
+        smw.sendbox(f"路径不存在：{_text}")
+        smw.sendbox(mode=3)
     else:
-        env.launch["snow_path"] = _text
+        sme.launch["snow_path"] = _text
 
 
 def snow_connect():
@@ -34,11 +35,11 @@ def snow_connect():
     _sonw.set.local.button_wiki.clicked.connect(lambda: weopen("https://www.gamekee.com/snow/"))
     _sonw.set.local.combo_server.toggled.connect(combo_server_change)
     _sonw.set.local.line_start.editingFinished.connect(line_start_change)
-    _sonw.set.roll.button_open_roll.clicked.connect(lambda: cmd_run(env.workdir + "\\personal\\snow\\roll", shell=True))
+    _sonw.set.roll.button_open_roll.clicked.connect(lambda: cmd_run(sme.workdir + "\\personal\\snow\\roll", shell=True))
     _sonw.set.fight.button_snow_list1.clicked.connect(
-        lambda: cmd_run(env.workdir + "\\assets\\snow\\list.json", shell=True))
+        lambda: cmd_run(sme.workdir + "\\assets\\snow\\list.json", shell=True))
     _sonw.set.daily.button_snow_list2.clicked.connect(
-        lambda: cmd_run(env.workdir + "\\assets\\snow\\list.json", shell=True))
+        lambda: cmd_run(sme.workdir + "\\assets\\snow\\list.json", shell=True))
 
     # _sonw.list.button_start.clicked.connect(_sonw.rapid_start_game)
     # _sonw.list.button_switch.checkedChanged.connect(_sonw.switcher)

@@ -9,18 +9,18 @@ class SnowList:
         self.scroll = ScrollArea(widget, (0, 0, 215, 515))
         self.scroll.setFrameShape(QtWidgets.QFrame.Shape(0))
         # 设置控件
-        setpath = "assets/main_window/ui/set.png"
-        self.set_snow = PicButton(self.scroll, (180, 10, 22, 22), setpath, (22, 22))
+        setpath = "assets/main_window/button/set.png"
+        self.set_snow = PicButton(self.scroll, (180, 13, 22, 22), setpath, (22, 22))
 
-        self.check_fight = Check(self.scroll, (15, 50, 140, 22), "感知扫荡")
-        self.check_daily = Check(self.scroll, (15, 95, 140, 22), "日常周常")
-        self.check_mail = Check(self.scroll, (15, 140, 140, 22), "领取邮件")
-        self.check_roll = Check(self.scroll, (15, 185, 140, 22), "共鸣记录")
+        self.check_fight = Check(self.scroll, (15, 55, 140, 22), "感知扫荡")
+        self.check_daily = Check(self.scroll, (15, 100, 140, 22), "日常周常")
+        self.check_mail = Check(self.scroll, (15, 145, 140, 22), "领取邮件")
+        self.check_roll = Check(self.scroll, (15, 190, 140, 22), "共鸣记录")
 
-        self.set_fight = PicButton(self.scroll, (180, 50, 22, 22), setpath, (22, 22))
-        self.set_daily = PicButton(self.scroll, (180, 95, 22, 22), setpath, (22, 22))
-        self.set_mail = PicButton(self.scroll, (180, 140, 22, 22), setpath, (22, 22))
-        self.set_roll = PicButton(self.scroll, (180, 185, 22, 22), setpath, (22, 22))
+        self.set_fight = PicButton(self.scroll, (180, 55, 22, 22), setpath, (22, 22))
+        self.set_daily = PicButton(self.scroll, (180, 100, 22, 22), setpath, (22, 22))
+        self.set_mail = PicButton(self.scroll, (180, 145, 22, 22), setpath, (22, 22))
+        self.set_roll = PicButton(self.scroll, (180, 190, 22, 22), setpath, (22, 22))
 
         self.button_start = Button(self.scroll, (70, 225, 80, 35), "启动游戏")
         tips(self.button_start, '快捷启动游戏，不执行任务')

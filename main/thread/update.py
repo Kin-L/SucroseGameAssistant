@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QThread, pyqtSignal
-from main.mainwindows import main_windows as mw
+from main.mainwindows import smw as mw
 from traceback import format_exc
 from os.path import join, splitext
 from os import remove
@@ -7,7 +7,7 @@ from requests import get
 from json import loads
 from time import sleep
 from sys import exit as sysexit
-from main.tools.environment import env, logger
+from main.mainenvironment import sme, logger
 from subprocess import run as cmd_run
 
 
@@ -17,7 +17,7 @@ class Update(QThread):
     def __init__(self, ui):  # mode true:集成运行 false:独立运行
         super(Update, self).__init__()
         self.ui = ui
-        env.version = ui.state["version"]
+        sme.version = ui.state["version"]
         self.mode = None
         self.download = None
 
@@ -43,13 +43,13 @@ class Update(QThread):
                 if response.status_code == 200:
                     data = loads(response.text)
                     new_version = data["tag_name"]
-                    if env.version == new_version:
-                        mw.indicate(f"已为最新版本: {env.version}", 3)
+                    if sme.version == new_version:
+                        mw.indicate(f"已为最新版本: {sme.version}", 3)
                         if not self.mode:
                             mw.overall.button_check.setEnabled(True)
                         return 0
                     else:
-                        mw.indicate(f"发现新版本: {env.version} -> {new_version}")
+                        mw.indicate(f"发现新版本: {sme.version} -> {new_version}")
                         mw.indicate(f"可通过此链接进行手动更新: https://gitee.com/huixinghen/SucroseGameAssistant/releases")
                         mw.indicate(data["body"], 3)
                         assets = data["assets"]
@@ -76,7 +76,7 @@ class Update(QThread):
         # noinspection PyBroadException
         try:
             from urllib.request import urlretrieve
-            temp_path = join(env.workdir, "cache")
+            temp_path = join(sme.workdir, "cache")
             load_path = join(temp_path, self.download["name"])
             urlretrieve(self.download["browser_download_url"], load_path)
             mw.indicate("下载完成")
@@ -96,7 +96,7 @@ class Update(QThread):
         try:
             from shutil import copytree
             extract_folder = splitext(load_path)[0]
-            cover_folder = env.workdir
+            cover_folder = sme.workdir
             copytree(extract_folder, cover_folder, dirs_exist_ok=True)
         except Exception:
             mw.sendbox("替换异常")

@@ -16,6 +16,10 @@ class Prepare:
         self.check_user_admin()
 
     @staticmethod
+    def send_messagebox(_str):
+        MessageBox(0, _str, "砂糖代理", MB_OK)
+
+    @staticmethod
     # 获取管理员权限
     def check_user_admin():
         if not isUserAdmin():

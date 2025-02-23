@@ -1,4 +1,4 @@
-from main.mainwindows import main_windows as mw
+from main.mainwindows import smw as mw
 _snow_dir = {
         "模块": 5,
         "预下载": False,
