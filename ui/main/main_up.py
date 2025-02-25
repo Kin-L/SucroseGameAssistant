@@ -6,6 +6,7 @@ from random import randint
 from os import remove, rename
 from json import dump, load
 from time import strftime
+from subprocess import run as cmd_run
 from datetime import timedelta, datetime
 
 
@@ -176,9 +177,9 @@ class MainUp(MainDown):
                     f = open(xml_path, 'w', encoding='utf-16')
                     f.writelines(auto)
                     f.close()
-                    cmd_run("schtasks.exe /create /tn SGA-auto /xml \"%s\" /f" % xml_path)
+                    cmd_run("schtasks.exe /create /tn SGA-auto /xml \"%s\" /f" % xml_path, shell=True)
                 else:
-                    cmd_run("schtasks.exe /DELETE /tn SGA-auto /f")
+                    cmd_run("schtasks.exe /DELETE /tn SGA-auto /f", shell=True)
                 if awake:
                     _p2 = xml_dir["part2"]
                     _p2[22] = f"<WakeToRun>true</WakeToRun>"
@@ -187,13 +188,13 @@ class MainUp(MainDown):
                     f = open(xml_path, 'w', encoding='utf-16')
                     f.writelines(awake)
                     f.close()
-                    cmd_run("schtasks.exe /create /tn SGA-awake /xml \"%s\" /f" % xml_path)
+                    cmd_run("schtasks.exe /create /tn SGA-awake /xml \"%s\" /f" % xml_path, shell=True)
                 else:
-                    cmd_run("schtasks.exe /DELETE /tn SGA-awake /f")
+                    cmd_run("schtasks.exe /DELETE /tn SGA-awake /f", shell=True)
                 self.indicate("应用定时成功", 3)
             else:
-                cmd_run("schtasks.exe /DELETE /tn SGA-auto /f")
-                cmd_run("schtasks.exe /DELETE /tn SGA-awake /f")
+                cmd_run("schtasks.exe /DELETE /tn SGA-auto /f", shell=True)
+                cmd_run("schtasks.exe /DELETE /tn SGA-awake /f", shell=True)
                 self.indicate("清除定时", 3)
         except Exception as e:
             logger.error("应用定时异常:\n%s\n" % format_exc())
@@ -201,6 +202,6 @@ class MainUp(MainDown):
 
     def timer_delete(self):
         self.indicate("", 1)
-        cmd_run("schtasks.exe /DELETE /tn SGA-auto /f")
-        cmd_run("schtasks.exe /DELETE /tn SGA-awake /f")
+        cmd_run("schtasks.exe /DELETE /tn SGA-auto /f", shell=True)
+        cmd_run("schtasks.exe /DELETE /tn SGA-awake /f", shell=True)
         self.indicate("清除定时", 3)

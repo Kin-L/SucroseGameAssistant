@@ -3,6 +3,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from tools.environment import *
 from traceback import format_exc
 from os.path import join, splitext
+from subprocess import run as cmd_run
 from os import remove
 from requests import get
 from json import loads
@@ -119,7 +120,7 @@ class Update(QThread):
             self.ui.overall.button_check.show()
             self.ui.overall.button_check.setEnabled(True)
             self.ui.overall.button_update.hide()
-        cmd_run("start "" /d \"personal/bat\" restart.vbs")
+        cmd_run("start "" /d \"personal/bat\" restart.vbs", shell=True)
         sysexit(0)
         
             

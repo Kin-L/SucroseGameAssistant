@@ -75,7 +75,7 @@ class TaskMAA(Task):
                 f.close()
                 _p = join(env.workdir, "assets/main_window/bat_scr/PsExec64.exe")
                 for n in range(2):
-                    cmd_run(f"start \"\" \"{_p}\" -i -s -d \"{_path}\"")
+                    cmd_run(f"start \"\" \"{_p}\" -i -s -d \"{_path}\"", shell=True)
                     for i in range(30):
                         wait(1000)
                         self.hwnd = find_hwnd((False, "HwndWrapper[MAA", "MAA"))

@@ -6,7 +6,6 @@ from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import windll
 from win10toast import ToastNotifier
-from subprocess import run
 from win32api import MessageBox
 from win32con import MB_OK
 # pyuic5 -o SGA_demo.py SGA_demo.ui
@@ -51,11 +50,6 @@ def screen_off():
     windll.user32.PostMessageW(0xffff, 0x0112, 0xF170, power_off)
     shell32 = windll.LoadLibrary("shell32.dll")
     shell32.ShellExecuteW(None, 'open', 'rundll32.exe', 'USER32', '', 5)
-
-
-# cmd运行
-def cmd_run(cmd_str):
-    run(cmd_str, shell=True)
 
 
 # 获取电脑缩放和分辨率
