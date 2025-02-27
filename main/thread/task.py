@@ -45,82 +45,62 @@ def contact_task():
     main_task()
 
 
+def kill():
+    # noinspection PyBroadException
+    try:
+        sme.foreground()
+        _error = ["异常", "完成"][sme.now_config["error"]]
+        if sme.thread.mode == "cycle":
+            _text = f"{_error}执行:定时计划 "
+            notify(_text, "任务名:" + sme.now_config["name"])
+            smw.indicate(_text + sme.now_config["name"])
+        elif sme.thread.mode == "contacttask":
+            _text = f"{_error}执行:实时计划"
+            notify(f"{_error}执行:实时计划", " ")
+            smw.indicate(_text)
+        if sme.now_config["完成后"] == 1:
+            smw.indicate("任务完成,20s后熄屏")
+            smw.indicate("         可按组合键“ctrl+/”取消")
+        elif sme.now_config["完成后"] == 2:
+            smw.indicate("  任务完成,60s后睡眠")
+            smw.indicate("         可按组合键“ctrl+/”取消")
+        now_mute = get_mute()
+        if (now_mute != sme.current_mute) and (now_mute == sme.now_config["静音"]):
+            sleep(1.2)
+            keyboard.press('volumemute')
+            keyboard.release('volumemute')
+        # 结束
+        if sme.now_config["完成后"] == 1:
+            sleep(20)
+            _text = "电脑熄屏"
+        elif sme.now_config["完成后"] == 2:
+            sleep(60)
+            _text = "电脑睡眠"
+        else:
+            _text = "电脑无操作"
+        sme.hotkeystop.disable()
+        if sme.now_config["SGA关闭"]:
+            smw.indicate(f"SGA关闭 {_text}")
+            smw.sendbox(mode=3)
+            if sme.now_config["完成后"] == 1:
+                cmd_run("start "" /d \"assets/main_window/script\" screen_off.vbs", shell=True)
+            elif sme.now_config["完成后"] == 2:
+                cmd_run("start "" /d \"assets/main_window/script\" sleep.vbs")
+            sys.exit(0)
+        else:
+            smw.module.button_pause.hide()
+            smw.module.button_start.show()
+            smw.indicate(f"SGA等待 {_text}")
+            smw.sendbox(mode=3)
+            if sme.now_config["完成后"] == 1:
+                screen_off()
+            elif sme.now_config["完成后"] == 2:
+                cmd_run("start "" /d \"assets/main_window/script\" sleep.vbs")
+    except Exception:
+        from traceback import format_exc
+        smw.indicate("结束流程异常\n%s\n" % format_exc())
+        smw.sendbox(mode=3)
+
+
 def main_task():
     pass
-
-
-def kill(self, mode):
-    sme.wait_time = 5
-    sme.foreground()
-    if mode:
-        _str0 = "异常"
-        pixmap = QPixmap(r"assets/main_window/ui/ico/3.png")
-    else:
-        _str0 = "完成"
-        pixmap = QPixmap(r"assets/main_window/ui/ico/1.png")
-    self.ui.label_status.setPixmap(pixmap)
-    # 通知
-    if self.ui.task_thread["name"]:
-        _text = f"{_str0}执行:定时计划"
-        notify(_text, "任务名:" + self.ui.task_thread["name"])
-        smw.indicate(_text + self.ui.task_thread["name"])
-    else:
-        _text = f"{_str0}执行:实时计划"
-        notify(f"{_str0}执行:实时计划", " ")
-        smw.indicate(_text)
-    if self.ui.task_thread["完成后"] == 1:
-        smw.indicate("任务完成,20s后熄屏")
-        smw.indicate("         可按组合键“ctrl+/”取消", 4, False)
-    elif self.ui.task_thread["完成后"] == 2:
-        smw.indicate("  任务完成,60s后睡眠")
-        smw.indicate("         可按组合键“ctrl+/”取消", 4, False)
-    now_mute = get_mute()
-    if (now_mute != self.ui.task_thread["current_mute"]) and (now_mute == self.ui.task_thread["静音"]):
-        sleep(1.2)
-        keyboard.press('volumemute')
-    # 结束
-    if self.ui.task_thread["完成后"] == 1:
-        sleep(20)
-        self.ui.kill.terminate()
-        self.ui.button_pause.hide()
-        self.ui.button_start.show()
-        if self.ui.task_thread["SGA关闭"]:
-            smw.indicate("SGA关闭 电脑熄屏")
-            smw.sendbox(mode=3)
-            cmd_run("start "" /d \"assets/main_window/bat_scr\" screen_off.vbs")
-            sys.exit(0)
-        else:
-            smw.indicate("SGA等待 电脑熄屏")
-            smw.sendbox(mode=3)
-            sme.wait_time = 5
-            self.ui.cycle_thread.start()
-            screen_off()
-    elif self.ui.task_thread["完成后"] == 2:
-        sleep(60)
-        self.ui.kill.terminate()
-        self.ui.button_pause.hide()
-        self.ui.button_start.show()
-        if self.ui.task_thread["SGA关闭"]:
-            smw.indicate("SGA关闭 电脑睡眠")
-            smw.sendbox(mode=3)
-            cmd_run("start "" /d \"assets/main_window/bat_scr\" sleep.vbs")
-            sys.exit(0)
-        else:
-            smw.indicate("SGA等待 电脑睡眠")
-            smw.sendbox(mode=3)
-            sme.wait_time = 5
-            self.ui.cycle_thread.start()
-            cmd_run("start "" /d \"assets/main_window/bat_scr\" sleep.vbs")
-    else:
-        self.ui.kill.terminate()
-        if self.ui.task_thread["SGA关闭"]:
-            smw.indicate("SGA关闭 电脑无操作")
-            smw.sendbox(mode=3)
-            sys.exit(0)
-        else:
-            self.ui.button_pause.hide()
-            self.ui.button_start.show()
-            sme.wait_time = 5
-            smw.indicate("SGA等待 电脑无操作")
-            smw.sendbox(mode=3)
-            self.ui.cycle_thread.start()

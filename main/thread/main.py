@@ -10,7 +10,7 @@ from main.ui.module.connect import read_config_dir
 from datetime import datetime
 from .update import check_update, update_procedure
 import keyboard
-import sys
+from sys import exit as sysexit
 
 
 class SGAThread(QThread):
@@ -34,32 +34,55 @@ class SGAThread(QThread):
             save_env_data()
             sme.now_config = smw.module.collect_module_config()
             sme.now_config["name"] = "current"
+            sme.now_config["error"] = False
             print("触发任务开始")
-            from .task import contact_task
-            contact_task()
+            from .task import contact_task, kill
+            # noinspection PyBroadException
+            try:
+                contact_task()
+            except Exception:
+                logger.critical("任务执行流程\n%s\n" % format_exc())
+                sme.now_config["error"] = True
+            kill()
         else:
             sme.send_messagebox(f"SGA线程异常参数启动(mode)：{self.mode}")
             logger.debug(f"SGA线程异常参数启动(mode)：{self.mode}")
-            sys.exit(1)
+            sysexit(1)
+        self.mode = "cycle"
         # noinspection PyBroadException
         try:
             sleep(10)
             while 1:
+                # 防止同一分钟运行两次
+                _now = datetime.now()
+                if sme.last_runtime == _now.strftime("%Y-%m-%d %H:%M"):
+                    _num = (60 - int(_now.strftime("%S"))) // 15 + 1
+                    for i in range(_num):
+                        sleep(15)
+                        save_env_data()
+                # 定时运行
                 if _text := check_timer():
                     sme.last_runtime = datetime.now().strftime("%Y-%m-%d %H:%M")
                     save_env_data()
                     sme.now_config = read_config_dir(_text)
                     sme.now_config["name"] = _text
+                    sme.now_config["error"] = False
                     print("定时任务开始")  # appointtask
-                    from .task import appoint_task
-                    appoint_task()
+                    from .task import appoint_task, kill
+                    # noinspection PyBroadException
+                    try:
+                        appoint_task()
+                    except Exception:
+                        logger.critical("任务执行流程\n%s\n" % format_exc())
+                        sme.now_config["error"] = True
+                    kill()
                 sleep(10)
                 save_env_data()
                 sleep(10)
         except Exception as err:
             sme.send_messagebox("时间循环线程异常:\n%s\n" % err)
             logger.error("时间循环线程异常:\n%s\n" % format_exc())
-            sys.exit(1)
+            sysexit(1)
 
 
 class HotKeyStop:
@@ -78,24 +101,20 @@ class HotKeyStop:
             self.hotkey = False
 
     def thread_stop(self):
-        self.hotkeystop_disable()
-        if sme.thread.isRunning():
-            sme.thread.terminate()
-            smw.indicate("手动终止")
-            smw.sendbox(mode=3)
-            sme.ocr.disable()
-            smw.module.button_pause.hide()
-            smw.module.button_start.show()
-            from time import sleep
-            from datetime import datetime
-            _now = datetime.now()
-            if sme.last_runtime == _now.strftime("%Y-%m-%d %H:%M"):
-                from main.ui.mainwindow.connect import save_env_data
-                _num = (60 - int(_now.strftime("%S"))) // 15 + 1
-                for i in range(_num):
-                    sleep(15)
-                    save_env_data()
-            sme.thread = SGAThread("cycle")
-            sme.thread.start()
-        else:
-            logger.debug("线程早已关闭")
+        try:
+            self.hotkeystop_disable()
+            if sme.thread.isRunning():
+                sme.thread.terminate()
+                smw.indicate("手动终止")
+                smw.sendbox(mode=3)
+                sme.ocr.disable()
+                smw.module.button_pause.hide()
+                smw.module.button_start.show()
+                sme.thread = SGAThread("cycle")
+                sme.thread.start()
+            else:
+                logger.debug("线程早已关闭")
+        except Exception as err:
+            sme.send_messagebox("快捷终止功能异常:\n%s\n" % err)
+            logger.critical("快捷终止功能异常:\n%s\n" % format_exc())
+            sysexit(1)
