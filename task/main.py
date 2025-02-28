@@ -24,8 +24,8 @@ class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon, T
                 else:
                     single_task["关闭软件"] = True
                     if self.single_run(single_task):
-                        self.indicate("-------------")
                         _k = True
+                    self.indicate("-------------")
         else:
             if self.single_run(task):
                 _k = True
