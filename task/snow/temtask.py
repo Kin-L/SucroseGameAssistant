@@ -1,3 +1,4 @@
+import keyboard
 from PyQt5.QtCore import QThread, pyqtSignal
 from tools.environment import *
 from tools.software import find_hwnd
@@ -6,7 +7,7 @@ from tools.software import find_hwnd
 class Monitor(QThread):
     send = pyqtSignal(str, int, bool, bool)
 
-    def __init__(self, ui, _num):  # mode true:集成运行 false:独立运行
+    def __init__(self, ui, _num):
         super().__init__()
         self.ui = ui
         self.num = _num
@@ -15,15 +16,27 @@ class Monitor(QThread):
     def run(self):
         try:
             self.indicate("开始临时任务")
+            keyboard.add_hotkey("ctrl+/", self.stop)
             env.OCR.enable()
-            _h = find_hwnd((0, "UnrealWindow", "尘白禁区"))
+            p1 = (0, "UnrealWindow", "尘白禁区")
+            p2 = (0, "UnrealWindow", "Snowbreak: Containment Zone")
+            _h = find_hwnd(p1)
             if not _h:
-                _h = find_hwnd((0, "UnrealWindow", "Snowbreak: Containment Zone"))
+                _h = find_hwnd(p2)
                 if not _h:
                     self.indicate("未识别到窗口")
-                    self.ui.temkill.terminate()
+                    env.OCR.disable()
                     self.terminate()
-            foreground(_h)
+                else:
+                    _p = p2
+            else:
+                _p = p1
+            env.set_soft(self.ui.set.line_start.text(), _p)
+            env.soft.hwnd = _h
+            env.soft.run()
+            env.soft.compile_resolution = (1920, 1080)
+            env.mode(3)
+            env.soft.foreground()
             if self.num == 4:
                 while 1:
                     _sc = scshot()
@@ -67,46 +80,33 @@ class Monitor(QThread):
                     if "波" in _t1:
                         if not self.trigger.isRunning():
                             self.trigger.start()
-                    _t2 = ocr((819, 22, 1087, 124), _sc)[0]
-                    if "选择" in _t2:
+                    _t2 = ocr((901, 963, 1013, 1036), _sc)[0]
+                    if "确认" in _t2:
                         if self.trigger.isRunning():
                             self.trigger.terminate()
-                        _sc = scshot()
-                        for i in range(3):
-                            _tt = ocr(_list1[i], _sc)[0]
-                            if "增益" in _tt:
-                                continue
-                            else:
-                                click(_list2[i])
-                                wait(800)
-                                click_text("确认", (901, 963, 1013, 1036))
-                                wait(800)
-                                break
-                        else:
+                        while 1:
                             click((329, 829))
+                            wait(600)
+                            click((965, 1008))
                             wait(800)
-                            click_text("确认", (901, 963, 1013, 1036))
-                            wait(800)
-                        _tt2 = find_text("丢弃", (251, 952, 383, 1033))
-                        if _tt2:
-                            try:
-                                click_change((1522, 681), (1506, 950, 1621, 1028))
-                                wait(800)
-                                click_change((1566, 989), (1506, 950, 1621, 1028))
-                                wait(800)
-                            except:
+                            _sc = scshot()
+                            _t3 = ocr((231, 955, 1053, 1050), _sc)[0]
+                            if "确认" in _t3:
+                                continue
+                            elif "丢弃" in _t3:
                                 click_text("丢弃", (251, 952, 383, 1033))
                                 wait(1000)
-                                click((1458, 777))
+                                click_text("确定", (1384, 717, 1534, 807))
                                 wait(800)
+                            else:
+                                break
                         if not self.trigger.isRunning():
                             self.trigger.start()
-                    _t3 = ocr((896, 946, 1004, 1018), _sc)[0]
-                    if "出" in _t3:
+                    elif "退出" in _t2:
                         if self.trigger.isRunning():
                             self.trigger.terminate()
                         click_text("退出", (896, 946, 1004, 1018))
-                        wait_text("难度选择", (73, 8, 328, 92), wait_time=(1000, 30))
+                        wait_text("选", (73, 8, 328, 92), wait_time=(1000, 30))
                         break
                     wait(500)
         except:
@@ -115,6 +115,12 @@ class Monitor(QThread):
 
     def indicate(self, msg: str, mode=2, his=True, log=True):
         self.send.emit(msg, mode, his, log)
+
+    def stop(self):
+        env.OCR.disable()
+        self.indicate("临时任务终止")
+        self.terminate()
+        keyboard.remove_all_hotkeys()
 
 
 class TemTrigger(QThread):

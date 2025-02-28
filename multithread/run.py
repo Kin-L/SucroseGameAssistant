@@ -178,12 +178,12 @@ class SGARun(QThread, TaskRun):
         # 结束
         if self.ui.task["完成后"] == 1:
             wait(20000)
-            self.ui.kill.terminate()
+            keyboard.remove_all_hotkeys()
             self.ui.button_pause.hide()
             self.ui.button_start.show()
             if self.ui.task["SGA关闭"]:
                 self.indicate("SGA关闭 电脑熄屏", 3)
-                cmd_run("start "" /d \"assets/main_window/bat_scr\" screen_off.vbs")
+                cmd_run("start "" /d \"assets/main_window/bat_scr\" screen_off.vbs", shell=True)
                 sys.exit(0)
             else:
                 self.indicate("SGA等待 电脑熄屏", 3)
@@ -192,20 +192,20 @@ class SGARun(QThread, TaskRun):
                 screen_off()
         elif self.ui.task["完成后"] == 2:
             wait(60000)
-            self.ui.kill.terminate()
+            keyboard.remove_all_hotkeys()
             self.ui.button_pause.hide()
             self.ui.button_start.show()
             if self.ui.task["SGA关闭"]:
                 self.indicate("SGA关闭 电脑睡眠", 3)
-                cmd_run("start "" /d \"assets/main_window/bat_scr\" sleep.vbs")
+                cmd_run("start "" /d \"assets/main_window/bat_scr\" sleep.vbs", shell=True)
                 sys.exit(0)
             else:
                 self.indicate("SGA等待 电脑睡眠", 3)
                 self.ui.state["wait_time"] = 5
                 self.ui.cycle.start()
-                cmd_run("start "" /d \"assets/main_window/bat_scr\" sleep.vbs")
+                cmd_run("start "" /d \"assets/main_window/bat_scr\" sleep.vbs", shell=True)
         else:
-            self.ui.kill.terminate()
+            keyboard.remove_all_hotkeys()
             if self.ui.task["SGA关闭"]:
                 self.indicate("SGA关闭 电脑无操作", 3)
                 sys.exit(0)

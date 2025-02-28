@@ -6,6 +6,7 @@ from tools.software import *
 from PyQt5.QtGui import QPixmap
 from traceback import format_exc
 from webbrowser import open as weopen
+import keyboard
 
 
 class MainTop(MainUp):
@@ -18,12 +19,30 @@ class MainTop(MainUp):
 
     def thread_load(self):
         from multithread.cycle import Cycle
-        from multithread.run import Kill, SGARun
+        from multithread.run import SGARun
         from multithread.update import Update
         self.cycle = Cycle(self)
-        self.kill = Kill(self)
         self.sga_run = SGARun(self)
         self.update = Update(self)
+
+    def stop(self):
+        # noinspection PyBroadException
+        try:
+            if self.sga_run.isRunning():
+                keyboard.remove_all_hotkeys()
+                self.sga_run.terminate()
+                self.state["wait_time"] = 5
+                foreground(self.state["hwnd"])
+                pixmap = QPixmap(r"assets/main_window/ui/ico/2.png")
+                self.indicate("手动终止", 3)
+                env.OCR.disable()
+                self.button_pause.hide()
+                self.button_start.show()
+                self.label_status.setPixmap(pixmap)
+                self.cycle.start()
+        except Exception:
+            logger.error("手动终止线程异常:\n%s\n" % format_exc())
+            sysexit(1)
 
     def function_connect(self):
         # 主面板操作
@@ -56,7 +75,6 @@ class MainTop(MainUp):
         # 切换面板
         self.box_module_change.currentIndexChanged.connect(self.change_module)
         # 信息输出
-        self.kill.send.connect(self.indicate)
         self.sga_run.send.connect(self.indicate)
         self.cycle.send.connect(self.indicate)
         self.update.send.connect(self.indicate)
@@ -94,7 +112,7 @@ class MainTop(MainUp):
             self.button_pause.show()
             self.button_start.hide()
 
-            self.kill.start()
+            keyboard.add_hotkey("ctrl+/", self.stop)
             self.sga_run.start()
         except Exception:
             logger.error("手动开始异常:\n%s\n" % format_exc())
@@ -103,13 +121,9 @@ class MainTop(MainUp):
     def pause(self):
         # noinspection PyBroadException
         try:
+            keyboard.remove_all_hotkeys()
             self.state["wait_time"] = 5
             foreground(self.state["hwnd"])
-            # noinspection PyBroadException
-            try:
-                self.sga_run.trigger.kill()
-            except Exception:
-                pass
             self.sga_run.terminate()
             pixmap = QPixmap(r"assets/main_window/ui/ico/2.png")
             self.indicate("手动终止", 3)
@@ -117,7 +131,6 @@ class MainTop(MainUp):
             self.button_pause.hide()
             self.button_start.show()
             self.label_status.setPixmap(pixmap)
-            self.kill.terminate()
             self.cycle.start()
         except Exception:
             logger.error("手动终止线程异常:\n%s\n" % format_exc())

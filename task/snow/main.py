@@ -18,10 +18,27 @@ class TaskSnow(Fight, Daily, Mail, Roll):
         self.task = task
         env.OCR.enable()
         self.indicate("开始任务:尘白禁区")
-        self.snow_launch()
+        for i in range(3):
+            # noinspection PyBroadException
+            try:
+                self.snow_launch()
+                if self.snow_log(60):
+                    break
+            except RuntimeError("尘白禁区:登录超时"):
+                self.indicate("尝试关闭游戏")
+                s, n = 15, 2
+                if env.soft.kill(s, n):
+                    self.indicate("游戏已关闭")
+                else:
+                    self.indicate(f"error:游戏关闭超时({s * n}s)")
+                    raise RuntimeError("snow exit error")
+                if pid := get_pid("snow_launcher.exe"):
+                    close(pid)
+                if pid := get_pid("SeasunGame.exe"):
+                    close(pid)
+                continue
         # noinspection PyBroadException
         try:
-            self.snow_log(60)
             click((829, 585))
             wait(300)
             click((829, 585))

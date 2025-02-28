@@ -59,6 +59,5 @@ class Cycle(QThread, TaskRun):
         self.ui.label_status.setPixmap(pixmap)
         self.ui.button_pause.show()
         self.ui.button_start.hide()
-
-        self.ui.kill.start()
+        keyboard.add_hotkey("ctrl+/", self.ui.stop)
         self.ui.sga_run.start()
