@@ -64,7 +64,7 @@ class TaskM7A(Task):
         _run = env.soft.run(fls=False, tit="m7a")
         if _run:
             self.indicate("三月七助手运行中...")
-            wait(100000)
+            wait(10000)
             while 1:
                 wait(10000)
                 if not find_hwnd((1, "UnityWndClass", "崩坏：星穹铁道")):
@@ -102,7 +102,7 @@ class TaskM7A(Task):
         _run = env.soft.run(fls=False, tit="OneDragon")
         if _run:
             self.indicate("星铁一条龙运行中...")
-            wait(100000)
+            wait(10000)
             while 1:
                 wait(10000)
                 if not find_hwnd((1, "UnityWndClass", "崩坏：星穹铁道")):
