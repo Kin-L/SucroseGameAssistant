@@ -48,7 +48,7 @@ class Taskzzz(Task):
             _run = env.soft.run(fls=False, tit="OneDragon")
             if _run:
                 self.indicate("绝区零一条龙运行中...")
-                wait(100000)
+                wait(10000)
                 while 1:
                     wait(10000)
                     if not find_hwnd((1, "UnityWndClass", "绝区零")):
