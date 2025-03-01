@@ -1,5 +1,6 @@
 from main.ui.control import (Button, Widget, TransPicButton,
-                             Label, Line, Check)
+                             Label, Line, Check,
+                             Lineedit)
 from main.ui.overall.timer.window import TimerWindow
 
 
@@ -26,3 +27,6 @@ class OverallWindow:
                                            r"assets\main_window\button\gitee.png", (30, 30))
         self.button_bilibili = TransPicButton(self.widget, (580, 312, 30, 30),
                                               r"assets\main_window\button\bilibili.png", (30, 30))
+        self.label_ocr = Label(self.widget, (0, 250, 110, 40), f"指定OCR路径：")
+        self.ocr_path_line = Lineedit(self.widget, (110, 255, 510, 33))
+

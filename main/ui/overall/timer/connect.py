@@ -129,10 +129,8 @@ def item_change(add: bool):
 def check_timer():
     now_time = localtime()
     for num in range(sme.timer["item_num"]):
-        execute = sme.timer["execute"][num]
-        timetuple = sme.timer["time"][num].timetuple()
-        if execute in [now_time[6] + 2, 1]:
-            if now_time[3:5] == timetuple[3:5]:
+        if sme.timer["execute"][num] in [now_time[6] + 2, 1]:
+            if now_time[3:5] == sme.timer["time"][num][3:5]:
                 _text = sme.timer["text"][num]
                 if _text != "<未选择>":
                     return _text

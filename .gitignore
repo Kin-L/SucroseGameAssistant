@@ -2,3 +2,4 @@
 /.idea/
 .gitignore
 /test/
+/ocr_json/

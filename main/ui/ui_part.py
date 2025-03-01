@@ -1,7 +1,8 @@
 from PyQt5.QtWidgets import QWidget, QTextBrowser
 from PyQt5.QtCore import Qt, QRect, QSize
 from PyQt5.QtGui import QIcon, QPalette, QColor
-from .control import Picture, Check, Combobox, Label, Widget
+from .control import (Picture, Check, Combobox,
+                      Label, Widget, PRing)
 from qfluentwidgets import ToggleToolButton
 
 
@@ -29,7 +30,7 @@ class TaskWidgt:
         self.list = None
         self.set = None
         from main.mainenvironment import sme
-        sme.load = sme.load + [False]
+        sme.load += [False]
 
 
 class OverallButton(ToggleToolButton):
@@ -77,4 +78,3 @@ class Independent:
         self.combo_after = Combobox(self.widget, (60, 40, 100, 30))
         self.combo_after.addItems(["无操作", "熄屏", "电脑睡眠"])
         self.check_kill_sga = Check(self.widget, (205, 40, 220, 27), "完成后关闭SGA")
-        

@@ -1,60 +1,69 @@
 from .PPOCR_api import GetOcrApi
 from PIL import Image
 from io import BytesIO
-from os.path import exists, join, abspath
-from sys import exit as sysexit
+from os import path, walk, makedirs
+from main.mainenvironment import sme, logger
 
 
 class OCR:
-    def __init__(self, logger, workdir, cpufeature):
+    def __init__(self):
         self.logger = logger
-        self.workdir = workdir
-        if cpufeature:
-            self.exe_name = "PaddleOCR-json_v.1.3.1(simplify)"
-            self.load_url = ("https://github.moeyy.xyz/"
-                             "https://github.com/Kin-L/SucroseGameAssistant/releases/download/ocr/"
-                             "PaddleOCR-json_v.1.3.1.simplify.zip")
-            self.exe_path = r"3rd_package\PaddleOCR-json_v.1.3.1(simplify)\PaddleOCR-json.exe"
+        self.exe_path = sme.ocrdir
+        self.workdir = sme.workdir
+        if sme.cpu_feature:
+            self.exe_name = "PaddleOCR-json.exe"
             self.logger.debug("CPU 支持 AVX2 指令集，使用 PaddleOCR-json")
         else:
-            self.exe_name = "RapidOCR-json_v0.2.0(simplify)"
-            self.load_url = ("https://github.moeyy.xyz/"
-                             "https://github.com/Kin-L/SucroseGameAssistant/releases/download/ocr/"
-                             "RapidOCR-json_v0.2.0.simplify.zip")
-            self.exe_path = r"3rd_package\RapidOCR-json_v0.2.0(simplify)\RapidOCR-json.exe"
+            self.exe_name = "RapidOCR-json.exe"
             self.logger.debug("CPU 不支持 AVX2 指令集，使用 RapidOCR-json")
         self.running = None
         self.isrunning = False
 
     def check(self):
-        abs_path = join(self.workdir, self.exe_path)
-        if exists(abs_path):
-            return True
+        if self.exe_path:
+            if path.exists(self.exe_path):
+                if path.basename(self.exe_path) == self.exe_name:
+                    return True
+            self.logger.debug(f"OCR组件路径无效:{self.exe_path}")
+            return False
         else:
+            _dir = self.workdir + "\\ocr_json"
+            if not path.exists(_dir):
+                makedirs(_dir)
+                return False
+            for root, dirs, files in walk(_dir):
+                if self.exe_name in files:
+                    self.exe_path = path.join(root, self.exe_name)
+                    return True
+            self.logger.debug(f"OCR组件缺失")
             return False
 
     def enable(self):
         if self.isrunning:
             self.logger.debug("OCR早已启用")
+            return True
         else:
             try:
                 self.logger.debug("开始初始化OCR...")
                 self.running = GetOcrApi(self.exe_path)
                 self.isrunning = True
                 self.logger.debug("初始化OCR完成")
+                return True
             except Exception as e:
                 self.logger.error(f"初始化OCR失败:{e}")
                 self.running = None
-                self.logger.info("请尝试重新下载或解压")
-                self.logger.info("若 Win7 报错计算机中丢失 VCOMP140.DLL,请安装 VC运行库")
-                self.logger.info("https://aka.ms/vs/17/release/vc_redist.x64.exe")
-                sysexit(1)
+                _str = (f"初始化OCR失败:{e}\n"
+                        f"请尝试重新下载或解压OCR组件\n"
+                        f"若 Win7 报错计算机中丢失 VCOMP140.DLL,请安装 VC运行库\n"
+                        f"https://aka.ms/vs/17/release/vc_redist.x64.exe")
+                sme.send_messagebox(_str)
+                return False
 
     def disable(self):
         if self.isrunning:
             self.running.exit()
             self.isrunning = False
-            self.logger.debug("OCR关闭")
+            self.logger.debug("关闭OCR完成")
         else:
             self.logger.debug("OCR早已关闭")
 
@@ -84,7 +93,7 @@ class OCR:
             if isinstance(image, Image.Image):
                 pass
             elif isinstance(image, str):
-                return self.running.run(abspath(image))
+                return self.running.run(path.abspath(image))
             else:  # 默认为 np.ndarray，避免需要import numpy
                 image = Image.fromarray(image)
             image_stream = BytesIO()
@@ -110,7 +119,7 @@ class OCR:
         if isinstance(image, Image.Image):
             pass
         elif isinstance(image, str):
-            return self.running.run(abspath(image))
+            return self.running.run(path.abspath(image))
         else:  # 默认为 np.ndarray，避免需要import numpy
             image = Image.fromarray(image)
         image_stream = BytesIO()
@@ -130,3 +139,6 @@ class OCR:
             converted_item = [[box[0], box[1], box[2], box[3]], (text, score)]
             converted_result.append(converted_item)
         return converted_result
+
+
+ocr = OCR()

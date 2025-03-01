@@ -1,13 +1,12 @@
-from main.ui.control import PicButton, Picture, Stack, Line
-from main.ui.ui_part import InfoBox, OverallButton, MainWidget
+from main.ui.control import (PicButton, Picture, Stack,
+                             Line)
+from main.ui.ui_part import (InfoBox, OverallButton, MainWidget)
 
 
 class MainWindow:
     def __init__(self):
         self.widget = MainWidget()
-        self.label_shelter = Picture(self.widget, (0, 0, 910, 580),  # 指示图标
-                                     r"assets\main_window\back\set_back.png")
-        self.label_shelter.raise_()
+
         # 全局/模块 设置按钮
 
         self.label_status = Picture(self.widget, (485, 430, 150, 150),  # 指示图标
@@ -18,7 +17,6 @@ class MainWindow:
         self.button_set_home = OverallButton(self.widget)  # 全局/模块 设置按钮
         self.button_history = PicButton(self.widget, (555, 0, 35, 35),  # 历史信息按钮
                                         r"assets\main_window\button\history.png", (25, 25))
-
         # self.button_sponsor = PicButton(self.widget, (751, 0, 56, 56),  # 赞赏按钮
         #                                 r"assets\main_window\button\support.png", (25, 25))
         # self.window_support = Support()

@@ -27,7 +27,7 @@ class TimerWindow:
         self.label_text = Label(widget, (415, 30, 80, 30), "配置选择")
         self.label_awake = Label(widget, (565, 30, 60, 30), "唤醒")
         # 时间条目列表
-        self.scroll = ScrollArea(widget, (0, 65, 620, 162))
+        self.scroll = ScrollArea(widget, (0, 65, 620, 120))
         self.widget = Widget(None, (0, 0, 620, 120))
         self.scroll.setWidget(self.widget)
         self.widget.setFixedHeight(120)

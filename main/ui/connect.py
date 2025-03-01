@@ -8,11 +8,12 @@ from main.ui.overall.timer.connect import timer_dir_template
 from main.ui.module.mix import mix_dir_template
 _main_config_template = {
             "timer": timer_dir_template,
-            "update": True,
+            "update": False,
             "lock": True,
             "config": "",
             "current": mix_dir_template,
             "current_work_path": "",
+            "ocrpath": "",
             "launch": {}
         }
 
@@ -66,6 +67,7 @@ def load_main_window_config(_config):
     from main.ui.overall.timer.connect import timer_load_set
     timer_load_set(_config["timer"])
     smw.overall.auto_update.setChecked(_config["update"])
+    smw.overall.ocr_path_line.setText(_config["ocrpath"])
     if _config["lock"]:
         smw.module.button_config_lock.show()
         smw.module.button_config_unlock.hide()
@@ -84,12 +86,18 @@ def load_main_window_config(_config):
 
 
 def load_main_environment_config(_config):
+    from time import strptime
+    _time_list = []
+    for i in _config["timer"]["time"]:
+        _time_list += [strptime(i, "%H:%M:%S")]
+    _config["timer"]["time"] = _time_list
     sme.timer = _config["timer"]
     sme.update = _config["update"]
     sme.lock = _config["lock"]
     sme.config = _config["config"]
     sme.current = _config["current"]
     sme.current_work_path = _config["current_work_path"]
+    sme.ocrdir = _config["ocrpath"]
     sme.launch = _config["launch"]
 
 
@@ -148,8 +156,6 @@ def load_main_config():
             load_main_window_config(_main_config_template)
             _config = _main_config_template
     except Exception:
-        from traceback import format_exc
-        print(format_exc())
         smw.sendbox(mode=1)
         # noinspection PyBroadException
         try:
@@ -172,7 +178,7 @@ def function_connect():
                                         config_rename, config_box_add, change_module_stack,
                                         save_config)
     from main.ui.overall.timer.connect import item_change, timer_delete, apply_timer
-    from main.ui.overall.connect import update_check_change, open_update_history
+    from main.ui.overall.connect import update_check_change, open_update_history, ocr_dir_change
     from webbrowser import open as weopen
     import atexit
     smw.main.button_set_home.toggled.connect(change_interface)
@@ -187,6 +193,7 @@ def function_connect():
     smw.module.box_module_change.currentIndexChanged.connect(change_module_stack)
     smw.module.button_config_save.clicked.connect(save_config)
 
+    smw.overall.ocr_path_line.editingFinished.connect(ocr_dir_change)
     smw.overall.button_github.clicked.connect(lambda: weopen("https://github.com/Kin-L/SucroseGameAssistant"))
     smw.overall.button_gitee.clicked.connect(lambda: weopen("https://gitee.com/huixinghen/SucroseGameAssistant"))
     smw.overall.button_bilibili.clicked.connect(lambda: weopen("https://space.bilibili.com/406315493"))
@@ -196,57 +203,25 @@ def function_connect():
     smw.overall.timer.deduce.clicked.connect(lambda: item_change(False))
     smw.overall.timer.delete.clicked.connect(timer_delete)
     smw.overall.timer.apply.clicked.connect(apply_timer)
-    # 启动线程
-    sme.thread_load()
 
 
-def start(_task=None):
-    # noinspection PyBroadException
-    try:
-        smw.cycle_thread.terminate()
-        smw.save_main_data()
-        smw.indicate("", 0)
-        if _task:
-            smw.task_thread = _task
-        else:
-            smw.task_thread = smw.get_config_run()
-        smw.task_thread["name"] = ""
-        smw.task_thread["current_mute"] = get_mute()
-        if smw.task_thread["静音"] and not smw.task_thread["current_mute"]:
-            change_mute()
-        smw.box_info.clear()
-        smw.indicate("", 1)
-        smw.indicate("开始执行:实时计划")
-        pixmap = QPixmap(r"assets\main_window\ui\ico\0.png")
-        smw.label_status.setPixmap(pixmap)
-        smw.button_pause.show()
-        smw.button_start.hide()
-
-        smw.kill.start()
-        smw.sga_run.start()
-    except Exception:
-        logger.error("手动开始异常:\n%s\n" % format_exc())
-        sysexit(1)
-
-def pause(mw):
-    # noinspection PyBroadException
-    try:
-        mw.state["wait_time"] = 5
-        foreground(mw.state["hwnd"])
-        # noinspection PyBroadException
-        try:
-            mw.sga_run.trigger.kill()
-        except Exception:
-            pass
-        mw.sga_run.terminate()
-        pixmap = QPixmap(r"assets/main_window/ui/ico/2.png")
-        mw.indicate("手动终止", 3)
-        sme.OCR.disable()
-        mw.button_pause.hide()
-        mw.button_start.show()
-        mw.label_status.setPixmap(pixmap)
-        mw.kill.terminate()
-        mw.cycle_thread.start()
-    except Exception:
-        logger.error("手动终止线程异常:\n%s\n" % format_exc())
-        sysexit(1)
+def thread_load():
+    from main.thread.main import SGAThread, HotKeyStop
+    from main.tools.ocr.main import ocr
+    sme.hotkeystop = HotKeyStop()
+    if not ocr.check():
+        smw.main.stack_setting.setCurrentIndex(0)
+        _str = (f"OCR组件缺失，可参考从以下链接从\"PaddleOCR\"和\"RapidOCR\""
+                f"中选择\"{sme.ocr.exe_name}\"进行下载"
+                f"并将其解压到\"ocr_json\"文件夹下，并重启SGA完成安装。\n"
+                f"或在全局设置页面指定\"{sme.ocr.exe_name}\"的绝对路径。\n"
+                f"例如： E:\\OCR-json\\{sme.ocr.exe_name}")
+        sme.send_messagebox(_str)
+    else:
+        sme.ocrdir = ocr.exe_path
+        smw.overall.ocr_path_line.setText(sme.ocrdir)
+    if sme.update:
+        sme.thread = SGAThread("autoupdate")
+    else:
+        sme.thread = SGAThread("cycle")
+    sme.thread.start()

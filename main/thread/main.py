@@ -20,15 +20,12 @@ class SGAThread(QThread):
 
     def run(self):
         if self.mode == "cycle":
-            smw.main.label_shelter.hide()
+            pass
         elif self.mode == "autoupdate":
             if check_update():
                 update_procedure()
-            smw.main.label_shelter.hide()
         elif self.mode == "contactupdate":
-            smw.main.label_shelter.show()
             update_procedure()
-            smw.main.label_shelter.hide()
         elif self.mode == "contacttask":
             sme.last_runtime = datetime.now().strftime("%Y-%m-%d %H:%M")
             save_env_data()

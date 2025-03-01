@@ -1,7 +1,8 @@
 from qfluentwidgets import (SmoothScrollArea, StrongBodyLabel,
                             PushButton, ToolButton, TransparentToolButton,
                             CheckBox, ComboBox, LineEdit, SwitchButton,
-                            setFont, TimePicker, ToolTipFilter, ToolTipPosition)
+                            setFont, TimePicker, ToolTipFilter,
+                            ToolTipPosition, IndeterminateProgressRing)
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 
@@ -141,3 +142,12 @@ def tips(control, text):
     control.installEventFilter(
         ToolTipFilter(control, showDelay=200,
                       position=ToolTipPosition.TOP))
+
+
+class PRing(IndeterminateProgressRing):
+    def __init__(self, widget, location, width):
+        (x, y, w, h) = location
+        super().__init__(widget)
+        self.setGeometry(QtCore.QRect(x, y, w, h))
+        self.setFixedSize(w, h)
+        self.setStrokeWidth(width)

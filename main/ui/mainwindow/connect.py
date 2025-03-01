@@ -24,11 +24,18 @@ def save_env_data():
     import json
     _config = dict()
     _config["current_work_path"] = sme.current_work_path
-    _config["timer"] = sme.timer
+    import copy
+    _config["timer"] = copy.deepcopy(sme.timer)
+    from time import strftime
+    _time_list = []
+    for i in sme.timer["time"]:
+        _time_list += [strftime("%H:%M:%S", i)]
+    _config["timer"]["time"] = _time_list
     _config["update"] = sme.update
     _config["lock"] = sme.lock
     _config["config"] = sme.config
     _config["current"] = sme.current
+    _config["ocrpath"] = sme.ocrdir
     _config["launch"] = sme.launch
     with open("personal/main_config.json", 'w', encoding='utf-8') as c:
         json.dump(_config, c, ensure_ascii=False, indent=1)

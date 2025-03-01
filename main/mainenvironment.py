@@ -12,6 +12,7 @@ class SGAEnvironment(Environment):
         self.config = str
         self.current = dict
         self.launch = dict
+        self.ocrdir = ""
 
         self.version = str  # 版本号
         self.last_runtime = str  # 上一次任务执行时间
@@ -24,18 +25,6 @@ class SGAEnvironment(Environment):
         # 循环线程 任务线程 更新线程
         self.thread = None
         self.hotkeystop = None
-        self.ocr = None
-
-    def thread_load(self):
-        from main.thread.main import SGAThread, HotKeyStop
-        from main.tools.ocr.main import OCR
-        self.hotkeystop = HotKeyStop()
-        self.ocr = OCR(logger, self.workdir, self.cpu_feature)
-        if self.update:
-            self.thread = SGAThread("autoupdate")
-        else:
-            self.thread = SGAThread("cycle")
-        self.thread.start()
 
     def logger_environment_info(self):
         _str = (f"\n运行环境:\n"
