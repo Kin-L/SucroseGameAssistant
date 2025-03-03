@@ -8,11 +8,9 @@ import sys
 
 
 def appoint_task():
-    keyboard.press("numlock")
-    keyboard.release("numlock")
+    keyboard.send("numlock")
     sleep(0.01)
-    keyboard.press("numlock")
-    keyboard.release("numlock")
+    keyboard.send("numlock")
     _task_name = sme.now_config["name"]
     notify("SGA 定时任务", f"10秒后开始 任务名:{_task_name}")
     smw.box_info.clear()
@@ -26,8 +24,7 @@ def appoint_task():
     notify("开始定时任务", f"任务名:{_task_name}")
     sme.current_mute = get_mute()
     if sme.now_config["静音"] and not sme.current_mute:
-        keyboard.press('volumemute')
-        keyboard.release('volumemute')
+        keyboard.send('volumemute')
     main_task()
 
 
@@ -40,8 +37,7 @@ def contact_task():
     sme.hotkeystop.enable()
     sme.current_mute = get_mute()
     if sme.now_config["静音"] and not sme.current_mute:
-        keyboard.press('volumemute')
-        keyboard.release('volumemute')
+        keyboard.send('volumemute')
     main_task()
 
 
@@ -67,8 +63,7 @@ def kill():
         now_mute = get_mute()
         if (now_mute != sme.current_mute) and (now_mute == sme.now_config["静音"]):
             sleep(1.2)
-            keyboard.press('volumemute')
-            keyboard.release('volumemute')
+            keyboard.send('volumemute')
         # 结束
         if sme.now_config["完成后"] == 1:
             sleep(20)

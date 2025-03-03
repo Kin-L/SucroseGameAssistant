@@ -25,6 +25,9 @@ class SGAEnvironment(Environment):
         # 循环线程 任务线程 更新线程
         self.thread = None
         self.hotkeystop = None
+        self.zoom = 1.0
+        self.position = (0, 0)
+        self.frame = (0, 0, 1920, 1080)
 
     def logger_environment_info(self):
         _str = (f"\n运行环境:\n"

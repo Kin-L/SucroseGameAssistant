@@ -12,3 +12,6 @@ comtypes
 pycaw
 win10toast
 pillow
+opencv-python
+numpy
+pywin32

@@ -19,11 +19,9 @@ try:
         from PyQt5.QtCore import Qt
         from sys import argv
         # 唤醒屏幕
-        keyboard.press("numlock")
-        keyboard.release("numlock")
+        keyboard.send("numlock")
         sleep(0.01)
-        keyboard.press("numlock")
-        keyboard.release("numlock")
+        keyboard.send("numlock")
         from main.mainenvironment import sme
 except Exception as err:
     from traceback import format_exc

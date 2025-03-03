@@ -141,4 +141,4 @@ class OCR:
         return converted_result
 
 
-ocr = OCR()
+smo = OCR()
