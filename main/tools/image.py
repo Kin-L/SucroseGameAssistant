@@ -2,11 +2,11 @@ import cv2
 from colorsys import rgb_to_hsv
 from win32api import SetCursorPos
 from PIL import ImageGrab, Image
-from os import path
+from os import path, makedirs
 from time import sleep
 import numpy as np
 from .sautogui import deczone, tuple_zoom, regzone
-from main.mainenvironment import sme
+from main.mainenvironment import sme, logger
 from .ocr.main import smo
 
 
@@ -27,6 +27,52 @@ def screenshot(_zone=sme.rcgmode):
         return ImageGrab.grab()
     else:
         raise RuntimeError("error:\"_zone\" 无效参数")
+
+
+def target_load(_target):
+    # _target加载处理
+    if isinstance(_target, Image.Image):
+        _target = cv2.cvtColor(np.asarray(_target), cv2.COLOR_RGB2BGR)
+    elif path.exists(_target):
+        _target = cv2.imread(_target)
+    else:
+        raise ValueError("error: target_load \"_target\" 无效参数")
+    _tgwh = _target.shape[0:2]
+    if sme.zoom == 1.0:
+        pass
+    elif sme.zoom > 1.0:
+        _tgwh = tuple_zoom(_tgwh)
+        _tgh, _tgw = _tgwh
+        _target = cv2.resize(_target, _tgw, _tgh, interpolation=cv2.INTER_CUBIC)
+    else:
+        _tgwh = tuple_zoom(_tgwh)
+        _tgh, _tgw = _tgwh
+        _target = cv2.resize(_target, _tgw, _tgh, interpolation=cv2.INTER_AREA)
+    return _target, _tgwh
+
+
+def save_image(image, name):
+    if isinstance(image, Image.Image):
+        import time
+        now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
+        name = name + now
+        _path = f"personal/errorsc/{name}.png"
+        if not path.exists(r"personal/errorsc"):
+            makedirs("personal/errorsc")
+        image.save(_path)
+        logger.info(f"保存图片：{_path}")
+    elif isinstance(image, np.ndarray):
+        import time
+        now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
+        name = name + now
+        _path = f"personal/errorsc/{name}.png"
+        if not path.exists(r"personal/errorsc"):
+            makedirs("personal/errorsc")
+        cv2.imwrite(_path, image)
+        logger.info(f"保存图片：{_path}")
+    else:
+        logger.error(f"error: save_image 无效传入 {type(image)}")
+        logger.error(image)
 
 
 def ocr(_zone=None, _template=None, mode: int = 0):
@@ -148,6 +194,7 @@ def find_text(_target, _zone=None, _template=None, wait_time=(1, 10)):
             if res[1]:
                 return res
             sleep(_time)
+        save_image(_template, "_template")
         raise RuntimeError("error: find_text 识别超时")
     elif isinstance(_template, Image.Image):
         _zone, _position = regzone(_zone)
@@ -172,22 +219,7 @@ def find_text(_target, _zone=None, _template=None, wait_time=(1, 10)):
 
 
 def find_pic(_target, _zone=None, _template=None, wait_time=(1, 10), _minsim=sme.sim):
-    # _target加载处理
-    if isinstance(_target, Image.Image):
-        _target = cv2.cvtColor(np.asarray(_target), cv2.COLOR_RGB2BGR)
-    elif path.exists(_target):
-        _target = cv2.imread(_target)
-    else:
-        raise ValueError("error: find_pic \"_target\" 无效参数")
-    _tgwh = _target.shape[0:2]
-    if sme.zoom == 1.0:
-        _tgh, _tgw = _tgwh
-    elif sme.zoom > 1.0:
-        _tgh, _tgw = tuple_zoom(_tgwh)
-        _target = cv2.resize(_target, _tgw, _tgh, interpolation=cv2.INTER_CUBIC)
-    else:
-        _tgh, _tgw = tuple_zoom(_tgwh)
-        _target = cv2.resize(_target, _tgw, _tgh, interpolation=cv2.INTER_AREA)
+    _target, _tgwh = target_load(_target)
 
     def find_pic_temp(_target, _template, _position):
         match_res = cv2.matchTemplate(_template, _target, cv2.TM_CCOEFF_NORMED)
@@ -206,10 +238,11 @@ def find_pic(_target, _zone=None, _template=None, wait_time=(1, 10), _minsim=sme
             if res[1]:
                 return res
             sleep(_time)
+        save_image(_template, "_template")
         raise RuntimeError("error: find_pic 识别超时")
     elif isinstance(_template, Image.Image):
         _zone, _position = regzone(_zone)
-        _position = np.divide((_tgh, _tgw), 2) + _position
+        _position = np.divide(_tgwh, 2) + _position
         if isinstance(_zone, tuple):
             _template = _template.crop(_zone)
         elif _zone == "WINDOW":
@@ -222,11 +255,11 @@ def find_pic(_target, _zone=None, _template=None, wait_time=(1, 10), _minsim=sme
         else:
             raise RuntimeError("error:find_pic \"_template\" 无效参数")
         if _zone is None:
-            _position = np.divide((_tgh, _tgw), 2)
+            _position = np.divide(_tgwh, 2)
         elif isinstance(_zone[1], int):
             scx1, scy1, scx2, scy2 = _zone
             _template = _template[scy1:scy2, scx1:scx2]
-            _position = np.divide((_tgh, _tgw), 2) + (scx1, scy1)
+            _position = np.divide(_tgwh, 2) + (scx1, scy1)
         else:
             raise RuntimeError("error: find_pic \"_zone\" 无效参数")
         return find_pic_temp(_target, _template, _position)
