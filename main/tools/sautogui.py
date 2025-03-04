@@ -28,7 +28,7 @@ def clickup(_click):
 
 
 # 坐标缩放
-def coordinate_zoom(_nl):
+def tuple_zoom(_nl):
     return np.rint(np.multiply(_nl, sme.zoom))
 
 
@@ -50,23 +50,53 @@ def frame_change(_zone):
     return np.add(np.rint(np.multiply(_zone, sme.zoom)), sme.position+sme.position)
 
 
-def move(xy, duration, steps=10):
-    x, y = position_change(xy)
-    delay = duration / steps
-    dx = x / steps
-    dy = y / steps
-    for i in range(steps):
-        mouse_event(0x0001, dx, dy, 0, 0)
-        sleep(delay)
+def decpos(pos):
+    if isinstance(pos[1], bool):
+        return pos[0]
+    else:
+        return np.add(np.rint(np.multiply(pos, sme.zoom)), sme.position)
 
 
-def moveto(xy):
-    SetCursorPos(position_change(xy))
+def decvec(vec):
+    if isinstance(vec[1], bool):
+        return vec[0]
+    else:
+        return np.rint(np.multiply(vec, sme.zoom))
+
+
+def deczone(zone):
+    if isinstance(zone[1], bool):
+        return zone[0]
+    else:
+        np.add(np.rint(np.multiply(zone, sme.zoom)), sme.position + sme.position)
+
+
+def regzone(_zone):
+    if _zone is None:
+        _zone = sme.rcgmode
+        _position = sme.position
+    elif isinstance(_zone[1], int):
+        _zone = deczone(_zone)
+        _position = _zone[0:2]
+    else:
+        _zone = _zone[0]
+        _position = _zone[0:2]
+    return _zone, _position
+
+
+def move(vec):
+    x, y = decvec(vec)
+    mouse_event(0x0001, x, y, 0, 0)
     sleep(0.01)
 
 
-def click(xy):
-    SetCursorPos(position_change(xy))
+def moveto(pos):
+    SetCursorPos(decpos(pos))
+    sleep(0.01)
+
+
+def click(pos):
+    SetCursorPos(decpos(pos))
     sleep(0.01)
     mouse_event(2, 0, 0)
     sleep(0.01)
@@ -74,24 +104,22 @@ def click(xy):
     sleep(0.01)
 
 
-def drag(pos, mov, duration, steps=10):
-    x, y = position_change(mov)
-    SetCursorPos(position_change(pos))
+def drag(pos, vec, duration, steps=10, _click="left"):
+    SetCursorPos(decpos(pos))
     sleep(0.01)
-    mouse_event(2, 0, 0)
+    mouse_event(click_down_map[_click.lower()], 0, 0)
     sleep(0.01)
     delay = duration / steps
-    dx = x / steps
-    dy = y / steps
+    x, y = np.divide(decvec(vec), steps)
     for i in range(steps):
-        mouse_event(0x0001, dx, dy, 0, 0)
+        mouse_event(0x0001, x, y, 0, 0)
         sleep(delay)
-    mouse_event(4, 0, 0)
+    mouse_event(click_up_map[_click.lower()], 0, 0)
     sleep(0.01)
 
 
-def scroll(xy, clicks=1):
-    SetCursorPos(position_change(xy))
+def scroll(pos, clicks=1):
+    SetCursorPos(decpos(pos))
     sleep(0.01)
     if clicks > 0:
         for _ in range(clicks):
@@ -103,8 +131,8 @@ def scroll(xy, clicks=1):
             sleep(0.05)
 
 
-def hscroll(xy, clicks=1):
-    SetCursorPos(position_change(xy))
+def hscroll(pos, clicks=1):
+    SetCursorPos(decpos(pos))
     sleep(0.01)
     if clicks > 0:
         for _ in range(clicks):

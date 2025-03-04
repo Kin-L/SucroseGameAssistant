@@ -28,6 +28,8 @@ class SGAEnvironment(Environment):
         self.zoom = 1.0
         self.position = (0, 0)
         self.frame = (0, 0, 1920, 1080)
+        self.rcgmode = "WINDOW"
+        self.codmode = (1920, 1080)  # tuple:映射；local："WINDOW" "SCREEN"
 
     def logger_environment_info(self):
         _str = (f"\n运行环境:\n"
