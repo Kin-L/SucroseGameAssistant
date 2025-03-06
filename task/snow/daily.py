@@ -198,7 +198,7 @@ class Daily(Task):
                 wait_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
                 wait(300)
                 pos = find_text("任务")
-                cpos = (478, 1000)  # 漠北寻风
+                cpos = (499, 1005)  # 荒城栖花
                 if pos:
                     x, y = pos
                     click_change(pos, (x-10, y-10, x+10,  y+10))

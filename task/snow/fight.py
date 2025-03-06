@@ -81,7 +81,7 @@ class Fight(Task):
                     wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
                     wait(300)
                     pos = find_text("材料")
-                    cpos = (284, 547)  # 夙圆心行
+                    cpos = (397, 307)  # 荒城栖花
                     if pos:
                         click_change(pos, (1732, 920, 1829, 1013))
                     else:
@@ -91,7 +91,7 @@ class Fight(Task):
                     wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
                     wait(500)
                     pos = find_text("深渊")
-                    cpos = (1558, 372)  # 夙圆心行
+                    cpos = (1354, 342)  # 荒城栖花
                     if pos:
                         click_change(pos, (1387, 945, 1599, 1075))
                         wait_text("速战", (1387, 945, 1599, 1075))
