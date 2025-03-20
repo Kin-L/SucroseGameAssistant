@@ -21,7 +21,7 @@ class TaskM7A(Task):
                     if name == "March7th Assistant.exe":
                         pass
                     elif name == "March7th Launcher.exe":
-                        _path = dire + "/March7th Launcher.exe"
+                        _path = dire + "/March7th Assistant.exe"
                     self.m7a(_path)
                 elif "OneDragon" in name:
                     if name == "OneDragon Scheduler.exe":
@@ -46,8 +46,8 @@ class TaskM7A(Task):
         env.set_soft(None, [True, "ConsoleWindowClass", "m7a"])
         env.soft.set_path(_path)
         #三月七关闭并初始化
-        pid = get_pid("March7th Assistant.exe")
-        if pid is not None:
+        pid = get_pid("March7th Launcher.exe")
+        if pid :
             self.indicate("三月七助手已启动,准备重启")
             close(pid)
         # 修改三月七运行设置
@@ -74,18 +74,19 @@ class TaskM7A(Task):
         else:
             self.indicate("三月七助手启动失败")
             return True
-        # M7A关闭
+        # 关闭M7A窗口
         pid = get_pid("March7th Assistant.exe")
-        if pid is not None:
+        if pid:
             self.indicate("关闭三月七助手窗口")
             close(pid)
+        return False
     
     def od(self, _path):
         env.set_soft(None, [True, "ConsoleWindowClass", "od"])
         env.soft.set_path(_path)
         # 一条龙关闭并初始化
         pid = get_pid("OneDragon Launcher.exe")
-        if pid is not None:
+        if pid :
             self.indicate("星铁一条龙已启动,准备重启")
             close(pid)
         # 修改一条龙运行设置
@@ -102,7 +103,7 @@ class TaskM7A(Task):
         _run = env.soft.run(fls=False, tit="OneDragon")
         if _run:
             self.indicate("星铁一条龙运行中...")
-            wait(10000)
+            wait(100000)
             while 1:
                 wait(10000)
                 if not find_hwnd((1, "UnityWndClass", "崩坏：星穹铁道")):
@@ -111,7 +112,7 @@ class TaskM7A(Task):
             self.indicate("星铁一条龙运行完成")
         else:
             self.indicate("星铁一条龙启动失败")
-            return True
+            return False
 
 if __name__ == '__main__':
     pass

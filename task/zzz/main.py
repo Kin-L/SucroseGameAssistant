@@ -31,7 +31,7 @@ class Taskzzz(Task):
             env.soft.set_path(_path)
             # 一条龙关闭并初始化
             pid = get_pid("OneDragon Launcher.exe")
-            if pid is not None:
+            if pid :
                 self.indicate("绝区零一条龙已启动,准备重启")
                 close(pid)
             # 修改一条龙运行设置
@@ -48,7 +48,7 @@ class Taskzzz(Task):
             _run = env.soft.run(fls=False, tit="OneDragon")
             if _run:
                 self.indicate("绝区零一条龙运行中...")
-                wait(10000)
+                wait(100000)
                 while 1:
                     wait(10000)
                     if not find_hwnd((1, "UnityWndClass", "绝区零")):
