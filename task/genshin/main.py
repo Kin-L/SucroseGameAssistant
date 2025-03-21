@@ -10,7 +10,7 @@ from .rambler import Rambler
 from .cut_tree.main import CutTree
 from .mail import Mail
 from .gpass import Pass
-
+from subprocess import run as cmd_run
 
 class TaskGenshin(Team, Dispatch, Transformer,CatchFly, Daily, Rambler,Mail, CutTree, Pass):
     def __init__(self):
@@ -47,14 +47,15 @@ class TaskGenshin(Team, Dispatch, Transformer,CatchFly, Daily, Rambler,Mail, Cut
             # 启动BGI
             cmd = f"start \"\" \"{_path}\""
             for n in range(2):
-                run(cmd, shell=True)
+                cmd_run(cmd, shell=True)
                 for sec in range(10):
                     wait(1000)
                     hwnd = FindWindow(None, "更好的原神")
                     if hwnd:
                         self.indicate("BGI启动成功")
+                        wait(500)
                         break
-                    else:
+                    elif sec == 9:
                         self.indicate("BGI启动异常")
                         return True
             # 打开一条龙
@@ -67,15 +68,16 @@ class TaskGenshin(Team, Dispatch, Transformer,CatchFly, Daily, Rambler,Mail, Cut
             _p = find_text("关闭游戏和软件", (1177,730,1411,822))
             if not _p:
                 (x, y) = find_text("任务完成后执行的操作", (511,222,1411,822))
-                click(x+120, y+15)
+                click((x+120, y+15))
                 wait(200)
-                click_text("关闭游戏和软件", (511,222,1411,942))
+                click_text("关闭游戏和软件", (511,222,1411,942), once = True)
             # 执行一条龙
             wait(400)
             (x, y) = find_text("任务列表", (511,222,1411,822))
             click((x+120, y))
             env.OCR.disable()
             # 检测关闭
+            wait(30000)
             while 1:
                 wait(10000)
                 if not find_hwnd((1, "UnityWndClass", "原神")):

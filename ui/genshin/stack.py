@@ -36,7 +36,7 @@ class Run_way:
         self.label_way = Label(self.page_way, (0, 12, 180, 18), "运行方式选择")
         self.runway0 = Combobox(self.page_way, (10, 50, 150, 30))
         self.runway0.addItems(["SGA", "BGI一条龙"])
-        self.label_way_tip = Label(self.page_way, (0, 80, 400, 200),"SGA：使用SGA内代码运行\nBGI一条龙：使用BGI的一条龙功能运行(使用前请先\n                 配置好BGI)\n两者可搭配使用")
+        self.label_way_tip = Label(self.page_way, (0, 80, 400, 200),"SGA：使用SGA内代码运行\nBGI一条龙：使用BGI的一条龙功能运行,下面的设置不再生效\n                 (使用前请先配置好BGI)\n两者可搭配使用")
         
 
 class Team:

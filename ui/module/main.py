@@ -8,6 +8,8 @@ from ..common.main import Common
 from ..presstrigger.main import PressTrigger
 from .module import ModuleWindow
 from ..zzz import zzz
+from ..ww import ww
+
 
 
 class Module(ModuleWindow):
@@ -22,3 +24,4 @@ class Module(ModuleWindow):
         self.common = Common(self.stack_module, main)
         self.presstrigger = PressTrigger(self.stack_module, main)
         self.zzz = zzz(self.stack_module, main)
+        self.ww = ww(self.stack_module, main)

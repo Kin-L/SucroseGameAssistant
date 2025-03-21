@@ -4,7 +4,7 @@ import os
 from tools.software import get_pid, close
 import json
 from win32gui import FindWindow
-
+from subprocess import run as cmd_run
 
 class Daily(Genshin):
     def daily_activity(self):
@@ -208,7 +208,7 @@ class Daily(Genshin):
         def run_bgi():
             cmd = f"start \"\" \"{_path}\""
             for n in range(2):
-                run(cmd, shell=True)
+                cmd_run(cmd, shell=True)
                 for sec in range(10):
                     wait(1000)
                     hwnd = FindWindow(None, "更好的原神")
@@ -220,7 +220,13 @@ class Daily(Genshin):
         run_bgi()
         wait(3000)
         _s = _dir["hotKeyConfig"]["bgiEnabledHotkey"]
+        if _s == "":
+            self.indicate("未设置BGI启动快捷键")
+            raise ValueError("未设置BGI启动快捷键")
         _d = _dir["hotKeyConfig"]["autoDomainHotkey"]
+        if _d == "":
+            self.indicate("未设置BGI自动秘境快捷键")
+            raise ValueError("未设置BGI自动秘境快捷键")
         from pyautogui import hotkey
         def dopress(key):
             if "+" in key:
