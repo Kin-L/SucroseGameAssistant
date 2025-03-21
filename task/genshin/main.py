@@ -1,5 +1,6 @@
 from tools.environment import *
-from tools.software import find_hwnd
+from tools.software import find_hwnd, get_pid, close
+from win32gui import FindWindow
 from .team import Team
 from .dispatch import Dispatch
 from .transformer import Transformer
@@ -11,13 +12,85 @@ from .mail import Mail
 from .gpass import Pass
 
 
-class TaskGenshin(Team, Dispatch, Transformer,
-                  CatchFly, Daily, Rambler,
-                  Mail, CutTree, Pass):
+class TaskGenshin(Team, Dispatch, Transformer,CatchFly, Daily, Rambler,Mail, CutTree, Pass):
     def __init__(self):
         super().__init__()
 
-    def genshin_start(self, task: type[dir]):
+    def genshin_start(self, task: type[dir]): #总执行流程
+        _k = False
+        if task["运行方式"] == "SGA":
+            _k = self.SGA_run(task)
+        elif task["运行方式"] == "BGI一条龙":
+            _k = self.BGI_run(task)
+        return _k
+        
+    def BGI_run(self, task):
+        self.task = task
+        self.indicate("开始任务:原神")
+        try:
+            # 确认BGI路径
+            pid = get_pid("BetterGI.exe")
+            if pid :
+                self.indicate("BGI已启动,准备重启")
+                close(pid)
+            _path = self.task["启动"]["BGI"]
+            if os.path.isfile(_path):
+                dire, name = os.path.split(_path)
+                if name == "BetterGI.exe":
+                    pass
+                else:
+                    self.indicate("BGI,无效启动路径")
+                    return True
+            else:
+                self.indicate("BGI,无效启动路径")
+                return True
+            # 启动BGI
+            cmd = f"start \"\" \"{_path}\""
+            for n in range(2):
+                run(cmd, shell=True)
+                for sec in range(10):
+                    wait(1000)
+                    hwnd = FindWindow(None, "更好的原神")
+                    if hwnd:
+                        self.indicate("BGI启动成功")
+                        break
+                    else:
+                        self.indicate("BGI启动异常")
+                        return True
+            # 打开一条龙
+            env.OCR.enable()
+            click_text("一条龙", (511,222,1411,822))
+            wait(200)
+            # 修改BGI设置
+            _p = find_text("每日秘境刷取配置", (511,222,1411,822))
+            roll(_p, -80)      
+            _p = find_text("关闭游戏和软件", (1177,730,1411,822))
+            if not _p:
+                (x, y) = find_text("任务完成后执行的操作", (511,222,1411,822))
+                click(x+120, y+15)
+                wait(200)
+                click_text("关闭游戏和软件", (511,222,1411,942))
+            # 执行一条龙
+            wait(400)
+            (x, y) = find_text("任务列表", (511,222,1411,822))
+            click((x+120, y))
+            env.OCR.disable()
+            # 检测关闭
+            while 1:
+                wait(10000)
+                if not find_hwnd((1, "UnityWndClass", "原神")):
+                    break
+        except Exception:
+            self.indicate("任务执行异常:原神", log=False)
+            logger.error("任务执行异常:原神\n%s" % format_exc())
+            sc = scshot()
+            _path = errorsc_save(sc)
+            logger.error(f"截图导出: {_path}")
+            return True
+        self.indicate("完成任务:原神")
+        return False
+
+    def SGA_run(self, task):
         _k = False
         self.task = task
         env.OCR.enable()
@@ -71,6 +144,9 @@ class TaskGenshin(Team, Dispatch, Transformer,
         except Exception:
             self.indicate("任务执行异常:原神", log=False)
             logger.error("任务执行异常:原神\n%s" % format_exc())
+            sc = scshot()
+            _path = errorsc_save(sc)
+            logger.error(f"截图导出: {_path}")
             _k = True
         env.OCR.disable()
         if self.task["关闭软件"]:

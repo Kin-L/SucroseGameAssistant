@@ -19,15 +19,16 @@ class Genshin:
         self.list = GenshinList(self.widget_genshin, (0, 0, 215, 515))
         self.set = GenshinStack(self.widget_genshin, (225, 0, 410, 515))
         self.list.set_genshin.clicked.connect(lambda: self.set.stack.setCurrentIndex(0))
-        self.list.set_team.clicked.connect(lambda: self.set.stack.setCurrentIndex(1))
-        self.list.set_disp.clicked.connect(lambda: self.set.stack.setCurrentIndex(2))
-        self.list.set_trans.clicked.connect(lambda: self.set.stack.setCurrentIndex(3))
-        self.list.set_fly.clicked.connect(lambda: self.set.stack.setCurrentIndex(4))
-        self.list.set_daily.clicked.connect(lambda: self.set.stack.setCurrentIndex(5))
-        self.list.set_pot.clicked.connect(lambda: self.set.stack.setCurrentIndex(6))
-        self.list.set_mail.clicked.connect(lambda: self.set.stack.setCurrentIndex(7))
-        self.list.set_tree.clicked.connect(lambda: self.set.stack.setCurrentIndex(8))
-        self.list.set_pass.clicked.connect(lambda: self.set.stack.setCurrentIndex(9))
+        self.list.set_way0.clicked.connect(lambda: self.set.stack.setCurrentIndex(1))
+        self.list.set_team.clicked.connect(lambda: self.set.stack.setCurrentIndex(2))
+        self.list.set_disp.clicked.connect(lambda: self.set.stack.setCurrentIndex(3))
+        self.list.set_trans.clicked.connect(lambda: self.set.stack.setCurrentIndex(4))
+        self.list.set_fly.clicked.connect(lambda: self.set.stack.setCurrentIndex(5))
+        self.list.set_daily.clicked.connect(lambda: self.set.stack.setCurrentIndex(6))
+        self.list.set_pot.clicked.connect(lambda: self.set.stack.setCurrentIndex(7))
+        self.list.set_mail.clicked.connect(lambda: self.set.stack.setCurrentIndex(8))
+        self.list.set_tree.clicked.connect(lambda: self.set.stack.setCurrentIndex(9))
+        self.list.set_pass.clicked.connect(lambda: self.set.stack.setCurrentIndex(10))
         Line(self.widget_genshin, (215, 5, 3, 505), False)
 
     #读取游戏运行相关参数并写到界面
@@ -70,6 +71,7 @@ class Genshin:
             "功能7": False,
             "功能8": False,
             "功能9": False,
+            "运行方式": "SGA",
             "派遣0": [0, 0],
             "派遣1": [0, 0],
             "派遣2": [0, 0],
@@ -123,6 +125,8 @@ class Genshin:
         self.list.check_tree.setChecked(config["功能7"])
         self.list.check_daily.setChecked(config["功能8"])
         self.list.check_pass.setChecked(config["功能9"])
+
+        self.set.runway0.setCurrentText(config["运行方式"])
 
         self.set.area0.setCurrentIndex(config["派遣0"][0])
         self.set.area1.setCurrentIndex(config["派遣1"][0])
@@ -198,6 +202,8 @@ class Genshin:
         config["功能7"] = self.list.check_tree.isChecked()
         config["功能8"] = self.list.check_daily.isChecked()
         config["功能9"] = self.list.check_pass.isChecked()
+
+        config["运行方式"] = self.set.runway0.currentText()
 
         config["派遣0"] = [self.set.area0.currentIndex(), self.set.mat0.currentIndex()]
         config["派遣1"] = [self.set.area1.currentIndex(), self.set.mat1.currentIndex()]
