@@ -3,12 +3,13 @@ from task.genshin.main import TaskGenshin
 from task.kleins.main import TaskKleins
 from task.m7a.main import TaskM7A
 from task.zzz.main import Taskzzz
+from task.ww.main import Taskww
 from task.snow.main import TaskSnow
 from task.common.main import TaskCommon
 from task.presstrigger.main import TaskTrigger
 
 
-class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon, TaskTrigger,Taskzzz):
+class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon, TaskTrigger, Taskzzz, Taskww):
     def __init__(self):
         super(TaskRun, self).__init__()
 
@@ -25,6 +26,7 @@ class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon, T
                     single_task["关闭软件"] = True
                     if self.single_run(single_task):
                         _k = True
+                    self.indicate("-------------")
         else:
             if self.single_run(task):
                 _k = True
@@ -63,6 +65,10 @@ class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon, T
         elif task["模块"] == 8:
             Taskzzz.__init__(self)
             if self.zzz_start(task):
+                _k = True
+        elif task["模块"] == 9:
+            Taskww.__init__(self)
+            if self.ww_start(task):
                 _k = True
         else:
             self.indicate("error:未知模块。")

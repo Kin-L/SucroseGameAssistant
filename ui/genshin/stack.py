@@ -10,21 +10,34 @@ class Local:
         self.page_local = Widget(stack)
         stack.addWidget(self.page_local)
         # 添加控件
-        self.label_local = Label(self.page_local, (0, 12, 180, 18), "设置页面：原神 运行方式")
+        self.label_local = Label(self.page_local, (0, 12, 180, 18), "设置页面：原神 运行参数设置")
         self.line_local0 = Line(self.page_local, (0, 42, 395, 3))
-
         self.label_overall = Label(self.page_local, (0, 50, 180, 27), "全局设置：")
         self.label_start = Label(self.page_local, (0, 90, 80, 27), "服务器")
         self.combo_server = Combobox(self.page_local, (80, 90, 100, 32))
         self.combo_server.addItems(["官服", "B服"])
         self.label_start = Label(self.page_local, (0, 130, 80, 27), "启动路径")
         self.line_start = Lineedit(self.page_local, (0, 160, 385, 33))
+        self.label_bgi = Label(self.page_local, (0, 195, 80, 25), "BGI路径")
+        self.button_BGI = Button(self.page_local, (150, 195, 80, 25), "BGI下载")
+        self.line_bgi = Lineedit(self.page_local, (0, 225, 385, 33))
 
-        self.line_local1 = Line(self.page_local, (0, 202, 395, 3))
+        self.line_local1 = Line(self.page_local, (0, 260, 395, 3))
 
-        self.label_single = Label(self.page_local, (0, 210, 220, 27), "独立运行设置：")
-        self.independent = Independent(self.page_local, (0, 250, 350, 70))
+        self.label_single = Label(self.page_local, (0, 265, 220, 27), "独立运行设置：")
+        self.independent = Independent(self.page_local, (0, 295, 350, 70))
 
+class Run_way:
+    def __init__(self, stack):
+        # 初始化窗口
+        self.page_way = Widget(stack)
+        stack.addWidget(self.page_way)
+        # 添加控件
+        self.label_way = Label(self.page_way, (0, 12, 180, 18), "运行方式选择")
+        self.runway0 = Combobox(self.page_way, (10, 50, 150, 30))
+        self.runway0.addItems(["SGA", "BGI一条龙"])
+        self.label_way_tip = Label(self.page_way, (0, 80, 400, 200),"SGA：使用SGA内代码运行\nBGI一条龙：使用BGI的一条龙功能运行,下面的设置不再生效\n                 (使用前请先配置好BGI)\n两者可搭配使用")
+        
 
 class Team:
     def __init__(self, stack):
@@ -148,9 +161,6 @@ class Daily:
         self.daily_gift = Check(self.page_Daily, (0, 75, 400, 25), "领取凯瑟琳每日任务奖励")
 
         self.hid_domain = Check(self.page_Daily, (0, 100, 180, 18), "启用秘境")
-        self.label_bgi = Label(self.page_Daily, (0, 140, 80, 25), "BGI路径")
-        self.button_BGI = Button(self.page_Daily, (150, 140, 80, 25), "BGI下载")
-        self.line_bgi = Lineedit(self.page_Daily, (0, 170, 385, 33))
 
         self.label_domain_select = Label(self.page_Daily, (0, 210, 180, 18), "秘境选择")
         self.domain_type = Combobox(self.page_Daily, (0, 235, 130, 50))
@@ -255,11 +265,12 @@ class Pass:
         self.label_pass_tip = Label(self.page_pass, (90, 80, 220, 27), "领取纪行 暂无配置项目。")
 
 
-class GenshinStack(Local, Team, Disp, Trans, Fly, Daily, Pot, Mail, Tree, Pass):
+class GenshinStack(Local, Run_way,Team, Disp, Trans, Fly, Daily, Pot, Mail, Tree, Pass):
     def __init__(self, widget, location):
         # 功能堆叠窗口
         self.stack = Stack(widget, location)
         Local.__init__(self, self.stack)
+        Run_way.__init__(self, self.stack)
         Team.__init__(self, self.stack)
         Disp.__init__(self, self.stack)
         Trans.__init__(self, self.stack)
