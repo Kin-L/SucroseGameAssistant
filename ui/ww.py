@@ -21,7 +21,7 @@ class wwStack:
         self.label_local = Label(self.stack, (0, 12, 220, 18), "设置页面：")
         Line(self.stack, (0, 41, 395, 3))
         
-        self.label_ww_overall = Label(self.stack, (0, 45, 360, 40), "使用说明：本模块支持ok-ww一条龙运行，请确保\n                  您已正确安装并配置好相关软件。")
+        self.label_ww_overall = Label(self.stack, (0, 45, 360, 65), "使用说明：本模块支持ok-ww一条龙运行，请确保\n                  您已正确安装并配置好相关软件。\n    请在ok—ww一条龙设置点击内创建快捷启动方式")
 
 
         self.label_team_tip = Label(self.stack, (0, 160, 220, 27), "独立运行设置：")
