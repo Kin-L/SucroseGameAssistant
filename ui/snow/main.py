@@ -44,40 +44,51 @@ class Snow:
         # tem
         self.list.button_tem.clicked.connect(self.start_tem)
 
-        _path = self.main.config["snow"]["snow_path"]
-        if os.path.exists(_path):
-            _d, _name = os.path.split(_path)
-            if _name == "snow_launcher.exe":
-                _pref = os.path.join(_d, "preference.json")
-                if os.path.exists(_pref):
-                    with open(_pref, 'r', encoding='utf-8') as f:
-                        _json = load(f)
+        try:
+            _path = self.main.config["snow"]["snow_path"]
+            if os.path.exists(_path):
+                _d, _name = os.path.split(_path)
+                if _name == "SNOWBREAK":
+                    loca = os.path.join(_d, "localization.txt")
+                    if os.path.exists(loca):
+                        pass
+                    else:
+                        self.list.button_switch.setDisabled()
+                        return 0
                 else:
-                    self.main.indicate("开关错误：启动器目录结构异常", 3)
-                    self.list.button_switch.setChecked(False)
-                    return False
-                _dir = _json["dataPath"]
-            elif _name == "SeasunGame.exe":
-                _dir = os.path.join(_d, "data")
-            elif _name == "SNOWBREAK":
-                _dir = _d
-            else:
-                self.main.indicate("开关错误：未知路径", 1)
-                self.list.button_switch.setChecked(False)
-                return False
-            _file = os.path.join(_dir, "localization.txt")
-            if os.path.exists(_file):
-                with open(_file, 'r', encoding='utf-8') as f:
+                    if _name in ["snow_launcher.exe", "SeasunGame.exe"]:
+                        loca = os.path.join(_d, "data/localization.txt")
+                        if os.path.exists(loca):
+                            pass
+                        else:
+                            _pref = os.path.join(_d, "preference.json")
+                            if os.path.exists(_pref):
+                                with open(_pref, 'r', encoding='utf-8') as f:
+                                    _json = load(f)
+                                _dir = _json["dataPath"]
+                                loca = os.path.join(_dir, "localization.txt")
+                                if os.path.exists(loca):
+                                    pass
+                                else:
+                                    self.list.button_switch.setDisabled()
+                                    return 0
+                            else:
+                                self.list.button_switch.setDisabled()
+                                return 0
+                    else:
+                        self.main.indicate("开关错误：未知路径", 1)
+                        self.list.button_switch.setDisabled()
+                        return 0
+                self.swpath = loca
+                with open(loca, 'r', encoding='utf-8') as f:
                     _line = f.readline()
-            else:
-                self.main.indicate("开关错误：小开关文件缺失", 1)
-                self.list.button_switch.setChecked(False)
-                return False
-            if _line.count("=") == 1:
-                if "1" in _line:
-                    self.list.button_switch.setChecked(True)
-                else:
-                    self.list.button_switch.setChecked(False)
+                if _line.count("=") == 1:
+                    if "1" in _line:
+                        self.list.button_switch.setChecked(True)
+                    else:
+                        self.list.button_switch.setChecked(False)
+        except:
+            pass
 
     def rapid_start_game(self):
         self.main.save_main_data()
@@ -169,6 +180,7 @@ class Snow:
             "领取日常": False,
             "领取凭证": False,
             "活动每日": False,
+            "信源断片": False,
             "共鸣记录": [False, False, False, False, False, False, False, False]
         }
         config.update(_dir)
@@ -208,6 +220,7 @@ class Snow:
         self.set.check_daily.setChecked(config["领取日常"])
         self.set.check_daily2.setChecked(config["领取凭证"])
         self.set.check_daily3.setChecked(config["活动每日"])
+        self.set.check_daily4.setChecked(config["信源断片"])
         self.set.check_roll0.setChecked(config["共鸣记录"][0])
         self.set.check_roll1.setChecked(config["共鸣记录"][1])
         self.set.check_roll2.setChecked(config["共鸣记录"][2])
@@ -256,6 +269,7 @@ class Snow:
         config["领取日常"] = self.set.check_daily.isChecked()
         config["领取凭证"] = self.set.check_daily2.isChecked()
         config["活动每日"] = self.set.check_daily3.isChecked()
+        config["信源断片"] = self.set.check_daily4.isChecked()
         config["共鸣记录"] = [
             self.set.check_roll0.isChecked(),
             self.set.check_roll1.isChecked(),
@@ -280,41 +294,15 @@ class Snow:
         self.main.indicate("打开网页: 尘白禁区 BWIKI", 1)
 
     def switcher(self, checked):
-        _path = self.main.config["snow"]["snow_path"]
-        if os.path.exists(_path):
-            _d, _name = os.path.split(_path)
-            if _name == "snow_launcher.exe":
-                _pref = os.path.join(_d, "preference.json")
-                if os.path.exists(_pref):
-                    with open(_pref, 'r', encoding='utf-8') as f:
-                        _json = load(f)
-                else:
-                    self.main.indicate("开关错误：启动器目录结构异常", 3)
-                    self.list.button_switch.setChecked(False)
-                    return False
-                _dir = _json["dataPath"]
-            elif _name == "SeasunGame.exe":
-                _dir = os.path.join(_d, "data")
-            elif _name == "SNOWBREAK":
-                _dir = _d
-            else:
-                self.main.indicate("开关错误：未知路径", 3)
-                self.list.button_switch.setChecked(False)
-                return False
-        else:
-            self.main.indicate("开关错误：请先填写游戏路径", 3)
-            self.list.button_switch.setChecked(False)
-            return False
-        _file = os.path.join(_dir, "localization.txt")
-        if not os.path.exists(_file):
+        if not os.path.exists(self.swpath):
             self.main.indicate("开关错误：小开关文件缺失", 3)
             self.list.button_switch.setChecked(False)
             return False
         if checked:
-            with open(_file, 'w', encoding='utf-8') as f:
+            with open(self.swpath, 'w', encoding='utf-8') as f:
                 f.writelines("localization = 1")
         else:
-            with open(_file, 'w', encoding='utf-8') as f:
+            with open(self.swpath, 'w', encoding='utf-8') as f:
                 f.writelines("localization = 0")
 
     def roll_arrange(self):

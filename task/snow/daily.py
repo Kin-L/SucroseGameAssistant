@@ -68,12 +68,16 @@ class Daily(Task):
                     if _num == 0 and self.task["个人故事"][1] and _u < 2:
                         _u += 1
                         click_change((1566, 51), (1547, 38, 1584, 69))
-                        pos = wait_text("确定", (1354, 717, 1552, 817))
-                        if cl:
-                            click_change((1221, 626), (934, 595, 990, 656))
-                        click_change(pos, (1354, 717, 1552, 817))
-                        wait_text("获得道具", (809, 40, 1113, 147))
-                        click_change((1037, 951), (809, 40, 1113, 147))
+                        wait(500)
+                        if ocr((1354, 717, 1552, 817))[0] == "确定":
+                            if cl:
+                                click_change((1221, 626), (934, 595, 990, 656))
+                            click_change(pos, (1354, 717, 1552, 817))
+                            wait_text("获得道具", (809, 40, 1113, 147))
+                            click_change((1037, 951), (809, 40, 1113, 147))
+                        else:
+                            self.indicate(f"补嵌包不足")
+                            break
                     elif _num > 2:
                         pass
                     else:
@@ -129,7 +133,6 @@ class Daily(Task):
                 if "×" in i:
                     i = i.split("×")[0]
                     _f = True
-
                 pos = find_text(i, (323, 213, 1860, 1003))
                 if pos:
                     click_change(pos, (1723, 981, 1840, 1044))
@@ -198,7 +201,7 @@ class Daily(Task):
                 wait_pic(r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
                 wait(300)
                 pos = find_text("任务")
-                cpos = (499, 1005)  # 荒城栖花
+                cpos = (1081, 1025)  # 渊沉曙色
                 if pos:
                     x, y = pos
                     click_change(pos, (x-10, y-10, x+10,  y+10))
@@ -224,4 +227,22 @@ class Daily(Task):
                 wait(500)
             else:
                 self.indicate(f"本期活动已关闭")
+        if self.task["信源断片"]:
+            click_change((1629, 710), (1570, 675, 1689, 751))
+            press_to_text("esc", "分析员", (1716, 156, 1811, 207))
+            click_change((1629, 710), (1514, 1022, 1611, 1067))
+            wait(500)
+            click_change((1471, 765), (1383, 733, 1547, 798))
+            wait(500)
+            if ocr((1716, 156, 1811, 207))[0] == "分析员":
+                self.indicate(f"暂无断片可收获")
+            else:
+                wait_text("芙", (852, 804, 1065, 875))
+                click_change((960, 838), (852, 804, 1065, 875))
+                self.indicate(f"收取到信源断片")
+                wait(500)
+            click_change((1652, 46), (1626, 27, 1685, 65))
+            wait(500)
+            wait_text("任务", (1458, 330, 1529, 379))
+
         self.indicate("检查完成：日常周常")

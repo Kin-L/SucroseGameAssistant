@@ -83,7 +83,8 @@ class Roll(Task):
                 click_to_text(pos, "出", (377, 227, 490, 292))
             elif i == "新手池":
                 pos = find_text("启程", (3, 67, 280, 1066))
-                click_to_text(pos, "到", (324, 71, 500, 129))
+                if pos:
+                    click_to_text(pos, "到", (324, 71, 500, 129))
             wait(500)
             click_change((1877, 141), (1858, 117, 1903, 163))
             wait(500)
