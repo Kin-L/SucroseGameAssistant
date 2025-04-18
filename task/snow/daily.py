@@ -27,7 +27,7 @@ class Daily(Task):
                     elif i == "驰掣":
                         _r = "驰"
                     elif i == "冥河代理人":
-                        _r = "代理人"
+                        _r = "代理"
                     else:
                         _r = i
                     _f = False
