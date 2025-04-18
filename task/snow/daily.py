@@ -230,7 +230,7 @@ class Daily(Task):
         if self.task["信源断片"]:
             click_change((1629, 710), (1570, 675, 1689, 751))
             press_to_text("esc", "分析员", (1716, 156, 1811, 207))
-            click_change((1629, 710), (1514, 1022, 1611, 1067))
+            click_change((1619, 1038), (1514, 1022, 1611, 1067))
             wait(500)
             click_change((1471, 765), (1383, 733, 1547, 798))
             wait(500)
@@ -240,6 +240,8 @@ class Daily(Task):
                 wait_text("芙", (852, 804, 1065, 875))
                 click_change((960, 838), (852, 804, 1065, 875))
                 self.indicate(f"收取到信源断片")
+                wait(500)
+                press_to_text("esc", "分析员", (1716, 156, 1811, 207))
                 wait(500)
             click_change((1652, 46), (1626, 27, 1685, 65))
             wait(500)
