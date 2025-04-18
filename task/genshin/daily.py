@@ -272,9 +272,9 @@ class Daily(Genshin):
             wait(1000)
             click_text("快速选择",(185,981,431,1051))
             wait(500)
-            for i in range(4):
+            """for i in range(4):
                 click((270,153+70*i))
-                wait(200)
+                wait(200)"""
             click_text("确认选择",(270,987,439,1049))
             wait(500)
             click((1733,1013))
