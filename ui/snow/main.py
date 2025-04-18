@@ -4,7 +4,7 @@ from webbrowser import open as weopen
 from .list import SnowList
 from .stack import SnowStack
 from ui.element.control import *
-from tools.environment import env
+from tools.environment import env, logger
 from tools.system import check_path
 from json import load
 
@@ -21,6 +21,7 @@ class Snow:
         # self.button.dis
         self.list = None
         self.set = None
+        self.swpath = ""
 
     def load_window(self):
         self.list = SnowList(self.widget_snow, (0, 0, 215, 515))
@@ -44,6 +45,16 @@ class Snow:
         # tem
         self.list.button_tem.clicked.connect(self.start_tem)
 
+        if self.find_local():
+            with open(self.swpath, 'r', encoding='utf-8') as f:
+                _line = f.readline()
+            if _line.count("=") == 1:
+                if "1" in _line:
+                    self.list.button_switch.setChecked(True)
+                else:
+                    self.list.button_switch.setChecked(False)
+
+    def find_local(self):
         try:
             _path = self.main.config["snow"]["snow_path"]
             if os.path.exists(_path):
@@ -53,13 +64,16 @@ class Snow:
                     if os.path.exists(loca):
                         pass
                     else:
-                        self.list.button_switch.setDisabled()
+                        self.list.button_switch.setChecked(False)
                         return 0
                 else:
                     if _name in ["snow_launcher.exe", "SeasunGame.exe"]:
-                        loca = os.path.join(_d, "data/localization.txt")
-                        if os.path.exists(loca):
-                            pass
+                        loca1 = os.path.join(_d, "data/localization.txt")
+                        loca2 = os.path.join(_d, "Game/cbjq/localization.txt")
+                        if os.path.exists(loca1):
+                            loca = loca1
+                        elif os.path.exists(loca2):
+                            loca = loca2
                         else:
                             _pref = os.path.join(_d, "preference.json")
                             if os.path.exists(_pref):
@@ -70,25 +84,30 @@ class Snow:
                                 if os.path.exists(loca):
                                     pass
                                 else:
-                                    self.list.button_switch.setDisabled()
+                                    self.list.button_switch.setChecked(False)
+                                    self.main.indicate("", mode=1)
+                                    self.main.indicate("开关错误：未找到小开关文件", 3)
                                     return 0
                             else:
-                                self.list.button_switch.setDisabled()
+                                self.list.button_switch.setChecked(False)
+                                self.main.indicate("", mode=1)
+                                self.main.indicate("开关错误：未找到小开关文件", 3)
                                 return 0
                     else:
-                        self.main.indicate("开关错误：未知路径", 1)
-                        self.list.button_switch.setDisabled()
+                        self.main.indicate("", mode=1)
+                        self.main.indicate("开关错误：未知路径", 3)
+                        self.list.button_switch.setChecked(False)
                         return 0
                 self.swpath = loca
-                with open(loca, 'r', encoding='utf-8') as f:
-                    _line = f.readline()
-                if _line.count("=") == 1:
-                    if "1" in _line:
-                        self.list.button_switch.setChecked(True)
-                    else:
-                        self.list.button_switch.setChecked(False)
-        except:
-            pass
+                return 1
+            else:
+                return 0
+        except Exception:
+            from traceback import format_exc
+            logger.error("开关未知错误：尘白禁区\n%s" % format_exc())
+            self.main.indicate("", mode=1)
+            self.main.indicate("开关错误：未知错误", 3)
+            return 0
 
     def rapid_start_game(self):
         self.main.save_main_data()
@@ -287,23 +306,28 @@ class Snow:
 
     def open_list_file(self):
         startfile(env.workdir + "/assets/snow/list.json")
-        self.main.indicate("打开文件: 自定义文件", 1)
+        self.main.indicate("", mode=1)
+        self.main.indicate("打开文件: 自定义文件", 3)
 
     def open_wiki(self):
         weopen("https://wiki.biligame.com/sonw/%E9%A6%96%E9%A1%B5")
-        self.main.indicate("打开网页: 尘白禁区 BWIKI", 1)
+        self.main.indicate("", mode=1)
+        self.main.indicate("打开网页: 尘白禁区 BWIKI", 3)
 
     def switcher(self, checked):
         if not os.path.exists(self.swpath):
-            self.main.indicate("开关错误：小开关文件缺失", 3)
-            self.list.button_switch.setChecked(False)
-            return False
+            if not self.find_local():
+                return 0
         if checked:
             with open(self.swpath, 'w', encoding='utf-8') as f:
                 f.writelines("localization = 1")
+            self.main.indicate("", mode=1)
+            self.main.indicate("小开关已开启", 3)
         else:
             with open(self.swpath, 'w', encoding='utf-8') as f:
                 f.writelines("localization = 0")
+            self.main.indicate("", mode=1)
+            self.main.indicate("小开关已关闭", 3)
 
     def roll_arrange(self):
         import json
