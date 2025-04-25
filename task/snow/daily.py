@@ -69,18 +69,18 @@ class Daily(Task):
                         return 0
                     if _num == 0 and self.task["个人故事"][1] and _u < 2:
                         _u += 1
-                        click_change((1566, 51), (1547, 38, 1584, 69))
-                        wait(500)
-                        if ocr((1354, 717, 1552, 817))[0] == "确定":
-                            if cl:
-                                click_change((1221, 626), (934, 595, 990, 656))
-
-                            click_change((1457, 768), (1354, 717, 1552, 817))
-                            wait_text("获得道具", (809, 40, 1113, 147))
-                            click_change((1037, 951), (809, 40, 1113, 147))
-                        else:
+                        try:
+                            click_change((1566, 51), (1547, 38, 1584, 69), wait_time=(800, 5))
+                        except:
                             self.indicate(f"补嵌包不足")
                             break
+                        wait(500)
+                        if cl:
+                            click_change((1221, 626), (934, 595, 990, 656))
+
+                        click_change((1457, 768), (1354, 717, 1552, 817))
+                        wait_text("获得道具", (809, 40, 1113, 147))
+                        click_change((1037, 951), (809, 40, 1113, 147))
                     elif _num > 2:
                         pass
                     else:

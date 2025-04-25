@@ -4,6 +4,7 @@ from tools.environment import *
 from tools.software import get_pid, close, find_hwnd
 from os.path import isfile, split, join, exists
 from os import remove
+import subprocess
 from traceback import format_exc
 
 
@@ -75,7 +76,7 @@ class TaskMAA(Task):
                 f.close()
                 _p = join(env.workdir, "assets/main_window/bat_scr/PsExec64.exe")
                 for n in range(2):
-                    cmd_run(f"start \"\" \"{_p}\" -i -s -d \"{_path}\"", shell=True)
+                    subprocess.run(f"start \"\" \"{_p}\" -i -s -d \"{_path}\"", shell=True)
                     for i in range(30):
                         wait(1000)
                         self.hwnd = find_hwnd((False, "HwndWrapper[MAA", "MAA"))
