@@ -10,7 +10,7 @@ IsWindowVisible = ctypes.windll.user32.IsWindowVisible
 
 
 def find_hwnd_from_pid(_pid):
-    def callback(_hwnd, _hwnds):
+    def callback(hwnd, _hwnds):
         # if win32gui.IsWindowVisible(hwnd) and win32gui.IsWindowEnabled(hwnd):
         _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
 
@@ -51,7 +51,8 @@ class TaskCommon(Task):
             # 启动流程
             _p = task["启动路径"]
             _c = task["附加命令"]
-            proc = subprocess.Popen(f"start \"\" \"{_p}\" {_c}", shell=True)
+            [_dir, name] = split(_p)
+            proc = subprocess.Popen(f"start \"\" \"{_p}\" {_c}", cwd=_dir, shell=True)
             self.pid = proc.pid
             self.proc = psutil.Process(self.pid)
 
