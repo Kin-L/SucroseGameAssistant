@@ -14,6 +14,7 @@ from yaml import FullLoader
 from os import rename
 import os
 import numpy as np
+from .image import match_zone
 
 
 def errorsc_save(sc, name = ""):
@@ -215,8 +216,7 @@ class Environment(Operate):
             self.click(pos)
             sleep(wait_time[0] / 1000)
             aft = self.scshot(zone)
-            p, s = self.find_pic(bef, template=aft)
-            # print(s)
+            s = match_zone(aft, bef)
             if s < sim:
                 return True
         _path1 = errorsc_save(bef, "bef")
@@ -274,8 +274,7 @@ class Environment(Operate):
             press(key)
             sleep(wait_time[0] / 1000)
             aft = self.scshot(zone)
-            p, s = self.find_pic(bef, template=aft)
-            # print(s)
+            s = match_zone(aft, bef)
             if s < sim:
                 return True
         _path1 = errorsc_save(bef, "bef")

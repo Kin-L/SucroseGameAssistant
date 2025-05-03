@@ -21,6 +21,19 @@ color_zone = {"red": [[156, 180], [0, 10], 43, 255, 46, 255],
               "grey": [0, 180, 0, 43, 46, 220]}
 
 
+def match_zone(aft, bef):
+    match_res = matchTemplate(aft, bef, TM_CCOEFF_NORMED)
+    min_sim, max_sim, min_loc, max_loc = minMaxLoc(match_res)
+    if (min_sim >= -0.6) and (max_sim <= 0.6):
+        return 0
+    else:
+        min_sim = min_sim * -1
+        if max_sim >= min_sim:
+            return max_sim
+        else:
+            return min_sim
+
+
 class Image(System):
     def screenshot(self, zone: list = "WINDOW"):
         SetCursorPos((1, 1))
@@ -89,14 +102,11 @@ class Image(System):
         else:
             print("error: findpic 参数 small_pic 为无效路径。")
             raise ValueError("error: findpic 参数 small_pic 为无效路径。")
-        tem_h, tem_w, num = target.shape
+        tem_h, tem_w = target.shape[0:2]
         if self.zoom == 1.0:
             pass
-        elif self.zoom < 1.0:
-            tem_w, tem_h = tem_w * self.zoom, tem_h * self.zoom
-            target = resize(target, (int(tem_w), int(tem_h)))
         else:
-            search_h, search_w, num = template.shape
+            search_h, search_w = template.shape[0:2]
             template = resize(template,
                               (int(search_w / self.zoom),
                                int(search_h / self.zoom)))
@@ -111,12 +121,6 @@ class Image(System):
                 (rel_x, rel_y), sim = max_loc, max_sim
             else:
                 (rel_x, rel_y), sim = min_loc, min_sim
-            if self.zoom == 1.0:
-                pass
-            elif self.zoom < 1.0:
-                (rel_x, rel_y) = (int(rel_x / self.zoom), int(rel_y / self.zoom))
-            elif self.zoom > 1.0:
-                (rel_x, rel_y) = (int(rel_x*self.zoom), int(rel_y*self.zoom))
             x = x1 + rel_x + int(tem_w / 2)
             y = y1 + rel_y + int(tem_h / 2)
             centre = (x, y)

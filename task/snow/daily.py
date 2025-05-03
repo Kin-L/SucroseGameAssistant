@@ -37,11 +37,11 @@ class Daily(Task):
                         if pos:
                             (_x, _y) = pos
                             _str = ocr((_x+267, 177,  _x+447, 233))[0]
-
-                            if "0" in _str or "o" in _str or "O" in _str:
+                            # print("数量：", _str,  _str[-3])
+                            if _str[-3] == "0":
                                 self.indicate(f"今日已完成：角色 {i}")
                                 _f = True
-                            elif "1" in _str or "i" in _str or "I" in _str:
+                            elif _str[-3] == "1":
                                 pass
                             else:
                                 cl = True
