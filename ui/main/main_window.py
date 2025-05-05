@@ -23,8 +23,8 @@ class MainWindow:  # FramelessWindow
         self.box_info = InfoBox(self.main_window)  # 指示信息窗口
         self.stack_setting = Stack(self.main_window, (5, 0, 620, 570))
         self.state = \
-            {"name": ["mix", "kleins", "genshin", "maa", "m7a", "snow", "common", "presstrigger","zzz", "ww"],
-             "prefix": ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09"],
+            {"name": ["mix", "kleins", "genshin", "maa", "m7a", "snow", "common", "presstrigger","zzz", "ww", "kaa"],
+             "prefix": ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10"],
              "mix":     {"load": False, "prefix": "00"},
              "kleins":   {"load": False, "prefix": "01"},
              "genshin": {"load": False, "prefix": "02"},
@@ -35,6 +35,7 @@ class MainWindow:  # FramelessWindow
              "presstrigger": {"load": False, "prefix": "07"},
              "zzz":     {"load": False, "prefix": "08"},
              "ww":      {"load": False, "prefix": "09"},
+             "kaa":     {"load": False, "prefix": "10"},
              "plan":    {},    "serial": [],   "single":    [],
              "stack":   None,  "locked": None, "hwnd":      None,
              "text":    None,  "index":  None, "wait_time": 1,

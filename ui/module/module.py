@@ -12,7 +12,7 @@ class ModuleWindow:
         self.box_module_change = ComboBox(self.widget_module)
         self.box_module_change.setGeometry(QtCore.QRect(55, 8, 160, 35))
         self.box_module_change.addItems(
-            ["连续任务", "环行旅舍", "原神", "MAA", "崩坏：星穹铁道助手", "尘白禁区", "通用执行", "连点器","绝区零助手","鸣潮助手"])
+            ["连续任务", "环行旅舍", "原神", "MAA", "崩坏：星穹铁道助手", "尘白禁区", "通用执行", "连点器","绝区零助手","鸣潮助手","琴音小助手"])
         # 配置切换列表
         self.box_config_change = EditableComboBox(self.widget_module)
         self.box_config_change.setGeometry(QtCore.QRect(265, 9, 215, 35))

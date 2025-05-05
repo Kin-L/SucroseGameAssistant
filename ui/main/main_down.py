@@ -41,6 +41,9 @@ class MainDown(MainBottom):
             "presstrigger": {},
             "zzz": {},
             "ww": {},
+            "kaa": {
+                "kaa_path": ""
+            },
             "update": False,
             "timer": {},
             "current": {"模块": 0}
