@@ -63,7 +63,9 @@ class Genshin(Task):
         pos = clickto(pos, 2500, ("秘境", (256, 416, 345, 469), 0))
         click((301, 442))
         wait(800)
-        click((490, 301))
+        m = ["圣遗物", "武器突破素材", "天赋培养素材"]
+        n = m.index(self.task["秘境"][0])
+        click((555,n*100+230))
         wait(800)
         if domain == "椛染之庭":
             _t = "染之庭"
