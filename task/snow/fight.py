@@ -81,7 +81,7 @@ class Fight(Task):
                     wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
                     wait(300)
                     pos = find_text("材料")
-                    cpos = (284, 547)  # 夙圆心行
+                    cpos = (89, 575)  # 渊沉曙色
                     if pos:
                         click_change(pos, (1732, 920, 1829, 1013))
                     else:
@@ -91,7 +91,7 @@ class Fight(Task):
                     wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
                     wait(500)
                     pos = find_text("深渊")
-                    cpos = (1558, 372)  # 夙圆心行
+                    cpos = (1500, 357)  # 渊沉曙色
                     if pos:
                         click_change(pos, (1387, 945, 1599, 1075))
                         wait_text("速战", (1387, 945, 1599, 1075))
@@ -191,9 +191,18 @@ class Fight(Task):
                 print(self.task["活动后勤选择"][:-2])
                 pos = find_text(self.task["活动后勤选择"][:-2], (158, 174, 903, 941))
                 if not pos:
-                    roll((679, 494), -35)
+                    roll((679, 494), 60)
                     wait(500)
-                    pos = find_text(self.task["活动后勤选择"][:-2], (158, 174, 903, 941))
+                    for i in range(5):
+                        pos = find_text(self.task["活动后勤选择"][:-2], (158, 174, 903, 941))
+                        if pos:
+                            break
+                        roll((679, 494), -25)
+                        wait(500)
+                    else:
+                        self.indicate("未找到目标后勤")
+                        press_to_pic("esc", r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
+                        return 0
                 click_change(pos, (1488, 193, 1619, 237))
                 click_change((1823, 52), (1811, 40, 1846, 79))
         elif common == 7:

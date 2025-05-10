@@ -6,6 +6,7 @@ from tools.software import *
 from PyQt5.QtGui import QPixmap
 from traceback import format_exc
 from webbrowser import open as weopen
+from subprocess import run as cmd_run
 import keyboard
 
 
@@ -49,8 +50,8 @@ class MainTop(MainUp):
         self.button_set_home.toggled.connect(self.change_interface)
         self.button_sponsor.clicked.connect(self.window_support.show)
         self.button_statement.clicked.connect(self.show_statement)
-        self.button_instructions.clicked.connect(lambda: cmd_run("start "" Instructions.docx"))
-        self.button_history.clicked.connect(lambda: cmd_run("start /d \"personal\" history.txt"))
+        self.button_instructions.clicked.connect(lambda: cmd_run("start "" Instructions.docx", shell=True))
+        self.button_history.clicked.connect(lambda: cmd_run("start /d \"personal\" history.txt", shell=True))
         # 全局设置操作
         self.overall.timer.apply.clicked.connect(self.apply_timer)
         self.overall.button_check.clicked.connect(self.check_update)

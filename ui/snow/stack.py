@@ -152,6 +152,7 @@ class Daily:
         self.check_daily = Check(self.page_debris, (15, 375, 140, 22), "领取日常")
         self.check_daily2 = Check(self.page_debris, (15, 410, 140, 22), "领取凭证")
         self.check_daily3 = Check(self.page_debris, (15, 445, 180, 22), "领取活动每日")
+        self.check_daily4 = Check(self.page_debris, (15, 475, 180, 22), "收取信源断片")
 
         self.label_character = Label(self.page_debris, (200, 50, 180, 18), "角色选择自定义添加")
         self.button_snow_list2 = (

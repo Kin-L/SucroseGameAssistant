@@ -22,7 +22,6 @@ color_zone = {"red": [[156, 180], [0, 10], 43, 255, 46, 255],
 
 
 class Image(System):
-
     def screenshot(self, zone: list = "WINDOW"):
         SetCursorPos((1, 1))
         sleep(0.01)
