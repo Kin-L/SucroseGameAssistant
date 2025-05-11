@@ -24,14 +24,14 @@ class Fight(Task):
             else:
                 raise RuntimeError("每日配给识别错误")
             if "每日" in ocr((176, 621, 558, 676))[0]:
-                click_text("每日", (223, 606, 504, 692))
+                pos = wait_text("每日", (223, 606, 504, 692))
+                click_change(pos, (1263, 745, 1363, 800))
                 click_change((1313, 773), (1269, 750, 1355, 798))
                 self.indicate(f"每日物资配给箱 领取完成")
-                click_change((1668, 49), (1646, 24, 1697, 72))
-                click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+                press_to_text("esc", "任务", (1458, 330, 1529, 379))
             else:
                 self.indicate(f"每日物资配给箱 暂无")
-                click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+                press_to_text("esc", "任务", (1458, 330, 1529, 379))
         if self.task["使用试剂"]:
             self.indicate(f"检查限时试剂")
             click_change((1055, 35), (1031, 17, 1078, 53))
@@ -63,19 +63,28 @@ class Fight(Task):
                 click_change((1055, 35), (1031, 17, 1078, 53))
                 self.indicate(f"暂无限时试剂可用")
             del sc
-        sc = scshot()
-        _str1 = ocr((901, 12, 1028, 60), sc)[0]
-        _str2 = _str1.replace(" ", "")[:-4]
-        try:
-            cons = int(_str2)
-        except ValueError:
-            self.indicate(f"感知数量识别异常")
-            _path = errorsc_save(sc)
-            logger.error(f"截图导出: {_path}")
-            logger.error(f"_str1: {_str1}")
-            return 0
+
+        def read_cons():
+            sc = scshot()
+            _str1 = ocr((901, 12, 1028, 60), sc)[0]
+            _str2 = _str1.replace(" ", "")[:-4]
+            try:
+                cons = int(_str2)
+                del sc
+                return cons
+            except ValueError:
+                self.indicate(f"感知数量识别异常")
+                _path = errorsc_save(sc)
+                del sc
+                logger.error(f"截图导出: {_path}")
+                logger.error(f"_str1: {_str1}")
+                return 0
         if self.task["行动选择"] == 8:
-            if cons >= 30:
+            while 1:
+                cons = read_cons()
+                if cons < 30:
+                    self.indicate(f"感知不足30：{cons}")
+                    break
                 if ocr((1378, 420, 1460, 457))[0]:
                     click_change((1499, 538), (1402, 463, 1499, 505))
                     wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
@@ -94,7 +103,7 @@ class Fight(Task):
                     cpos = (1500, 357)  # 渊沉曙色
                     if pos:
                         click_change(pos, (1387, 945, 1599, 1075))
-                        wait_text("速战", (1387, 945, 1599, 1075))
+
                     else:
                         click(cpos)
                         wait(1000)
@@ -106,23 +115,28 @@ class Fight(Task):
                             wait(500)
                             self.indicate("检查完成：感知扫荡")
                             return True
-                    click_text("速战", (1387, 945, 1599, 1075))
+                    pos = wait_text("速战", (1387, 945, 1599, 1075))
+                    click_change(pos, (858, 801, 1072, 875))
+                    wait(600)
                     click((1280, 711))
                     wait(600)
                     click_text("开始", (858, 801, 1072, 875))
-                    press_to_pic("esc", r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
-                    self.indicate(f"扫荡活动材料关卡完成")
-                    click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+                    wait(500)
+                    press_to_text("esc", "任务", (1458, 330, 1529, 379))
                     wait(500)
                 else:
                     self.indicate(f"本期活动已关闭")
-            else:
-                self.indicate(f"感知不足30：{cons}")
+
+            self.indicate(f"扫荡活动材料关卡完成")
         else:
-            if cons >= 40:
+            while 1:
+                cons = read_cons()
+                if cons < 40:
+                    self.indicate(f"感知不足40：{cons}")
+                    break
                 self.fight_common(self.task["行动选择"])
-            else:
-                self.indicate(f"感知不足40：{cons}")
+
+            self.indicate(f"扫荡常规行动关卡完成")
         self.indicate("检查完成：感知扫荡")
 
     def fight_common(self, common):
@@ -166,7 +180,8 @@ class Fight(Task):
                 wait_text("获得道具", (809, 40, 1113, 147))
                 press_to_text("esc", "小", (34, 959, 159, 1013))
             if not self.task["后勤选择"][:-2] in ocr((164, 923, 350, 982))[0]:
-                click_text("小", (38, 890, 154, 1025))
+                pos = wait_text("小", (38, 890, 154, 1025))
+                click_change(pos, (829, 12, 1101, 130))
                 wait_text("小", (825, 10, 1111, 129))
                 pos = find_text(self.task["后勤选择"][:-2], (158, 174, 903, 941))
                 click_change(pos, (1488, 193, 1619, 237))
@@ -186,7 +201,8 @@ class Fight(Task):
                 wait_text("获得道具", (809, 40, 1113, 147))
                 press_to_text("esc", "小", (32, 995, 142, 1039))
             if not (self.task["活动后勤选择"][:-2] in ocr((147, 962, 288, 1012))[0]):
-                click_text("小", (38, 890, 154, 1025))
+                pos = wait_text("小", (38, 890, 154, 1025))
+                click_change(pos, (829, 12, 1101, 130))
                 wait_text("小", (825, 10, 1111, 129))
                 print(self.task["活动后勤选择"][:-2])
                 pos = find_text(self.task["活动后勤选择"][:-2], (158, 174, 903, 941))
@@ -223,7 +239,6 @@ class Fight(Task):
         click((1280, 711))
         wait(600)
         click_text("开始", (858, 801, 1072, 875))
-        press_to_pic("esc", r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
-        self.indicate(f"扫荡常规行动关卡完成")
-        click_pic(r"assets\snow\picture\home.png", zone=(1504, 0, 1771, 117))
+        wait(500)
+        press_to_text("esc", "任务", (1458, 330, 1529, 379))
         wait(500)
