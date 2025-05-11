@@ -102,28 +102,25 @@ class Daily(Task):
             x, y = wait_text("精神", (150, 770, 1779, 848))
             click_change((x, 462), (61, 998, 245, 1059))
             wait_text("斗", (1288, 180, 1451, 239))
+            _cn = 0
             for _p in [(224, 253), (216, 394)]:
                 click(_p)
                 wait(800)
                 for i in range(4):
-                    sc = scshot()
-                    if ("快速" in ocr((1351, 977, 1512, 1052), sc)[0] and
-                            int(ocr((1791, 576, 1852, 611), sc)[0].replace(" ", "")[:-2]) > 0):
-                        del sc
+                    if _cn < 4 and "快速" in ocr((1351, 977, 1512, 1052))[0]:
                         click_change((1415, 999), (1358, 964, 1548, 1071))
                         wait(500)
                         click_change((1375, 773), (1358, 964, 1548, 1071))
                         wait(500)
+                        _cn += 1
                         self.indicate("拟境扫荡一次")
                     else:
-                        del sc
                         break
             if find_color("yellow", (188, 869, 195, 876))[1]:
-                click_change((137, 914), (107, 883, 179, 948))
+                click_change((137, 914), (16, 51, 240, 128))
                 click_change((1742, 1001), (1670, 971, 1830, 1022))
                 wait_text("获得道具", (809, 40, 1113, 147))
                 self.indicate("领取评测奖励")
-                press_to_pic("esc", r"assets\snow\picture\home.png", (1504, 0, 1771, 117))
             press_to_text("esc", "任务", (1458, 330, 1529, 379))
             wait(500)
         if self.task["商店购物"][0]:
