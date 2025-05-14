@@ -17,7 +17,7 @@ class Update(QThread):
     def __init__(self, ui):  # mode true:集成运行 false:独立运行
         super(Update, self).__init__()
         self.ui = ui
-        self.version = ui.state["version"]
+        self.version = env.version
         self.mode = None
         self.download = None
 

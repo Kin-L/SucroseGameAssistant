@@ -10,7 +10,8 @@ class OCR:
     def __init__(self, logger, workdir):
         self.logger = logger
         self.workdir = workdir
-        if CPUFeature["AVX2"]:
+        self.cpu_feature = CPUFeature["AVX2"]
+        if self.cpu_feature:
             self.exe_name = "PaddleOCR-json_v.1.3.1(simplify)"
             self.load_url = ("https://github.moeyy.xyz/"
                              "https://github.com/Kin-L/SucroseGameAssistant/releases/download/ocr/"

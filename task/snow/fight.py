@@ -25,9 +25,10 @@ class Fight(Task):
                 raise RuntimeError("每日配给识别错误")
             if "每日" in ocr((176, 621, 558, 676))[0]:
                 pos = wait_text("每日", (223, 606, 504, 692))
-                click_change(pos, (1263, 745, 1363, 800))
-                click_change((1313, 773), (1269, 750, 1355, 798))
-                self.indicate(f"每日物资配给箱 领取完成")
+                if pos:
+                    click_change(pos, (653, 516, 759, 613))
+                    click_text("购买", (1243, 735, 1402, 819))
+                    self.indicate(f"每日物资配给箱 领取完成")
                 press_to_text("esc", "任务", (1458, 330, 1529, 379))
             else:
                 self.indicate(f"每日物资配给箱 暂无")

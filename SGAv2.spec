@@ -1,16 +1,23 @@
 # -*- mode: python ; coding: utf-8 -*-
 from os import path
-# pyinstaller SGA2.0-demo.spec
+# pyinstaller SGAv2.spec
 
 a = Analysis(
-    ['SGA2.0-demo.py'],
+    ['SGAv2.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[("assets", "assets"),
+            ("README.md", "."),
+            ("update_history.txt", "."),
+            ("3rd_package", "3rd_package"),
+            ("Instructions.docx", "."),
+            ("SGA快速上手.docx", "."),
+            ("venv\Lib\site-packages\win32comext\shell\shellcon.py", "win32com\shell"),
+            ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
-    runtime_hooks=[],
+    runtime_hooks=["runtime_hook.py"],
     excludes=[],
     noarchive=False,
 )
@@ -54,5 +61,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='SGA2.0-demo',
+    name='SGAv2',
 )

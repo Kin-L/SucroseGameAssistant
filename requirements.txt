@@ -21,3 +21,4 @@ numpy
 ruamel.yaml
 pynput
 playsound3
+screeninfo

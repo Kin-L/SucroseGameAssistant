@@ -45,7 +45,6 @@ class MainDown(MainBottom):
             "timer": {},
             "current": {"模块": 0}
         }
-        self.state["version"] = self.overall.version
         self.state["hwnd"] = find_hwnd((True, "Qt5152QWindowIcon", "砂糖代理"))
         if exists("personal/main_config.json"):
             # noinspection PyBroadException

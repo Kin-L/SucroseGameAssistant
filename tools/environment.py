@@ -12,12 +12,33 @@ from yaml import load as yload
 from yaml import dump as ydump
 from yaml import FullLoader
 from os import rename
+import platform
 import os
 import numpy as np
 from .image import match_zone
+from screeninfo import get_monitors
 
 
-def errorsc_save(sc, name = ""):
+def get_platform():
+    system = platform.system()
+    release = platform.release()
+    version = platform.version()
+    if system == "Windows":
+        if release == "10":
+            build_number = int(version.split('.')[2])  # 获取构建版本号
+            if build_number >= 22000:
+                return "Windows 11"
+            else:
+                return "Windows 10"
+        elif release == "7":
+            return "Windows 7"
+        else:
+            return f"Windows-未知版本:{release}-Version: {version}）"
+    else:
+        return system
+
+
+def errorsc_save(sc, name=""):
     import time
     now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
     if name:
@@ -62,6 +83,26 @@ class Environment(Operate):
         self.mode()
         from tools.ocr.ocr import OCR
         self.OCR = OCR(self.logger, self.workdir)
+        self.version = "v2.5.3.6"
+        self.platform = get_platform()
+        self.monitors = []
+        self.getmonitors()
+        self.logger_environment_info()
+
+    def getmonitors(self):
+        for i, monitor in enumerate(get_monitors(), start=1):
+            self.monitors += [[i, (monitor.width, monitor.height),
+                              (monitor.x, monitor.y)]]
+
+    def logger_environment_info(self):
+        _str = (f"\n运行环境:\n"
+                f"  工作目录:{self.workdir}\n"
+                f"  CPU 是否支持 AVX2 指令集:{self.OCR.cpu_feature}\n"
+                f"  系统:{self.platform}\n"
+                f"显示器:")
+        for i, (w, h), (x, y) in self.monitors:
+            _str += f"\n  编号:{i} 分辨率:{w}×{h} 位置:{x},{y}"
+        self.logger.info(_str)
 
     # 键鼠及识图缩放模式（全屏复刻模式：0， 软件窗口模式：1， 全屏普通模式：2）
     def mode(self, mode_num: int = 0):
@@ -215,12 +256,12 @@ class Environment(Operate):
         for i in range(wait_time[1]):
             self.click(pos)
             sleep(wait_time[0] / 1000)
-            aft = self.scshot(zone)
-            s = match_zone(aft, bef)
+            _aft = self.scshot(zone)
+            s = match_zone(_aft, bef)
             if s < sim:
                 return True
         _path1 = errorsc_save(bef, "bef")
-        _path2 = errorsc_save(aft, "aft")
+        _path2 = errorsc_save(_aft, "aft")
         logger.error(f"截图导出bef: {_path1}")
         logger.error(f"截图导出aft: {_path2}")
         raise RuntimeError("click_change点击超时")

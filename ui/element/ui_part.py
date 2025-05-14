@@ -14,7 +14,7 @@ class MWindow(QWidget):
         self.setWindowTitle("砂糖代理")
         self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
         self.setFixedSize(self.width(), self.height())
-        from assets.main_window.ui import SGA_icon
+        from ui.main import SGA_icon
         self.setWindowIcon(QIcon(":/SGA.ico"))
         palette = QPalette()
         palette.setColor(QPalette.Background, QColor(255, 255, 255))

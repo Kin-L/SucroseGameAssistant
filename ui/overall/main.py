@@ -1,5 +1,6 @@
 from .timer.main import Timer
 from ui.element.control import *
+from tools.environment import env
 from json import load
 
 
@@ -16,8 +17,7 @@ class Overall:
         self.button_update = Button(self.widget, (135, 315, 80, 30), "开始更新")
         self.button_update.hide()
         self.button_update.setEnabled(False)
-        self.version = self.get_ver()
-        Label(self.widget, (225, 310, 120, 40), f"版本号 {self.version}", 14)
+        Label(self.widget, (225, 310, 120, 40), f"版本号 {env.version}", 14)
 
         self.button_update_history = Button(self.widget, (325, 315, 80, 30), "更新日志")
         self.button_logger = Button(self.widget, (410, 315, 80, 30), "运行日志")
