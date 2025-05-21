@@ -7,9 +7,10 @@ from task.ww.main import Taskww
 from task.snow.main import TaskSnow
 from task.common.main import TaskCommon
 from task.presstrigger.main import TaskTrigger
+from task.kaa.main import TaskKaa
 
 
-class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon, TaskTrigger, Taskzzz, Taskww):
+class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon, TaskTrigger, Taskzzz, Taskww, TaskKaa):
     def __init__(self):
         super(TaskRun, self).__init__()
 
@@ -69,6 +70,10 @@ class TaskRun(TaskKleins, TaskGenshin, TaskMAA, TaskM7A, TaskSnow, TaskCommon, T
         elif task["模块"] == 9:
             Taskww.__init__(self)
             if self.ww_start(task):
+                _k = True
+        elif task["模块"] == 10:
+            TaskKaa.__init__(self)
+            if self.kaa_start(task):
                 _k = True
         else:
             self.indicate("error:未知模块。")

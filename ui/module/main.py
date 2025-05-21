@@ -9,6 +9,7 @@ from ..presstrigger.main import PressTrigger
 from .module import ModuleWindow
 from ..zzz import zzz
 from ..ww import ww
+from ..kaa import Kaa
 
 
 
@@ -25,3 +26,4 @@ class Module(ModuleWindow):
         self.presstrigger = PressTrigger(self.stack_module, main)
         self.zzz = zzz(self.stack_module, main)
         self.ww = ww(self.stack_module, main)
+        self.kaa = Kaa(self.stack_module, main)
