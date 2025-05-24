@@ -1,7 +1,7 @@
 from main.mainenvironment import sme
 from main.mainwindows import smw
 from subprocess import run as cmd_run
-from main.tools.system import notify, screen_off, get_mute
+from main.tools.main import notify, screen_off, get_mute
 from time import sleep
 import keyboard
 import sys

@@ -43,7 +43,7 @@ def save_env_data():
 
 # 全局设置:退出前保存 & 每10秒自动保存
 def exit_prepare():
-    from main.tools.system import get_pid, close
+    from main.tools.main import get_pid, close
     sme.current = smw.module.collect_module_config()
     save_env_data()
     if sme.cpu_feature:

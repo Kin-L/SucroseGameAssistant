@@ -15,3 +15,4 @@ pillow
 opencv-python
 numpy
 pywin32
+screeninfo

@@ -4,6 +4,8 @@ from qfluentwidgets import (SmoothScrollArea, StrongBodyLabel,
                             setFont, TimePicker, ToolTipFilter,
                             ToolTipPosition, IndeterminateProgressRing)
 from PyQt5 import QtCore, QtWidgets, QtGui
+palette = QtGui.QPalette()
+palette.setColor(QtGui.QPalette.Background, QtGui.QColor(255, 255, 255))
 
 
 # 窗口
@@ -13,8 +15,6 @@ class Widget(QtWidgets.QWidget):
         if location is not None:
             (x, y, w, h) = location
             self.setGeometry(QtCore.QRect(x, y, w, h))
-        palette = QtGui.QPalette()
-        palette.setColor(QtGui.QPalette.Background, QtGui.QColor(255, 255, 255))
         self.setPalette(palette)
 
 
