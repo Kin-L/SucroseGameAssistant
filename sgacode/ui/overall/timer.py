@@ -1,22 +1,13 @@
 from sgacode.ui.control import (Button, Widget, Label,
-                                PicButton, Combobox, Check,
+                                Combobox, Check,
                                 ScrollArea, Timepicker)
 
 
 class TimerWindow(Widget):
     def __init__(self, widget, location: (int, int, int, int)):
         super().__init__(widget, location)
-        self.timeitem = 3
         # 时间条目控制
-        self.lbitemchange = Label(self, (0, 0, 100, 30), "时间条目增减")
-        
-        addpath = r"resources/main/button/add.png"
-        deducepath = r"resources/main/button/reduce.png"
-        applypath = r"resources/main/button/save.png"
-        sizetp = (20, 20) 
-        self.pbadd = PicButton(self, (110, 0, 30, 30), addpath, sizetp)
-        self.pbdeduce = PicButton(self, (150, 0, 30, 30), deducepath, sizetp)
-        self.pbapply = PicButton(self, (190, 0, 30, 30), applypath, sizetp)
+        self.lbitemchange = Label(self, (0, 0, 100, 30), "定时任务：")
         self.btdelete = Button(self, (540, 0, 80, 30), "清除定时")
         # 时间条目标签
         self.lbexecute = Label(self, (35, 30, 50, 30), "执行")
@@ -28,7 +19,7 @@ class TimerWindow(Widget):
         self.wdtime = Widget(self, (0, 0, 620, 120))
         _wdt = self.wdtime
         self.sratime.setWidget(_wdt)
-        self.wdtime.setFixedHeight(120)
+        self.wdtime.setFixedHeight(400)
         # self.scroll_time_item.setFrameShape(QtWidgets.QFrame.Shape(0))
         # 时间条目按钮
         _wdt.execute0 = Combobox(_wdt, (5, 5, 90, 30))

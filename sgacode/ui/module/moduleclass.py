@@ -1,11 +1,14 @@
 from typing import Union
-from sgacode.tools.myclass import ConfigTool
-from typing import List, Tuple
-from PyQt5.QtWidgets import QWidget, QFrame
-from sgacode.ui.control import palette, ScrollArea, Widget, Stack
+from sgacode.configclass import ConfigTool
+from typing import List, Tuple, Optional
+from sgacode.ui.control import Stack, ModuleStackPage
+from os import path, makedirs, listdir
+import json
+from sgacode.tools.main import env
+from sgacode.configclass import SGAMainConfig
 
 
-class ModuleClass(QWidget):
+class ModuleClass:
     Count: int = 0  # 实例化的次数，即模组数量
     Instances: List[object] = []  # 存储所有实例化的类
     SignList: List[Tuple[int, str, str, int]] = []  # 每个实例的以下四项标识信息
@@ -17,29 +20,19 @@ class ModuleClass(QWidget):
 
     IconPath: str  # 图标路径
     Config: ConfigTool
-
-    scroll: ScrollArea
-    widget: Widget
+    Widget: Optional[ModuleStackPage]
 
     def __init__(self):
         super().__init__()
+        self.Widget = None
         # 每次实例化时，增加计数并将类添加到实例列表中
         ModuleClass.Count += 1
-        ModuleClass.Instances.append(self.__class__)
+        ModuleClass.Instances.append(self)
         ModuleClass.SignList.append((self.ModuleNum, self.ModuleNameCH,
                                      self.ModuleNameEN, self.ModuleKey))
 
-    def WidgetInit(self):
-        self.setPalette(palette)
-
-        # 功能列表窗口
-        self.scroll = ScrollArea((0, 0, 215, 515))
-        self.scroll.setFrameShape(QFrame.Shape(0))
-        self.widget = Widget((0, 0, 215, 515))
-        _wdt = self.widget
-        self.scroll.setWidget(_wdt)
-        self.widget.setFixedHeight(515)
-        self.stack = Stack((225, 0, 395, 515))
+    def WidgetInit(self, stack: Stack):
+        pass
 
     @classmethod
     def CheckConfig(cls, _config: dict):
@@ -71,11 +64,44 @@ class ModuleClass(QWidget):
         return False
 
 
-class SGAModuleInstances:
-    def __init__(self):
+class SGAModuleGroup:
+    def __init__(self, smc: SGAMainConfig):
         self.Class = ModuleClass
+
+        # 添加需要载入的模组
         from sgacode.ui.module.mix import MixClass
         self.Mix = MixClass()
+
+        # 子设置文件载入
+        self.LoadSubConfig()
+        if not self.Class.CheckConfig(smc['CurrentConfig']):
+            smc['CurrentConfig'] = self.Mix.Config.getdefault()
+
+    def LoadSubConfig(self):
+        _, _, _, mkl = zip(*self.Class.SignList)
+        # 读取子设置信息
+        _subconfigs = []
+        _configdirpath = "personal/config"
+        if not path.exists(_configdirpath):
+            makedirs(_configdirpath)
+        _listdir = listdir(_configdirpath)
+        if _listdir:
+            for file in _listdir:
+                name, suffix = path.splitext(file)
+                seq, name = name[:4], name[4:]
+                if suffix == ".json":
+                    _path = path.join(_configdirpath, file)
+                    with open(_path, 'r', encoding='utf-8') as c:
+                        _config = json.load(c)
+                        modulekey: Union[int, None] = _config.get("模块", None)
+                    if modulekey is not None:
+                        allow = True
+                        for item in _subconfigs:
+                            if seq in item and modulekey not in mkl:
+                                allow = False
+                        if allow:
+                            _subconfigs += [[seq, modulekey, name]]
+        env.value["SubConfigs"] = _subconfigs  # 储存设置文件信息，文件名和类型
 
     @staticmethod
     def GetInstances():

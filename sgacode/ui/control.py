@@ -15,7 +15,7 @@ int4 = Tuple[int, int, int, int]
 
 # 窗口
 class Widget(QWidget):
-    def __init__(self, widget: QWidget=None, location: Union[int4, None] = None):
+    def __init__(self, widget: Union[QWidget, None] = None, location: Union[int4, None] = None):
         super().__init__(widget)
         if location is not None:
             self.setGeometry(*location)
@@ -155,3 +155,55 @@ class OverallButton(ToggleToolButton):
         self.setIcon(r'resources/main/button/set.png')
         self.setGeometry(595, 0, 35, 35)
         self.setIconSize(QSize(25, 25))
+
+
+class StateSigh(QWidget):
+    def __init__(self, widget: QWidget, location: int4):
+        super().__init__(widget)
+        self.setGeometry(*location)
+        self.setPalette(palette)
+        self.rightpic = QPixmap("resources/main/state/right.png")
+        self.stoppic = QPixmap("resources/main/state/right.png")
+        self.errorpic = QPixmap("resources/main/state/right.png")
+        self.righttext = "正常运行"
+        self.stoptext = "手动终止"
+        self.errortext = "运行异常"
+        self.light = Picture(self, (0, 3, 25, 25), self.rightpic)
+        self.label = Label(self, (30, 0, 65, 30), self.righttext)
+
+    def SetState(self, mode: int):
+        if mode == 0:
+            self.light.setPixmap(self.rightpic)
+            self.setText(self.righttext)
+        elif mode == 1:
+            self.light.setPixmap(self.stoppic)
+            self.setText(self.stoptext)
+        elif mode == 2:
+            self.light.setPixmap(self.errorpic)
+            self.setText(self.errortext)
+
+
+class SetButton(ToolButton):
+    def __init__(self, widget: QWidget, location: int4):
+        super().__init__(widget)
+        setpath = 'resources/main/button/set.png'
+        self.setIcon(setpath)
+        self.setGeometry(*location)
+        self.setIconSize(QSize(30, 30))
+
+
+class SetStackPage(QWidget):
+    def __init__(self, name: str):
+        super().__init__()
+        self.setPalette(palette)
+        self.lbname = Label(self, (0, 10, 120, 25), name)
+        Line(self, (0, 45, 630, 1))
+
+
+class ModuleStackPage(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setPalette(palette)
+        self.srlist = ScrollArea(self, (0, 55, 210, 480))
+        self.srlist.setFrameShape(QFrame.Shape(0))
+        self.sksetting = Stack(self, (225, 0, 400, 515))
