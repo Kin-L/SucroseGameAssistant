@@ -1,13 +1,13 @@
 from logging import getLogger, FileHandler, Formatter, StreamHandler
 from os import path, makedirs
-from datetime import datetime
+from time import strftime, localtime
 from colorlog import ColoredFormatter
 
 
 class Logger:
     def __init__(self):
         self.logger = getLogger('SGA')
-        self.logger.date = datetime.now().strftime("%Y-%m-%d")
+        self.logger.date = strftime("%Y-%m-%d", localtime())
         self.logger.propagate = False
         self.logger.setLevel("DEBUG")
         if not path.exists("personal/logs"):

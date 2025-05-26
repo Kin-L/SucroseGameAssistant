@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QPalette, QColor, QMovie, QPixmap
-from sgacode.tools.main import env, gethwnd
+from sgacode.tools.main import env, GetHwnd
 from sys import argv
 from typing import Optional
 from sgacode.ui.control import (Line, Stack, Widget,
@@ -9,10 +9,11 @@ from sgacode.ui.control import (Line, Stack, Widget,
 from sgacode.ui.overall.main import OverallWindow
 from sgacode.ui.module.main import ModuleWindow
 from sgacode.ui.module.moduleclass import SGAModuleGroup
+from sgacode.configclass import SGAMainConfig
 
 
 class SGAMainWindow(Widget):
-    def __init__(self, smg: SGAModuleGroup):
+    def __init__(self):
         super().__init__()
         self.sksetting = Stack(self, (5, 0, 625, 575))
         # 指示图标
@@ -29,19 +30,26 @@ class SGAMainWindow(Widget):
         self.btconfigsave = PicButton(self, (515, 0, 35, 35), savepath, sizetp)
         # 指示信息窗口
         self.infobox = InfoBox(self)
+        self.overall: Optional[OverallWindow] = None
+        self.module: Optional[ModuleWindow] = None
+
+    def LoadMainSet(self, smc: SGAMainConfig):
         # 全局设置窗口
-        self.overall = OverallWindow()
+        self.overall = OverallWindow(smc)
         self.sksetting.addWidget(self.overall)
-        # # 全局设置窗口
-        self.module = ModuleWindow(smg)
+
+    def LoadSubSet(self, smc: SGAMainConfig, smg: SGAModuleGroup):
+        # # 模组设置窗口
+        self.module = ModuleWindow(smc, smg)
         self.sksetting.addWidget(self.module)
         self.sksetting.setCurrentIndex(1)
         self.module.SubModuleInit()
 
 
 class SGAQMainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, thread):
         super().__init__()
+        self.thread = thread
         self.setObjectName("mainwindow")
         # 窗口大小
         self.resize(910, 580)
@@ -58,20 +66,26 @@ class SGAQMainWindow(QMainWindow):
         # 加载动画，置顶窗口，等待SGA加载完成后再取消
         self.loading = LoadWindow(self)
         self.loading.raise_()
-        # self.loading.lower()
+        self.loading.lower()
         self.SMW: Optional[SGAMainWindow] = None
         # 窗口显现
         self.show()
-        env.hwnd = gethwnd(True, "Qt5152QWindowIcon", "砂糖代理")
+        env.hwnd = GetHwnd(True, "Qt5152QWindowIcon", "砂糖代理")
         if len(argv) <= 1:
             env.foreground()
         elif argv[1] != "True":
             env.foreground()
 
-    def LoadMainWindows(self, smg: SGAModuleGroup) -> SGAMainWindow:
-        self.SMW = SGAMainWindow(smg)
+    def LoadMainWindows(self) -> SGAMainWindow:
+        self.SMW = SGAMainWindow()
         self.setCentralWidget(self.SMW)  # 关键步骤！
         return self.SMW
+
+    def closeEvent(self, event):
+        if self.thread.isRunning():
+            self.thread.quit()
+            self.thread.wait()
+        super().closeEvent(event)
 
 
 class LoadWindow(QWidget):

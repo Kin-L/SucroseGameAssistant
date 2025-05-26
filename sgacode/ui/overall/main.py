@@ -4,10 +4,11 @@ from sgacode.ui.control import (Button, TransPicButton,
 from sgacode.ui.overall.timer import TimerWindow
 from PyQt5.QtWidgets import QWidget
 from sgacode.tools.main import env
+from sgacode.configclass import SGAMainConfig
 
 
 class OverallWindow(QWidget):
-    def __init__(self):
+    def __init__(self, smc: SGAMainConfig):
         super().__init__()
         self.lbtitle = Label(self, (0, 0, 80, 40), "全局设置", 18)
         self.timer = TimerWindow(self, (0, 60, 620, 300))
@@ -37,3 +38,10 @@ class OverallWindow(QWidget):
         self.btgithub = TransPicButton(self, (500, 352, 30, 30), githubpath, sizetp)
         self.btgitee = TransPicButton(self, (540, 352, 30, 30), giteepath, sizetp)
         self.btbilibili = TransPicButton(self, (580, 352, 30, 30), bilibilipath, sizetp)
+        # 加载设置
+        self.leocrpath.setText(smc['OcrPath'])
+        self.lekeyboard.setText(smc['StopKeys'])
+        self.ckautoupdate.setChecked(smc["AutoUpdate"])
+        
+        
+        

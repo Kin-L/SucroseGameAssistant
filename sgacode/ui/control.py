@@ -7,9 +7,9 @@ from PyQt5.QtWidgets import QWidget, QLabel, QFrame, QStackedWidget, QTextBrowse
 from PyQt5.QtGui import QPixmap, QPalette, QColor
 from PyQt5.QtCore import QSize
 from typing import Union, Tuple
+from time import strftime, localtime
 palette = QPalette()
 palette.setColor(QPalette.Background, QColor(255, 255, 255))
-
 int4 = Tuple[int, int, int, int]
 
 
@@ -123,6 +123,7 @@ class Timepicker(TimePicker):
     def __init__(self, widget: QWidget, location: int4):
         super().__init__(widget)
         self.setGeometry(*location)
+        self.getTime()
 
 
 def tips(control, text: str):
@@ -174,13 +175,13 @@ class StateSigh(QWidget):
     def SetState(self, mode: int):
         if mode == 0:
             self.light.setPixmap(self.rightpic)
-            self.setText(self.righttext)
+            self.label.setText(self.righttext)
         elif mode == 1:
             self.light.setPixmap(self.stoppic)
-            self.setText(self.stoptext)
+            self.label.setText(self.stoptext)
         elif mode == 2:
             self.light.setPixmap(self.errorpic)
-            self.setText(self.errortext)
+            self.label.setText(self.errortext)
 
 
 class SetButton(ToolButton):
@@ -207,3 +208,6 @@ class ModuleStackPage(QWidget):
         self.srlist = ScrollArea(self, (0, 55, 210, 480))
         self.srlist.setFrameShape(QFrame.Shape(0))
         self.sksetting = Stack(self, (225, 0, 400, 515))
+
+    def LoadWindow(self, config: {}):
+        pass

@@ -1,6 +1,6 @@
 from os import path, makedirs
 import json
-from sgacode.tools.main import env, ConfigTool, dictlisttype
+from sgacode.tools.main import env, DictListType
 from shutil import copyfile
 
 
@@ -10,6 +10,81 @@ class ScheMa(dict):
 
     def typedict(self):
         return {key: _dict['type'] for key, _dict in self.items()}
+
+
+class ConfigTool(dict):
+    ConfigFolderPath = "personal/config"
+    ExampleModuleScheMa = {
+        'ConfigKey': {'type': str, 'default': ""},  # 每个配置文件的识别码，每个文件唯一
+        'ModuleKey': {'type': int, 'default': 0},  # 每个模块的识别码，每个模块唯一
+        'ConfigName': {'type': str, 'default': "默认配置"}}  # 每个配置文件的名字，不唯一
+
+    def __init__(self, schema: ScheMa):
+        super().__init__()
+        self.schema: ScheMa = schema
+
+    def getdefault(self) -> dict:
+        """
+        根据schema规范生成默认字典
+        :return: 包含默认值的字典
+        """
+        default_dict = {}
+        for field, config in self.schema.items():
+            if 'default' in config:
+                default_dict[field] = config['default']
+            elif config.get('required', True):
+                # 为必填字段但没有默认值的字段生成默认值
+                field_type = config.get('type')
+                if field_type == str:
+                    default_dict[field] = ""
+                elif field_type == int:
+                    default_dict[field] = 0
+                elif field_type == float:
+                    default_dict[field] = 0.0
+                elif field_type == bool:
+                    default_dict[field] = False
+                elif field_type == list:
+                    default_dict[field] = []
+                elif field_type == dict:
+                    default_dict[field] = {}
+        return default_dict
+
+    def init(self):
+        super().__init__(self.getdefault())
+
+    def GetSelfDict(self):
+        return dict(self)
+
+    def check(self, data: dict):
+        """
+        验证字典是否符合规范
+        :param data: 要验证的字典
+        :return: (是否有效, 错误信息)
+        """
+        errors = []
+        # 检查必填字段是否缺失
+        for field, config in self.schema.items():
+            if config.get('required', False) and field not in data:
+                errors.append(f"缺少必填字段: {field}")
+        # 检查字段类型
+        for field, value in data.items():
+            if field in self.schema:
+                expected_type = self.schema[field].get('type')
+                if expected_type and not isinstance(value, expected_type):
+                    errors.append(f"字段 '{field}' 类型错误，应为 {expected_type}，实际为 {type(value)}")
+        # 检查是否有未定义的字段
+        for field in data:
+            if field not in self.schema:
+                errors.append(f"存在未定义的字段: {field}")
+        return len(errors) == 0, errors
+
+    @classmethod
+    def save(cls, config: dict):
+        if not path.exists(cls.ConfigFolderPath):
+            makedirs(cls.ConfigFolderPath)
+        configpath = path.join(cls.ConfigFolderPath, config['ConfigKey'] + config['ConfigName'] + ".json")
+        with open(configpath, 'w', encoding='utf-8') as c:
+            json.dump(config, c, ensure_ascii=False, indent=1)
 
 
 class TimerConfig(ConfigTool):
@@ -32,11 +107,13 @@ class SGAMainConfig(ConfigTool):
         'Version': {'type': str, 'default': ''},
         'WorkDir': {'type': str, 'default': ''},
         'OcrPath': {'type': str, 'default': ''},
+        'StopKeys': {'type': str, 'default': 'ctrl+/'},
         'AutoUpdate': {'type': bool, 'default': True},
         'TimerConfig': {'type': TimerConfig, 'default': tc.getdefault()},
-        'ConfigName': {'type': str, 'default': ''},
+        'ConfigKey': {'type': int, 'default': ''},
         'ConfigLock': {'type': bool, 'default': True},
         'CurrentConfig': {'type': dict, 'default': {}},
+        'SubConfig': {'type': dict, 'default': {}},
     }
     schema = ScheMa(schema)
     MainConfigPath = "personal/mainconfig.json"
@@ -67,9 +144,9 @@ class SGAMainConfig(ConfigTool):
             if self.check(_mainconfig):
                 env.value["MainConfigTypeChange"] = True
         if not configread:
-            self.getinit()
+            self.init()
             env.value["MainConfigInit"] = True
-        self.save()
+        self.savemain()
         self.savebackup()
         # 运行路径变化时，基础文件初始化
         if env.workdir != self["WorkDir"]:
@@ -122,29 +199,23 @@ class SGAMainConfig(ConfigTool):
             copyfile(rstvpath, pss)
 
     def check(self, configdict):
-        if self.schema.typedict() != dictlisttype(configdict):
+        if self.schema.typedict() != DictListType(configdict):
             return False
-        if dictlisttype(configdict['TimerConfig']) != TimerConfig.schema.typedict():
+        if DictListType(configdict['TimerConfig']) != TimerConfig.schema.typedict():
             return False
         return True
-
-    def getinit(self):
-        return self.update(self.getdefault())
 
     def keylist(self):
         return list(self.keys())
 
-    def save(self):
+    def savemain(self):
         if not path.exists(self.PersonalPath):
             makedirs(self.PersonalPath)
         with open(self.MainConfigPath, 'w', encoding='utf-8') as c:
-            json.dump(self, c, ensure_ascii=False, indent=1)
+            json.dump(dict(self), c, ensure_ascii=False, indent=1)
 
     def savebackup(self):
         if not path.exists(self.PersonalPath):
             makedirs(self.PersonalPath)
         with open(self.MainConfigBackupPath, 'w', encoding='utf-8') as c:
-            json.dump(self, c, ensure_ascii=False, indent=1)
-
-            # 运行路径变化时，基础文件初始化
-
+            json.dump(dict(self), c, ensure_ascii=False, indent=1)
