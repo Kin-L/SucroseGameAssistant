@@ -1,7 +1,7 @@
-from os import path, makedirs
+from os import path, makedirs, listdir
 import json
-from sgacode.tools.main import env, DictListType
-from shutil import copyfile
+from typing import List, Tuple, Union
+import random
 
 
 class ScheMa(dict):
@@ -87,13 +87,92 @@ class ConfigTool(dict):
             json.dump(config, c, ensure_ascii=False, indent=1)
 
 
+class SGASubConfigGroup:
+    def __init__(self):
+        self._configlist: List[ConfigTool] = []
+        self._configsignlist: List[Tuple[str, str, int, str]] = []  # 中文名， 英文名， 模组识别码， 图标路径
+        self._filelist: List[Tuple[str, str, int]] = []  # 文件识别码， 模组识别码， 文件名
+
+    def SetConfigList(self, configlist: List[ConfigTool]):
+        self._configlist = configlist
+
+    def GetConfigList(self):
+        return self._configlist
+
+    def SetFileList(self, filelist: List[Tuple[str, str, int]]):
+        self._filelist = filelist
+
+    def GetFileList(self):
+        return self._filelist
+
+    def GetFileListT(self):
+        return tuple(zip(*self._filelist))
+
+    def SetSignListt(self, signlist: List[Tuple[str, str, int, str]]):
+        self._configsignlist = signlist
+
+    def GetSignList(self):
+        return self._configsignlist
+
+    def GetSignListT(self):
+        return tuple(zip(*self._configsignlist))
+
+    def FindSignList(self, _input: Union[str, int]) -> Union[tuple, bool]:
+        for item in self._configsignlist:
+            for i in item:
+                if _input == i:
+                    return item
+        return False
+
+    def CheckConfig(self, _config: dict) -> bool:
+        modulekey = _config.get('ModuleKey', None)
+        mklist = list(self.GetSignListT()[2])
+        num = mklist.index(modulekey) if modulekey in mklist else -1
+        if num >= 0 and self._configlist[num].check(_config):
+            return True
+        return False
+
+    def LoadSubConfig(self):
+        _, _, _, mkl = list(zip(*self._configsignlist))
+        # 读取子设置信息
+        _subconfigs = []
+        _configdirpath = "personal/config"
+        if not path.exists(_configdirpath):
+            makedirs(_configdirpath)
+        _listdir = listdir(_configdirpath)
+        if _listdir:
+            for file in _listdir:
+                name, suffix = path.splitext(file)
+                configkey, name = name[:4], name[4:]
+                if suffix == ".json":
+                    _path = path.join(_configdirpath, file)
+                    with open(_path, 'r', encoding='utf-8') as c:
+                        _config = json.load(c)
+                        modulekey: Union[int, None] = _config.get("ModuleKey", None)
+                    if modulekey is not None:
+                        allow = True
+                        for item in _subconfigs:
+                            if configkey in item and modulekey not in mkl:
+                                allow = False
+                        if allow:
+                            _subconfigs += [[configkey, modulekey, name]]
+        if not _subconfigs:
+            default = self._configlist[0].getdefault()
+            default['ConfigKey'] = f"{random.randint(0, 9999):04d}"
+            ConfigTool.save(default)
+            _subconfigs = [[default['ConfigKey'],
+                            default['ModuleKey'],
+                            default['ConfigName']]]
+        self._filelist = _subconfigs  # 储存设置文件信息，文件名和类型
+
+
 class TimerConfig(ConfigTool):
     schema = {
         'ItemNum': {'type': int,         'default': 3},
-        'Execute': {'type': [int] * 10,  'default': [0] * 10},
-        'Time':    {'type': [str] * 10,  'default': [''] * 10},
-        'Name':    {'type': [str] * 10,  'default': [''] * 10},
-        'Awake':   {'type': [bool] * 10, 'default': [False] * 10},
+        'Execute': {'type': list,  'default': [0] * 10},
+        'Time':    {'type': list,  'default': [[0, 0]] * 10},
+        'Name':    {'type': list,  'default': [''] * 10},
+        'Awake':   {'type': list, 'default': [False] * 10},
     }
     schema = ScheMa(schema)
 
@@ -109,7 +188,7 @@ class SGAMainConfig(ConfigTool):
         'OcrPath': {'type': str, 'default': ''},
         'StopKeys': {'type': str, 'default': 'ctrl+/'},
         'AutoUpdate': {'type': bool, 'default': True},
-        'TimerConfig': {'type': TimerConfig, 'default': tc.getdefault()},
+        'TimerConfig': {'type': dict, 'default': tc.getdefault()},
         'ConfigKey': {'type': int, 'default': ''},
         'ConfigLock': {'type': bool, 'default': True},
         'CurrentConfig': {'type': dict, 'default': {}},
@@ -120,90 +199,56 @@ class SGAMainConfig(ConfigTool):
     MainConfigBackupPath = "personal/mainconfigbackup.json"
     PersonalPath = "personal"
 
-    def __init__(self):
+    def __init__(self, sc: SGASubConfigGroup):
         super().__init__(self.schema)
+        self.subconfig = sc
         # 加载主配置，若损坏则从备份恢复，若备份损坏或没有则进行初始化修复或者初始化
         if not path.exists(self.PersonalPath):
             makedirs(self.PersonalPath)
-        env.value["MainConfigBackup"] = False  # 是否从备份文件读取
-        env.value["MainConfigTypeChange"] = False  # 主配置文件类型变动
-        env.value["MainConfigInit"] = False  # 是否主配置初始化
-        configread = False
+        self.configread = False
+        self.configmsg = ""
         if path.exists(self.MainConfigPath):
             with open(self.MainConfigPath, 'r', encoding='utf-8') as c:
                 _mainconfig = json.load(c)
-            if self.check(_mainconfig):
-                self.update(self.schema)
-                configread = True
-        if not configread and path.exists(self.MainConfigBackupPath):
+            if _mainconfig := self.checkmain(_mainconfig):
+                self.update(_mainconfig)
+                self.configread = True
+        if not self.configread and path.exists(self.MainConfigBackupPath):
             with open(self.MainConfigBackupPath, 'r', encoding='utf-8') as c:
                 _mainconfig = json.load(c)
-            self.update(self.schema)
-            configread = False
-            env.value["MainConfigBackup"] = True
-            if self.check(_mainconfig):
-                env.value["MainConfigTypeChange"] = True
-        if not configread:
+            if _mainconfig := self.checkmain(_mainconfig):
+                self.update(_mainconfig)
+                self.configmsg = "主配置异常，从备份恢复" + self.configmsg
+            else:
+                self.init()
+                self.update(_mainconfig)
+                self.configread = True
+                self.configmsg = "主配置异常，进行修复" + self.configmsg
+        if not self.configread:
+            self.configmsg = "主配置初始化" + self.configmsg
             self.init()
-            env.value["MainConfigInit"] = True
+            self['CurrentConfig'] = self.subconfig.GetConfigList()[0].getdefault()
+        self.configmsg.strip("\n")
         self.savemain()
         self.savebackup()
-        # 运行路径变化时，基础文件初始化
-        if env.workdir != self["WorkDir"]:
-            self["WorkDir"] = env.workdir
-            self.BasisFileInit()
 
-    @staticmethod
-    def BasisFileInit():
-        cachedir = "cache"
-        scdir = "personal/script"
-        rstpath = "resources/main/schtasks.json"
-        pstpath = "personal/schtasks.json"
-        rrspath = "resources/main/script/restart.bat"
-        prspath = "personal/script/restart.bat"
-        if not path.exists(cachedir):
-            makedirs(cachedir)
-        if not path.exists(scdir):
-            makedirs(scdir)
-        with open(rstpath, 'r', encoding='utf-8') as m:
-            xml_dir = json.load(m)
-        xml_list = xml_dir["part2"]
-        xml_list[32] = f"      <Command>{env.workdir}\\SGA.exe</Command>\n"
-        xml_list[34] = "      <WorkingDirectory>" + env.workdir + "</WorkingDirectory>\n"
-        xml_dir["part2"] = xml_list
-        with open(pstpath, 'w', encoding='utf-8') as x:
-            json.dump(xml_dir, x, ensure_ascii=False, indent=1)
-
-        f = open(rrspath, 'r', encoding='utf-8')
-        start_list = f.readlines()
-        f.close()
-        start_list[2] = "start /d \"%s\" SGA.exe\n" % env.workdir
-        f = open(prspath, 'w', encoding='utf-8')
-        f.writelines(start_list)
-        f.close()
-
-        f = open("resources/main/script/maacreate.bat", 'r', encoding='ansi')
-        bat_list = f.readlines()
-        f.close()
-        bat_list[1] = f" cd. > \"{env.workdir}/cache/maacomplete.txt\""
-        f = open("personal/script/maacreate.bat", 'w', encoding='ansi')
-        f.writelines(bat_list)
-        f.close()
-
-        rstvpath = "resources/main/script/restart.vbs"
-        prsv = "personal/script/restart.vbs"
-        pss = "personal/script/start-SGA.vbs"
-        if not path.exists(prsv):
-            copyfile(rstvpath, prsv)
-        if not path.exists(pss):
-            copyfile(rstvpath, pss)
-
-    def check(self, configdict):
-        if self.schema.typedict() != DictListType(configdict):
+    def checkmain(self, configdict):
+        if self.check(configdict) and self.tc.check(configdict['TimerConfig']):
+            pass
+        else:
             return False
-        if DictListType(configdict['TimerConfig']) != TimerConfig.schema.typedict():
-            return False
-        return True
+        subconfig = configdict['CurrentConfig']
+        if subconfig:
+            if self.subconfig.CheckConfig(subconfig):
+                return configdict
+            else:
+                self.configmsg = "\n子配置损坏,进行重置"
+                configdict['CurrentConfig'] = self.subconfig.GetConfigList()[0].getdefault()
+                return configdict
+        else:
+            configdict['CurrentConfig'] = self.subconfig.GetConfigList()[0].getdefault()
+            self.configmsg = "\n子配置初始化"
+        return configdict
 
     def keylist(self):
         return list(self.keys())

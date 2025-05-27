@@ -1,13 +1,13 @@
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtBoundSignal
-from sgacode.configclass import SGAMainConfig
-from sgacode.ui.module.moduleclass import SGAModuleGroup
+from PyQt5.QtCore import QThread
 from sgacode.tools.main import (GetTracebackInfo, SendMessageBox,
-                                logger, env, CmdRun)
+                                logger, CmdRun)
 from time import sleep, localtime
 from typing import Optional
 from requests import get
 from json import loads
 from os import path, makedirs, remove
+from sgacode.tools.sgagroup import sg
 
 
 class SGAMainThread(QObject):
@@ -17,24 +17,22 @@ class SGAMainThread(QObject):
     infoHead: 添加日期行  "%Y-%m-%d"
     infoEnd: 添加结束行 "-" * n
     """
-    info: pyqtBoundSignal = pyqtSignal(str, bool)
+    infoAdd: pyqtBoundSignal = pyqtSignal(str, bool)
     infoHead: pyqtBoundSignal = pyqtSignal()
     infoEnd: pyqtBoundSignal = pyqtSignal()
 
-    def __init__(self, smc: SGAMainConfig, smg: SGAModuleGroup):
+    def __init__(self, thread: QThread):
         super().__init__()
-        self.SMC = smc
-        self.SMG = smg
-        self.triggerflag = False
         self.count = 5
         self.currentday = localtime()[0:3]
         self.downloadurl = {}
+        self.moveToThread(thread)
 
     def run(self):
-        self.info.emit("")
+        self.infoAdd.emit("")
         errornum = 0
         try:
-            if self.SMC['AutoUpdate']:
+            if sg.mainconfig['AutoUpdate']:
                 self.updatecheck()
         except Exception as err:
             _str = GetTracebackInfo(err)
@@ -55,17 +53,18 @@ class SGAMainThread(QObject):
         exit(1)
 
     def cycle(self):
-        if self.triggerflag:  # 手动触发更新，手动启动实时任务
+        if sg.GetTriggerFlag():  # 手动触发更新，手动启动实时任务
+            sg.SetRunning(True)
             pass
         else:
             if self.count == 0:
                 self.count = 15
                 y, M, d, h, m, _, w = localtime()[0:7]
-                if self.SMC['AutoUpdate'] and ((y, M, d) != self.currentday):
+                if sg.mainconfig['AutoUpdate'] and ((y, M, d) != self.currentday):
                     self.updatecheck()
                     h, m, _, w = localtime()[3:7]
                 nowtup = ((w+2, (h, m)), (1, (h, m)))
-                tc = self.SMC['TimerConfig']
+                tc = sg.mainconfig['TimerConfig']
                 timetup = tuple(*zip(tc['Execute'], tc['Time']))
                 for n, ti in enumerate(timetup):
                     if ti in nowtup:
@@ -85,7 +84,7 @@ class SGAMainThread(QObject):
             if response.status_code == 200:
                 data = loads(response.text)
                 newversion = data["tag_name"]
-                if env.version != newversion:
+                if sg.version != newversion:
                     assets = data["assets"]
                     for d in assets:
                         if "replace" in d["name"]:
@@ -99,7 +98,7 @@ class SGAMainThread(QObject):
             from urllib.request import urlretrieve
             if not path.exists("cache"):
                 makedirs("cache")
-            temp_path = path.join(env.wordir, "cache")
+            temp_path = path.join(sg.wordir, "cache")
             load_path = path.join(temp_path, self.downloadurl["name"])
             urlretrieve(self.downloadurl["browser_download_url"], load_path)
         except Exception as e:
@@ -118,7 +117,7 @@ class SGAMainThread(QObject):
         try:
             from shutil import copytree
             extract_folder = path.splitext(load_path)[0]
-            cover_folder = env.wordir
+            cover_folder = sg.wordir
             copytree(extract_folder, cover_folder, dirs_exist_ok=True)
         except Exception as e:
             _str = GetTracebackInfo(e)
@@ -134,6 +133,4 @@ class SGAMainThread(QObject):
             logger.error(_str + "更新异常：删除临时文件异常")
         else:
             CmdRun("start "" /d \"personal/bat\" restart.vbs")
-            input("111")
             exit()
-

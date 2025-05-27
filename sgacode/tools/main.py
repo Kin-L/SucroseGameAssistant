@@ -9,7 +9,6 @@ import sys
 from traceback import format_exc
 from win32con import MB_OK, SW_RESTORE
 from sgacode.tools.logger import Logger
-from sgacode.tools.environment import Environment
 from win32gui import (FindWindow, EnumWindows, GetClassName,
                       GetWindowText, IsIconic, ShowWindow,
                       SetForegroundWindow, GetForegroundWindow)
@@ -150,6 +149,5 @@ def DictListType(_dict):
 
 
 logger = Logger().getlogger()
-env = Environment(logger)
 if __name__ == '__main__':
     pass

@@ -2,13 +2,12 @@ from sgacode.ui.control import (Button, TransPicButton,
                                 Label, Line, Check,
                                 SLineEdit, PicButton)
 from sgacode.ui.overall.timer import TimerWindow
-from PyQt5.QtWidgets import QWidget
-from sgacode.tools.main import env
-from sgacode.configclass import SGAMainConfig
+from PyQt5.QtWidgets import QWidget, QFileDialog
+from sgacode.tools.sgagroup import sg
 
 
 class OverallWindow(QWidget):
-    def __init__(self, smc: SGAMainConfig):
+    def __init__(self):
         super().__init__()
         self.lbtitle = Label(self, (0, 0, 80, 40), "全局设置", 18)
         self.timer = TimerWindow(self, (0, 60, 620, 300))
@@ -26,7 +25,7 @@ class OverallWindow(QWidget):
         self.btstartupdate = Button(self, (90, 355, 80, 30), "开始更新")
         self.btstartupdate.hide()
         self.btstartupdate.setEnabled(False)
-        self.lbversion = Label(self, (180, 350, 120, 40), f"版本号 {env.version}", 14)
+        self.lbversion = Label(self, (180, 350, 120, 40), f"版本号 {sg.info.version}", 14)
         self.btupdatehistory = Button(self, (280, 355, 80, 30), "更新日志")
         self.btrunhistory = Button(self, (370, 355, 80, 30), "运行日志")
         supportpath = r"resources/main/button/support.png"
@@ -38,10 +37,8 @@ class OverallWindow(QWidget):
         self.btgithub = TransPicButton(self, (500, 352, 30, 30), githubpath, sizetp)
         self.btgitee = TransPicButton(self, (540, 352, 30, 30), giteepath, sizetp)
         self.btbilibili = TransPicButton(self, (580, 352, 30, 30), bilibilipath, sizetp)
-        # 加载设置
-        self.leocrpath.setText(smc['OcrPath'])
-        self.lekeyboard.setText(smc['StopKeys'])
-        self.ckautoupdate.setChecked(smc["AutoUpdate"])
-        
-        
-        
+
+    def SelectOCRPath(self):
+        path = QFileDialog.getOpenFileName(self, "选择OCR组件exe文件")
+        self.leocrpath.setText(path[0])
+        sg.mainconfig['OcrPath'] = path

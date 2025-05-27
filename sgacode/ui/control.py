@@ -3,11 +3,12 @@ from qfluentwidgets import (SmoothScrollArea, StrongBodyLabel,
                             CheckBox, ComboBox, LineEdit, SwitchButton,
                             setFont, TimePicker, ToolTipFilter,
                             ToolTipPosition, ToggleToolButton)
-from PyQt5.QtWidgets import QWidget, QLabel, QFrame, QStackedWidget, QTextBrowser
-from PyQt5.QtGui import QPixmap, QPalette, QColor
-from PyQt5.QtCore import QSize
+from PyQt5.QtWidgets import (QWidget, QLabel, QFrame,
+                             QStackedWidget, QTextBrowser,
+                             QMainWindow)
+from PyQt5.QtGui import QPixmap, QPalette, QColor, QIcon, QMovie
+from PyQt5.QtCore import QSize, Qt, QThread
 from typing import Union, Tuple
-from time import strftime, localtime
 palette = QPalette()
 palette.setColor(QPalette.Background, QColor(255, 255, 255))
 int4 = Tuple[int, int, int, int]
@@ -209,5 +210,11 @@ class ModuleStackPage(QWidget):
         self.srlist.setFrameShape(QFrame.Shape(0))
         self.sksetting = Stack(self, (225, 0, 400, 515))
 
-    def LoadWindow(self, config: {}):
+    def LoadWindow(self):
+        pass
+
+    def SetWindow(self, config: dict):
+        pass
+
+    def CollectConfig(self) -> dict:
         pass

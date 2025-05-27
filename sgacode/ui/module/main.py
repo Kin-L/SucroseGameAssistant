@@ -1,22 +1,19 @@
+from os import path, remove, rename
 from sgacode.ui.control import (Button, Stack, Combobox,
                                 PicButton, StateSigh)
 from qfluentwidgets import EditableComboBox
 from PyQt5.QtWidgets import QWidget
-from sgacode.ui.module.moduleclass import SGAModuleGroup
-from sgacode.configclass import SGAMainConfig
-from sgacode.tools.main import env
-import json
+from sgacode.tools.sgagroup import sg
 
 
 # 模组设置窗口
 class ModuleWindow(QWidget):
-    def __init__(self, smc: SGAMainConfig, smg: SGAModuleGroup):
+    def __init__(self):
         super().__init__()
-        self.SMC = smc
-        self.SMG = smg
         # 配置切换列表
         self.ecbconfig = EditableComboBox(self)
         self.ecbconfig.setGeometry(40, 0, 215, 35)
+        self.ecbconfig.addItems(sg.subconfig.GetFileListT()[2])
         # 开始暂停按钮
         deletepath = r"resources/main/button/delete.png"
         unlockpath = r"resources/main/button/unlock.png"
@@ -38,52 +35,50 @@ class ModuleWindow(QWidget):
         self.skmodule = Stack(self, (0, 40, 625, 540))
         # 模块按钮
         self.boxmodule = Combobox(self, (0, 45, 170, 35))
+        self.boxmodule.addItems(sg.subconfig.GetSignListT()[0])
         # 图标标签
         defaultpath = "resources/main/SGA/default.png"
         self.picicon = PicButton(self, (525, 475, 100, 100), defaultpath, (98, 98))
         # 状态指示
         self.statesigh = StateSigh(self, (526, 440, 100, 40))
 
-    def setlock(self, lock: bool):
-        if lock:
-            self.btconfiglock.show()
-            self.btconfigunlock.hide()
-            self.btconfigdelete.hide()
-            self.btconfigadd.show()
-        else:
-            self.btconfiglock.hide()
-            self.btconfigunlock.show()
-            self.btconfigdelete.show()
-            self.btconfigadd.hide()
+    def configdelete(self):
+        num = self.boxmodule.currentIndex()
+        ol = sg.subconfig.GetFileList()
+        filepath = f"personal/config/{ol[num][0]}{ol[num][2]}.json"
+        onl = sg.subconfig.GetFileListT()[2]
+        sg.subconfig.SetFileList(ol[:num] + ol[num+1:])
+        self.boxmodule.clear()
+        self.boxmodule.addItems(onl[:num] + onl[num+1:])
+        remove(filepath)
 
-    def SubModuleInit(self):
-        # 加载设置
-        keys, modulekeys, names = list(zip(*env.value["SubConfigs"]))
-        self.ecbconfig.addItems(names)
-        self.setlock(self.SMC['ConfigLock'])
-        configkey = self.SMC['ConfigKey']
-        if configkey in keys:
-            seq = keys.index(configkey)
-        else:
-            seq = 0
-        self.ecbconfig.setCurrentIndex(seq)
-        for ins in self.SMG.GetInstances():
-            ins.Widget = ins.PageClass()
-            self.skmodule.addWidget(ins.Widget)
-        curconfig = self.SMC['CurrentConfig']
-        signlist = self.SMG.GetSignList()
-        self.boxmodule.addItems(list(zip(*signlist))[1])
-        seq = self.SMG.FindSignList(curconfig['ModuleKey'])[0]
-        self.boxmodule.setCurrentIndex(seq)
-        self.skmodule.setCurrentIndex(seq)
-        self.SMG.LoadWindow(curconfig)
-        self.picicon.setIcon(signlist[seq][4])
+    def configadd(self):
+        import random
+        from sgacode.tools.configclass import ConfigTool
+        default = sg.subconfig.GetConfigList()[0].getdefault()
+        while 1:
+            key = f"{random.randint(0, 9999):04d}"
+            if key in sg.subconfig.GetFileListT()[0]:
+                continue
+            else:
+                break
+        default['ConfigKey'] = key
+        ConfigTool.save(default)
+        self.boxmodule.addItem("默认配置")
+        fl = sg.subconfig.GetFileList()
+        nfl = fl + [default['ConfigKey'], default['ModuleKey'], default['ConfigName']]
+        sg.subconfig.SetFileList(nfl)
+        self.boxmodule.setCurrentIndex(len(fl))
 
-    def LoadSubConfig(self, num: int):
-        nk, name = env.value["SubConfigs"][num][1:]
-        _path = f"personal/config/{nk+name}.json"
-        with open(_path, 'r', encoding='utf-8') as c:
-            _config = json.load(c)
-        if self.SMG.CheckConfig(_config, True):
-            return True
-        return False
+    def configrename(self):
+        oldname = sg.subconfig.GetFileListT()[2][self.boxmodule.currentIndex()]
+        newname = self.boxmodule.currentText()
+        num = self.boxmodule.currentIndex()
+        fl = sg.subconfig.GetFileList()
+        fl[2][num] = newname
+        sg.subconfig.SetFileList(fl)
+        configkey = sg.mainconfig['ConfigKey']
+        if newname != oldname:
+            oldpath = path.join(sg.info.workdir,f"personal/config/{configkey}{oldname}.json")
+            newpath = path.join(sg.info.workdir,f"personal/config/{configkey}{newname}.json")
+            rename(oldpath, newpath)
