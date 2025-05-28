@@ -26,7 +26,7 @@ class Monitor(QThread):
                 if not _h:
                     self.indicate("未识别到窗口")
                     env.OCR.disable()
-                    self.terminate()
+                    raise SGAStop
                 else:
                     _p = p2
             else:
@@ -109,17 +109,19 @@ class Monitor(QThread):
                         wait_text("选", (73, 8, 328, 92), wait_time=(1000, 30))
                         break
                     wait(500)
+        except SGAStop:
+            sgs.set_state(None)
         except:
             self.indicate("任务执行异常:尘白禁区", log=False)
             logger.error("任务执行异常：验证战场\n%s" % format_exc())
+        self.indicate("停止临时任务")
 
     def indicate(self, msg: str, mode=2, his=True, log=True):
         self.send.emit(msg, mode, his, log)
 
     def stop(self):
         env.OCR.disable()
-        self.indicate("临时任务终止")
-        self.terminate()
+        sgs.set_state(False)
         keyboard.remove_all_hotkeys()
 
 
@@ -131,31 +133,9 @@ class TemTrigger(QThread):
         self.ui = ui
 
     def run(self):
-        while 1:
-            press("e")
-            wait(800)
-
-
-class TemKill(QThread):
-    send = pyqtSignal(str, int, bool, bool)
-
-    def __init__(self, ui):  # mode true:集成运行 false:独立运行
-        super().__init__()
-        self.ui = ui
-
-    def run(self):
-        # noinspection PyBroadException
-        import keyboard
-        keyboard.wait("ctrl+/")
-        # noinspection PyBroadException
         try:
-            if self.ui.text_monitor.trigger.isRunning():
-                self.ui.text_monitor.trigger.terminate()
-            if self.ui.text_monitor.isRunning():
-                self.ui.text_monitor.terminate()
-            self.indicate("停止临时任务")
-        except Exception:
-            self.indicate("关闭线程错误")
-
-    def indicate(self, msg: str, mode=2, his=True, log=True):
-        self.send.emit(msg, mode, his, log)
+            while 1:
+                press("e")
+                wait(800)
+        except SGAStop:
+            pass

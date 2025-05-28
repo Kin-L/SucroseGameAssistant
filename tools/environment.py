@@ -89,6 +89,7 @@ class Environment(Operate):
         self.getmonitors()
         self.logger_environment_info()
 
+
     def getmonitors(self):
         for i, monitor in enumerate(get_monitors(), start=1):
             self.monitors += [[i, (monitor.width, monitor.height),

@@ -7,6 +7,7 @@ from PyQt5.QtGui import QPixmap
 from traceback import format_exc
 from webbrowser import open as weopen
 from subprocess import run as cmd_run
+from PyQt5.QtCore import Qt
 import keyboard
 
 
@@ -29,9 +30,10 @@ class MainTop(MainUp):
     def stop(self):
         # noinspection PyBroadException
         try:
+            keyboard.remove_all_hotkeys()
             if self.sga_run.isRunning():
-                keyboard.remove_all_hotkeys()
-                self.sga_run.terminate()
+                sgs.set_state(False)
+                self.sga_run.wait()
                 self.state["wait_time"] = 5
                 foreground(self.state["hwnd"])
                 pixmap = QPixmap(r"assets/main_window/ui/ico/2.png")
@@ -112,7 +114,7 @@ class MainTop(MainUp):
             self.label_status.setPixmap(pixmap)
             self.button_pause.show()
             self.button_start.hide()
-
+            sgs.set_state(True)
             keyboard.add_hotkey("ctrl+/", self.stop)
             self.sga_run.start()
         except Exception:
@@ -123,9 +125,10 @@ class MainTop(MainUp):
         # noinspection PyBroadException
         try:
             keyboard.remove_all_hotkeys()
+            sgs.set_state(False)
+            self.sga_run.wait()
             self.state["wait_time"] = 5
             foreground(self.state["hwnd"])
-            self.sga_run.terminate()
             pixmap = QPixmap(r"assets/main_window/ui/ico/2.png")
             self.indicate("手动终止", 3)
             env.OCR.disable()

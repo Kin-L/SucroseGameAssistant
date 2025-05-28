@@ -62,6 +62,8 @@ class Taskzzz(Task):
             self.indicate("任务执行异常:绝区零助手", log=False)
             logger.error("任务执行异常:绝区零助手\n%s" % format_exc())
             _k = True
+        except SGAStop:
+            raise SGAStop
         self.indicate("完成任务:绝区零助手")
         return _k
     

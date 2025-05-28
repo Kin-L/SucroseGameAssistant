@@ -184,6 +184,8 @@ class TaskTrigger(Task):
         except Exception:
             self.indicate("任务执行异常:连点器", log=False)
             logger.error("任务执行异常:连点器\n%s" % format_exc())
+        except SGAStop:
+            raise SGAStop
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.trigger.isRunning():

@@ -26,10 +26,12 @@ click_up_map = {"LCLICK": 4, "RCLICK": 16, "MCLICK": 64}
 
 class KeyMouse(System):
     def move(self, xy):
+        sgs.check_run()
         x, y = xy
         SetCursorPos(self.axis_change(x, y))
 
     def click(self, xy):
+        sgs.check_run()
         x, y = xy
         if (x, y) != (0, 0):
             x, y = self.axis_change(x, y)
@@ -41,6 +43,7 @@ class KeyMouse(System):
         sleep(0.01)
 
     def drag(self, pos, mov):
+        sgs.check_run()
         xp, yp = self.axis_change(pos[0], pos[1])
         xv, yv = self.axis_zoom(mov[0], mov[1])
         SetCursorPos((xp, yp))
@@ -48,6 +51,7 @@ class KeyMouse(System):
         dragRel(xv, yv, duration=1, button='left')
 
     def roll(self, xy, num):
+        sgs.check_run()
         x, y = xy
         x, y = self.axis_change(x, y)
         SetCursorPos((x, y))
@@ -62,6 +66,7 @@ class KeyMouse(System):
             self.wait(0.01)
 
     def roll_h(self, xy, num):
+        sgs.check_run()
         x, y = xy
         x, y = self.axis_change(x, y)
         SetCursorPos((x, y))
@@ -77,38 +82,45 @@ class KeyMouse(System):
 
     @staticmethod
     def press(key):
+        sgs.check_run()
         key_num = key_map[key.upper()]
         keybd_event(key_num, 0, 0, 0)
         keybd_event(key_num, 0, KEYEVENTF_KEYUP, 0)
 
     @staticmethod
     def keydown(key):
+        sgs.check_run()
         key_num = key_map[key.upper()]
         keybd_event(key_num, 0, 0, 0)
 
     @staticmethod
     def keyup(key):
+        sgs.check_run()
         key_num = key_map[key.upper()]
         keybd_event(key_num, 0, KEYEVENTF_KEYUP, 0)
 
     @staticmethod
     def clickdown(click):
+        sgs.check_run()
         _num = click_down_map[click.upper()]
         mouse_event(_num, 0, 0)
         sleep(0.01)
 
     @staticmethod
     def clickup(click):
+        sgs.check_run()
         _num = click_up_map[click.upper()]
         mouse_event(_num, 0, 0)
         sleep(0.01)
 
     @staticmethod
     def moveto(xy):
+        sgs.check_run()
         SetCursorPos(xy)
 
     @staticmethod
     def key_add(key1, key2):
+        sgs.check_run()
         key_num1 = key_map[key1.upper()]
         key_num2 = key_map[key2.upper()]
         keybd_event(key_num1, 0, 0, 0)  # ctrl按下
@@ -117,6 +129,7 @@ class KeyMouse(System):
         keybd_event(key_num1, 0, 0, 0)  # ctrl抬起
 
     def add_press(self, _str):
+        sgs.check_run()
         keys = _str.split("+")
         if len(keys) == 1:
             self.press(_str)
@@ -129,7 +142,13 @@ class KeyMouse(System):
 
     @staticmethod
     def wait(t):
-        sleep(t / 1000)
+        a, b = divmod(t / 1000, 1)
+        lis = [1]*int(a)
+        if b:
+            lis += [b]
+        for i in lis:
+            sgs.check_run()
+            sleep(i)
 
 
 if __name__ == '__main__':

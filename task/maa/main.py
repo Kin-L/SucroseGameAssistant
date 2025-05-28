@@ -105,6 +105,8 @@ class TaskMAA(Task):
             self.indicate("任务执行异常:MAA", log=False)
             logger.error("任务执行异常:MAA\n%s" % format_exc())
             _k = True
+        except SGAStop:
+            raise SGAStop
         self.indicate("完成任务:MAA")
         return _k
 

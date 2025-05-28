@@ -89,6 +89,8 @@ class TaskGenshin(Team, Dispatch, Transformer,CatchFly, Daily, Rambler,Mail, Cut
             _path = errorsc_save(sc)
             logger.error(f"截图导出: {_path}")
             return True
+        except SGAStop:
+            raise SGAStop
         self.indicate("完成任务:原神")
         return False
 
@@ -150,6 +152,8 @@ class TaskGenshin(Team, Dispatch, Transformer,CatchFly, Daily, Rambler,Mail, Cut
             _path = errorsc_save(sc)
             logger.error(f"截图导出: {_path}")
             _k = True
+        except SGAStop:
+            raise SGAStop
         env.OCR.disable()
         if self.task["关闭软件"]:
             self.indicate("尝试关闭游戏")

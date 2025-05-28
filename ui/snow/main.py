@@ -7,6 +7,7 @@ from ui.element.control import *
 from tools.environment import env, logger
 from tools.system import check_path
 from json import load
+from PyQt5.QtWidgets import QFileDialog
 
 
 # 尘白禁区模组设置窗口
@@ -31,7 +32,7 @@ class Snow:
         self.list.set_daily.clicked.connect(lambda: self.set.stack.setCurrentIndex(2))
         self.list.set_mail.clicked.connect(lambda: self.set.stack.setCurrentIndex(3))
         self.list.set_roll.clicked.connect(lambda: self.set.stack.setCurrentIndex(4))
-
+        self.set.button_select.clicked.connect(self.select_cbjq_path)
         self.set.button_wiki.clicked.connect(self.open_wiki)
         # self.set.button_arrange.clicked.connect(self.roll_arrange)
         self.set.button_open_roll.clicked.connect(self.open_roll_directory)
@@ -53,6 +54,11 @@ class Snow:
                     self.list.button_switch.setChecked(True)
                 else:
                     self.list.button_switch.setChecked(False)
+
+    def select_cbjq_path(self):
+        # 选择文件夹
+        path = QFileDialog.getOpenFileName(self.widget_snow, "选择尘白禁区启动器")
+        self.set.line_start.setText(path[0])
 
     def find_local(self):
         try:
@@ -144,7 +150,7 @@ class Snow:
         self.main.start(_task)
 
     def start_tem(self):
-        from task.snow.temtask import Monitor, TemKill
+        from task.snow.temtask import Monitor
         _num = self.list.combo_tem.currentIndex()
         self.text_monitor = Monitor(self, _num)
         # self.temkill = TemKill(self)

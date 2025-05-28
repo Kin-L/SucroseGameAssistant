@@ -3,7 +3,7 @@ import subprocess
 from datetime import datetime
 from ..default_task import Task
 from traceback import format_exc
-from tools.environment import wait
+from tools.environment import wait, SGAStop
 from tools.software import get_pid, close
 
 class TaskKaa(Task):
@@ -34,6 +34,8 @@ class TaskKaa(Task):
         except Exception:
             self.indicate("任务执行异常:琴音小助手", log=False)
             self.indicate("任务执行异常:琴音小助手\n%s" % format_exc(), log=True)
+        except SGAStop:
+            raise SGAStop
         return True
 
     def kaa_wait(self, kaa_path, config_path, log_path):

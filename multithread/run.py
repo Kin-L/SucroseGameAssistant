@@ -23,6 +23,7 @@ class Kill(QThread):
         try:
             import keyboard
             keyboard.wait("ctrl+/")
+            sgs.set_state(False)
             self.ui.state["wait_time"] = 5
             foreground(self.ui.state["hwnd"])
             # noinspection PyBroadException
@@ -30,7 +31,8 @@ class Kill(QThread):
                 self.ui.sga_run.trigger.kill()
             except Exception:
                 pass
-            self.ui.sga_run.terminate()
+            self.ui.sga_run.wait()
+            sgs.set_state(None)
 
             pixmap = QPixmap(r"assets/main_window/ui/ico/2.png")
             self.indicate("手动终止", 3)
@@ -54,6 +56,7 @@ class SGARun(QThread, TaskRun):
     def __init__(self, ui):  # mode true:集成运行 false:独立运行
         super(SGARun, self).__init__()
         self.ui = ui
+
         # self.trigger = None
 
     def run(self):
@@ -80,6 +83,8 @@ class SGARun(QThread, TaskRun):
                 logger.error(f"界面截图导出: {new_path}")
                 _k = True
                 logger.error("执行流程异常:\n%s" % format_exc())
+            except SGAStop:
+                pass
         # noinspection PyBroadException
         try:
             self.kill(_k)
@@ -147,6 +152,7 @@ class SGARun(QThread, TaskRun):
     def kill(self, mode):
         self.ui.state["wait_time"] = 5
         foreground(self.ui.state["hwnd"])
+        sgs.set_state(None)
         if mode:
             _str0 = "异常"
             pixmap = QPixmap(r"assets/main_window/ui/ico/3.png")

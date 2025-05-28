@@ -12,7 +12,27 @@ from win32con import MB_OK
 from time import sleep
 from win32gui import (IsIconic, ShowWindow, GetForegroundWindow, SetForegroundWindow)
 from win32con import SW_RESTORE
+# 全局变量 SGA_RUN
+SGA_RUN = None
 
+
+class SGAStop(BaseException):
+    def __str__(self):
+        return "SGA stop"
+
+
+class SGAState:
+    SGA_RUN = None
+
+    def check_run(self):
+        if self.SGA_RUN is False:
+            raise SGAStop
+
+    def set_state(self, state):
+        self.SGA_RUN = state
+
+    def get_state(self):
+        return self.SGA_RUN
 
 # windows提示
 def notify(title, massage):
@@ -189,6 +209,7 @@ class System:
         return x, y
 
 
+sgs = SGAState()
 if __name__ == '__main__':
     pass
     # frame, zoom, Ocr, logger = None, None, None, None

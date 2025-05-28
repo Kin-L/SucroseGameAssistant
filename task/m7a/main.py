@@ -39,6 +39,8 @@ class TaskM7A(Task):
             self.indicate("任务执行异常:崩坏：星穹铁道助手", log=False)
             logger.error("任务执行异常:崩坏：星穹铁道助手\n%s" % format_exc())
             _k = True
+        except SGAStop:
+            raise SGAStop
         self.indicate("完成任务:崩坏：星穹铁道助手")
         return _k
     

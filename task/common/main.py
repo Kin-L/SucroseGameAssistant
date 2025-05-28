@@ -153,6 +153,8 @@ class TaskCommon(Task):
             self.indicate("任务执行异常:通用执行", log=False)
             logger.error("任务执行异常:通用执行\n%s" % format_exc())
             _k = True
+        except SGAStop:
+            raise SGAStop
         env.mode(0)
         env.OCR.disable()
         if self.task["关闭软件"]:

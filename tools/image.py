@@ -2,7 +2,6 @@ from cv2 import (imread, resize,
                  matchTemplate, minMaxLoc, TM_CCOEFF_NORMED,
                  cvtColor, COLOR_BGR2HSV, COLOR_RGB2BGR)
 from colorsys import rgb_to_hsv
-from win32api import SetCursorPos
 from PIL import ImageGrab
 from os import remove
 from os.path import isfile
@@ -36,8 +35,7 @@ def match_zone(aft, bef):
 
 class Image(System):
     def screenshot(self, zone: list = "WINDOW"):
-        SetCursorPos((1, 1))
-        sleep(0.01)
+        sgs.check_run()
         if zone == "WINDOW":
             shot = ImageGrab.grab(self.frame)
         elif isinstance(zone, tuple):
@@ -55,8 +53,7 @@ class Image(System):
         return path
 
     def scshot(self, zone="WINDOW"):
-        SetCursorPos((1, 1))
-        sleep(0.01)
+        sgs.check_run()
         if zone == "WINDOW":
             shot = ImageGrab.grab(self.frame)
         elif isinstance(zone, tuple):
