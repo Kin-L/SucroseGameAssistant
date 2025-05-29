@@ -91,7 +91,7 @@ class Fight(Task):
                     wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
                     wait(300)
                     pos = find_text("材料")
-                    cpos = (89, 575)  # 渊沉曙色
+                    cpos = (85, 379)  # 罅隙轨迹
                     if pos:
                         click_change(pos, (1732, 920, 1829, 1013))
                     else:
@@ -101,7 +101,7 @@ class Fight(Task):
                     wait_pic(r"assets\snow\picture\home.png", (1633, 6, 1718, 91))
                     wait(500)
                     pos = find_text("深渊")
-                    cpos = (1500, 357)  # 渊沉曙色
+                    cpos = (1062, 573)  # 罅隙轨迹
                     if pos:
                         click_change(pos, (1387, 945, 1599, 1075))
 
