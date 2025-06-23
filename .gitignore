@@ -1,5 +1,6 @@
-/personal/
-/.idea/
+personal
+.idea
 .gitignore
-/test/
-/ocr_json/
+test
+ocr-json
+cache
