@@ -16,3 +16,6 @@ opencv-python
 numpy
 pywin32
 screeninfo
+pydantic
+pyautogui
+pygetwindow
