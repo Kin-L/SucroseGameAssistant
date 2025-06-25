@@ -10,7 +10,8 @@ class MixPage(ModuleStackPage):
         super().__init__()
         self.wdlist: Optional[MixList] = None
         self.page01: Optional[MixPage00Set] = None
-        self.picbt: Optional[Picture] = None
+        pic = 'resources/main/SGA/title.png'
+        self.picbt = Picture(self, (175, 5, 35, 35), pic)
 
     def LoadWidget(self):
         self.wdlist = MixList()
@@ -18,8 +19,8 @@ class MixPage(ModuleStackPage):
         self.page01 = MixPage00Set()
         self.sksetting.addWidget(self.page01)
         Line(self, (215, 5, 3, 530), False)
-        pic = 'resources/main/SGA/title.png'
-        self.picbt = Picture(self, (175, 5, 35, 35), pic)
+
+        # self.picbt =
 
     def SetWidget(self, config: dict):
         seql = [sc.FindItem(k)[-1]+1 if k else 0 for k in config['ConfigKeyList']]

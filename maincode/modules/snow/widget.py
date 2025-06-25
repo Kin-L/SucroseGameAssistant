@@ -20,7 +20,7 @@ class SnowPage(ModuleStackPage):
         self.page03: Optional[SnowPage03Set] = None
         self.page04: Optional[SnowPage04Set] = None
         self.picbt: Optional[Picture] = None
-        self.pbset00 = None
+        self.pbset00 = SetButton(self, (180, 10, 25, 25), (25, 25))
 
     def LoadWidget(self):
         self.wdlist = SnowList()
@@ -36,7 +36,7 @@ class SnowPage(ModuleStackPage):
         self.sksetting.addWidget(self.page03)
         self.sksetting.addWidget(self.page04)
         Line(self, (215, 5, 3, 530), False)
-        self.pbset00 = SetButton(self, (180, 10, 25, 25), (25, 25))
+        # self.pbset00 =
         self.pbset00.clicked.connect(lambda: self.sksetting.setCurrentIndex(0))
         self.wdlist.pbset01.clicked.connect(lambda: self.sksetting.setCurrentIndex(1))
         self.wdlist.pbset02.clicked.connect(lambda: self.sksetting.setCurrentIndex(2))
@@ -155,10 +155,10 @@ class SnowPage(ModuleStackPage):
                               self.page04.ckroll6.isChecked())
         _dict["GachaOpenSheet"] = self.page04.ckopensheet.isChecked()
 
-        _dict["Mute"] = self.page00.taskpanel.ckkillsga.isChecked()
-        _dict["SoftClose"] = self.page00.taskpanel.ckmute.isChecked()
-        _dict["Finished"] = self.page00.taskpanel.ckkillprog.isChecked()
-        _dict["SGAClose"] = self.page00.taskpanel.cbafter.currentIndex()
+        _dict["Mute"] = self.page00.taskpanel.ckmute.isChecked()
+        _dict["SoftClose"] = self.page00.taskpanel.ckkillprog.isChecked()
+        _dict["Finished"] = self.page00.taskpanel.cbafter.currentIndex()
+        _dict["SGAClose"] = self.page00.taskpanel.ckkillsga.isChecked()
         return _dict
 
 

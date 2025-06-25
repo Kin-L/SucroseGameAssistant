@@ -5,6 +5,16 @@ from PyQt5.QtCore import pyqtSignal, pyqtBoundSignal, QObject
 from typing import Optional, Callable
 from .update import update
 from maincode.main.info import info
+from time import sleep
+import keyboard
+
+
+def waitpause(num):
+    for _ in range(num):
+        if sg.info.StopFlag:
+            break
+        else:
+            sleep(1)
 
 
 class SGAMainThread(QObject):
@@ -32,6 +42,8 @@ class SGAMainThread(QObject):
             self.__class__.start = update
             self.start()
         elif self.tasktype in ["current", "timed"]:
+            if not self.para["current_mute"]:
+                keyboard.send('volume mute')
             num = sg.modules.FindItem(self.para["ModuleKey"])[-1]
             _func = sg.modules.Tasks[num]
             self.__class__.start = _func
@@ -48,6 +60,16 @@ class SGAMainThread(QObject):
                 self.send(f"任务执行异常")
                 logger.error(_str+f"任务执行异常")
             self.ctler.OCR.disable()
+            if self.para["Finished"] == 1:
+                self.send("任务完成,20s后熄屏")
+                self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
+                waitpause(20)
+            elif self.para["Finished"] == 2:
+                self.send("  任务完成,60s后睡眠")
+                self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
+                waitpause(60)
+            else:
+                self.infoAdd("任务结束")
         self.finish.emit()
 
     def send(self, msg: [str, int], addtime: bool = True):
@@ -55,3 +77,4 @@ class SGAMainThread(QObject):
             self.infoAdd.emit(msg, addtime)
         else:
             self.infoEnd.emit() if msg else self.infoHead.emit()
+

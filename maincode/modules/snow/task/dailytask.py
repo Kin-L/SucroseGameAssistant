@@ -143,9 +143,9 @@ def snowDailyTask(self):
             self.ctler.clickTo(pos, "resources/snow/picture/home.png", (1504, 0, 1771, 117))
             self.send("领取周常奖励")
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
-    if self.para["ProofReceive"] and self.ctler.findcolor("FFFF8B", (357, 540, 405, 577), tolerance=10):
-        print(222)
+    if self.para["ProofReceive"]:
         self.ctler.clickChange((311, 580), zone=(283, 560, 366, 599))
+        flag = False
         for _p in [(1272, 1025), (1512, 1027), (1052, 1029)]:
             self.ctler.click(_p)
             self.ctler.wait(0.5)
@@ -154,5 +154,8 @@ def snowDailyTask(self):
                 self.ctler.clickChange(pos, zone=(76, 1000, 220, 1045))
                 self.send("领取凭证奖励")
                 self.ctler.clickChange(pos, zone=(809, 40, 1113, 147))
+                flag = True
+        if not flag:
+            self.send("凭证奖励暂无可领取")
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
     self.send("检查完成：日常任务")
