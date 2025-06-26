@@ -4,3 +4,6 @@ personal
 test
 ocr-json
 cache
+dist
+build
+example

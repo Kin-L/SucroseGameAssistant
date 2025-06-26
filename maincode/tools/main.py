@@ -91,7 +91,8 @@ def CheckAdmin():
                "可参考视频给予默认管理员权限启动：\n"\
                "https://www.bilibili.com/video/BV18kKAeYE2t"
         SendMessageBox(_str)
-        exit(1)
+        return False
+    return True
 
 
 def foreground(self):

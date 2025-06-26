@@ -9,7 +9,8 @@ import keyboard
 
 def SGALoad(useui: bool = True):
     try:
-        CheckAdmin()
+        if not CheckAdmin():
+            return
         window = GetWindow("砂糖代理")
         if window is not None:
             window.foreground()
