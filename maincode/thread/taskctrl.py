@@ -2,7 +2,7 @@ import keyboard
 from time import localtime, sleep
 from maincode.main.maingroup import sg
 from maincode.mainwindows.main import SGAMain6
-from maincode.tools.main import CmdRun, GetMute, ScreenOff
+from maincode.tools.main import CmdRun, GetMute, ScreenOff, GetTracebackInfo, logger
 import sys
 
 
@@ -29,10 +29,10 @@ class SGAMain7(SGAMain6):
             self.SaveConfig()
             para = dict(sg.mainconfig.CurrentConfig)
             para["OtherConfig"] = sg.mainconfig.OtherConfig
+            para["current_mute"] = GetMute()
             self.NewThread(tasktype, para)
-            self.thread.started.connect(self.taskthread.run)
             self.thread.finished.connect(lambda: self.TaskStop(tasktype, para))
-            self.taskthread.finish.connect(self.NormalFinish)
+            # self.taskthread.finish.connect(self.NormalFinish)
             self.thread.start()
             self.infoAdd("开始执行实时任务")
             self.module.btpause.setEnabled(True)
@@ -43,10 +43,9 @@ class SGAMain7(SGAMain6):
             self.infoHead()
             self.infoAdd("准备开始...")
             para["OtherConfig"] = sg.mainconfig.OtherConfig
+            para["current_mute"] = GetMute()
             self.NewThread(tasktype, para)
-            self.thread.started.connect(self.taskthread.run)
             self.thread.finished.connect(lambda: self.TaskStop(tasktype, para))
-            self.taskthread.finish.connect(self.NormalFinish)
             self.thread.start()
             name = para["ConfigName"]
             self.infoAdd(f"开始执行定时任务：{name}")
@@ -58,12 +57,9 @@ class SGAMain7(SGAMain6):
             self.infoAdd("准备开始...")
             para["OtherConfig"] = sg.mainconfig.OtherConfig
             self.NewThread(tasktype, para)
-            self.thread.started.connect(self.taskthread.run)
             self.thread.finished.connect(lambda: self.TaskStop(tasktype, para))
-            self.taskthread.finish.connect(self.NormalFinish)
             self.thread.start()
             self.infoAdd("开始更新")
-        para["current_mute"] = GetMute()
 
     def TaskStop(self, tasktype: str, para=None):
         self.window.foreground()

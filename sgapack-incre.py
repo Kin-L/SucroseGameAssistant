@@ -50,7 +50,7 @@ for src, drc in lis:
             lis2.append([src, drc])
 version = "3.X"
 _str = f"/SGAv3-{version}-replace/"
-if path.exists(f"release/SGAv3-{version}-replace"):
+if not path.exists(f"release/SGAv3-{version}-replace"):
     makedirs(f"release/SGAv3-{version}-replace")
 for src, drc in lis2:
     shutil.copyfile(src, drc.replace("/SGAv3/", _str))

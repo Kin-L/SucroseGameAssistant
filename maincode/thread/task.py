@@ -1,7 +1,7 @@
 from maincode.tools.main import GetTracebackInfo, logger
 from maincode.tools.myclass import SGAStop
 from maincode.main.maingroup import sg
-from PyQt5.QtCore import pyqtSignal, pyqtBoundSignal, QObject
+from PyQt5.QtCore import pyqtSignal, pyqtBoundSignal, QThread
 from typing import Optional, Callable
 from .update import update
 from maincode.main.info import info
@@ -17,9 +17,9 @@ def waitpause(num):
             sleep(1)
 
 
-class SGAMainThread(QObject):
+class SGAMainThread(QThread):
     # update: Callable
-    start: Optional[Callable] = None
+    # start: Optional[Callable] = None
     """
     info: 发送信息到指示栏（str)；
           默认在信息前添加时间前缀（默认值True），可使用False取消时间前缀 "%H:%M:%S "
@@ -39,22 +39,22 @@ class SGAMainThread(QObject):
 
     def run(self):
         if self.tasktype == "update":
-            self.__class__.start = update
-            self.start()
+            self.__class__.taskstart = update
+            self.taskstart()
         elif self.tasktype in ["current", "timed"]:
             if not self.para["current_mute"]:
                 keyboard.send('volume mute')
             num = sg.modules.FindItem(self.para["ModuleKey"])[-1]
             _func = sg.modules.Tasks[num]
-            self.__class__.start = _func
+            self.__class__.taskstart = _func
             from maincode.tools.controller.main import ctler
             self.ctler = ctler
             try:
-                self.start()
+                self.taskstart()
                 info.TaskError = False
             except SGAStop:
                 pass
-            except RuntimeError as e:
+            except Exception as e:
                 info.TaskError = True
                 _str = GetTracebackInfo(e)
                 self.send(f"任务执行异常")
@@ -69,7 +69,7 @@ class SGAMainThread(QObject):
                 self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
                 waitpause(60)
             else:
-                self.infoAdd("任务结束")
+                self.send("任务结束")
         self.finish.emit()
 
     def send(self, msg: [str, int], addtime: bool = True):
