@@ -14,7 +14,7 @@ class SGAInfo:
         self.Monitors: list = []  # 电脑显示器信息
         self.Platform: str = ""  # 系统平台信息
         self.StartTime = localtime()  # 记录SGA本次启动时间
-        self.CurrentDate = localtime()[:3]
+        self.CurrentDate = None
         self.Workdir = getcwd()  # 记录并检查SGA本次工作目录
         self.CpuFeature = CPUFeature["AVX2"]
         self.OcrPath = ""
