@@ -136,7 +136,7 @@ def LogSnow(self, second: int):
         _list = self.ctler.ocr(template=sc, mode=1)
         print("_list:", _list)
         if not started:
-            if self.para["AccountChoose"] and path.exists("resources/snow/license.txt"):
+            if self.para["AccountChoose"] and self.para["OtherConfig"]["License"]:
                 if self.ctler.StrFind("欢迎", _list):
                     self.ctler.tapChange((1102, 72), zone=(984, 16, 1089, 66))
                     self.ctler.tapChange((1158, 492), zone=(738, 533, 910, 586))

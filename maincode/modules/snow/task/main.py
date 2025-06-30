@@ -250,7 +250,7 @@ def LogSnow(self, second: int):
             if self.ctler.StrFind("开始游戏", _list):
                 server = 3
                 self.ctler.wait(0.3)
-                if self.para["AccountChoose"] and path.exists("resources/snow/license.txt"):
+                if self.para["AccountChoose"] and self.para["OtherConfig"]["License"]:
                     self.ctler.clickChange((1866, 219), zone=(984, 16, 1089, 66))
                     self.ctler.clickChange(target="切换", zone=(984, 16, 1089, 66))
                     self.ctler.wait(0.5)

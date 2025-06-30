@@ -13,19 +13,22 @@ class KeyMouse(CtrlBase, ADBController):
         :return:
         """
         self.checkrun()
-        pos = (None, None) if pos is None else self.convert(pos)
-        pyautogui.click(*pos, button=key)
+        self.moveto(pos)
+        pyautogui.click(None, None, button=key)
 
     def clickdown(self, pos=None, key="left"):
         self.checkrun()
-        pyautogui.mouseDown(*(None, None) if pos is None else self.convert(pos), button=key)
+        self.moveto(pos)
+        pyautogui.mouseDown(None, None, button=key)
 
     def clickup(self, pos=None, key="left"):
         self.checkrun()
-        pyautogui.mouseUp(*(None, None) if pos is None else self.convert(pos), button=key)
+        self.moveto(pos)
+        pyautogui.mouseUp(None, None, button=key)
     
     def moveto(self, pos):
-        self.checkrun(), pyautogui.moveTo(*self.convert(pos))
+        self.checkrun(), pyautogui.moveTo(*(None, None) if pos is None else self.convert(pos))
+        sleep(0.1)
     
     def move(self, pos):
         self.checkrun(), pyautogui.moveRel(*self.convertVector(pos))
@@ -33,7 +36,6 @@ class KeyMouse(CtrlBase, ADBController):
     def roll(self, pos, num, hori=False):
         self.checkrun()
         self.moveto(pos)
-        self.wait(0.2)
         if hori:
             pyautogui.hscroll(num)
         else:

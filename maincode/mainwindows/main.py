@@ -28,24 +28,28 @@ class SGAMain6(SGAMain5):
 
     def ManualSaveConfig(self):
         self.infoHead()
-        self.SaveConfig()
-        _dict = {'ConfigKey': sg.mainconfig.ConfigKey,
-                 'ConfigName': self.module.ecbconfig.text()}
-        _save = dict(sg.mainconfig.CurrentConfig)
-        _save.update(_dict)
-        sg.subconfig.Save(_save)
-        num = sg.subconfig.FindItem(_save['ConfigKey'])[-1]
-        sg.subconfig.filelist[num][2] = _save['ModuleKey']
-        self.infoAdd("保存成功", False)
-        try:
-            if ApplyTimer():
-                self.infoAdd("应用SGA定时自启/唤醒", False)
-            else:
-                self.infoAdd("取消SGA自启/唤醒行为", False)
-        except Exception as e:
-            _str = GetTracebackInfo(e) + "操作异常：更改SGA定时自启/唤醒"
-            logger.error(_str)
-            self.infoAdd("操作异常：更改SGA定时自启/唤醒", False)
+
+        # self.SaveConfig()
+        if self.mainwidget.sksetting.currentIndex():
+            _dict = {'ConfigKey': sg.mainconfig.ConfigKey,
+                     'ConfigName': self.module.ecbconfig.text()}
+            _save = dict(sg.mainconfig.CurrentConfig)
+            _save.update(_dict)
+            sg.subconfig.Save(_save)
+            num = sg.subconfig.FindItem(_save['ConfigKey'])[-1]
+            sg.subconfig.filelist[num][2] = _save['ModuleKey']
+            self.infoAdd("保存成功", False)
+        else:
+            try:
+                sg.mainconfig.TimerConfig = TimerConfigClass(**self.CollectConfig())
+                if ApplyTimer():
+                    self.infoAdd("应用SGA定时自启/唤醒", False)
+                else:
+                    self.infoAdd("取消SGA自启/唤醒行为", False)
+            except Exception as e:
+                _str = GetTracebackInfo(e) + "操作异常：更改SGA定时自启/唤醒"
+                logger.error(_str)
+                self.infoAdd("操作异常：更改SGA定时自启/唤醒", False)
         self.infoEnd()
 
     def closeEvent(self, event):

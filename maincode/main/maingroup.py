@@ -35,6 +35,7 @@ class SGAConfigGroup(QObject):
         if not self.subconfig.filelist:
             self.NewSubFile()
         self.info = info
+        self.info.OtherConfig = self.mainconfig.OtherConfig
         self.mainconfig.Version = self.info.Version
         self.SaveMain()
         self.SaveBackUp()

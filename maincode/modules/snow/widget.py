@@ -196,7 +196,7 @@ class SnowPage00Set(SetStackPage):
         self.ckupdate = Check(self, (205, 215, 140, 22), "自动更新")
         self.lbaccount = Label(self, (0, 255, 120, 27), "账号选择：")
         self.leaccount = SLineEdit(self, (80, 255, 200, 33))
-        if not path.exists("resources/snow/license.txt"):
+        if not info.OtherConfig["License"]:
             self.lbaccount.hide()
             self.leaccount.hide()
         Line(self, (0, 292, 395, 3))

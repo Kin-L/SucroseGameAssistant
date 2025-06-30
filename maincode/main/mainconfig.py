@@ -19,7 +19,7 @@ class MainConfig(BaseModel):
     ConfigKey: str = ""
     ConfigLock: bool = True
     CurrentConfig: dict = {}
-    OtherConfig: dict = {}
+    OtherConfig: dict = {"License": False}
 
 
 def checkmain(configdict: dict):
