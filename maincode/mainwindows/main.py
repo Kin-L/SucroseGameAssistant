@@ -11,14 +11,6 @@ class SGAMain6(SGAMain5):
 
     def SaveConfig(self):
         sg.mainconfig.TimerConfig = TimerConfigClass(**self.CollectConfig())
-        num = self.module.boxmodule.currentIndex()
-        mk = sg.modules.GetInfos()[num][2]
-        _dict = {'ModuleKey': mk, 'ConfigKey': "", 'ConfigName': "默认配置"}
-        _subconfig = sg.modules.GetWidgets()[num].CollectConfig()
-        _subconfig.update(_dict)
-        otherconfig = _subconfig.pop("OtherConfig", {})
-        sg.mainconfig.OtherConfig.update(otherconfig)
-        sg.mainconfig.CurrentConfig = _subconfig
 
         smc = sg.mainconfig.model_dump()
         if smc != sg.currentmainconfig:
@@ -31,6 +23,14 @@ class SGAMain6(SGAMain5):
 
         # self.SaveConfig()
         if self.mainwidget.sksetting.currentIndex():
+            num = self.module.boxmodule.currentIndex()
+            mk = sg.modules.GetInfos()[num][2]
+            _dict = {'ModuleKey': mk, 'ConfigKey': "", 'ConfigName': "默认配置"}
+            _subconfig = sg.modules.GetWidgets()[num].CollectConfig()
+            _subconfig.update(_dict)
+            otherconfig = _subconfig.pop("OtherConfig", {})
+            sg.mainconfig.OtherConfig.update(otherconfig)
+            sg.mainconfig.CurrentConfig = _subconfig
             _dict = {'ConfigKey': sg.mainconfig.ConfigKey,
                      'ConfigName': self.module.ecbconfig.text()}
             _save = dict(sg.mainconfig.CurrentConfig)
@@ -53,6 +53,14 @@ class SGAMain6(SGAMain5):
         self.infoEnd()
 
     def closeEvent(self, event):
+        num = self.module.boxmodule.currentIndex()
+        mk = sg.modules.GetInfos()[num][2]
+        _dict = {'ModuleKey': mk, 'ConfigKey': "", 'ConfigName': "默认配置"}
+        _subconfig = sg.modules.GetWidgets()[num].CollectConfig()
+        _subconfig.update(_dict)
+        otherconfig = _subconfig.pop("OtherConfig", {})
+        sg.mainconfig.OtherConfig.update(otherconfig)
+        sg.mainconfig.CurrentConfig = _subconfig
         self.SaveConfig()
         try:
             if self.thread.isRunning():

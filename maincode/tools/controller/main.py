@@ -1,3 +1,5 @@
+import time
+
 from maincode.tools.controller.operate import Operate
 import winreg
 from ctypes import windll
@@ -13,7 +15,13 @@ class Controller(Operate):
         self.DeviceMode()
 
     def ChooseWindow(self, para, ref):  # title hwnd
-        self.window = GetWindow(para)
+        for _ in range(10):
+            self.window = GetWindow(para)
+            if self.window is not None:
+                break
+            time.sleep(0.5)
+        else:
+            raise ValueError("GetWindow 未获取到有效值")
         self.window.foreground()
         self.ChangeReference(ref)
         self.ChangeOperate(self.window.rect)

@@ -83,10 +83,10 @@ class SnowPage(ModuleStackPage):
         self.page02.cbmarket1.setText(_list[0])
         self.page02.cbmarket2.setText(_list[1])
         self.page02.ckweapon.setChecked(config["WeaponUp"])
-        self.page02.ckdaily.setChecked(config["DailyTaskReceive"])
-        self.page02.ckproof.setChecked(config["ProofReceive"])
+        self.page02.ckimitate.setChecked(config["Simulation"])
 
-        self.page03.ckimitate.setChecked(config["Simulation"])
+        self.page03.ckdaily.setChecked(config["DailyTaskReceive"])
+        self.page03.ckproof.setChecked(config["ProofReceive"])
         self.page03.ckactdaily.setChecked(config["ActivityDaily"])
         self.page03.ckinfofreg.setChecked(config["InfoFragment"])
 
@@ -139,10 +139,10 @@ class SnowPage(ModuleStackPage):
         _dict["ShopEnable"] = self.page02.ckmarket.isChecked()
         _dict["ShopList"] = (self.page02.cbmarket1.text(), self.page02.cbmarket2.text())
         _dict["WeaponUp"] = self.page02.ckweapon.isChecked()
-        _dict["DailyTaskReceive"] = self.page02.ckdaily.isChecked()
-        _dict["ProofReceive"] = self.page02.ckproof.isChecked()
+        _dict["Simulation"] = self.page02.ckimitate.isChecked()
 
-        _dict["Simulation"] = self.page03.ckimitate.isChecked()
+        _dict["DailyTaskReceive"] = self.page03.ckdaily.isChecked()
+        _dict["ProofReceive"] = self.page03.ckproof.isChecked()
         _dict["ActivityDaily"] = self.page03.ckactdaily.isChecked()
         _dict["InfoFragment"] = self.page03.ckinfofreg.isChecked()
 
@@ -167,7 +167,7 @@ class SnowList(Widget):
         super().__init__()
         self.ckitem01 = Check(self, (0,   5, 120, 22), "感知扫荡")
         self.ckitem02 = Check(self, (0,  50, 120, 22), "日常任务")
-        self.ckitem03 = Check(self, (0,  95, 120, 22), "其他任务")
+        self.ckitem03 = Check(self, (0,  95, 120, 22), "领取奖励")
         self.ckitem04 = Check(self, (0, 140, 120, 22), "共鸣记录")
 
         self.pbset01 = SetButton(self, (175,   5, 25, 25), (25, 25))
@@ -288,17 +288,17 @@ class SnowPage02Set(SetStackPage):
         self.cbmarket2.addItems(_list)
         self.cbmarket2.setMaxVisibleItems(8)
         self.ckweapon = Check(self, (15, 305, 220, 22), "通过武器升级一次完成每日")
-
-        self.ckdaily = Check(self, (15, 340, 140, 22), "领取日常")
-        self.ckproof = Check(self, (15, 375, 140, 22), "领取凭证")
+        self.ckimitate = Check(self, (15, 340, 140, 22), "拟境扫荡")
 
 
 class SnowPage03Set(SetStackPage):
     def __init__(self):
-        super().__init__("设置页面：其他任务")
-        self.ckimitate = Check(self, (15, 60, 140, 22), "拟境扫荡")
-        self.ckactdaily = Check(self, (15, 100, 180, 22), "领取活动每日")
-        self.ckinfofreg = Check(self, (15, 140, 180, 22), "收取信源断片")
+        super().__init__("设置页面：领取奖励")
+
+        self.ckdaily = Check(self, (15, 60, 140, 22), "领取日常")
+        self.ckproof = Check(self, (15, 100, 140, 22), "领取凭证")
+        self.ckactdaily = Check(self, (15, 140, 180, 22), "领取活动每日")
+        self.ckinfofreg = Check(self, (15, 180, 180, 22), "收取信源断片")
 
 
 class SnowPage04Set(SetStackPage):

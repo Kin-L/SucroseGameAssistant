@@ -26,6 +26,14 @@ class SGAMain7(SGAMain6):
         if tasktype == "current":
             self.infoClear()
             self.infoHead()
+            num = self.module.boxmodule.currentIndex()
+            mk = sg.modules.GetInfos()[num][2]
+            _dict = {'ModuleKey': mk, 'ConfigKey': "", 'ConfigName': "默认配置"}
+            _subconfig = sg.modules.GetWidgets()[num].CollectConfig()
+            _subconfig.update(_dict)
+            otherconfig = _subconfig.pop("OtherConfig", {})
+            sg.mainconfig.OtherConfig.update(otherconfig)
+            sg.mainconfig.CurrentConfig = _subconfig
             self.SaveConfig()
             para = dict(sg.mainconfig.CurrentConfig)
             para["OtherConfig"] = sg.mainconfig.OtherConfig

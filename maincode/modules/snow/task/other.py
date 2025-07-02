@@ -1,31 +1,37 @@
 
 def snowOther(self):
-    if self.para["Simulation"]:
-        self.ctler.clickChange((1690, 470), zone=(1552, 468, 1626, 515))
-        self.ctler.clickChange(target="特别", zone=(157, 464, 425, 560))
-        pos = self.ctler.waitTo("精神", (150, 770, 1779, 848))
-        x, y = self.ctler.convertR(pos)
-        self.ctler.clickChange((x, 462), zone=(61, 998, 245, 1059))
-        _cn = 0
-        for _p in [(224, 253), (216, 394)]:
-            self.ctler.click(_p)
-            self.ctler.wait(0.8)
-            for i in range(4):
-                if _cn < 4 and "快速" in self.ctler.ocr((1351, 977, 1512, 1052))[0]:
-                    self.ctler.clickChange((1415, 999), zone=(1358, 964, 1548, 1071))
-                    self.ctler.wait(0.5)
-                    self.ctler.clickChange((1375, 773), zone=(1358, 964, 1548, 1071))
-                    self.ctler.wait(0.5)
-                    _cn += 1
-                    self.send("拟境扫荡一次")
-                else:
-                    break
-        if self.ctler.findcolor("FFFF8B", (188, 869, 195, 876)):
-            self.ctler.clickChange((137, 914), zone=(16, 51, 240, 128))
-            self.ctler.clickChange((1742, 1001), zone=(1670, 971, 1830, 1022))
-            self.send("领取评测奖励")
-        self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
+    if self.para["DailyTaskReceive"]:
+        self.ctler.clickChange(target="任务", zone=(1440, 311, 1555, 403))
         self.ctler.wait(0.5)
+        pos = self.ctler.findtext("领取", (55, 973, 197, 1023))
+        if pos:
+            self.ctler.clickChange(pos, zone=(18, 952, 242, 1040))
+            self.ctler.clickTo(pos, "resources/snow/picture/home.png", (1504, 0, 1771, 117))
+            self.send("领取日常奖励")
+            self.ctler.wait(0.5)
+        self.ctler.click((101, 257))
+        self.ctler.wait(0.8)
+        pos = self.ctler.findtext("领取", (55, 973, 197, 1023))
+        if pos:
+            self.ctler.clickChange(pos, zone=(18, 952, 242, 1040))
+            self.ctler.clickTo(pos, "resources/snow/picture/home.png", (1504, 0, 1771, 117))
+            self.send("领取周常奖励")
+        self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
+    if self.para["ProofReceive"]:
+        self.ctler.clickChange((311, 580), zone=(283, 560, 366, 599))
+        flag = False
+        for _p in [(1272, 1025), (1512, 1027), (1052, 1029)]:
+            self.ctler.click(_p)
+            self.ctler.wait(0.5)
+            pos = self.ctler.findtext("领取", (76, 1000, 220, 1045))
+            if pos:
+                self.ctler.clickChange(pos, zone=(76, 1000, 220, 1045))
+                self.send("领取凭证奖励")
+                self.ctler.clickChange(pos, zone=(809, 40, 1113, 147))
+                flag = True
+        if not flag:
+            self.send("凭证奖励暂无可领取")
+        self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
     if self.para["ActivityDaily"]:
         if self.ctler.ocr((1378, 420, 1460, 457))[0]:
             self.ctler.clickChange((1499, 538), zone=(1402, 463, 1499, 505))

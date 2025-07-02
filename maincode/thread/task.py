@@ -42,7 +42,7 @@ class SGAMainThread(QThread):
             self.__class__.taskstart = update
             self.taskstart()
         elif self.tasktype in ["current", "timed"]:
-            if not self.para["current_mute"]:
+            if self.para["Mute"] and (not self.para["current_mute"]):
                 keyboard.send('volume mute')
             num = sg.modules.FindItem(self.para["ModuleKey"])[-1]
             _func = sg.modules.Tasks[num]
