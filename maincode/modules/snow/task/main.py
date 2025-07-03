@@ -270,14 +270,12 @@ def LogSnow(self, second: int):
                 # self.ctler.clickChange("开始游戏", (883, 920, 1049, 989))
                 self.send("登录游戏")
                 self.ctler.wait(5)
-                started = True
                 continue
         elif server == 1:
             if self.ctler.findpic(r"resources\snow\picture\login2.png", (853, 369, 1055, 461), sc)[1] >= 0.6:
                 self.ctler.click((964, 679))
                 self.send("登录B服账号")
                 self.ctler.wait(4)
-                started = True
                 continue
         elif server == 2:
             if self.ctler.StrFind("开始游戏", _list):
@@ -286,7 +284,6 @@ def LogSnow(self, second: int):
                 self.ctler.clickChange(pos=(930, 630), zone=(883, 920, 1049, 989))
                 self.send("登录游戏")
                 self.ctler.wait(5)
-                started = True
                 continue
         if self.ctler.StrFind("获得道具", _list):
             self.ctler.click((967, 909))

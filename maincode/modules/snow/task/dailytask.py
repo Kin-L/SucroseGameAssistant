@@ -60,7 +60,7 @@ def snowDailyTask(self):
                     _path = self.ctler.SaveShot(sc, "")
                     logger.error(f"value: {_str1}")
                     logger.error(f"截图导出: {_path}")
-                    return 0
+                    raise ValueError(f"记忆嵌片数量识别异常")
                 if _num == 0 and self.para["StoryUsePackage"] and _u < 2:
                     _u += 1
                     try:

@@ -110,7 +110,7 @@ class SGAImage(KeyMouse):
                 makedirs("personal/errorsc")
             image.save(_path)
             logger.info(f"保存图片：{_path}")
-            return path
+            return _path
         else:
             logger.error(f"error: SaveShot 无效传入 {type(image)}")
             logger.error(image)

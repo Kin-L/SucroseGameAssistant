@@ -9,9 +9,28 @@ class SGAMain6(SGAMain5):
     def __init__(self, userui):
         super().__init__(userui)
 
-    def SaveConfig(self):
-        sg.mainconfig.TimerConfig = TimerConfigClass(**self.CollectConfig())
+    def currentsave(self):
+        num = self.module.boxmodule.currentIndex()
+        mk = sg.modules.GetInfos()[num][2]
+        _dict = {'ModuleKey': mk, 'ConfigKey': "", 'ConfigName': "默认配置"}
+        _subconfig = sg.modules.GetWidgets()[num].CollectConfig()
+        _subconfig.update(_dict)
+        otherconfig = _subconfig.pop("OtherConfig", {})
+        sg.mainconfig.OtherConfig.update(otherconfig)
+        sg.mainconfig.CurrentConfig = _subconfig
 
+    def subconfigsave(self):
+        _dict = {'ConfigKey': sg.mainconfig.ConfigKey,
+                 'ConfigName': self.module.ecbconfig.text()}
+        _save = dict(sg.mainconfig.CurrentConfig)
+        _save.update(_dict)
+        sg.subconfig.Save(_save)
+        num = sg.subconfig.FindItem(_save['ConfigKey'])[-1]
+        sg.subconfig.filelist[num][2] = _save['ModuleKey']
+
+    def SaveConfig(self):
+        self.currentsave()
+        sg.mainconfig.TimerConfig = TimerConfigClass(**self.CollectConfig())
         smc = sg.mainconfig.model_dump()
         if smc != sg.currentmainconfig:
             sg.SaveMain()
@@ -20,24 +39,9 @@ class SGAMain6(SGAMain5):
 
     def ManualSaveConfig(self):
         self.infoHead()
-
-        # self.SaveConfig()
         if self.mainwidget.sksetting.currentIndex():
-            num = self.module.boxmodule.currentIndex()
-            mk = sg.modules.GetInfos()[num][2]
-            _dict = {'ModuleKey': mk, 'ConfigKey': "", 'ConfigName': "默认配置"}
-            _subconfig = sg.modules.GetWidgets()[num].CollectConfig()
-            _subconfig.update(_dict)
-            otherconfig = _subconfig.pop("OtherConfig", {})
-            sg.mainconfig.OtherConfig.update(otherconfig)
-            sg.mainconfig.CurrentConfig = _subconfig
-            _dict = {'ConfigKey': sg.mainconfig.ConfigKey,
-                     'ConfigName': self.module.ecbconfig.text()}
-            _save = dict(sg.mainconfig.CurrentConfig)
-            _save.update(_dict)
-            sg.subconfig.Save(_save)
-            num = sg.subconfig.FindItem(_save['ConfigKey'])[-1]
-            sg.subconfig.filelist[num][2] = _save['ModuleKey']
+            self.currentsave()
+            self.subconfigsave()
             self.infoAdd("保存成功", False)
         else:
             try:
@@ -53,14 +57,6 @@ class SGAMain6(SGAMain5):
         self.infoEnd()
 
     def closeEvent(self, event):
-        num = self.module.boxmodule.currentIndex()
-        mk = sg.modules.GetInfos()[num][2]
-        _dict = {'ModuleKey': mk, 'ConfigKey': "", 'ConfigName': "默认配置"}
-        _subconfig = sg.modules.GetWidgets()[num].CollectConfig()
-        _subconfig.update(_dict)
-        otherconfig = _subconfig.pop("OtherConfig", {})
-        sg.mainconfig.OtherConfig.update(otherconfig)
-        sg.mainconfig.CurrentConfig = _subconfig
         self.SaveConfig()
         try:
             if self.thread.isRunning():
