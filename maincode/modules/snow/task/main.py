@@ -107,7 +107,7 @@ def taskstart(self):
                 self.send(f"尘白禁区:执行异常,跳过流程")
                 raise RuntimeError("尘白禁区:执行异常,跳过流程")
         else:
-            self.send(f"尘白禁区:执行完成")
+            self.send(f"任务完成:尘白禁区")
             if self.para["SoftClose"]:
                 # print("SoftClose", self.para["SoftClose"])
                 self.send("尝试关闭游戏")

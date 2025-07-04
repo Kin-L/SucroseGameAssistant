@@ -7,7 +7,7 @@ def snowOther(self):
         if pos:
             self.ctler.clickChange(pos, zone=(18, 952, 242, 1040))
             self.ctler.clickTo(pos, "resources/snow/picture/home.png", (1504, 0, 1771, 117))
-            self.send("领取日常奖励")
+            self.send("完成:领取日常奖励")
             self.ctler.wait(0.5)
         self.ctler.click((101, 257))
         self.ctler.wait(0.8)
@@ -15,7 +15,7 @@ def snowOther(self):
         if pos:
             self.ctler.clickChange(pos, zone=(18, 952, 242, 1040))
             self.ctler.clickTo(pos, "resources/snow/picture/home.png", (1504, 0, 1771, 117))
-            self.send("领取周常奖励")
+            self.send("完成:领取周常奖励")
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
     if self.para["ProofReceive"]:
         self.ctler.clickChange((311, 580), zone=(283, 560, 366, 599))
@@ -26,7 +26,7 @@ def snowOther(self):
             pos = self.ctler.findtext("领取", (76, 1000, 220, 1045))
             if pos:
                 self.ctler.clickChange(pos, zone=(76, 1000, 220, 1045))
-                self.send("领取凭证奖励")
+                self.send("完成:领取凭证奖励")
                 self.ctler.clickChange(pos, zone=(809, 40, 1113, 147))
                 flag = True
         if not flag:
@@ -57,7 +57,7 @@ def snowOther(self):
                     self.send("检查完成：日常周常")
                     return True
             self.ctler.clickChange(pos, zone=(76, 1000, 220, 1045))
-            self.send("领取已完成的活动任务")
+            self.send("完成:领取活动奖励")
             self.ctler.clickChange(pos, zone=(809, 40, 1113, 147))
             self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
             self.ctler.wait(0.5)
@@ -74,4 +74,4 @@ def snowOther(self):
             self.ctler.waitTo("谢谢", (852, 804, 1065, 875))
             self.ctler.clickChange((960, 838), zone=(852, 804, 1065, 875))
         self.SnowHome(self)
-        self.send(f"收取信源断片完成")
+        self.send(f"完成:收取信源断片")

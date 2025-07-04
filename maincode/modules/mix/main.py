@@ -17,7 +17,7 @@ def taskstart(self):
     self.send(1)
     for num, (ck_, ac) in enumerate(zip(self.para["ConfigKeyList"], self.mixpara["Accomplish"])):
         if ck_ and not ac:
-            _, _, mk, n = sc.FindItem(ck_)
+            _, na, mk, n = sc.FindItem(ck_)
             if not mk:
                 self.send(f"连续任务 {num + 1} 无效")
                 self.send(1)
@@ -28,16 +28,16 @@ def taskstart(self):
                 self.para = _dict
                 self.para["OtherConfig"] = self.mixpara["OtherConfig"]
                 self.para["SoftClose"] = True
-                self.send(f"连续任务 {num + 1} 开始执行")
+                self.send(f"连续任务 {num + 1} {ck_, na}开始执行")
                 self.substart()
                 self.mixpara["Accomplish"][num] = True
                 self.errornum = 0
-                self.send(f"连续任务 {num + 1} 完成")
+                self.send(f"连续任务 {num + 1} {ck_, na}完成")
                 self.send(1)
                 self.send(f"等待5秒...")
                 self.ctler.wait(5)
             else:
-                self.send(f"连续任务 {num + 1} 配置读取异常")
+                self.send(f"连续任务 {num + 1} {ck_, na}配置读取异常")
                 self.send(1)
                 info.TaskError = True
                 continue

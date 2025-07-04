@@ -108,14 +108,13 @@ def FightCommon(self, common):
 
 
 def snowEnergy(self):
-    self.send("开始检查：感知扫荡")
     if self.para["Email"]:
         self.ctler.clickChange((113, 465), zone=(91, 451, 131, 477))
         self.ctler.wait(0.5)
         pos = self.ctler.findtext("领取", (308, 967, 516, 1044))
         self.ctler.click(pos)
         self.ctler.wait(0.5)
-        self.send("领取邮件完成")
+        self.send("完成:领取邮件完成")
         self.ctler.pressTo("esc", "任务", (1455, 324, 1533, 380))
         self.ctler.wait(0.5)
     if self.para["EnergyExchange"]:
@@ -124,7 +123,7 @@ def snowEnergy(self):
         if "收" in self.ctler.ocr((1705, 993, 1880, 1066))[0]:
             self.ctler.clickChange(target="收", zone=(1705, 993, 1880, 1066))
             self.ctler.wait(2)
-            self.send(f"感知互赠完成")
+            self.send(f"完成:感知互赠")
         # assert 0
         self.ctler.pressTo("esc", "任务", (1455, 324, 1533, 380))
     if self.para["DailyEnergyPack"]:
@@ -139,13 +138,12 @@ def snowEnergy(self):
             if pos:
                 self.ctler.clickChange(pos, zone=(653, 516, 759, 613))
                 self.ctler.clickChange(target="购买", zone=(1243, 735, 1402, 819))
-                self.send(f"每日物资配给箱 领取完成")
+                self.send(f"完成:领取每日物资配给箱")
             self.ctler.pressTo("esc", "任务", (1455, 324, 1533, 380))
         else:
             self.send(f"每日物资配给箱 暂无")
             self.ctler.pressTo("esc", "任务", (1455, 324, 1533, 380))
     if self.para["EnergyDrug"]:
-        self.send(f"检查限时试剂")
         self.ctler.clickChange((1055, 35), zone=(1031, 17, 1078, 53))
         sc = self.ctler.screenshot()
         pt = self.ctler.ocr((293, 312, 511, 379), sc)[0]
@@ -172,7 +170,6 @@ def snowEnergy(self):
         if not used:
             self.ctler.clickChange((1055, 35), zone=(1031, 17, 1078, 53))
             self.send(f"暂无限时试剂可用")
-        del sc
 
     def ReadCons():
         _sc = self.ctler.screenshot()
@@ -191,7 +188,7 @@ def snowEnergy(self):
         while 1:
             cons = ReadCons()
             if cons < 30:
-                self.send(f"感知不足30：{cons}")
+                self.send(f"感知剩余：{cons}")
                 break
             if self.ctler.ocr((1378, 420, 1460, 457))[0]:
                 self.ctler.clickChange((1499, 538), zone=(1402, 463, 1499, 505))
@@ -227,6 +224,7 @@ def snowEnergy(self):
                 self.ctler.click((1280, 711))
                 self.ctler.wait(0.6)
                 self.ctler.clickChange(target="开始", zone=(858, 801, 1072, 875))
+                self.send(f"完成:扫荡 活动材料关卡")
                 self.ctler.wait(0.5)
                 self.ctler.pressTo("esc", "任务", (1455, 324, 1533, 380))
                 self.ctler.wait(0.5)
@@ -238,9 +236,11 @@ def snowEnergy(self):
         while 1:
             cons = ReadCons()
             if cons < 40:
-                self.send(f"感知不足40：{cons}")
+                self.send(f"感知剩余：{cons}")
                 break
             FightCommon(self, self.para["LevelsChoose"])
-
-        self.send(f"扫荡常规行动关卡完成")
-    self.send("检查完成：感知扫荡")
+        _str = ["通用银", "角色经验素材", "武器经验素材",
+                "武器突破素材", "角色神经素材", "后勤获取",
+                "活动后勤获取", "活动武器获取",
+                "活动材料关卡"][self.para["LevelsChoose"]]
+        self.send(f"完成:扫荡 {_str}")

@@ -2,7 +2,6 @@ from maincode.tools.main import logger
 
 
 def snowDailyTask(self):
-    self.send("开始检查：日常任务")
     if self.para["StoryEnable"]:
         self.ctler.clickChange((1690, 470), zone=(1552, 468, 1626, 515))
         self.ctler.wait(0.5)
@@ -83,7 +82,7 @@ def snowDailyTask(self):
                 if cl:
                     self.ctler.clickChange((1168, 718), zone=(875, 685, 945, 749))
                 self.ctler.clickChange(target="开始", zone=(858, 801, 1072, 875))
-                self.send(f"完成个人故事扫荡 {i}")
+                self.send(f"完成:个人故事 {i}")
                 self.ctler.pressTo("esc", "resources/snow/picture/home.png", (1504, 0, 1771, 117))
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
         self.ctler.wait(0.5)
@@ -105,7 +104,7 @@ def snowDailyTask(self):
                 break
         self.ctler.clickChange((1782, 1014), zone=(1504, 0, 1771, 117))
         self.SnowHome(self)
-        self.send("商店购物一次")
+        self.send("完成:商店购物")
     if self.para["WeaponUp"]:
         self.ctler.clickChange(target="背包", zone=(1599, 994, 1692, 1063))
         self.ctler.wait(0.5)
@@ -123,7 +122,7 @@ def snowDailyTask(self):
         self.ctler.clickChange((1383, 717), zone=(123, 263, 248, 332))
         self.ctler.clickChange((119, 168), zone=(1341, 675, 1431, 766))
         self.ctler.clickChange(pos, zone=(1691, 981, 1818, 1053))
-        self.send("武器升级一次")
+        self.send("完成:武器升级")
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
         self.ctler.wait(0.5)
     if self.para["Simulation"]:
@@ -152,5 +151,3 @@ def snowDailyTask(self):
             self.send("领取评测奖励")
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
         self.ctler.wait(0.5)
-
-    self.send("检查完成：日常任务")
