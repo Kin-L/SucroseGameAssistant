@@ -28,14 +28,15 @@ def taskstart(self):
                 self.para = _dict
                 self.para["OtherConfig"] = self.mixpara["OtherConfig"]
                 self.para["SoftClose"] = True
+                if num:
+                    self.send(f"等待5秒...")
+                    self.ctler.wait(5)
                 self.send(f"连续任务 {num + 1} {ck_, na}开始执行")
                 self.substart()
                 self.mixpara["Accomplish"][num] = True
                 self.errornum = 0
                 self.send(f"连续任务 {num + 1} {ck_, na}完成")
                 self.send(1)
-                self.send(f"等待5秒...")
-                self.ctler.wait(5)
             else:
                 self.send(f"连续任务 {num + 1} {ck_, na}配置读取异常")
                 self.send(1)

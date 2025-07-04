@@ -69,10 +69,3 @@ class ModuleClass:
             except Exception as e:
                 print(str(e))
         return False
-
-
-def RecognizeModules():
-    from .mix.main import MixClass
-    MixClass()
-    from .snow.main import SnowClass
-    SnowClass()

@@ -54,9 +54,10 @@ class SnowPage(ModuleStackPage):
         self.page00.ckpreload.setChecked(config["PreLoad"])
         self.page00.ckupdate.setChecked(config["Update"])
         self.page00.leaccount.setText(config["AccountChoose"])
-        _snow = info.OtherConfig["Snow"]
-        self.page00.lepath.setText(_snow["Path"])
-        self.page00.cbserver.setCurrentIndex(_snow["Server"])
+        _snow = info.OtherConfig.get("Snow", {})
+        if _snow:
+            self.page00.lepath.setText(_snow["Path"])
+            self.page00.cbserver.setCurrentIndex(_snow["Server"])
 
         self.wdlist.ckitem01.setChecked(config["Energy"])
         self.wdlist.ckitem02.setChecked(config["DailyTask"])

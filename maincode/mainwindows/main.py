@@ -57,6 +57,7 @@ class SGAMain6(SGAMain5):
         self.infoEnd()
 
     def closeEvent(self, event):
+        sg.mainconfig.ModulesEnable = [self.overall.boxmodules.itemText(i) for i in range(self.overall.boxmodules.count())]
         self.SaveConfig()
         try:
             if self.thread.isRunning():

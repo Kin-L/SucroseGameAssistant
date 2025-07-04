@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtBoundSignal
-from maincode.modules.main import ModuleClass, RecognizeModules
+from maincode.modules.main import ModuleClass
 from .subconfig import sc, SubConfigs
 from .mainconfig import MainConfig, checkmain
 from .info import SGAInfo, info
@@ -27,8 +27,8 @@ class SGAConfigGroup(QObject):
 
     def Load(self):
         self.modules = ModuleClass
-        RecognizeModules()
         self.mainconfig: MainConfig = self.ReadMainConfig()
+        self.RecognizeModules()
         self.ReadCurrentConfig()
         self.currentmainconfig: dict = self.mainconfig.model_dump()
         self.subconfig = sc
@@ -69,6 +69,15 @@ class SGAConfigGroup(QObject):
         else:
             self.infoAdd.emit("主配置初始化", False)
             return MainConfig()
+
+    def RecognizeModules(self):
+        _l = self.mainconfig.ModulesEnable
+        if "连续任务" in _l or not _l:
+            from maincode.modules.mix.main import MixClass
+            MixClass()
+        if "尘白禁区" in _l or not _l:
+            from maincode.modules.snow.main import SnowClass
+            SnowClass()
 
     def ReadCurrentConfig(self):
         _current = self.mainconfig.CurrentConfig

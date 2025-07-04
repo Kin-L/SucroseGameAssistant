@@ -20,6 +20,7 @@ class MainConfig(BaseModel):
     ConfigLock: bool = True
     CurrentConfig: dict = {}
     OtherConfig: dict = {"License": False}
+    ModulesEnable: list = []
 
 
 def checkmain(configdict: dict):

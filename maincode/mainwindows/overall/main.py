@@ -14,6 +14,14 @@ class SGAMain3(SGAMain2):
             self.mainwidget.sksetting.addWidget(self.overall)
             self.overall.leocrpath.setText(sg.mainconfig.OcrPath)
             self.overall.lekeyboard.setText(sg.mainconfig.StopKeys)
+            if sg.mainconfig.ModulesEnable:
+                _l = sg.mainconfig.ModulesEnable
+            else:
+                _l = list(sg.modules.GetInfosT()[0])
+                sg.mainconfig.ModulesEnable = _l
+            self.overall.boxmodules.addItems(_l)
+            self.overall.btmodulesdisable.clicked.connect(self.DisableModules)
+            self.overall.btmodulesrefresh.clicked.connect(self.RefreshModules)
             self.overall.ckautoupdate.setChecked(sg.mainconfig.AutoUpdate)
 
             self.overall.btsupport.clicked.connect(self.mainwidget.support.show)
@@ -41,3 +49,12 @@ class SGAMain3(SGAMain2):
         _path = QFileDialog.getOpenFileName(self, "选择OCR组件exe文件")
         self.overall.leocrpath.setText(_path[0])
         sg.mainconfig.OcrPath = _path
+
+    def DisableModules(self):
+        sg.mainconfig.ModulesEnable.remove(self.overall.boxmodules.currentText())
+        self.overall.boxmodules.removeItem(self.overall.boxmodules.currentIndex())
+
+    def RefreshModules(self):
+        sg.mainconfig.ModulesEnable = list(sg.modules.GetInfosT()[0])
+        self.overall.boxmodules.clear()
+        self.overall.boxmodules.addItems(sg.mainconfig.ModulesEnable)
