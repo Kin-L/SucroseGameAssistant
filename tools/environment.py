@@ -83,7 +83,7 @@ class Environment(Operate):
         self.mode()
         from tools.ocr.ocr import OCR
         self.OCR = OCR(self.logger, self.workdir)
-        self.version = "v2.5.4"
+        self.version = "v2.5.4.1"
         self.platform = get_platform()
         self.monitors = []
         self.getmonitors()

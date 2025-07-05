@@ -1,5 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-from os import path
+from ossu import path
 # pyinstaller SGAv2.spec
 
 a = Analysis(
