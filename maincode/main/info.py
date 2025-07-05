@@ -60,8 +60,8 @@ class SGAInfo:
         scdir = "personal/script"
         rstpath = "resources/main/schtasks.json"
         pstpath = "personal/schtasks.json"
-        rrspath = "resources/main/script/restart.bat"
-        prspath = "personal/script/restart.bat"
+        rrspath = "resources/main/script/start-SGA.bat"
+        prspath = "personal/script/start-SGA.bat"
         if not path.exists(cachedir):
             makedirs(cachedir)
         if not path.exists(scdir):
@@ -75,11 +75,11 @@ class SGAInfo:
         with open(pstpath, 'w', encoding='utf-8') as x:
             json.dump(xml_dir, x, ensure_ascii=False, indent=1)
 
-        f = open(rrspath, 'r', encoding='utf-8')
+        f = open(rrspath, 'r', encoding='ansi')
         start_list = f.readlines()
         f.close()
         start_list[2] = "start /d \"%s\" SGA.exe\n" % self.Workdir
-        f = open(prspath, 'w', encoding='utf-8')
+        f = open(prspath, 'w', encoding='ansi')
         f.writelines(start_list)
         f.close()
 
@@ -91,11 +91,8 @@ class SGAInfo:
         f.writelines(bat_list)
         f.close()
 
-        rstvpath = "resources/main/script/restart.vbs"
-        prsv = "personal/script/restart.vbs"
+        rstvpath = "resources/main/script/start-SGA.vbs"
         pss = "personal/script/start-SGA.vbs"
-        if not path.exists(prsv):
-            copyfile(rstvpath, prsv)
         if not path.exists(pss):
             copyfile(rstvpath, pss)
 

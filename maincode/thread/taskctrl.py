@@ -55,11 +55,9 @@ class SGAMain7(SGAMain6):
         elif tasktype == "update":
             self.infoHead()
             self.infoAdd("准备开始...")
-            para["OtherConfig"] = sg.mainconfig.OtherConfig
             self.NewThread(tasktype, para)
             self.thread.finished.connect(lambda: self.TaskStop(tasktype, para))
             self.thread.start()
-            self.infoAdd("开始更新")
 
     def TaskStop(self, tasktype: str, para=None):
         self.window.foreground()

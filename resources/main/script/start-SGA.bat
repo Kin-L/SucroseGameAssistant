@@ -1,3 +1,3 @@
-@echo Rem Г■╣Х└▒Г├└Е╠▐
+@echo Rem ╣Гдто╗фа
 TIMEOUT /T 2
 start /d "D:\Kin-project\SucroseGameAssistant" SGA.exe

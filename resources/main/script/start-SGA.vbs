@@ -1,2 +1,2 @@
 Set shell = Wscript.createobject("wscript.shell")
-a=shell.run ("restart.bat",0)
+a=shell.run ("start-SGA.bat",0)

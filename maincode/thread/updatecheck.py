@@ -55,7 +55,7 @@ class SGAMain8(SGAMain7):
         from requests import get
         from json import loads
         url = "https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/releases/latest"
-        downloadurl = ""
+        downloadurl = {}
         self.infoHead()
         for i in range(3):
             response = get(url, timeout=10)
