@@ -26,10 +26,11 @@ def snowOther(self):
             pos = self.ctler.findtext("领取", (76, 1000, 220, 1045))
             if pos:
                 self.ctler.clickChange(pos, zone=(76, 1000, 220, 1045))
-                self.send("完成:领取凭证奖励")
                 self.ctler.clickChange(pos, zone=(809, 40, 1113, 147))
                 flag = True
-        if not flag:
+        if flag:
+            self.send("完成:领取凭证奖励")
+        else:
             self.send("凭证奖励暂无可领取")
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
     if self.para["ActivityDaily"]:

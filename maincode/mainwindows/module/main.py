@@ -69,7 +69,7 @@ class SGAMain5(SGAMain4):
                 name = _config["ConfigName"]
                 configkey = _config["ConfigKey"]
                 self.infoHead()
-                self.infoAdd(f"载入配置：{name} (configkey:{configkey})")
+                self.infoAdd(f"载入配置：{configkey}{name}")
                 self.infoEnd()
                 self.LoadSet(_config)
         sg.mainconfig.ConfigKey = sg.subconfig.filelist[num][0]
@@ -131,7 +131,7 @@ class SGAMain5(SGAMain4):
             _wdlist.task07.removeItem(nn)
             _wdlist.task08.removeItem(nn)
         self.infoHead()
-        self.infoAdd(f"删除配置：{name} (configkey:{ck})")
+        self.infoAdd(f"删除配置：{ck}{name}")
         self.infoEnd()
 
     def configadd(self):
@@ -227,7 +227,7 @@ class SGAMain5(SGAMain4):
                 _wdlist.task07.setItemText(old_index, newname)
                 _wdlist.task08.setItemText(old_index, newname)
             self.infoHead()
-            self.infoAdd(f"重命名配置：{oldname} -> {newname} (configkey:{configkey})")
+            self.infoAdd(f"重命名配置：{configkey}\n{oldname}\nv\n{newname}")
             self.infoEnd()
         self.module.edlconfig.hide()
         self.module.ecbconfig.show()

@@ -31,14 +31,14 @@ def taskstart(self):
                 if num:
                     self.send(f"等待5秒...")
                     self.ctler.wait(5)
-                self.send(f"连续任务 {num + 1} {ck_, na}开始执行")
+                self.send(f"连续任务 {num + 1} 开始执行\n{ck_}{na}")
                 self.substart()
                 self.mixpara["Accomplish"][num] = True
                 self.errornum = 0
-                self.send(f"连续任务 {num + 1} {ck_, na}完成")
+                self.send(f"连续任务 {num + 1} 完成\n{ck_}{na}")
                 self.send(1)
             else:
-                self.send(f"连续任务 {num + 1} {ck_, na}配置读取异常")
+                self.send(f"连续任务 {num + 1} 配置读取异常\n{ck_}{na}")
                 self.send(1)
                 info.TaskError = True
                 continue

@@ -65,7 +65,7 @@ class SGAMainThread(QThread):
                 self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
                 waitpause(20)
             elif self.para["Finished"] == 2:
-                self.send("  任务完成,60s后睡眠")
+                self.send("任务完成,60s后睡眠")
                 self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
                 waitpause(60)
             else:
