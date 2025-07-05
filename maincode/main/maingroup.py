@@ -39,7 +39,9 @@ class SGAConfigGroup(QObject):
         self.mainconfig.Version = self.info.Version
         self.SaveMain()
         self.SaveBackUp()
-        self.info.BasisFileInit()
+        if self.mainconfig.WorkDir != self.info.Workdir:
+            self.info.BasisFileInit()
+            self.mainconfig.WorkDir = self.info.Workdir
 
     def ReadMainConfig(self):
         # 加载主配置，若损坏则从备份恢复，若备份损坏或没有则进行初始化修复或者初始化

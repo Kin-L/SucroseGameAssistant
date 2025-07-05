@@ -27,7 +27,10 @@ for src, drc in lis:
 chdir("release")
 rar_path = "D:/Program Files/WinRAR/WinRAR.exe"
 version = "3.X"
-cmdline = [rar_path, "a", f"SGAv3-{version}-full.rar", "SGAv3"]
+cmdline = [rar_path,
+           "a",
+           '-v{}m'.format(95),
+           f"SGAv3-{version}-full.rar", "SGAv3"]
 result = subprocess.run(cmdline, shell=True, capture_output=True, text=True)
 print("stdout, stderr, 返回码:", result.stdout, result.stderr, result.returncode)
 if result.returncode:
