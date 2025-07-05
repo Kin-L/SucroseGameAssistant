@@ -1,5 +1,4 @@
 import time
-
 from maincode.tools.controller.operate import Operate
 import winreg
 from ctypes import windll

@@ -1,4 +1,4 @@
-from maincode.tools.main import (CheckAdmin, GetWindow, logger, foreground,
+from maincode.tools.main import (CheckAdmin, GetWindow, logger,
                                  GetTracebackInfo, SendMessageBox)
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt

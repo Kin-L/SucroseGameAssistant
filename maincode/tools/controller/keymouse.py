@@ -3,6 +3,7 @@ import keyboard
 import pyautogui
 from time import sleep
 from maincode.tools.myclass import CtrlBase, ADBController
+pyautogui.FAILSAFE = False
 
 
 class KeyMouse(CtrlBase, ADBController):
