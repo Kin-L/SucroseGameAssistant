@@ -1,0 +1,14 @@
+3rd_package
+build
+cache
+dist
+personal
+releases
+test
+venv
+license.txt
+main_window.lnk
+test1.py
+test2.py
+.idea
+.gitignore
