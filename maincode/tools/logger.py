@@ -1,7 +1,8 @@
 from logging import getLogger, FileHandler, Formatter, StreamHandler
-from os import path, makedirs
+from os import path, makedirs, remove
 from time import strftime, localtime
 from colorlog import ColoredFormatter
+import glob
 
 
 class Logger:
@@ -40,10 +41,36 @@ class Logger:
     def new_handler(self, date):
         self.logger.date = date
         self.logger.removeHandler(self.file_handler)
-        self.file_handler = FileHandler(rf"personal\logs\{date}.log", encoding="utf-8")  # midnight
+        self.file_handler = FileHandler(f"personal/logs/{date}.log", encoding="utf-8")  # midnight
         file_formatter = Formatter('%(asctime)s | %(levelname)s | %(message)s', datefmt="%H:%M:%S")
         self.file_handler.setFormatter(file_formatter)
         self.logger.addHandler(self.file_handler)
+
+        # 保留30天日志
+        files = glob.glob(path.join("personal/logs", '*'))
+        files = [f for f in files if path.isfile(f)]
+        if len(files) <= 30:
+            return
+        files.sort(key=lambda x: path.getmtime(x), reverse=True)
+        files_to_delete = files[30:]
+        for file_to_delete in files_to_delete:
+            try:
+                remove(file_to_delete)
+            except Exception as e:
+                print(f"{e}")
+
+        # 保留40张错误截图
+        files = glob.glob(path.join("personal/errorsc", '*'))
+        files = [f for f in files if path.isfile(f)]
+        if len(files) <= 30:
+            return
+        files.sort(key=lambda x: path.getmtime(x), reverse=True)
+        files_to_delete = files[30:]
+        for file_to_delete in files_to_delete:
+            try:
+                remove(file_to_delete)
+            except Exception as e:
+                print(f"{e}")
 
 
 if __name__ == '__main__':

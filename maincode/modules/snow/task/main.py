@@ -100,6 +100,7 @@ def taskstart(self):
                     self.ctler.wait(4)
                 else:
                     self.ctler.wait(2)
+                    self.ctler.window.foreground()
                     SnowHome(self)
                     self.ctler.wait(2)
             else:
