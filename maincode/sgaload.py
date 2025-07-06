@@ -28,6 +28,8 @@ def SGALoad(useui: bool = True):
             application = QApplication(argv)
             from maincode.thread.updatecheck import SGAMain8
             sqmw = SGAMain8(useui)
+            if not useui and len(argv) > 1 and argv[1] == "true":
+                sqmw.TaskStart("current")
             application.exec_()
     except Exception as e:
         _str = GetTracebackInfo(e) + "SGA加载失败"

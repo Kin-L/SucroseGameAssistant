@@ -41,6 +41,7 @@ class SGAMain7(SGAMain6):
         elif tasktype == "timed":
             self.infoClear()
             self.infoHead()
+            self.SaveConfig()
             self.infoAdd("准备开始...")
             para["OtherConfig"] = sg.mainconfig.OtherConfig
             para["current_mute"] = GetMute()
@@ -70,13 +71,13 @@ class SGAMain7(SGAMain6):
         self.module.btstart.show()
         self.module.btpause.setEnabled(True)
         self.module.btpause.hide()
-
+        self.timerallow = True
         if tasktype == "timed":
             sleeptime = 46 - localtime()[5]
             self.sleeptime = sleeptime if sleeptime > 0 else 0
         elif tasktype == "update":
             self.overall.btcheckupdate.setEnabled(True)
-        self.timerallow = True
+            return
         if para["Mute"] and (GetMute() != para["current_mute"]):
             keyboard.send('volume mute')
         # 结束

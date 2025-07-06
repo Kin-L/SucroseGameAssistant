@@ -19,7 +19,7 @@ class SGAMain1(SGAMain0):
             self.window = GetWindow("砂糖代理")
             if len(argv) <= 1:
                 self.window.foreground()
-            elif argv[1] != "True":
+            elif argv[1] != "back":
                 self.window.foreground()
 
             self.mainwidget = MainWidget()
