@@ -17,7 +17,8 @@ lis = [["dist/SGAv3/_internal", "release/SGAv3/_internal"],
        ["dist/SGAv3/SGA.exe", "release/SGAv3/SGA.exe"],
        ["ocr-json", "release/SGAv3/ocr-json"],
        ["resources", "release/SGAv3/resources"],
-       ["update.txt", "release/SGAv3/update.txt"]]
+       ["update.txt", "release/SGAv3/update.txt"],
+       ["readme.md", "release/SGAv3/readme.md"]]
 # shutil.copytree("dist/SGAv3", "release/SGAv3")
 for src, drc in lis:
     if path.isdir(src):
