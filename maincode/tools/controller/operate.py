@@ -22,7 +22,7 @@ class Operate(SGAImage):
             while num > 0:
                 sleep(sec)
                 scaft = self.screenshot(zone)
-                aft = cv2.cvtColor(np.asarray(), cv2.COLOR_BGR2GRAY)
+                aft = cv2.cvtColor(np.asarray(scaft), cv2.COLOR_BGR2GRAY)
                 min_sim, max_sim, _, _ = cv2.minMaxLoc(cv2.matchTemplate(aft, bef, cv2.TM_CCOEFF_NORMED))
                 min_sim *= -1
                 sim = max_sim if max_sim >= min_sim else min_sim
