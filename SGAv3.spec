@@ -31,8 +31,8 @@ b = Analysis(
     noarchive=False,
 )
 private_module = []
-temp = a.pure.copy(); a.pure.clear()
-for name, src, type in temp:
+tempa = a.pure.copy(); a.pure.clear()
+for name, src, type in tempa:
     condition = [name.startswith(m) for m in private_module]
     if condition and any(condition):
         a.pure.append((name, src, type))    # 把需要保留打包的 py 文件重新添加回 a.pure
@@ -45,8 +45,8 @@ for name, src, type in temp:
         a.datas.append((dst, src, 'DATA'))
 pyza = PYZ(a.pure)
 
-temp = b.pure.copy(); b.pure.clear()
-for name, src, type in temp:
+tempb = b.pure.copy(); b.pure.clear()
+for name, src, type in tempb:
     condition = [name.startswith(m) for m in private_module]
     if condition and any(condition):
         b.pure.append((name, src, type))    # 把需要保留打包的 py 文件重新添加回 a.pure
@@ -87,7 +87,7 @@ exeb = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False,
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

@@ -1,6 +1,6 @@
 from maincode.main.maingroup import sg
 from maincode.tools.main import VersionsCompare
-from time import localtime
+from time import localtime, strftime
 import keyboard
 from .taskctrl import SGAMain7
 
@@ -20,7 +20,9 @@ class SGAMain8(SGAMain7):
         self.timer.start(15000)
 
     def timercheck(self):
-        # print(localtime())
+        if self.loadui:
+            time_str = strftime("%H:%M:%S", localtime())
+            print(f"{time_str} | INFO | SGA定时检测，SGA运行中...")
         if self.sleeptime > 0:
             self.sleeptime -= 15
             return

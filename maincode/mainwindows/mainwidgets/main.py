@@ -6,6 +6,7 @@ from maincode.tools.main import logger
 import os
 from pathlib import Path as libPath
 from sys import argv
+from maincode.tools.controls import ConsoleButton
 
 
 class SGAMain1(SGAMain0):
@@ -17,13 +18,15 @@ class SGAMain1(SGAMain0):
             # 窗口显现
             from maincode.tools.main import GetWindow
             self.window = GetWindow("砂糖代理")
-            if len(argv) <= 1:
-                self.window.foreground()
-            elif argv[1] != "back":
+            if "back" not in argv:
                 self.window.foreground()
 
             self.mainwidget = MainWidget()
             self.setCentralWidget(self.mainwidget)
+            if "showconsole" in argv:
+                self.mainwidget.btconsole = ConsoleButton(self.mainwidget)
+                self.mainwidget.btconsole.setChecked(True)
+                self.mainwidget.btconsole.toggled.connect(self.mainwidget.changecs)
             self.mainwidget.btsetting.toggled.connect(self.mainwidget.changeob)
             self.mainwidget.bthistory.clicked.connect(lambda: os.startfile(
                 max([f for f in libPath("personal/logs").iterdir() if f.is_file()],
@@ -50,7 +53,8 @@ class SGAMain1(SGAMain0):
         if today != logger.date:
             logger.new_handler(today)
         now_time = strftime("%Y-%m-%d", localtime())
-        self.mainwidget.infobox.append(now_time)
+        if self.loadui:
+            self.mainwidget.infobox.append(now_time)
 
     def infoEnd(self):
         _str = "------------------------------"
@@ -60,4 +64,5 @@ class SGAMain1(SGAMain0):
         logger.info(_str)
 
     def infoClear(self):
-        self.mainwidget.infobox.clear()
+        if self.loadui:
+            self.mainwidget.infobox.clear()

@@ -7,7 +7,7 @@ from sys import argv
 import keyboard
 
 
-def SGALoad(useui: bool = True):
+def SGALoad(showconsole: bool = True):
     try:
         if not CheckAdmin():
             return
@@ -27,9 +27,16 @@ def SGALoad(useui: bool = True):
             QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
             application = QApplication(argv)
             from maincode.thread.updatecheck import SGAMain8
-            sqmw = SGAMain8(useui)
-            if not useui and len(argv) > 1 and argv[1] == "true":
-                sqmw.TaskStart("current")
+            loadui = False
+            if showconsole:
+                argv.append("showconsole")
+                if "current" not in argv and "hideui" not in argv:
+                    loadui = True
+            sqmw = SGAMain8(loadui)
+            if not loadui:
+                logger.info("SGA启动完成, SGA运行中...")
+                if "current" in argv:
+                    sqmw.TaskStart("current")
             application.exec_()
     except Exception as e:
         _str = GetTracebackInfo(e) + "SGA加载失败"

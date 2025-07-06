@@ -29,36 +29,39 @@ class SGAMain6(SGAMain5):
         sg.subconfig.filelist[num][2] = _save['ModuleKey']
 
     def SaveConfig(self):
-        self.currentsave()
-        sg.mainconfig.TimerConfig = TimerConfigClass(**self.CollectConfig())
-        smc = sg.mainconfig.model_dump()
-        if smc != sg.currentmainconfig:
-            sg.SaveMain()
-            sg.SaveBackUp()
-            sg.currentmainconfig = smc
+        if self.loadui:
+            self.currentsave()
+            sg.mainconfig.TimerConfig = TimerConfigClass(**self.CollectConfig())
+            smc = sg.mainconfig.model_dump()
+            if smc != sg.currentmainconfig:
+                sg.SaveMain()
+                sg.SaveBackUp()
+                sg.currentmainconfig = smc
 
     def ManualSaveConfig(self):
-        self.infoHead()
-        if self.mainwidget.sksetting.currentIndex():
-            self.currentsave()
-            self.subconfigsave()
-            self.infoAdd("保存成功", False)
-        else:
-            try:
-                sg.mainconfig.TimerConfig = TimerConfigClass(**self.CollectConfig())
-                if ApplyTimer():
-                    self.infoAdd("应用SGA定时自启/唤醒", False)
-                else:
-                    self.infoAdd("取消SGA自启/唤醒行为", False)
-            except Exception as e:
-                _str = GetTracebackInfo(e) + "操作异常：更改SGA定时自启/唤醒"
-                logger.error(_str)
-                self.infoAdd("操作异常：更改SGA定时自启/唤醒", False)
-        self.infoEnd()
+        if self.loadui:
+            self.infoHead()
+            if self.mainwidget.sksetting.currentIndex():
+                self.currentsave()
+                self.subconfigsave()
+                self.infoAdd("保存成功", False)
+            else:
+                try:
+                    sg.mainconfig.TimerConfig = TimerConfigClass(**self.CollectConfig())
+                    if ApplyTimer():
+                        self.infoAdd("应用SGA定时自启/唤醒", False)
+                    else:
+                        self.infoAdd("取消SGA自启/唤醒行为", False)
+                except Exception as e:
+                    _str = GetTracebackInfo(e) + "操作异常：更改SGA定时自启/唤醒"
+                    logger.error(_str)
+                    self.infoAdd("操作异常：更改SGA定时自启/唤醒", False)
+            self.infoEnd()
 
     def closeEvent(self, event):
-        sg.mainconfig.ModulesEnable = [self.overall.boxmodules.itemText(i) for i in range(self.overall.boxmodules.count())]
-        self.SaveConfig()
+        if self.loadui:
+            sg.mainconfig.ModulesEnable = [self.overall.boxmodules.itemText(i) for i in range(self.overall.boxmodules.count())]
+            self.SaveConfig()
         try:
             if self.thread.isRunning():
                 self.thread.quit()

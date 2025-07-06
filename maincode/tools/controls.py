@@ -160,6 +160,14 @@ class OverallButton(ToggleToolButton):
         self.setIconSize(QSize(25, 25))
 
 
+class ConsoleButton(ToggleToolButton):
+    def __init__(self, widget: QWidget):
+        super().__init__(widget)
+        self.setIcon(r'resources/main/button/set.png')
+        self.setGeometry(475, 0, 35, 35)
+        self.setIconSize(QSize(25, 25))
+
+
 class StateSigh(QWidget):
     def __init__(self, widget: QWidget, location: int4):
         super().__init__(widget)

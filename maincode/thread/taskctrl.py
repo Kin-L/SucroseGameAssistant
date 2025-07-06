@@ -9,8 +9,9 @@ import sys
 class SGAMain7(SGAMain6):
     def __init__(self, userui):
         super().__init__(userui)
-        self.module.btstart.clicked.connect(lambda: self.TaskStart("current"))
-        self.module.btpause.clicked.connect(self.ManualStop)
+        if userui:
+            self.module.btstart.clicked.connect(lambda: self.TaskStart("current"))
+            self.module.btpause.clicked.connect(self.ManualStop)
         self.timerallow = True
 
     def TaskStart(self, tasktype: str, para=None):
@@ -41,7 +42,6 @@ class SGAMain7(SGAMain6):
         elif tasktype == "timed":
             self.infoClear()
             self.infoHead()
-            self.SaveConfig()
             self.infoAdd("准备开始...")
             para["OtherConfig"] = sg.mainconfig.OtherConfig
             para["current_mute"] = GetMute()
