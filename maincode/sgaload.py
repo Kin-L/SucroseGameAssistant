@@ -27,11 +27,11 @@ def SGALoad(showconsole: bool = True):
             QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
             application = QApplication(argv)
             from maincode.thread.updatecheck import SGAMain8
-            loadui = False
+            loadui = True
             if showconsole:
                 argv.append("showconsole")
-                if "current" not in argv and "hideui" not in argv:
-                    loadui = True
+                if "current" in argv or "hideui" in argv:
+                    loadui = False
             sqmw = SGAMain8(loadui)
             if not loadui:
                 logger.info("SGA启动完成, SGA运行中...")
