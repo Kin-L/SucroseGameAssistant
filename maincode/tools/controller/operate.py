@@ -16,11 +16,13 @@ class Operate(SGAImage):
         sec, num = wait
         flag = False
         if target is None:
-            bef = cv2.cvtColor(np.asarray(self.screenshot(zone)), cv2.COLOR_BGR2GRAY)
+            scbef = self.screenshot(zone)
+            bef = cv2.cvtColor(np.asarray(scbef), cv2.COLOR_BGR2GRAY)
             self.click(pos)
             while num > 0:
                 sleep(sec)
-                aft = cv2.cvtColor(np.asarray(self.screenshot(zone)), cv2.COLOR_BGR2GRAY)
+                scaft = self.screenshot(zone)
+                aft = cv2.cvtColor(np.asarray(), cv2.COLOR_BGR2GRAY)
                 min_sim, max_sim, _, _ = cv2.minMaxLoc(cv2.matchTemplate(aft, bef, cv2.TM_CCOEFF_NORMED))
                 min_sim *= -1
                 sim = max_sim if max_sim >= min_sim else min_sim
@@ -32,8 +34,8 @@ class Operate(SGAImage):
                 else:
                     self.click(pos)
                     num -= 1
-            _path1 = self.SaveShot(bef, "bef")
-            _path2 = self.SaveShot(aft, "aft")
+            _path1 = self.SaveShot(scbef, "bef")
+            _path2 = self.SaveShot(scaft, "aft")
             logger.error(f"截图导出bef: {_path1}")
             logger.error(f"截图导出aft: {_path2}")
         elif isinstance(target, str):

@@ -36,11 +36,6 @@ def FightCommon(self, common):
                 self.ctler.clickChange(pos, zone=(64, 1003, 225, 1057))
                 self.ctler.wait(0.8)
                 break
-        pos = self.ctler.findtext("接收", (977, 954, 1094, 1011))
-        if pos:
-            self.ctler.clickChange(pos, zone=(966, 872, 1107, 1032))
-            self.ctler.waitTo("获得道具", (809, 40, 1113, 147))
-            self.ctler.pressTo("esc", "小", (34, 959, 159, 1013))
         if not self.para["CommonLogistics"][:-2] in self.ctler.ocr((164, 923, 350, 982))[0]:
             pos = self.ctler.waitTo("小", (38, 890, 154, 1025))
             self.ctler.clickChange(pos, zone=(829, 12, 1101, 130))
@@ -48,6 +43,11 @@ def FightCommon(self, common):
             pos = self.ctler.findtext(self.para["CommonLogistics"][:-2], (158, 174, 903, 941))
             self.ctler.clickChange(pos, zone=(1488, 193, 1619, 237))
             self.ctler.clickChange((1823, 52), zone=(1811, 40, 1846, 79))
+        pos = self.ctler.findtext("接收", (977, 954, 1094, 1011))
+        if pos:
+            self.ctler.clickChange(pos, zone=(966, 872, 1107, 1032))
+            self.ctler.waitTo("获得道具", (809, 40, 1113, 147))
+            self.ctler.pressTo("esc", "小", (34, 959, 159, 1013))
     elif common == 6:
         for t in range(3):
             self.ctler.roll((1002, 581), -3500)
@@ -57,11 +57,6 @@ def FightCommon(self, common):
                 self.ctler.clickChange(pos, zone=(64, 1003, 225, 1057))
                 self.ctler.wait(0.8)
                 break
-        pos = self.ctler.findtext("接收", (847, 988, 981, 1041))
-        if pos:
-            self.ctler.clickChange(pos, zone=(966, 872, 1107, 1032))
-            self.ctler.waitTo("获得道具", (809, 40, 1113, 147))
-            self.ctler.pressTo("esc", "小", (32, 995, 142, 1039))
         if not (self.para["ActivityLogistics"][:-2] in self.ctler.ocr((147, 962, 288, 1012))[0]):
             pos = self.ctler.waitTo("小", (38, 890, 154, 1025))
             self.ctler.clickChange(pos, zone=(829, 12, 1101, 130))
@@ -83,6 +78,11 @@ def FightCommon(self, common):
                     return 0
             self.ctler.clickChange(pos, zone=(1488, 193, 1619, 237))
             self.ctler.clickChange((1823, 52), zone=(1811, 40, 1846, 79))
+        pos = self.ctler.findtext("接收", (847, 988, 981, 1041))
+        if pos:
+            self.ctler.clickChange(pos, zone=(966, 872, 1107, 1032))
+            self.ctler.waitTo("获得道具", (809, 40, 1113, 147))
+            self.ctler.pressTo("esc", "小", (32, 995, 142, 1039))
     elif common == 7:
         for t in range(3):
             self.ctler.roll((1002, 581), -3500)
