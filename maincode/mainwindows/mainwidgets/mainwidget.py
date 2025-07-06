@@ -1,7 +1,9 @@
 from maincode.tools.controls import (Line, Stack, Widget,
                                      PicButton, InfoBox, OverallButton,
                                      tips, Support)
-import ctypes
+from sys import argv
+if "showconsole" in argv:
+    from ctypes import windll
 
 
 class MainWidget(Widget):
@@ -11,7 +13,8 @@ class MainWidget(Widget):
         Line(self, (5, 38, 625, 3))
         # 全局/模块 设置按钮
         self.btsetting = OverallButton(self)
-        self.console_window = ctypes.windll.kernel32.GetConsoleWindow()
+        if "showconsole" in argv:
+            self.console_window = windll.kernel32.GetConsoleWindow()
         self.obstate = False
         self.obconsole = True
         self.support = Support()
@@ -35,8 +38,8 @@ class MainWidget(Widget):
 
     def changecs(self):
         if self.obconsole:
-            ctypes.windll.user32.ShowWindow(self.console_window, 0)
+            windll.user32.ShowWindow(self.console_window, 0)
             self.obconsole = False
         else:
-            ctypes.windll.user32.ShowWindow(self.console_window, 1)
+            windll.user32.ShowWindow(self.console_window, 1)
             self.obconsole = True
