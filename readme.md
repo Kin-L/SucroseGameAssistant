@@ -55,7 +55,8 @@ MAA（明日方舟）
 添加信任可参考：[知乎帖子](https://zhuanlan.zhihu.com/p/645089615)
 
 ## 部分资源链接
-[尘白禁区启动器](https://wwrv.lanzouu.com/iSGYZ30gqnpe?pwd=gfhg#gfhg "前往下载尘白禁区启动器")
+[尘白禁区启动器](https://wwrv.lanzouu.com/iSGYZ30gqnpe?pwd=gfhg#gfhg "前往下载尘白禁区启动器")     
+[OCR-json](https://wwrv.lanzouu.com/b033h9ybi) 密码:1siv  
 ## 特别感谢
 
 1.  SGA用户界面使用了[PyQt-Fluent-Widgets](https://github.com/zhiyiYo/PyQt-Fluent-Widgets)  
