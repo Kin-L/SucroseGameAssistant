@@ -2,8 +2,7 @@ from maincode.tools.controls import (Line, Stack, Widget,
                                      PicButton, InfoBox, OverallButton,
                                      tips, Support)
 from sys import argv
-if "showconsole" in argv:
-    from ctypes import windll
+from ctypes import windll
 
 
 class MainWidget(Widget):
