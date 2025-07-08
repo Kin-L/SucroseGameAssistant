@@ -34,7 +34,8 @@ lis = [["dist/SGAv3/_internal", "release/SGAv3/_internal"],
        ["ocr-json", "release/SGAv3/ocr-json"],
        ["resources", "release/SGAv3/resources"],
        ["update.txt", "release/SGAv3/update.txt"],
-       ["readme.md", "release/SGAv3/readme.md"]]
+       ["readme.md", "release/SGAv3/readme.md"],
+       ["mdpic", "release/SGAv3/mdpic"]]
 lis2 = []
 for src, drc in lis:
     if path.isdir(src):

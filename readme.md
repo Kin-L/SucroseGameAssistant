@@ -75,6 +75,16 @@ SGA在win10上开发和测试，在win7/win11可能遇到未知问题，
 ## 部分资源链接
 [尘白禁区启动器](https://wwrv.lanzouu.com/iSGYZ30gqnpe?pwd=gfhg#gfhg "前往下载尘白禁区启动器")     
 [OCR-json](https://wwrv.lanzouu.com/b033h9ybi) 密码:1siv  
+## 用户界面展示
+### 全局设置页面
+<img src="./mdpic/overall.png" alt="全局设置" style="width:50%;" />
+
+### 连续执行 模块页面
+<img src="./mdpic/mix.png" alt="连续执行" style="width:50%;" />
+
+### 尘白禁区 模块页面
+<img src="./mdpic/snow.png" alt="尘白禁区" style="width:50%;" />
+
 ## 特别感谢
 
 1.  SGA用户界面使用了[PyQt-Fluent-Widgets](https://github.com/zhiyiYo/PyQt-Fluent-Widgets)  
