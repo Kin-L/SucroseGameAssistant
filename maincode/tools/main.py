@@ -50,7 +50,7 @@ def WindowsNotify(title: str, massage: str) -> None:
     toaster = ToastNotifier()
     toaster.show_toast(title,
                        massage,
-                       icon_path="assets/main_window/ui/ico/SGA.ico",
+                       icon_path="resources/main/SGA/title.png",
                        duration=5,
                        threaded=True)
 

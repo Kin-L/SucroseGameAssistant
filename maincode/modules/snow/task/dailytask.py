@@ -44,6 +44,7 @@ def snowDailyTask(self):
                         self.ctler.wait(0.8)
                         _f = True
                         self.send(f"未识别到角色: {i}")
+                        raise ValueError
                     else:
                         self.ctler.roll((1002, 581), -5620, True)
                         self.ctler.wait(0.8)

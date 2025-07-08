@@ -1,20 +1,10 @@
-from maincode.tools.main import GetTracebackInfo, logger
+from maincode.tools.main import GetTracebackInfo, logger, WindowsNotify
 from maincode.tools.myclass import SGAStop
 from maincode.main.maingroup import sg
 from PyQt5.QtCore import pyqtSignal, pyqtBoundSignal, QThread
-from typing import Optional, Callable
 from .update import update
 from maincode.main.info import info
-from time import sleep
 import keyboard
-
-
-def waitpause(num):
-    for _ in range(num):
-        if sg.info.StopFlag:
-            break
-        else:
-            sleep(1)
 
 
 class SGAMainThread(QThread):
@@ -50,8 +40,26 @@ class SGAMainThread(QThread):
             from maincode.tools.controller.main import ctler
             self.ctler = ctler
             try:
+                if self.tasktype == "timed":
+                    WindowsNotify("SGA定时任务", "10秒后开始")
+                    self.ctler.wait(10)
                 self.taskstart()
                 info.TaskError = False
+                self.ctler.OCR.disable()
+                if self.para["Finished"] == 1:
+                    WindowsNotify("SGA", "任务完成，20秒后熄屏")
+                    self.send("任务完成,20s后熄屏")
+                    self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
+                    self.ctler.wait(20)
+                elif self.para["Finished"] == 2:
+                    WindowsNotify("SGA", "任务完成，60秒后睡眠")
+                    self.send("任务完成,60s后睡眠")
+                    self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
+                    self.ctler.wait(60)
+                else:
+                    WindowsNotify("SGA", "任务完成")
+                    self.send("任务结束")
+                    self.ctler.wait(1.2)
             except SGAStop:
                 pass
             except Exception as e:
@@ -59,17 +67,6 @@ class SGAMainThread(QThread):
                 _str = GetTracebackInfo(e)
                 self.send(f"任务执行异常")
                 logger.error(_str+f"任务执行异常")
-            self.ctler.OCR.disable()
-            if self.para["Finished"] == 1:
-                self.send("任务完成,20s后熄屏")
-                self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
-                waitpause(20)
-            elif self.para["Finished"] == 2:
-                self.send("任务完成,60s后睡眠")
-                self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
-                waitpause(60)
-            else:
-                self.send("任务结束")
         self.finish.emit()
 
     def send(self, msg: [str, int], addtime: bool = True):
@@ -77,4 +74,3 @@ class SGAMainThread(QThread):
             self.infoAdd.emit(msg, addtime)
         else:
             self.infoEnd.emit() if msg else self.infoHead.emit()
-

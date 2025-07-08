@@ -66,7 +66,7 @@ class SGAMain7(SGAMain6):
             self.module.statesigh.SetState(2)
         self.infoEnd()
         keyboard.remove_all_hotkeys()
-        keyboard.add_hotkey("ctrl+s", self.SaveConfig)
+        keyboard.add_hotkey("ctrl+s", self.ManualSaveConfig)
         self.module.btstart.setEnabled(True)
         self.module.btstart.show()
         self.module.btpause.setEnabled(True)

@@ -18,12 +18,12 @@ class MainWidget(Widget):
         self.obconsole = True
         self.support = Support()
         # 历史信息按钮
-        historypath = r"resources/main/button/history.png"
-        savepath = r"resources/main/button/save.png"
+        historypath = "resources/main/button/history.png"
+        savepath = "resources/main/button/save.png"
         sizetp = (25, 25)
         self.bthistory = PicButton(self, (555, 0, 35, 35), historypath, sizetp)
         self.btconfigsave = PicButton(self, (515, 0, 35, 35), savepath, sizetp)
-        tips(self.btconfigsave, "手动保存当前页面和全局设置,并应用定时(快捷键：ctrl+s)")
+        tips(self.btconfigsave, "手动保存并应用当前页面设置(快捷键：ctrl+s)")
         # 指示信息窗口
         self.infobox = InfoBox(self)
 

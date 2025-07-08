@@ -191,8 +191,12 @@ def snowEnergy(self):
                 self.send(f"感知剩余：{cons}")
                 break
             if self.ctler.ocr((1378, 420, 1460, 457))[0]:
-                self.ctler.clickChange((1499, 538), zone=(1402, 463, 1499, 505))
-                self.ctler.waitTo("resources/snow/picture/home.png", (1633, 6, 1718, 91))
+                try:
+                    self.ctler.clickChange((1499, 538), zone=(1402, 463, 1499, 505))
+                    self.ctler.waitTo("resources/snow/picture/home.png", (1633, 6, 1718, 91))
+                except TimeoutError:
+                    self.send(f"活动未开启")
+                    break
                 self.ctler.wait(0.3)
                 pos = self.ctler.findtext("材料")
                 cpos = (85, 379)  # 罅隙轨迹

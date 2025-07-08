@@ -34,9 +34,12 @@ def snowOther(self):
             self.send("凭证奖励暂无可领取")
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
     if self.para["ActivityDaily"]:
-        if self.ctler.ocr((1378, 420, 1460, 457))[0]:
+        try:
             self.ctler.clickChange((1499, 538), zone=(1402, 463, 1499, 505))
-            self.ctler.waitTo("resources/snow/picture/home.png", (1504, 0, 1771, 117))
+            self.ctler.waitTo("resources/snow/picture/home.png", (1633, 6, 1718, 91))
+        except TimeoutError:
+            self.send(f"活动未开启")
+        else:
             self.ctler.wait(0.3)
             pos = self.ctler.findtext("任务")
             cpos = (607, 1031)  # 罅隙轨迹
@@ -62,8 +65,6 @@ def snowOther(self):
             self.ctler.clickChange(pos, zone=(809, 40, 1113, 147))
             self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
             self.ctler.wait(0.5)
-        else:
-            self.send(f"本期活动已关闭")
     if self.para["InfoFragment"]:
         self.ctler.clickChange((1629, 710), zone=(1570, 675, 1689, 751))
         self.ctler.pressTo("esc", "分析员", (1716, 156, 1811, 207), (0.4, 40))
