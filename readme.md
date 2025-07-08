@@ -36,9 +36,14 @@
 ## 下载、安装与更新指南
 ### [视频教程](https://www.bilibili.com/video/BV18kKAeYE2t)  
 1.  从网盘下载带"full"后缀的最新安装包。蓝奏云有最大包体限制，需要额外下载OCR组件（大多数电脑使用“PaddleOCR-json”），需全部下载才能解压  
-    1.  [蓝奏云下载](https://wwrv.lanzouu.com/b002v5cgdg) 密码:faml  
-    2.  [123云盘下载](https://www.123pan.com/s/PjLbVv-9kEuA.html) 提取码:stdl  
-    3.  [OCR-json](https://wwrv.lanzouu.com/b033h9ybi) 密码:1siv  
+    1.  SGA-full包体  
+        1.  [蓝奏云下载](https://wwrv.lanzouu.com/b002v5cgdg) 密码:faml  
+        2.  [123云盘下载](https://www.123pan.com/s/PjLbVv-9kEuA.html) 提取码:stdl  
+        3.  [百度云盘下载](https://pan.baidu.com/s/1OhXjg--R-a2YRPj9f5TNxA?pwd=33vp) 提取码: 33vp
+    2.  OCR-json  
+        1.  [蓝奏云下载](https://wwrv.lanzouu.com/b033h9ybi) 密码:1siv  
+        2. [123云盘下载](https://www.123865.com/s/PjLbVv-9R1uA) 提取码:ICSl  
+        3. [百度云盘下载](https://pan.baidu.com/s/1w6hD8UaCDQ7gj7kB8jvFnw?pwd=xrvx) 提取码: xrvx
 2.  SGA为绿色免安装版，解压后可用，需要管理员权限   
 3.  更新方案(每个更新包有最低适用版本的限制，无法在低于版本限制的版本上应用该更新包)：  
     1.  在全局设置页面可选自动更新，和立即检查更新。  
