@@ -1,9 +1,11 @@
 import keyboard
-from time import localtime, sleep
+from time import localtime
 from maincode.main.maingroup import sg
 from maincode.mainwindows.main import SGAMain6
-from maincode.tools.main import CmdRun, GetMute, ScreenOff, GetTracebackInfo, logger
+from maincode.tools.main import CmdRun, GetMute, ScreenOff
 import sys
+from PyQt5.QtWidgets import QShortcut
+from PyQt5.QtGui import QKeySequence
 
 
 class SGAMain7(SGAMain6):
@@ -12,7 +14,7 @@ class SGAMain7(SGAMain6):
         if userui:
             self.module.btstart.clicked.connect(lambda: self.TaskStart("current"))
             self.module.btpause.clicked.connect(self.ManualStop)
-        self.timerallow = True
+        self.quicksave = QShortcut(QKeySequence("Ctrl+S"), self)
 
     def TaskStart(self, tasktype: str, para=None):
         # print("TaskStart")
@@ -21,7 +23,6 @@ class SGAMain7(SGAMain6):
         self.timerallow = False
         self.module.statesigh.SetState(0)
         sg.info.OcrPath = sg.mainconfig.OcrPath
-        keyboard.remove_all_hotkeys()
         self.module.btstart.setDisabled(True)
         self.module.btstart.hide()
         if tasktype == "current":
@@ -66,11 +67,15 @@ class SGAMain7(SGAMain6):
             self.module.statesigh.SetState(2)
         self.infoEnd()
         keyboard.remove_all_hotkeys()
-        keyboard.add_hotkey("ctrl+s", self.ManualSaveConfig)
+        # keyboard.add_hotkey("Ctrl+S", self.ManualSaveConfig)
         self.module.btstart.setEnabled(True)
         self.module.btstart.show()
         self.module.btpause.setEnabled(True)
         self.module.btpause.hide()
+        try:
+            self.thread.deleteLater()
+        except:
+            ...
         self.timerallow = True
         if tasktype == "timed":
             sleeptime = 46 - localtime()[5]
@@ -88,29 +93,35 @@ class SGAMain7(SGAMain6):
         if para["Finished"] == 1:
             if para["SGAClose"]:
                 self.infoAdd("SGA关闭 电脑熄屏")
+                self.infoEnd()
                 CmdRun("start "" /d \"resources/main/script\" screen_off.vbs")
                 sys.exit(0)
             else:
                 self.infoAdd("SGA等待 电脑熄屏")
+                self.infoEnd()
                 ScreenOff()
         elif para["Finished"] == 2:
             if para["SGAClose"]:
                 self.infoAdd("SGA关闭 电脑睡眠")
+                self.infoEnd()
                 CmdRun("start "" /d \"resources/main/script\" sleep.vbs")
                 sys.exit(0)
             else:
                 self.infoAdd("SGA等待 电脑睡眠")
+                self.infoEnd()
                 CmdRun("start "" /d \"resources/main/script\" sleep.vbs")
         else:
             if para["SGAClose"]:
                 self.infoAdd("SGA关闭 电脑无操作")
+                self.infoEnd()
                 sys.exit(0)
             else:
                 self.infoAdd("SGA等待 电脑无操作")
+                self.infoEnd()
 
     def ManualStop(self):
         self.module.btpause.setDisabled(True)
-        self.infoAdd("手动终止,等待结束")
+        self.infoAdd("手动终止,等待结束...")
         keyboard.remove_all_hotkeys()
         sg.info.StopFlag = True
         self.module.statesigh.SetState(1)
@@ -118,16 +129,6 @@ class SGAMain7(SGAMain6):
             self.thread.quit()
             self.thread.wait(),  # 可选：等待线程结束
             self.module.btpause.hide()
-            self.taskthread.deleteLater()
             self.thread.deleteLater()
         except:
             ...
-
-    def NormalFinish(self):
-        self.module.btpause.setDisabled(True)
-        keyboard.remove_all_hotkeys()
-        self.thread.quit()
-        self.thread.wait(),  # 可选：等待线程结束
-        self.module.btpause.hide()
-        self.taskthread.deleteLater()
-        self.thread.deleteLater()

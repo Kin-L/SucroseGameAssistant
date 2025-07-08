@@ -8,6 +8,7 @@ from .timer.function import ApplyTimer
 class SGAMain6(SGAMain5):
     def __init__(self, userui):
         super().__init__(userui)
+        self.timerallow = True
 
     def currentsave(self):
         num = self.module.boxmodule.currentIndex()
@@ -39,7 +40,7 @@ class SGAMain6(SGAMain5):
                 sg.currentmainconfig = smc
 
     def ManualSaveConfig(self):
-        if self.loadui:
+        if self.loadui and self.timerallow:
             self.infoHead()
             if self.mainwidget.sksetting.currentIndex():
                 self.currentsave()

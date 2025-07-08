@@ -1,7 +1,6 @@
 from maincode.main.maingroup import sg
 from maincode.tools.main import VersionsCompare
 from time import localtime, strftime
-import keyboard
 from .taskctrl import SGAMain7
 
 
@@ -11,7 +10,7 @@ class SGAMain8(SGAMain7):
         if self.loadui:
             self.overall.btcheckupdate.clicked.connect(self.updatecheck)
             self.mainwidget.btconfigsave.clicked.connect(self.ManualSaveConfig)
-            keyboard.add_hotkey("ctrl+s", self.ManualSaveConfig)
+            self.quicksave.activated.connect(self.ManualSaveConfig)
             self.loading.hide()
             self.loading.lower()
             self.infoAdd("加载完成", False)
