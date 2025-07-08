@@ -31,7 +31,6 @@ if not path.exists("release/SGAv3"):
 lis = [["dist/SGAv3/_internal", "release/SGAv3/_internal"],
        ["dist/SGAv3/SGA.exe", "release/SGAv3/SGA.exe"],
        ["dist/SGAv3/SGA-c.exe", "release/SGAv3/SGA-c.exe"],
-       ["ocr-json", "release/SGAv3/ocr-json"],
        ["resources", "release/SGAv3/resources"],
        ["update.txt", "release/SGAv3/update.txt"],
        ["readme.md", "release/SGAv3/readme.md"],

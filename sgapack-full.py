@@ -1,3 +1,4 @@
+import os
 import subprocess
 from os import path, chdir
 import shutil
@@ -36,7 +37,14 @@ cmdline = [rar_path,
            '-v{}m'.format(95),
            f"SGAv3-{version}-full.rar", "SGAv3"]
 result = subprocess.run(cmdline, shell=True, capture_output=True, text=True)
-print("stdout, stderr, 返回码:", result.stdout, result.stderr, result.returncode)
+print("stdout1, stderr1, 返回码:", result.stdout, result.stderr, result.returncode)
+shutil.rmtree("ocr-json")
+cmdline = [rar_path,
+           "a",
+           '-v{}m'.format(95),
+           f"SGAv3-{version}-full-withoutOCR.rar", "SGAv3"]
+result = subprocess.run(cmdline, shell=True, capture_output=True, text=True)
+print("stdout2, stderr2, 返回码:", result.stdout, result.stderr, result.returncode)
 if result.returncode:
     raise RuntimeError
 chdir("..")
