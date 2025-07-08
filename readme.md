@@ -84,13 +84,13 @@ SGA在win10上开发和测试，在win7/win11可能遇到未知问题，
 [OCR-json](https://wwrv.lanzouu.com/b033h9ybi) 密码:1siv  
 ## 用户界面展示
 ### 全局设置页面
-<img src="./mdpic/overall.png" alt="全局设置" style="width:25%;" />
+<img src="./mdpic/overall.png" alt="全局设置" style="width:50%;" />
 
 ### 连续执行 模块页面
-<img src="./mdpic/mix.png" alt="连续执行" style="width:25%;" />
+<img src="./mdpic/mix.png" alt="连续执行" style="width:50%;" />
 
 ### 尘白禁区 模块页面
-<img src="./mdpic/snow.png" alt="尘白禁区" style="width:25%;" />
+<img src="./mdpic/snow.png" alt="尘白禁区" style="width:50%;" />
 
 ## 特别感谢
 
