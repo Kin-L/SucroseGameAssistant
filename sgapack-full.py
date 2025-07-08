@@ -30,7 +30,7 @@ for src, drc in lis:
         shutil.copyfile(src, drc)
 chdir("release")
 rar_path = "D:/Program Files/WinRAR/WinRAR.exe"
-version = "3.X"
+version = "3.0.0"
 cmdline = [rar_path,
            "a",
            '-v{}m'.format(95),

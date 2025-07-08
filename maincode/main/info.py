@@ -8,7 +8,7 @@ from maincode.tools.main import GetWindow
 
 class SGAInfo:
     def __init__(self):
-        self.Version: str = "v3.X"
+        self.Version: str = "v3.0.0"
         # SGA窗口句柄
         self.Window = GetWindow("砂糖代理")
         self.Monitors: list = []  # 电脑显示器信息
