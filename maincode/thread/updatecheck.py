@@ -11,6 +11,7 @@ class SGAMain8(SGAMain7):
             self.overall.btcheckupdate.clicked.connect(self.updatecheck)
             self.mainwidget.btconfigsave.clicked.connect(self.ManualSaveConfig)
             self.quicksave.activated.connect(self.ManualSaveConfig)
+            # self.quickstop.activated.connect(self.ManualStop)
             self.loading.hide()
             self.loading.lower()
             self.infoAdd("加载完成", False)

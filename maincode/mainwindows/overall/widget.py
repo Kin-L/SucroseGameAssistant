@@ -19,6 +19,7 @@ class OverallWidget(QWidget):
         self.fileselect = PicButton(self, (587, 255, 33, 33), foldpath, (25, 25))
         self.lbkeyboard = Label(self, (0, 290, 110, 40), f"停止快捷键：")
         self.lekeyboard = SLineEdit(self, (110, 295, 120, 33))
+        tips(self.lekeyboard, "更改快捷将在重启SGA后生效")
         sizetp = (30, 30)
 
         self.lbmodules = Label(self, (0, 335, 80, 40), "启用模组：")

@@ -16,6 +16,9 @@ class SGAMain7(SGAMain6):
             self.module.btpause.clicked.connect(self.ManualStop)
         self.quicksave = QShortcut(QKeySequence("Ctrl+S"), self)
 
+        # print(sg.mainconfig.StopKeys)
+        # self.quickstop = QShortcut(QKeySequence("Ctrl+?"), self)
+
     def TaskStart(self, tasktype: str, para=None):
         # print("TaskStart")
         sg.info.TaskError = False
@@ -39,7 +42,7 @@ class SGAMain7(SGAMain6):
             self.infoAdd("开始执行实时任务")
             self.module.btpause.setEnabled(True)
             self.module.btpause.show()
-            keyboard.add_hotkey(sg.mainconfig.StopKeys, self.ManualStop)
+            keyboard.add_hotkey(sg.mainconfig.StopKeys, self.module.btpause.click)
         elif tasktype == "timed":
             self.infoClear()
             self.infoHead()
@@ -53,7 +56,7 @@ class SGAMain7(SGAMain6):
             self.infoAdd(f"开始执行定时任务：{name}")
             self.module.btpause.setEnabled(True)
             self.module.btpause.show()
-            keyboard.add_hotkey(sg.mainconfig.StopKeys, self.ManualStop)
+            keyboard.add_hotkey(sg.mainconfig.StopKeys, self.module.btpause.click)
         elif tasktype == "update":
             self.infoHead()
             self.infoAdd("准备开始...")
@@ -66,19 +69,18 @@ class SGAMain7(SGAMain6):
         if sg.info.TaskError:
             self.module.statesigh.SetState(2)
         self.infoEnd()
-        keyboard.remove_all_hotkeys()
-        # keyboard.add_hotkey("Ctrl+S", self.ManualSaveConfig)
+        self.timerallow = True
         self.module.btstart.setEnabled(True)
         self.module.btstart.show()
         self.module.btpause.setEnabled(True)
         self.module.btpause.hide()
+        keyboard.remove_all_hotkeys()
         try:
             self.thread.deleteLater()
         except:
             ...
-        self.timerallow = True
         if tasktype == "timed":
-            sleeptime = 46 - localtime()[5]
+            sleeptime = 61 - localtime()[5]
             self.sleeptime = sleeptime if sleeptime > 0 else 0
         elif tasktype == "update":
             self.overall.btcheckupdate.setEnabled(True)
@@ -120,15 +122,16 @@ class SGAMain7(SGAMain6):
                 self.infoEnd()
 
     def ManualStop(self):
-        self.module.btpause.setDisabled(True)
-        self.infoAdd("手动终止,等待结束...")
-        keyboard.remove_all_hotkeys()
-        sg.info.StopFlag = True
-        self.module.statesigh.SetState(1)
-        try:
-            self.thread.quit()
-            self.thread.wait(),  # 可选：等待线程结束
-            self.module.btpause.hide()
-            self.thread.deleteLater()
-        except:
-            ...
+        if not self.timerallow:
+            self.module.btpause.setDisabled(True)
+            self.infoAdd("手动终止,等待结束...")
+            self.timerallow = True
+            sg.info.StopFlag = True
+            self.module.statesigh.SetState(1)
+            try:
+                self.thread.quit()
+                self.thread.wait(),  # 可选：等待线程结束
+                self.module.btpause.hide()
+                self.thread.deleteLater()
+            except:
+                ...

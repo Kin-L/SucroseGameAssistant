@@ -19,8 +19,8 @@ class SGAMain2(SGAMain1):
     def NewThread(self, tasktype, para):
         try:
             self.thread.deleteLater()
-        except Exception as e:
-            print(e)
+        except:
+            ...
         self.thread = SGAMainThread(tasktype, para)
         # self.thread = QThread()
         # self.taskthread.moveToThread(self.thread)

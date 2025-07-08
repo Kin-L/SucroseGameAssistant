@@ -67,6 +67,6 @@ class SGAMain6(SGAMain5):
             if self.thread.isRunning():
                 self.thread.quit()
                 self.thread.wait()
-        except Exception as e:
-            print(e)
+        except:
+            ...
         super().closeEvent(event)
