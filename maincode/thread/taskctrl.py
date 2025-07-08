@@ -74,7 +74,6 @@ class SGAMain7(SGAMain6):
         self.module.btstart.show()
         self.module.btpause.setEnabled(True)
         self.module.btpause.hide()
-        keyboard.remove_all_hotkeys()
         try:
             self.thread.deleteLater()
         except:
@@ -82,8 +81,10 @@ class SGAMain7(SGAMain6):
         if tasktype == "timed":
             sleeptime = 61 - localtime()[5]
             self.sleeptime = sleeptime if sleeptime > 0 else 0
+            keyboard.remove_all_hotkeys()
         elif tasktype == "update":
             self.overall.btcheckupdate.setEnabled(True)
+            keyboard.remove_all_hotkeys()
             return
         if para["Mute"] and (GetMute() != para["current_mute"]):
             keyboard.send('volume mute')
