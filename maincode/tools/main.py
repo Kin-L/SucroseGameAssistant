@@ -46,14 +46,16 @@ def killprocess(_process: Union[int, str]):
 
 
 # windows提示
-def WindowsNotify(title: str, massage: str) -> None:
-    toaster = ToastNotifier()
-    toaster.show_toast(title,
-                       massage,
-                       icon_path="resources/main/SGA/title.png",
-                       duration=5,
-                       threaded=True)
-
+def WindowsNotify(title: str, massage: str):
+    try:
+        toaster = ToastNotifier()
+        toaster.show_toast(title,
+                           massage,
+                           icon_path="resources/main/SGA/title.ico",
+                           duration=5,
+                           threaded=True)
+    except:
+        ...
 
 # 查询静音状态
 def GetMute() -> bool:

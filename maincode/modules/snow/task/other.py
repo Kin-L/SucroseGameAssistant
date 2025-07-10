@@ -42,13 +42,16 @@ def snowOther(self):
         else:
             self.ctler.wait(0.3)
             pos = self.ctler.findtext("任务")
-            cpos = (607, 1031)  # 罅隙轨迹
+            cpos = (553, 1010)  # 备用点位
+            vername = "合题诗篇"
             if pos:
+                self.send("识别到：任务")
                 x, y = self.ctler.convertR(pos)
                 self.ctler.clickChange(pos, zone=(x-10, y-10, x+10,  y+10))
                 pos = self.ctler.findtext("领取", (0, 605, 578, 1080))
 
             else:
+                self.send(f"未识别到：材料，尝试备用点位：{vername}")
                 self.ctler.click(cpos)
                 self.ctler.wait(1)
                 pos = self.ctler.findtext("领取", (0, 605, 578, 1080))

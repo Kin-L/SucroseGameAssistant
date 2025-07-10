@@ -40,24 +40,26 @@ class SGAMainThread(QThread):
             from maincode.tools.controller.main import ctler
             self.ctler = ctler
             try:
+                _tit = "SGA即时任务"
                 if self.tasktype == "timed":
                     WindowsNotify("SGA定时任务", "10秒后开始")
                     self.ctler.wait(10)
+                    _tit = "SGA定时任务"
                 self.taskstart()
                 info.TaskError = False
                 self.ctler.OCR.disable()
                 if self.para["Finished"] == 1:
-                    WindowsNotify("SGA", "任务完成，20秒后熄屏")
+                    WindowsNotify(_tit, "任务完成，20秒后熄屏")
                     self.send("任务完成,20s后熄屏")
                     self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
                     self.ctler.wait(20)
                 elif self.para["Finished"] == 2:
-                    WindowsNotify("SGA", "任务完成，60秒后睡眠")
+                    WindowsNotify(_tit, "任务完成，60秒后睡眠")
                     self.send("任务完成,60s后睡眠")
                     self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
                     self.ctler.wait(60)
                 else:
-                    WindowsNotify("SGA", "任务完成")
+                    WindowsNotify(_tit, "任务完成")
                     self.send("任务结束")
                     self.ctler.wait(1.2)
             except SGAStop:

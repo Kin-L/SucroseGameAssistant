@@ -87,7 +87,7 @@ def taskstart(self):
             _str = GetTracebackInfo(e)
             logger.error(_str + "任务执行异常:尘白禁区")
             CloseSnow(self)
-            raise RuntimeError("任务执行异常:尘白禁区")
+            break
         except Exception as e:
             num -= 1
             _str = GetTracebackInfo(e)
@@ -297,10 +297,10 @@ def LogSnow(self, second: int):
             continue
         if self.ctler.StrFind("版本过低", _list):
             self.send("尘白禁区:版本过低")
-            raise RuntimeError("尘白禁区:版本过低")
+            raise ValueError("尘白禁区:版本过低")
         if self.ctler.StrFind("服务器暂未开放", _list):
             self.send("尘白禁区:服务器暂未开放")
-            raise RuntimeError("尘白禁区:服务器暂未开放")
+            raise ValueError("尘白禁区:服务器暂未开放")
         if self.ctler.StrFind("任务", _list):
             self.ctler.wait(0.3)
             sc = self.ctler.screenshot()

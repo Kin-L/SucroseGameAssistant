@@ -10,7 +10,7 @@ colorlog
 psutil
 comtypes
 pycaw
-win10toast
+winotify
 pillow
 opencv-python
 numpy
