@@ -195,7 +195,7 @@ def LauchPrepare(self):
                 num = 120
                 self.ctler.wait(2)
             elif "更新中" in _value:
-                self.ctler.clickTo("开始游戏", zone=(1004, 646, 1151, 701), wait=(2, 100))
+                self.ctler.waitTo("开始游戏", zone=(1004, 646, 1151, 701), wait=(2, 100))
                 self.ctler.clickChange(target="开始游戏", zone=(1004, 646, 1151, 701))
                 self.ctler.wait(5)
                 return True
