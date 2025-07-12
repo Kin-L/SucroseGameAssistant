@@ -2,7 +2,7 @@ from ..mainwindow.main import SGAMain0
 from ..mainwidgets.loadwidget import LoadWidget
 from ..mainwidgets.mainwidget import MainWidget
 from time import localtime, strftime
-from maincode.tools.main import logger
+from maincode.tools.main import logger, sgatry
 import os
 from pathlib import Path as libPath
 from sys import argv
@@ -32,6 +32,7 @@ class SGAMain1(SGAMain0):
                 max([f for f in libPath("personal/logs").iterdir() if f.is_file()],
                     key=lambda f: f.stat().st_ctime)))
 
+    @sgatry
     def infoAdd(self, msg: str = "", addtime=True):
         if addtime:
             timestr = strftime("%H:%M:%S ", localtime())
@@ -48,6 +49,7 @@ class SGAMain1(SGAMain0):
             self.mainwidget.infobox.ensureCursorVisible()
         logger.info(msg)
 
+    @sgatry
     def infoHead(self):
         today = strftime("%Y-%m-%d", localtime())
         if today != logger.date:
@@ -56,6 +58,7 @@ class SGAMain1(SGAMain0):
         if self.loadui:
             self.mainwidget.infobox.append(now_time)
 
+    @sgatry
     def infoEnd(self):
         _str = "------------------------------"
         if self.loadui:
@@ -63,6 +66,7 @@ class SGAMain1(SGAMain0):
             self.mainwidget.infobox.ensureCursorVisible()
         logger.info(_str)
 
+    @sgatry
     def infoClear(self):
         if self.loadui:
             self.mainwidget.infobox.clear()

@@ -116,13 +116,21 @@ def GetHwnd(self):
     return self._hWnd
 
 
-def GetWindow(para):  # 标题, 句柄
+def GetWindow(para, accurate=False):  # 标题, 句柄
     if isinstance(para, str):
         windows = gw.getWindowsWithTitle(para)
         if not windows:
             return None
         else:
-            window = windows[0]
+            if accurate:
+                for win in windows:
+                    if para == win.title:
+                        window = win
+                        break
+                else:
+                    return None
+            else:
+                window = windows[0]
     elif isinstance(para, int):
         windows = gw.getWindowsWithTitle("")
 
@@ -163,5 +171,18 @@ def VersionsCompare(version1: str, version2: str) -> int:
 
 
 logger = Logger().getlogger()
+
+
+def sgatry(func):
+    def wrapper(*args, **kwargs):
+        """包装函数的文档字符串"""
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            _str = GetTracebackInfo(e)
+            logger.error(_str)
+    return wrapper
+
+
 if __name__ == '__main__':
     pass

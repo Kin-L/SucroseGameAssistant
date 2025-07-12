@@ -8,7 +8,7 @@ from maincode.tools.main import GetWindow
 
 class SGAInfo:
     def __init__(self):
-        self.Version: str = "v3.0.1"
+        self.Version: str = "v3.0.2"
         # SGA窗口句柄
         self.Window = GetWindow("砂糖代理")
         self.Monitors: list = []  # 电脑显示器信息
@@ -46,10 +46,13 @@ class SGAInfo:
             self.Platform = system
 
     def GetEnvironmentInfoStr(self):
+        _ocr = self.OcrPath if self.OcrPath else "默认"
         _str = (f"\n运行环境:\n"
+                f"  SGA版本:{self.Version}\n"
                 f"  工作目录:{self.Workdir}\n"
                 f"  CPUFeature:{self.CpuFeature}\n"
                 f"  系统:{self.Platform}\n"
+                f"  OCR路径:{_ocr}\n"
                 f"显示器:")
         for i, (w, h), (x, y) in self.Monitors:
             _str += f"\n  编号:{i} 分辨率:{w}×{h} 位置:{x},{y}"

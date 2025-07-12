@@ -11,7 +11,7 @@ def SGALoad(showconsole: bool = True):
     try:
         if not CheckAdmin():
             return
-        window = GetWindow("砂糖代理")
+        window = GetWindow("砂糖代理", True)
         if window is not None:
             window.foreground()
         else:
