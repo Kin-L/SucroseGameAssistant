@@ -104,7 +104,8 @@ def snowDailyTask(self):
                     self.ctler.clickChange((1832, 853), zone=(1545, 834, 1582, 874))
                 break
         self.ctler.clickChange((1782, 1014), zone=(1504, 0, 1771, 117))
-        self.SnowHome(self)
+        if not self.SnowHome(self):
+            raise TimeoutError
         self.send("完成:商店购物")
     if self.para["WeaponUp"]:
         self.ctler.clickChange(target="背包", zone=(1599, 994, 1692, 1063))

@@ -1,3 +1,4 @@
+from requests import get, exceptions
 from maincode.main.maingroup import sg
 from maincode.tools.main import VersionsCompare, logger, GetTracebackInfo
 from time import localtime, strftime
@@ -35,9 +36,9 @@ class SGAMain8(SGAMain7):
             y, M, d, h, m, _, w = localtime()[0:7]
             date = (y, M, d)
             if sg.mainconfig.AutoUpdate and (date != sg.info.CurrentDate):
-                sg.info.CurrentDate = date
-                self.updatecheck()
-                return
+                if self.updatecheck():
+                    sg.info.CurrentDate = date
+                    return
             nowtup = ((w + 2, [h, m]), (1, [h, m]))
             tc = sg.mainconfig.TimerConfig.model_dump()
             timetup = tuple(zip(tc['Execute'], tc['Time']))
@@ -60,7 +61,6 @@ class SGAMain8(SGAMain7):
 
     def updatecheck(self):
         try:
-            from requests import get
             from json import loads
             url = "https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/releases/latest"
             downloadurl = {}
@@ -106,7 +106,15 @@ class SGAMain8(SGAMain7):
             if downloadurl:
                 self.TaskStart("update", downloadurl)
                 self.infoAdd("开始更新..")
+            return True
+        except exceptions.ConnectionError as e:
+            _str = GetTracebackInfo(e) + "DNS解析失败, 检查更新异常"
+            logger.error(_str)
+            self.infoAdd(f"DNS解析失败")
+            self.infoAdd(f"检查更新异常")
+            return False
         except Exception as e:
             _str = GetTracebackInfo(e) + "检查更新异常"
             logger.error(_str)
             self.infoAdd(f"检查更新异常")
+            return False

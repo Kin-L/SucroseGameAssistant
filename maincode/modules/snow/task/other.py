@@ -78,5 +78,6 @@ def snowOther(self):
         if not self.ctler.findtext("分析员", (1716, 156, 1811, 207)):
             self.ctler.waitTo("谢谢", (852, 804, 1065, 875))
             self.ctler.clickChange((960, 838), zone=(852, 804, 1065, 875))
-        self.SnowHome(self)
+        if not self.SnowHome(self):
+            raise TimeoutError
         self.send(f"完成:收取信源断片")

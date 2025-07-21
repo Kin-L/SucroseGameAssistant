@@ -43,7 +43,8 @@ def SnowHome(self):
             num -= 1
             self.ctler.press("esc")
         self.ctler.wait(0.8)
-    raise TimeoutError("尘白禁区返回主页超时")
+    logger.error("尘白禁区返回主页超时")
+    return False
 
 
 def taskstart(self):
@@ -101,8 +102,14 @@ def taskstart(self):
                 else:
                     self.ctler.wait(2)
                     self.ctler.window.foreground()
-                    SnowHome(self)
-                    self.ctler.wait(2)
+                    if SnowHome(self):
+                        self.ctler.wait(2)
+                    else:
+                        self.send(f"进行重试,等待中...")
+                        self.para["startwait"] = True
+                        CloseSnow(self)
+                        self.ctler.wait(4)
+                        continue
             else:
                 CloseSnow(self)
                 self.send(f"尘白禁区:执行异常,跳过流程")
@@ -133,9 +140,9 @@ def SnowLaunch(self):
         h1 = FindWindow("wailsWindow", "尘白禁区启动器")
         h2 = FindWindow("Qt5159QWindowIcon", "西山居启动器-尘白禁区")
         if not (h1 or h2):
-            assert isinstance(_path, str)
-            assert path.isfile(_path)
-            assert path.split(_path)[1] in ["snow_launcher.exe", "SeasunGame.exe"]
+            if not (isinstance(_path, str) and path.isfile(_path) and
+                    path.split(_path)[1] in ["snow_launcher.exe", "SeasunGame.exe"]):
+                raise RuntimeError("启动器路径异常")
             _list = [["wailsWindow", "尘白禁区启动器"],
                      ["Qt5159QWindowIcon", "西山居启动器-尘白禁区"]]
             # print(_path)
