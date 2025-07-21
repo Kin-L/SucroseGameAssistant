@@ -100,16 +100,19 @@ def CheckAdmin():
 def foreground(self, num=20):
     for _ in range(num):
         if self.isActive:
-            return
+            return True
         else:
+            if _:
+                sleep(0.3)
             try:
                 if self.isMinimized:
                     self.restore()
                 self.activate()
             except:
                 ...
-        sleep(0.5)
-    raise TimeoutError
+            sleep(0.2)
+    logger.error("foreground 超时")
+    return False
 
 
 def GetHwnd(self):
