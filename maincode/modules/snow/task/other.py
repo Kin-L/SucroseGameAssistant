@@ -51,23 +51,15 @@ def snowOther(self):
                 pos = self.ctler.findtext("领取", (0, 605, 578, 1080))
 
             else:
-                self.send(f"未识别到：材料，尝试备用点位：{vername}")
+                self.send(f"未识别到：任务，尝试备用点位：{vername}")
                 self.ctler.click(cpos)
                 self.ctler.wait(1)
                 pos = self.ctler.findtext("领取", (0, 605, 578, 1080))
-                if pos:
-                    pass
-                else:
-                    self.send("未找到“任务”, 版本未适配")
-                    self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
-                    self.ctler.wait(0.5)
-                    self.send("检查完成：日常周常")
-                    return True
             if pos:
                 self.ctler.clickChange(pos, zone=(76, 1000, 220, 1045))
                 self.send("完成:领取活动奖励")
             else:
-                self.send("暂无活动奖励可领取")
+                self.send("未识别到可领取的活动奖励")
             self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
             self.ctler.wait(0.5)
     if self.para["InfoFragment"]:
