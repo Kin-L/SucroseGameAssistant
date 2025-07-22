@@ -63,9 +63,11 @@ def snowOther(self):
                     self.ctler.wait(0.5)
                     self.send("检查完成：日常周常")
                     return True
-            self.ctler.clickChange(pos, zone=(76, 1000, 220, 1045))
-            self.send("完成:领取活动奖励")
-            self.ctler.clickChange(pos, zone=(809, 40, 1113, 147))
+            if pos:
+                self.ctler.clickChange(pos, zone=(76, 1000, 220, 1045))
+                self.send("完成:领取活动奖励")
+            else:
+                self.send("暂无活动奖励可领取")
             self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
             self.ctler.wait(0.5)
     if self.para["InfoFragment"]:
