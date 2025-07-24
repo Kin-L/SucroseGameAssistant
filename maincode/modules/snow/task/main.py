@@ -5,9 +5,10 @@ from win32gui import FindWindow
 from os import path
 from .energy import snowEnergy
 from .dailytask import snowDailyTask
-from .other import snowOther
+from .receive import snowOther
 from .gacharecog import snowGachaRecog
 from ..emulator.main import emulatorstart
+from .rogue import snowRogue
 
 
 def CloseSnow(self):
@@ -60,6 +61,10 @@ def taskstart(self):
             # print("startwait", self.para.get("startwait", True))
             if self.para.get("startwait", True):
                 SnowLaunch(self)
+                if self.para["rogue"]:
+                    snowRogue(self)
+                    self.para["rogue"] = False
+                    return
                 LogSnow(self, 180)
                 num = 3
                 self.ctler.click((829, 585))
@@ -82,6 +87,7 @@ def taskstart(self):
             if self.para["GachaRecog"]:
                 snowGachaRecog(self)
                 self.para["GachaRecog"] = False
+
         except SGAStop:
             raise SGAStop
         except RuntimeError as e:

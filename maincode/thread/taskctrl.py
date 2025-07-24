@@ -16,7 +16,9 @@ class SGAMain7(SGAMain6):
             self.module.btpause.clicked.connect(self.ManualStop)
         self.quicksave = QShortcut(QKeySequence("Ctrl+S"), self)
 
-    def TaskStart(self, tasktype: str, para=None):
+    def TaskStart(self, tasktype: str, para: dict = None):
+        if para is None:
+            para = dict()
         try:
             # print("TaskStart")
             sg.info.TaskError = False
@@ -30,7 +32,7 @@ class SGAMain7(SGAMain6):
                 self.infoClear()
                 self.infoHead()
                 self.SaveConfig()
-                para = dict(sg.mainconfig.CurrentConfig)
+                para.update(dict(sg.mainconfig.CurrentConfig))
                 para["OtherConfig"] = sg.mainconfig.OtherConfig
                 para["current_mute"] = GetMute()
                 self.NewThread(tasktype, para)

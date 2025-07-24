@@ -19,6 +19,7 @@ class SnowPage(ModuleStackPage):
         self.page02: Optional[SnowPage02Set] = None
         self.page03: Optional[SnowPage03Set] = None
         self.page04: Optional[SnowPage04Set] = None
+        self.page05: Optional[SnowPage04Set] = None
         self.picbt: Optional[Picture] = None
         self.pbset00 = SetButton(self, (180, 10, 25, 25), (25, 25))
 
@@ -30,11 +31,13 @@ class SnowPage(ModuleStackPage):
         self.page02 = SnowPage02Set()
         self.page03 = SnowPage03Set()
         self.page04 = SnowPage04Set()
+        self.page05 = SnowPage05Set()
         self.sksetting.addWidget(self.page00)
         self.sksetting.addWidget(self.page01)
         self.sksetting.addWidget(self.page02)
         self.sksetting.addWidget(self.page03)
         self.sksetting.addWidget(self.page04)
+        self.sksetting.addWidget(self.page05)
         Line(self, (215, 5, 3, 530), False)
         # self.pbset00 =
         self.pbset00.clicked.connect(lambda: self.sksetting.setCurrentIndex(0))
@@ -42,6 +45,7 @@ class SnowPage(ModuleStackPage):
         self.wdlist.pbset02.clicked.connect(lambda: self.sksetting.setCurrentIndex(2))
         self.wdlist.pbset03.clicked.connect(lambda: self.sksetting.setCurrentIndex(3))
         self.wdlist.pbset04.clicked.connect(lambda: self.sksetting.setCurrentIndex(4))
+        self.wdlist.pbset05.clicked.connect(lambda: self.sksetting.setCurrentIndex(5))
         self.page01.btsnowlist.clicked.connect(lambda: startfile(f"{getcwd()}/resources/snow/list.json"))
         self.page02.btsnowlist.clicked.connect(lambda: startfile(f"{getcwd()}/resources/snow/list.json"))
         self.page04.btopenroll.clicked.connect(lambda: startfile(f"{getcwd()}/personal/snow/roll"))
@@ -160,6 +164,9 @@ class SnowPage(ModuleStackPage):
         _dict["SoftClose"] = self.page00.taskpanel.ckkillprog.isChecked()
         _dict["Finished"] = self.page00.taskpanel.cbafter.currentIndex()
         _dict["SGAClose"] = self.page00.taskpanel.ckkillsga.isChecked()
+
+        _dict["rogue"] = self.page05.ckrogue.isChecked()
+        _dict["roguediff"] = self.page05.cbrogue.currentIndex()
         return _dict
 
 
@@ -170,11 +177,15 @@ class SnowList(Widget):
         self.ckitem02 = Check(self, (0,  50, 120, 22), "日常任务")
         self.ckitem03 = Check(self, (0,  95, 120, 22), "领取奖励")
         self.ckitem04 = Check(self, (0, 140, 120, 22), "共鸣记录")
+        self.lbitem05 = Check(self, (0, 185, 120, 22), "临时功能")
+        self.lbitem05.setChecked(True)
+        self.lbitem05.setDisabled(True)
 
         self.pbset01 = SetButton(self, (175,   5, 25, 25), (25, 25))
         self.pbset02 = SetButton(self, (175,  50, 25, 25), (25, 25))
         self.pbset03 = SetButton(self, (175,  95, 25, 25), (25, 25))
         self.pbset04 = SetButton(self, (175, 140, 25, 25), (25, 25))
+        self.pbset05 = SetButton(self, (175, 185, 25, 25), (25, 25))
 
 
 class SnowPage00Set(SetStackPage):
@@ -315,3 +326,13 @@ class SnowPage04Set(SetStackPage):
         self.ckroll6 = Check(self, (0, 265, 150, 30), "新手池")
 
         self.ckopensheet = Check(self, (0, 300, 150, 30), "完成后打开表格")
+
+
+class SnowPage05Set(SetStackPage):
+    def __init__(self):
+        super().__init__("设置页面：临时功能")
+        self.ckrogue = Check(self, (0, 55, 150, 30), "验证战场")
+        tips(self.ckrogue, "需要提前进入验证战场难度选择页面，自行配置好队伍和buff\n辰星放一号位，选够三个队友推荐辰星豹豹")
+        self.cbrogue = Combobox(self, (100, 50, 120, 40))
+        self.cbrogue.addItems(["简单", "普通", "困难", "险恶"])
+        self.cbrogue.setCurrentIndex(3)
