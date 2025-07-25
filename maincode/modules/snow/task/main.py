@@ -1,6 +1,7 @@
 from maincode.tools.myclass import SGAStop
 from maincode.tools.main import GetWindow, GetTracebackInfo, logger
 from time import sleep
+from maincode.main.maingroup import sg
 from win32gui import FindWindow
 from os import path
 from .energy import snowEnergy
@@ -61,7 +62,7 @@ def taskstart(self):
             # print("startwait", self.para.get("startwait", True))
             if self.para.get("startwait", True):
                 SnowLaunch(self)
-                if self.para["rogue"]:
+                if self.para.get("rogue", False):
                     snowRogue(self)
                     self.para["rogue"] = False
                     return
@@ -119,6 +120,7 @@ def taskstart(self):
             else:
                 CloseSnow(self)
                 self.send(f"尘白禁区:执行异常,跳过流程")
+                sg.info.TaskError = True
                 break
         else:
             self.send(f"任务完成:尘白禁区")
