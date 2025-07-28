@@ -167,6 +167,7 @@ class SnowPage(ModuleStackPage):
 
         _dict["rogue"] = self.page05.ckrogue.isChecked()
         _dict["roguediff"] = self.page05.cbrogue.currentIndex()
+        _dict["guess"] = self.page05.ckguess.isChecked()
         return _dict
 
 
@@ -332,7 +333,11 @@ class SnowPage05Set(SetStackPage):
     def __init__(self):
         super().__init__("设置页面：临时功能")
         self.ckrogue = Check(self, (0, 55, 150, 30), "验证战场")
-        tips(self.ckrogue, "需要提前进入验证战场难度选择页面，自行配置好队伍和buff\n辰星放一号位，选够三个队友推荐辰星豹豹")
+        tips(self.ckrogue, "需要提前进入验证战场难度选择页面，\n自行配置好队伍和buff，\n辰星放一号位，选够三个队友，\n推荐辰星豹豹")
         self.cbrogue = Combobox(self, (100, 50, 120, 40))
         self.cbrogue.addItems(["简单", "普通", "困难", "险恶"])
         self.cbrogue.setCurrentIndex(3)
+
+        self.ckguess = Check(self, (0, 95, 150, 30), "猜心对局")
+        tips(self.ckguess,
+             "需要提前先进入猜心对局界面，\n选择好模式并邀请少女完成")

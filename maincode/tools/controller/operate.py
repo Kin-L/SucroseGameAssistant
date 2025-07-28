@@ -9,8 +9,8 @@ import numpy as np
 class Operate(SGAImage):
     WaitTime = (0.4, 10)
     MinSim = 0.9
-    
-    def clickChange(self, pos=None, target=None, zone=None, wait=WaitTime, minsim=MinSim):
+
+    def clickChange(self, pos=None, target=None, zone=None, wait=WaitTime, minsim=MinSim, errsc=True):
         zone = self.convert(zone)
         # print(zone)
         sec, num = wait
@@ -34,10 +34,11 @@ class Operate(SGAImage):
                 else:
                     self.click(pos)
                     num -= 1
-            _path1 = self.SaveShot(scbef, "bef")
-            _path2 = self.SaveShot(scaft, "aft")
-            logger.error(f"截图导出bef: {_path1}")
-            logger.error(f"截图导出aft: {_path2}")
+            if errsc:
+                _path1 = self.SaveShot(scbef, "bef")
+                _path2 = self.SaveShot(scaft, "aft")
+                logger.error(f"截图导出bef: {_path1}")
+                logger.error(f"截图导出aft: {_path2}")
         elif isinstance(target, str):
             if path.isfile(target) and path.exists(target):
 
@@ -66,7 +67,7 @@ class Operate(SGAImage):
                     sleep(sec)
         raise TimeoutError("clickChange点击超时")
 
-    def pressChange(self, key, target=None, zone=None, wait=WaitTime, minsim=MinSim):
+    def pressChange(self, key, target=None, zone=None, wait=WaitTime, minsim=MinSim, errsc=True):
         zone = self.convert(zone)
         sec, num = wait
         flag = False
@@ -83,6 +84,7 @@ class Operate(SGAImage):
                     if flag:
                         return True
                     num -= 1
+        if errsc:
             _path1 = self.SaveShot(bef, "bef")
             _path2 = self.SaveShot(aft, "aft")
             logger.error(f"截图导出bef: {_path1}")
@@ -167,7 +169,7 @@ class Operate(SGAImage):
                     num -= 1
                 sleep(sec)
         raise TimeoutError("pressTo点击超时")
-    
+
     def waitTo(self, target: str, zone="WINDOW", wait=WaitTime):
         zone = self.convert(zone)
         sec, num = wait
@@ -194,7 +196,7 @@ class Operate(SGAImage):
                 sleep(sec)
         raise TimeoutError("waitTo点击超时")
 
-    def tapChange(self, para=None, target=None, zone=None, wait=WaitTime, minsim=MinSim):
+    def tapChange(self, para=None, target=None, zone=None, wait=WaitTime, minsim=MinSim, errsc=True):
         zone = self.convert(zone)
         sec, num = wait
         flag = False
@@ -215,10 +217,11 @@ class Operate(SGAImage):
                 else:
                     self.tap(para)
                     num -= 1
-            _path1 = self.SaveShot(bef, "bef")
-            _path2 = self.SaveShot(aft, "aft")
-            logger.error(f"截图导出bef: {_path1}")
-            logger.error(f"截图导出aft: {_path2}")
+            if errsc:
+                _path1 = self.SaveShot(bef, "bef")
+                _path2 = self.SaveShot(aft, "aft")
+                logger.error(f"截图导出bef: {_path1}")
+                logger.error(f"截图导出aft: {_path2}")
         elif isinstance(target, str):
             if path.isfile(target) and path.exists(target):
                 while num > 0:

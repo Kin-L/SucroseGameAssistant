@@ -10,6 +10,7 @@ from .receive import snowOther
 from .gacharecog import snowGachaRecog
 from ..emulator.main import emulatorstart
 from .rogue import snowRogue
+from .guess import snowGuess
 
 
 def CloseSnow(self):
@@ -65,6 +66,10 @@ def taskstart(self):
                 if self.para.get("rogue", False):
                     snowRogue(self)
                     self.para["rogue"] = False
+                    return
+                elif self.para.get("guess", False):
+                    snowGuess(self)
+                    self.para["guess"] = False
                     return
                 LogSnow(self, 180)
                 num = 3

@@ -36,10 +36,10 @@ def GetPid(name: str) -> int:
 def killprocess(_process: Union[int, str]):
     if isinstance(_process, int):
         # 根据pid杀死进程
-        CmdRun('taskill /f /pid %s' % _process)
+        CmdRun('taskkill /f /pid %s' % _process)
     elif isinstance(_process, str):
         # 根据进程名杀死进程
-        pro = 'taskill /f /im %s' % _process
+        pro = 'taskkill /f /im %s' % _process
         CmdRun(pro)
     else:
         raise ValueError(f"close异常传输值：{_process}")
@@ -56,6 +56,7 @@ def WindowsNotify(title: str, massage: str):
                            threaded=True)
     except:
         ...
+
 
 # 查询静音状态
 def GetMute() -> bool:

@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
 from time import sleep
 from sys import argv
+from maincode.tools.main import killprocess, GetPid
 import keyboard
 
 
@@ -21,6 +22,8 @@ def SGALoad(showconsole: bool = True):
             keyboard.send("numlock")
             sleep(0.01)
             keyboard.send("numlock")
+            while v := GetPid("PaddleOCR-json.exe"):
+                killprocess(v)
             # SGA窗口初始化
             QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
             QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)

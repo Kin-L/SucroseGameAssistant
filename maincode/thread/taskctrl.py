@@ -6,6 +6,7 @@ from maincode.tools.main import CmdRun, GetMute, ScreenOff, logger, GetTraceback
 import sys
 from PyQt5.QtWidgets import QShortcut
 from PyQt5.QtGui import QKeySequence
+from maincode.tools.main import killprocess, GetPid
 
 
 class SGAMain7(SGAMain6):
@@ -20,6 +21,8 @@ class SGAMain7(SGAMain6):
         if para is None:
             para = dict()
         try:
+            while v := GetPid("PaddleOCR-json.exe"):
+                killprocess(v)
             # print("TaskStart")
             sg.info.TaskError = False
             sg.info.StopFlag = False

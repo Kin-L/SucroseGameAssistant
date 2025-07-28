@@ -16,7 +16,16 @@ def snowRogue(self):
     try:
         while 1:
             xy_list = [(383, 400), (767, 404), (1161, 427), (1541, 443)]
-            self.ctler.clickChange(xy_list[self.para["roguediff"]], zone=(102, 22, 301, 84))
+            try:
+                self.ctler.clickChange(xy_list[self.para["roguediff"]], zone=(102, 22, 301, 84))
+            except TimeoutError:
+                _list = self.ctler.ocr(mode=1)
+                if self.ctler.StrFind("难度选择", _list):
+                    self.send("今日悖论迷宫次数已消耗殆尽")
+                    self.send("验证战场结束")
+                    return
+                else:
+                    raise TimeoutError
             self.ctler.clickChange(target="开始", zone=(1694, 944, 1885, 1051))
             self.ctler.wait(1)
             _list = self.ctler.ocr(mode=1)
@@ -79,7 +88,6 @@ def snowRogue(self):
             self.trigger.quit()
             self.trigger.wait()
         raise SGAStop
-
 
 
 class TemTrigger(QThread):
