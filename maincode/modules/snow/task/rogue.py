@@ -47,6 +47,7 @@ def snowRogue(self):
                 if "确认" in _t2:
                     self.trigger.Stop = True
                     self.trigger.quit()
+                    self.trigger.wait()
                     self.ctler.wait(0.3)
                     _sc = self.ctler.screenshot()
                     pos = (329, 829)
@@ -77,25 +78,25 @@ def snowRogue(self):
                 elif "退出" in _t2:
                     self.trigger.Stop = True
                     self.trigger.quit()
+                    self.trigger.wait()
                     self.ctler.clickChange(target="退出", zone=(896, 946, 1004, 1018))
                     self.ctler.waitTo(target="选", zone=(73, 8, 328, 92), wait=(1, 30))
                     break
                 else:
                     self.ctler.wait(0.5)
-    except SGAStop or TimeoutError:
+    except Exception:
         if self.trigger.isRunning():
             self.trigger.Stop = True
             self.trigger.quit()
             self.trigger.wait()
-        raise SGAStop
+            self.trigger.deleteLater()
+        raise
 
 
 class TemTrigger(QThread):
 
-    def __init__(self):  # mode true:集成运行 false:独立运行
+    def __init__(self):
         super().__init__()
-        from maincode.tools.controller.main import ctler
-        self.ctler = ctler
         self.Stop = False
 
     def run(self):

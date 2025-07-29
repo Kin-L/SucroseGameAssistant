@@ -63,8 +63,10 @@ class SGAMainThread(QThread):
                     self.send("任务结束")
                     self.ctler.wait(1.2)
             except SGAStop:
+                self.ctler.OCR.disable()
                 pass
             except Exception as e:
+                self.ctler.OCR.disable()
                 info.TaskError = True
                 _str = GetTracebackInfo(e)
                 self.send(f"任务执行异常")
