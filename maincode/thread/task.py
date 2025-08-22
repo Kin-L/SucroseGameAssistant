@@ -1,13 +1,13 @@
 from maincode.tools.main import GetTracebackInfo, logger, WindowsNotify
 from maincode.tools.myclass import SGAStop
 from maincode.main.maingroup import sg
-from PyQt5.QtCore import pyqtSignal, pyqtBoundSignal, QThread
+from PyQt5.QtCore import pyqtSignal, pyqtBoundSignal, QObject
 from .update import update
 from maincode.main.info import info
 import keyboard
 
 
-class SGAMainThread(QThread):
+class SGAMainThread(QObject):
     # update: Callable
     # start: Optional[Callable] = None
     """
@@ -19,7 +19,7 @@ class SGAMainThread(QThread):
     infoAdd: pyqtBoundSignal = pyqtSignal(str, bool)
     infoHead: pyqtBoundSignal = pyqtSignal()
     infoEnd: pyqtBoundSignal = pyqtSignal()
-    finish: pyqtBoundSignal = pyqtSignal()
+    finished: pyqtBoundSignal = pyqtSignal()
 
     def __init__(self, tasktype: str, para: dict):
         super().__init__()
@@ -71,7 +71,7 @@ class SGAMainThread(QThread):
                 _str = GetTracebackInfo(e)
                 self.send(f"任务执行异常")
                 logger.error(_str+f"任务执行异常")
-        self.finish.emit()
+        self.finished.emit()
 
     def send(self, msg: [str, int], addtime: bool = True):
         if isinstance(msg, str):

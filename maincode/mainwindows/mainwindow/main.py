@@ -19,4 +19,5 @@ class SGAMain0(QMainWindow):
         # 窗口图标
         self.setWindowIcon(QIcon('resources/main/SGA/title.png'))
         self.setPalette(palette)
-        self.thread = QThread()
+        self.thread = None
+        self.worker = None

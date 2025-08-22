@@ -6,6 +6,7 @@ from maincode.tools.main import CmdRun, GetMute, ScreenOff, logger, GetTraceback
 import sys
 from PyQt5.QtWidgets import QShortcut
 from PyQt5.QtGui import QKeySequence
+
 from maincode.tools.main import killprocess, GetPid
 
 
@@ -39,8 +40,11 @@ class SGAMain7(SGAMain6):
                 para["OtherConfig"] = sg.mainconfig.OtherConfig
                 para["current_mute"] = GetMute()
                 self.NewThread(tasktype, para)
+                self.thread.started.connect(self.worker.run)
+                self.worker.finished.connect(self.thread.quit)
+                self.worker.finished.connect(self.worker.deleteLater)
                 self.thread.finished.connect(lambda: self.TaskStop(tasktype, para))
-                # self.taskthread.finish.connect(self.NormalFinish)
+                self.thread.finished.connect(self.thread.deleteLater)
                 self.thread.start()
                 self.infoAdd("开始执行实时任务")
                 self.module.btpause.setEnabled(True)
@@ -53,7 +57,11 @@ class SGAMain7(SGAMain6):
                 para["OtherConfig"] = sg.mainconfig.OtherConfig
                 para["current_mute"] = GetMute()
                 self.NewThread(tasktype, para)
+                self.thread.started.connect(self.worker.run)
+                self.worker.finished.connect(self.thread.quit)
+                self.worker.finished.connect(self.worker.deleteLater)
                 self.thread.finished.connect(lambda: self.TaskStop(tasktype, para))
+                self.thread.finished.connect(self.thread.deleteLater)
                 self.thread.start()
                 name = para["ConfigName"]
                 self.infoAdd(f"开始执行定时任务：{name}")
@@ -64,7 +72,11 @@ class SGAMain7(SGAMain6):
                 self.infoHead()
                 self.infoAdd("准备开始...")
                 self.NewThread(tasktype, para)
+                self.thread.started.connect(self.worker.run)
+                self.worker.finished.connect(self.thread.quit)
+                self.worker.finished.connect(self.worker.deleteLater)
                 self.thread.finished.connect(lambda: self.TaskStop(tasktype, para))
+                self.thread.finished.connect(self.thread.deleteLater)
                 self.thread.start()
         except Exception as e:
             _str = GetTracebackInfo(e) + "准备开始流程异常"
@@ -82,10 +94,6 @@ class SGAMain7(SGAMain6):
             self.module.btstart.show()
             self.module.btpause.setEnabled(True)
             self.module.btpause.hide()
-            try:
-                self.thread.deleteLater()
-            except:
-                ...
             if tasktype == "timed":
                 sleeptime = 61 - localtime()[5]
                 self.sleeptime = sleeptime if sleeptime > 0 else 0
@@ -143,9 +151,11 @@ class SGAMain7(SGAMain6):
                 sg.info.StopFlag = True
                 self.module.statesigh.SetState(1)
                 try:
-                    self.thread.quit()
-                    self.thread.wait(),  # 可选：等待线程结束
+                    self.worker.quit()
+                    self.worker.wait(),  # 可选：等待线程结束
                     self.module.btpause.hide()
+                    self.worker.deleteLater()
+                    self.thread.quit()
                     self.thread.deleteLater()
                 except:
                     ...

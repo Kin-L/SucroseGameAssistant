@@ -45,6 +45,7 @@ def SnowHome(self):
             flag = False
             num -= 1
             self.ctler.press("esc")
+            self.ctler.wait(0.7)
         self.ctler.wait(0.8)
     logger.error("尘白禁区返回主页超时")
     return False
@@ -170,6 +171,8 @@ def SnowLaunch(self):
         hwnd = self.ctler.RunProg(_path, glist, 5)
         assert hwnd
         self.ctler.ChooseWindow(hwnd, (1920, 1080))
+        if self.ctler.ZoomW != self.ctler.ZoomH:
+            self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
 
 
 def LauchPrepare(self):
@@ -192,6 +195,8 @@ def LauchPrepare(self):
         while num > 0:
             if hwnd := FindWindow("UnrealWindow", "尘白禁区"):
                 self.ctler.ChooseWindow(hwnd, (1920, 1080))
+                if self.ctler.ZoomW != self.ctler.ZoomH:
+                    self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
                 return True
             if self.ctler.findtext("关闭", (398, 219, 893, 540)):
                 if pos := self.ctler.findtext("确定", (398, 219, 893, 540)):
@@ -202,6 +207,7 @@ def LauchPrepare(self):
             if "开始游戏" in _value:
                 self.ctler.clickChange((1073, 673), zone=(1004, 646, 1151, 701))
                 self.ctler.wait(5)
+                error = -5
                 continue
             elif "获取更新" in _value:
                 if self.para["Update"]:
@@ -232,11 +238,14 @@ def LauchPrepare(self):
         for i in range(120):
             if hwnd := FindWindow("UnrealWindow", "尘白禁区"):
                 self.ctler.ChooseWindow(hwnd, (1920, 1080))
+                if self.ctler.ZoomW != self.ctler.ZoomH:
+                    self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
                 return True
             _value = self.ctler.ocr((966, 693, 1200, 750))[0]
             if "开始游戏" in _value:
                 self.ctler.clickChange(pos=(1087, 720), zone=(966, 693, 1200, 750))
                 self.ctler.wait(5)
+                error = -5
                 continue
             elif "更新" in _value:
                 if self.para["Update"]:
@@ -265,8 +274,7 @@ def LogSnow(self, second: int):
     self.send("开始识别游戏状态")
     server = self.para["OtherConfig"]["Snow"]["Server"]
     for i in range(second):
-        sc = self.ctler.screenshot()
-        _list = self.ctler.ocr(template=sc, mode=1)
+        _list = self.ctler.ocr(mode=1)
         if server == 0:
             if self.ctler.StrFind("开始游戏", _list):
                 server = 3
@@ -284,8 +292,8 @@ def LogSnow(self, second: int):
                     self.ctler.clickChange(target="登录", zone=(904, 577, 1018, 641))
                     self.ctler.wait(0.8)
                 try:
-                    self.ctler.clickChange((986, 949), zone=(27, 962, 97, 1015))
-                except:
+                    self.ctler.clickChange((986, 949), zone=(27, 962, 97, 1015), errsc=False)
+                except TimeoutError:
                     self.ctler.click((1866, 219))
                     self.ctler.clickChange((986, 949), zone=(27, 962, 97, 1015))
                 # self.ctler.clickChange("开始游戏", (883, 920, 1049, 989))
@@ -293,7 +301,7 @@ def LogSnow(self, second: int):
                 self.ctler.wait(5)
                 continue
         elif server == 1:
-            if self.ctler.findpic(r"resources\snow\picture\login2.png", (853, 369, 1055, 461), sc)[1] >= 0.6:
+            if self.ctler.findpic(r"resources\snow\picture\login2.png", (853, 369, 1055, 461))[1] >= 0.6:
                 self.ctler.click((964, 679))
                 self.send("登录B服账号")
                 self.ctler.wait(4)
@@ -306,15 +314,15 @@ def LogSnow(self, second: int):
                 self.send("登录游戏")
                 self.ctler.wait(5)
                 continue
-        if self.ctler.StrFind("获得道具", _list):
-            self.ctler.click((967, 909))
-            self.send("签到成功")
-            self.ctler.wait(2.5)
-            continue
-        if self.ctler.StrFind("时间", _list):
-            self.ctler.click((991, 123))
-            self.ctler.wait(1.5)
-            continue
+        # if self.ctler.StrFind("获得道具", _list):
+        #     self.ctler.click((967, 909))
+        #     self.send("签到成功")
+        #     self.ctler.wait(2.5)
+        #     continue
+        # if self.ctler.StrFind("时间", _list):
+        #     self.ctler.click((991, 123))
+        #     self.ctler.wait(1.5)
+        #     continue
         if self.ctler.StrFind("版本过低", _list):
             self.send("尘白禁区:版本过低")
             raise ValueError("尘白禁区:版本过低")
@@ -323,15 +331,15 @@ def LogSnow(self, second: int):
             raise ValueError("尘白禁区:服务器暂未开放")
         if self.ctler.StrFind("任务", _list):
             self.ctler.wait(0.3)
-            sc = self.ctler.screenshot()
-            if "任务" in self.ctler.ocr((1455, 324, 1533, 380), sc)[0]:
+            if "任务" in self.ctler.ocr((1455, 324, 1533, 380))[0]:
                 self.send("加载到主界面")
                 return True
             else:
+                self.send("状态检测存疑：加载主界面")
                 continue
-        if self.ctler.StrFind("等级提升", _list):
-            self.ctler.click((788, 1007))
-            self.ctler.wait(8)
+        # if self.ctler.StrFind("等级提升", _list):
+        #     self.ctler.click((788, 1007))
+        #     self.ctler.wait(8)
         self.ctler.press("esc")
-        self.ctler.wait(0.8)
+        self.ctler.wait(1.5)
     raise ValueError("尘白禁区:登录超时")

@@ -1,8 +1,6 @@
-from maincode.tools.myclass import SGAStop
-
 
 def snowGuess(self):
-    if "少女对" not in self.ctler.ocr((1543, 1010, 1779, 1054))[0]:
+    if "教学" not in self.ctler.ocr((1800, 207, 1874, 255))[0]:
         self.send("请先进入猜心对局界面，选择好模式并邀请少女完成")
         return
     else:

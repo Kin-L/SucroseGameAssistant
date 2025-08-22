@@ -22,9 +22,6 @@ class SGAMain8(SGAMain7):
 
     def timercheck(self):
         try:
-            if self.loadui:
-                time_str = strftime("%H:%M:%S", localtime())
-                print(f"{time_str} | INFO | SGA定时检测，SGA运行中...")
             if self.sleeptime > 0:
                 self.sleeptime -= 15
                 return
@@ -32,6 +29,9 @@ class SGAMain8(SGAMain7):
                 self.sleeptime = 0
                 if not self.timerallow:
                     return
+            if self.loadui:
+                time_str = strftime("%H:%M:%S", localtime())
+                print(f"{time_str} | INFO | SGA定时检测，SGA运行中...")
             self.SaveConfig()
             y, M, d, h, m, _, w = localtime()[0:7]
             date = (y, M, d)

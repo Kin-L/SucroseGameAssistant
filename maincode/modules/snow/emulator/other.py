@@ -32,7 +32,7 @@ def snowOther(self):
             self.ctler.waitTo("resources/snow/picture/home.png", (1504, 0, 1771, 117))
             self.ctler.wait(0.3)
             pos = self.ctler.findtext("任务")
-            cpos = (607, 1031)  # 罅隙轨迹
+            cpos = (1781, 1025)  # 逆光怒放
             if pos:
                 x, y = self.ctler.convertR(pos)
                 self.ctler.clickChange(pos, zone=(x-10, y-10, x+10,  y+10))

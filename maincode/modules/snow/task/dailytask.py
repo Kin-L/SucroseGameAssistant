@@ -64,7 +64,7 @@ def snowDailyTask(self):
                 if _num == 0 and self.para["StoryUsePackage"] and _u < 2:
                     _u += 1
                     try:
-                        self.ctler.clickChange((1566, 51), zone=(1547, 38, 1584, 69), wait=(0.8, 5))
+                        self.ctler.clickChange((1566, 51), zone=(1547, 38, 1584, 69), wait=(0.8, 5), errsc=False)
                     except TimeoutError:
                         self.send(f"补嵌包不足")
                         break
@@ -147,6 +147,7 @@ def snowDailyTask(self):
                     self.send("拟境扫荡一次")
                 else:
                     break
+        self.ctler.wait(0.5)
         if self.ctler.findcolor("FFFF8B", (188, 869, 195, 876)):
             self.ctler.clickChange((137, 914), zone=(16, 51, 240, 128))
             self.ctler.clickChange((1742, 1001), zone=(1670, 971, 1830, 1022))

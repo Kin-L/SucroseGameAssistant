@@ -199,8 +199,8 @@ def snowEnergy(self):
                     break
                 self.ctler.wait(0.3)
                 pos = self.ctler.findtext("材料")
-                cpos = (246, 621)  # 备用点位
-                vername = "合题诗篇"
+                cpos = (320, 205)  # 备用点位
+                vername = "逆光怒放"
                 if pos:
                     self.send("识别到：材料")
                     self.ctler.clickChange(pos, zone=(1732, 920, 1829, 1013))
@@ -211,7 +211,7 @@ def snowEnergy(self):
                 self.ctler.waitTo("resources/snow/picture/home.png", (1633, 6, 1718, 91))
                 self.ctler.wait(0.5)
                 pos = self.ctler.findtext("深渊")
-                cpos = (1339, 320)  # 备用点位
+                cpos = (936, 696)  # 备用点位
                 if pos:
                     self.send("识别到：深渊")
                     self.ctler.clickChange(pos, zone=(1387, 945, 1599, 1075))
@@ -239,6 +239,7 @@ def snowEnergy(self):
                 self.ctler.wait(0.5)
             else:
                 self.send(f"本期活动已关闭")
+                break
 
         self.send(f"扫荡活动材料关卡完成")
     else:
