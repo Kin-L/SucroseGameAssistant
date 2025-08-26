@@ -173,6 +173,7 @@ def SnowLaunch(self):
         self.ctler.ChooseWindow(hwnd, (1920, 1080))
         if self.ctler.ZoomW != self.ctler.ZoomH:
             self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
+            self.send(f"当前窗口: {self.ctler.window.rect}")
 
 
 def LauchPrepare(self):
@@ -192,11 +193,19 @@ def LauchPrepare(self):
         self.ctler.ChangeReference((1280, 748))
         error = 0
         num = 120
+        hwndNum = 0
         while num > 0:
             if hwnd := FindWindow("UnrealWindow", "尘白禁区"):
                 self.ctler.ChooseWindow(hwnd, (1920, 1080))
+                hwnd += 1
                 if self.ctler.ZoomW != self.ctler.ZoomH:
-                    self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
+                    if hwndNum == 3:
+                        self.send(
+                            "游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
+                        self.send(f"当前窗口: {self.ctler.window.rect}")
+                    else:
+                        sleep(2)
+                        continue
                 return True
             if self.ctler.findtext("关闭", (398, 219, 893, 540)):
                 if pos := self.ctler.findtext("确定", (398, 219, 893, 540)):
@@ -235,11 +244,19 @@ def LauchPrepare(self):
     elif _name == "SeasunGame.exe":
         self.ctler.ChangeReference((1280, 748))
         error = 0
-        for i in range(120):
+        num = 120
+        hwndNum = 0
+        while num > 0:
             if hwnd := FindWindow("UnrealWindow", "尘白禁区"):
                 self.ctler.ChooseWindow(hwnd, (1920, 1080))
+                hwnd += 1
                 if self.ctler.ZoomW != self.ctler.ZoomH:
-                    self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
+                    if hwndNum == 3:
+                        self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
+                        self.send(f"当前窗口: {self.ctler.window.rect}")
+                    else:
+                        sleep(2)
+                        continue
                 return True
             _value = self.ctler.ocr((966, 693, 1200, 750))[0]
             if "开始游戏" in _value:

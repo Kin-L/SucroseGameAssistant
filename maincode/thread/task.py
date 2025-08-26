@@ -38,7 +38,12 @@ class SGAMainThread(QObject):
             _func = sg.modules.Tasks[num]
             self.__class__.taskstart = _func
             from maincode.tools.controller.main import ctler
-            self.ctler = ctler
+            try:
+                self.ctler = ctler
+            except FileExistsError:
+                self.send("未找到有效ocr-json.exe文件")
+                self.finished.emit()
+                return
             try:
                 _tit = "SGA即时任务"
                 if self.tasktype == "timed":

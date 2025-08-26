@@ -1,6 +1,7 @@
 import time
 from maincode.tools.controller.operate import Operate
 import winreg
+from maincode.tools.main import logger
 from ctypes import windll
 from maincode.tools.main import GetWindow, CmdRun
 from win32gui import FindWindow
@@ -24,6 +25,7 @@ class Controller(Operate):
         self.window.foreground()
         self.ChangeReference(ref)
         self.ChangeOperate(self.window.rect)
+        logger.info(f"当前窗口：{self.window.rect}")
 
     @staticmethod
     def FindProgramPath(names, nametag="DisplayName", pathtag="DisplayIcon"):
@@ -89,7 +91,13 @@ class Controller(Operate):
             self.ChangeOperate((0, 0, w, h))
 
 
+if __name__ == '__main__':
+    from maincode.main.info import info
+    info.OcrPath = r"D:/Program Files (Green)/SGAv3/ocr-json/PaddleOCR-json.exe"
+
 ctler = Controller()
 if __name__ == '__main__':
-    pos = ctler.findcolor("FFFF8B", template=r"E:\Kin-Picture\111.png")
-    print(pos)
+    # pos = ctler.findcolor("FFFF8B", template=r"E:\Kin-Desktop\3333.png")
+    # print(pos)
+    res = ctler.ocr(template=r"E:\Kin-Desktop\5555.png", mode=1)
+    print(res)

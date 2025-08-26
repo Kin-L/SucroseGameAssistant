@@ -1,3 +1,4 @@
+import os
 import subprocess
 from os import path, chdir, walk, makedirs
 import shutil
@@ -29,8 +30,6 @@ if not path.exists("release/SGAv3"):
     print("未找到参照包体")
     exit()
 lis = [["dist/SGAv3/_internal", "release/SGAv3/_internal"],
-       ["dist/SGAv3/SGA.exe", "release/SGAv3/SGA.exe"],
-       ["dist/SGAv3/SGA-c.exe", "release/SGAv3/SGA-c.exe"],
        ["resources", "release/SGAv3/resources"],
        ["update.txt", "release/SGAv3/update.txt"],
        ["readme.md", "release/SGAv3/readme.md"],
@@ -57,6 +56,8 @@ if lis2:
     _str = f"/SGAv3-{version}-replace/"
     if not path.exists(f"release/SGAv3-{version}-replace"):
         makedirs(f"release/SGAv3-{version}-replace")
+    else:
+        os.remove(f"release/SGAv3-{version}-replace")
     print(lis2)
     for src, drc in lis2:
         drc = drc.replace("/SGAv3/", _str)

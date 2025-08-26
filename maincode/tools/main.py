@@ -177,16 +177,6 @@ def VersionsCompare(version1: str, version2: str) -> int:
 logger = Logger().getlogger()
 
 
-def sgatry(func):
-    def wrapper(*args, **kwargs):
-        """包装函数的文档字符串"""
-        try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            _str = GetTracebackInfo(e)
-            logger.error(_str)
-    return wrapper
-
 
 if __name__ == '__main__':
     pass

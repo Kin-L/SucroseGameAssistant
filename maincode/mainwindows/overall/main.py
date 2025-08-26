@@ -1,6 +1,5 @@
 from maincode.main.main import SGAMain2
 from .widget import OverallWidget
-from maincode.tools.main import sgatry
 from maincode.main.maingroup import sg
 from webbrowser import open as weopen
 from PyQt5.QtWidgets import QFileDialog
@@ -37,30 +36,26 @@ class SGAMain3(SGAMain2):
             self.overall.lekeyboard.editingFinished.connect(lambda: self.changeStopKeys())
             self.overall.fileselect.clicked.connect(self.SelectOCRPath)
 
-    @sgatry
     def changeAutoUpdate(self):
         sg.mainconfig.AutoUpdate = self.overall.ckautoupdate.isChecked()
 
-    @sgatry
     def changeOcrPath(self):
         sg.mainconfig.OcrPath = self.overall.leocrpath.text()
+        self.info.OcrPath = self.mainconfig.OcrPath
 
-    @sgatry
     def changeStopKeys(self):
         sg.mainconfig.StopKeys = self.overall.lekeyboard.text()
 
-    @sgatry
     def SelectOCRPath(self):
         _path = QFileDialog.getOpenFileName(self, "选择OCR组件exe文件")
         self.overall.leocrpath.setText(_path[0])
-        sg.mainconfig.OcrPath = _path
+        sg.mainconfig.OcrPath = _path[0]
+        self.info.OcrPath = self.mainconfig.OcrPath
 
-    @sgatry
     def DisableModules(self):
         sg.mainconfig.ModulesEnable.remove(self.overall.boxmodules.currentText())
         self.overall.boxmodules.removeItem(self.overall.boxmodules.currentIndex())
 
-    @sgatry
     def RefreshModules(self):
         sg.mainconfig.ModulesEnable = list(sg.modules.GetInfosT()[0])
         self.overall.boxmodules.clear()

@@ -22,6 +22,8 @@ def snowDailyTask(self):
                     _r = "驰"
                 elif i == "冥河代理人":
                     _r = "代理"
+                elif i == "绯月":
+                    _r = "月"
                 else:
                     _r = i
                 _f = False
