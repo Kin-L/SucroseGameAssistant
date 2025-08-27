@@ -31,7 +31,7 @@ for src, drc in lis:
         shutil.copyfile(src, drc)
 chdir("release")
 rar_path = "D:/Program Files/WinRAR/WinRAR.exe"
-version = "3.0.5"
+version = "3.0.5.3"
 cmdline = [rar_path,
            "a",
            f"SGAv3-{version}-full.rar", "SGAv3"]

@@ -3,9 +3,17 @@ from maincode.tools.main import (CheckAdmin, GetWindow, logger,
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
 from time import sleep
-from sys import argv
 from maincode.tools.main import killprocess, GetPid
 import keyboard
+import sys
+
+
+def excepthook(exc_type, exc_value, exc_tb):
+    logger.critical("全局异常", exc_info=(exc_type, exc_value, exc_tb))
+    # SendMessageBox(f"崩溃: {exc_value}")
+
+
+sys.excepthook = excepthook
 
 
 def SGALoad(showconsole: bool = True):
@@ -28,17 +36,17 @@ def SGALoad(showconsole: bool = True):
             QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
             QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
             QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
-            application = QApplication(argv)
+            application = QApplication(sys.argv)
             from maincode.thread.updatecheck import SGAMain8
             loadui = True
             if showconsole:
-                argv.append("showconsole")
-                if "current" in argv or "hideui" in argv:
+                sys.argv.append("showconsole")
+                if "current" in sys.argv or "hideui" in sys.argv:
                     loadui = False
             sqmw = SGAMain8(loadui)
             if not loadui:
                 logger.info("SGA启动完成, SGA运行中...")
-                if "current" in argv:
+                if "current" in sys.argv:
                     sqmw.TaskStart("current")
             application.exec_()
     except Exception as e:

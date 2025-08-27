@@ -1,4 +1,5 @@
 from maincode.tools.main import logger
+from maincode.main.maingroup import sg
 
 
 def snowDailyTask(self):
@@ -28,11 +29,15 @@ def snowDailyTask(self):
                     _r = i
                 _f = False
                 cl = False
+                cah = []
                 for o in range(8):
-                    pos = self.ctler.findtext(_r, (0, 731, 1417, 858))
+                    res = self.ctler.ocr((0, 731, 1417, 858), mode=1)
+                    cah.append([o, res])
+                    pos = self.ctler.StrFind(_r, res)
                     if pos:
                         (_x, _y) = self.ctler.convertR(pos)
                         _str = self.ctler.ocr((_x+247, 177,  _x+447, 233))[0]
+                        # print(_str, i)
                         if _str[-3] == "0":
                             self.send(f"今日已完成：角色 {i}")
                             _f = True
@@ -42,11 +47,12 @@ def snowDailyTask(self):
                             cl = True
                         break
                     elif o == 7:
-                        self.ctler.roll((1002, 581), 60000, True)
+                        self.ctler.roll((1002, 581), 70000, True)
                         self.ctler.wait(0.8)
                         _f = True
                         self.send(f"未识别到角色: {i}")
-                        raise ValueError
+                        logger.debug(f"{cah}")
+                        sg.info.TaskError = True
                     else:
                         self.ctler.roll((1002, 581), -5620, True)
                         self.ctler.wait(0.8)

@@ -3,16 +3,15 @@ from PIL import ImageGrab, Image
 from os import path, remove, makedirs
 import numpy as np
 from .keymouse import KeyMouse
-from time import time, localtime
+from time import time
 from maincode.tools.main import GetTracebackInfo, logger
 from ..ocr.main import OCR
 import subprocess
-import io
 
 
 class SGAImage(KeyMouse):
     def __init__(self):
-        self.OCR = OCR()
+        self.OCR = OCR
         self.OCR.check()
 
     def screenshot(self, zone="FULL", save=False):

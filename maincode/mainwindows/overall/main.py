@@ -41,7 +41,7 @@ class SGAMain3(SGAMain2):
 
     def changeOcrPath(self):
         sg.mainconfig.OcrPath = self.overall.leocrpath.text()
-        self.info.OcrPath = self.mainconfig.OcrPath
+        sg.info.OcrPath = sg.mainconfig.OcrPath
 
     def changeStopKeys(self):
         sg.mainconfig.StopKeys = self.overall.lekeyboard.text()
@@ -50,7 +50,7 @@ class SGAMain3(SGAMain2):
         _path = QFileDialog.getOpenFileName(self, "选择OCR组件exe文件")
         self.overall.leocrpath.setText(_path[0])
         sg.mainconfig.OcrPath = _path[0]
-        self.info.OcrPath = self.mainconfig.OcrPath
+        sg.info.OcrPath = sg.mainconfig.OcrPath
 
     def DisableModules(self):
         sg.mainconfig.ModulesEnable.remove(self.overall.boxmodules.currentText())

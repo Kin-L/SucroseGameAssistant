@@ -132,26 +132,12 @@ class SGAMain5(SGAMain4):
             remove(filepath)
             _tw = self.overall.timer.wdtime
             nn = num+1
-            _tw.text0.removeItem(nn)
-            _tw.text1.removeItem(nn)
-            _tw.text2.removeItem(nn)
-            _tw.text3.removeItem(nn)
-            _tw.text4.removeItem(nn)
-            _tw.text5.removeItem(nn)
-            _tw.text6.removeItem(nn)
-            _tw.text7.removeItem(nn)
-            _tw.text8.removeItem(nn)
-            _tw.text9.removeItem(nn)
+            for i in range(10):
+                getattr(_tw, f"text{i}").removeItem(nn)
             if sg.modules.WidgetsLoad[0]:
                 _wdlist = sg.modules.GetWidgets()[0].wdlist
-                _wdlist.task01.removeItem(nn)
-                _wdlist.task02.removeItem(nn)
-                _wdlist.task03.removeItem(nn)
-                _wdlist.task04.removeItem(nn)
-                _wdlist.task05.removeItem(nn)
-                _wdlist.task06.removeItem(nn)
-                _wdlist.task07.removeItem(nn)
-                _wdlist.task08.removeItem(nn)
+                for i in range(1, 9):
+                    getattr(_wdlist, f"task0{i}").removeItem(nn)
             self.infoHead()
             self.infoAdd(f"删除配置：{ck}{name}")
             self.infoEnd()
@@ -176,26 +162,12 @@ class SGAMain5(SGAMain4):
             sg.subconfig.filelist.append([key, "默认配置", 0])
             self.module.ecbconfig.setCurrentIndex(len(sg.subconfig.filelist)-1)
             _tw = self.overall.timer.wdtime
-            _tw.text0.addItem("默认配置")
-            _tw.text1.addItem("默认配置")
-            _tw.text2.addItem("默认配置")
-            _tw.text3.addItem("默认配置")
-            _tw.text4.addItem("默认配置")
-            _tw.text5.addItem("默认配置")
-            _tw.text6.addItem("默认配置")
-            _tw.text7.addItem("默认配置")
-            _tw.text8.addItem("默认配置")
-            _tw.text9.addItem("默认配置")
+            for i in range(10):
+                getattr(_tw, f"text{i}").addItem("默认配置")
             if sg.modules.WidgetsLoad[0]:
                 _wdlist = sg.modules.GetWidgets()[0].wdlist
-                _wdlist.task01.addItem("默认配置")
-                _wdlist.task02.addItem("默认配置")
-                _wdlist.task03.addItem("默认配置")
-                _wdlist.task04.addItem("默认配置")
-                _wdlist.task05.addItem("默认配置")
-                _wdlist.task06.addItem("默认配置")
-                _wdlist.task07.addItem("默认配置")
-                _wdlist.task08.addItem("默认配置")
+                for i in range(1, 9):
+                    getattr(_wdlist, f"task0{i}").addItem("默认配置")
             self.infoHead()
             self.infoAdd(f"新建配置")
             self.infoEnd()
@@ -243,26 +215,12 @@ class SGAMain5(SGAMain4):
                 sg.subconfig.Save(_dict)
                 _tw = self.overall.timer.wdtime
                 old_index = num + 1
-                _tw.text0.setItemText(old_index, newname)
-                _tw.text1.setItemText(old_index, newname)
-                _tw.text2.setItemText(old_index, newname)
-                _tw.text3.setItemText(old_index, newname)
-                _tw.text4.setItemText(old_index, newname)
-                _tw.text5.setItemText(old_index, newname)
-                _tw.text6.setItemText(old_index, newname)
-                _tw.text7.setItemText(old_index, newname)
-                _tw.text8.setItemText(old_index, newname)
-                _tw.text9.setItemText(old_index, newname)
+                for i in range(10):
+                    getattr(_tw, f"text{i}").setItemText(old_index, newname)
                 if sg.modules.WidgetsLoad[0]:
                     _wdlist = sg.modules.GetWidgets()[0].wdlist
-                    _wdlist.task01.setItemText(old_index, newname)
-                    _wdlist.task02.setItemText(old_index, newname)
-                    _wdlist.task03.setItemText(old_index, newname)
-                    _wdlist.task04.setItemText(old_index, newname)
-                    _wdlist.task05.setItemText(old_index, newname)
-                    _wdlist.task06.setItemText(old_index, newname)
-                    _wdlist.task07.setItemText(old_index, newname)
-                    _wdlist.task08.setItemText(old_index, newname)
+                    for i in range(1, 9):
+                        getattr(_wdlist, f"task0{i}").setItemText(old_index, newname)
                 self.infoHead()
                 self.infoAdd(f"重命名配置：{configkey}")
                 self.infoAdd(f"  {oldname} -> {newname}", False)

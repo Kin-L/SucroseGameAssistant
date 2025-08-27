@@ -3,8 +3,7 @@ from time import localtime
 from maincode.main.maingroup import sg
 from maincode.mainwindows.main import SGAMain6
 from maincode.tools.main import CmdRun, GetMute, ScreenOff, logger, GetTracebackInfo
-import sys
-from PyQt5.QtWidgets import QShortcut
+from PyQt5.QtWidgets import QShortcut, QApplication
 from PyQt5.QtGui import QKeySequence
 
 from maincode.tools.main import killprocess, GetPid
@@ -39,13 +38,7 @@ class SGAMain7(SGAMain6):
                 para.update(dict(sg.mainconfig.CurrentConfig))
                 para["OtherConfig"] = sg.mainconfig.OtherConfig
                 para["current_mute"] = GetMute()
-                self.NewThread(tasktype, para)
-                self.thread.started.connect(self.worker.run)
-                self.worker.finished.connect(self.thread.quit)
-                self.worker.finished.connect(self.worker.deleteLater)
-                self.thread.finished.connect(lambda: self.TaskStop(tasktype, para))
-                self.thread.finished.connect(self.thread.deleteLater)
-                self.thread.start()
+                self.NewThread(tasktype, para, self.TaskStop)
                 self.infoAdd("开始执行实时任务")
                 self.module.btpause.setEnabled(True)
                 self.module.btpause.show()
@@ -56,13 +49,7 @@ class SGAMain7(SGAMain6):
                 self.infoAdd("准备开始...")
                 para["OtherConfig"] = sg.mainconfig.OtherConfig
                 para["current_mute"] = GetMute()
-                self.NewThread(tasktype, para)
-                self.thread.started.connect(self.worker.run)
-                self.worker.finished.connect(self.thread.quit)
-                self.worker.finished.connect(self.worker.deleteLater)
-                self.thread.finished.connect(lambda: self.TaskStop(tasktype, para))
-                self.thread.finished.connect(self.thread.deleteLater)
-                self.thread.start()
+                self.NewThread(tasktype, para, self.TaskStop)
                 name = para["ConfigName"]
                 self.infoAdd(f"开始执行定时任务：{name}")
                 self.module.btpause.setEnabled(True)
@@ -71,13 +58,7 @@ class SGAMain7(SGAMain6):
             elif tasktype == "update":
                 self.infoHead()
                 self.infoAdd("准备开始...")
-                self.NewThread(tasktype, para)
-                self.thread.started.connect(self.worker.run)
-                self.worker.finished.connect(self.thread.quit)
-                self.worker.finished.connect(self.worker.deleteLater)
-                self.thread.finished.connect(lambda: self.TaskStop(tasktype, para))
-                self.thread.finished.connect(self.thread.deleteLater)
-                self.thread.start()
+                self.NewThread(tasktype, para, self.TaskStop)
         except Exception as e:
             _str = GetTracebackInfo(e) + "准备开始流程异常"
             logger.error(_str)
@@ -114,7 +95,9 @@ class SGAMain7(SGAMain6):
                     self.infoAdd("SGA关闭 电脑熄屏")
                     self.infoEnd()
                     CmdRun("start "" /d \"resources/main/script\" screen_off.vbs")
-                    sys.exit(0)
+                    app = QApplication.instance()
+                    if app:
+                        app.quit()
                 else:
                     self.infoAdd("SGA等待 电脑熄屏")
                     self.infoEnd()
@@ -124,7 +107,9 @@ class SGAMain7(SGAMain6):
                     self.infoAdd("SGA关闭 电脑睡眠")
                     self.infoEnd()
                     CmdRun("start "" /d \"resources/main/script\" sleep.vbs")
-                    sys.exit(0)
+                    app = QApplication.instance()
+                    if app:
+                        app.quit()
                 else:
                     self.infoAdd("SGA等待 电脑睡眠")
                     self.infoEnd()
@@ -133,7 +118,9 @@ class SGAMain7(SGAMain6):
                 if para["SGAClose"]:
                     self.infoAdd("SGA关闭 电脑无操作")
                     self.infoEnd()
-                    sys.exit(0)
+                    app = QApplication.instance()
+                    if app:
+                        app.quit()
                 else:
                     self.infoAdd("SGA等待 电脑无操作")
                     self.infoEnd()
@@ -152,10 +139,11 @@ class SGAMain7(SGAMain6):
                 self.module.statesigh.SetState(1)
                 try:
                     self.worker.quit()
-                    self.worker.wait(),  # 可选：等待线程结束
+                    self.worker.wait()  # 可选：等待线程结束
                     self.module.btpause.hide()
                     self.worker.deleteLater()
                     self.thread.quit()
+                    self.thread.wait()
                     self.thread.deleteLater()
                 except:
                     ...

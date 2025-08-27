@@ -1,4 +1,4 @@
-from psutil import process_iter
+import psutil
 from win10toast import ToastNotifier
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import cast, POINTER, windll
@@ -22,7 +22,7 @@ def CmdRun(_str: str):
 
 # 从exe名称获取pid
 def GetPid(name: str) -> int:
-    for proc in process_iter():
+    for proc in psutil.process_iter():
         # noinspection PyBroadException
         try:
             if proc.name() == name:
@@ -36,13 +36,26 @@ def GetPid(name: str) -> int:
 def killprocess(_process: Union[int, str]):
     if isinstance(_process, int):
         # 根据pid杀死进程
-        CmdRun('taskkill /f /pid %s' % _process)
+        _pid = _process
     elif isinstance(_process, str):
         # 根据进程名杀死进程
-        pro = 'taskkill /f /im %s' % _process
-        CmdRun(pro)
+        _pid = GetPid(_process)
     else:
         raise ValueError(f"close异常传输值：{_process}")
+    try:
+        process = psutil.Process(_pid)
+        process.terminate()
+        gone, still_alive = psutil.wait_procs([process], timeout=5)
+        if still_alive:
+            process.kill()
+            return
+        else:
+            return 0
+
+    except psutil.NoSuchProcess:
+        return 1
+    except psutil.AccessDenied:
+        return 2
 
 
 # windows提示

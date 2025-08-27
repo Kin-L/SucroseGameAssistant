@@ -3,6 +3,7 @@ from maincode.main.maingroup import sg
 from maincode.main.mainconfig import TimerConfigClass
 from maincode.tools.main import GetTracebackInfo, logger
 from .timer.function import ApplyTimer
+import keyboard
 
 
 class SGAMain6(SGAMain5):
@@ -66,16 +67,30 @@ class SGAMain6(SGAMain5):
 
     def closeEvent(self, event):
         try:
+            if hasattr(self, 'worker'):
+                self.worker.quit()
+                self.worker.wait()
+                self.worker.deleteLater()
+        except:
+            ...
+        try:
+            if hasattr(self, 'thread'):
+                self.thread.quit()
+                self.thread.wait()
+                self.thread.deleteLater()
+        except:
+            ...
+        try:
+            if hasattr(self, 'OCR'):
+                self.OCR.disable()
+            keyboard.unhook_all()
+            # keyboard.remove_all_hotkeys()
             if self.loadui:
-                sg.mainconfig.ModulesEnable = [self.overall.boxmodules.itemText(i) for i in range(self.overall.boxmodules.count())]
+                sg.mainconfig.ModulesEnable = [self.overall.boxmodules.itemText(i) for i in
+                                               range(self.overall.boxmodules.count())]
                 self.SaveConfig()
-            try:
-                if self.thread.isRunning():
-                    self.thread.quit()
-                    self.thread.wait()
-            except:
-                ...
             super().closeEvent(event)
         except Exception as e:
-            _str = GetTracebackInfo(e) + "SGA退出流程异常"
-            logger.error(_str)
+            logger.error(f"SGA退出前清理资源异常: {GetTracebackInfo(e)}")
+        finally:
+            event.accept()  # 允许窗口关闭

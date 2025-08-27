@@ -6,18 +6,19 @@ from maincode.main.info import info
 from maincode.tools.main import logger, SendMessageBox, GetTracebackInfo
 
 
-class OCR:
+class OCRControl:
     def __init__(self):
         self.logger = logger
-        if info.OcrPath:
-            self.path = info.OcrPath
-        else:
-            self.path = "ocr-json/PaddleOCR-json.exe" if info.CpuFeature else "ocr-json/RapidOCR-json.exe"
+        self.path = ""
         self.name = "PaddleOCR-json.exe" if info.CpuFeature else "RapidOCR-json.exe"
         self.running = None
         self.isrunning = False
 
     def check(self):
+        if info.OcrPath:
+            self.path = info.OcrPath
+        else:
+            self.path = "ocr-json/PaddleOCR-json.exe" if info.CpuFeature else "ocr-json/RapidOCR-json.exe"
         if self.path and path.exists(self.path) and path.basename(self.path) == self.name:
             return True
         else:
@@ -125,3 +126,6 @@ class OCR:
             converted_item = [[box[0], box[1], box[2], box[3]], (text, score)]
             converted_result.append(converted_item)
         return converted_result
+
+
+OCR = OCRControl()
