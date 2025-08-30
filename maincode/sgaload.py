@@ -3,7 +3,7 @@ from maincode.tools.main import (CheckAdmin, GetWindow, logger,
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
 from time import sleep
-from maincode.tools.main import killprocess, GetPid
+from maincode.tools.constant import spr
 import keyboard
 import sys
 
@@ -18,6 +18,7 @@ sys.excepthook = excepthook
 
 def SGALoad(showconsole: bool = True):
     try:
+        spr["ShowConsole"] = showconsole
         if not CheckAdmin():
             return
         window = GetWindow("砂糖代理", True)
@@ -30,21 +31,18 @@ def SGALoad(showconsole: bool = True):
             keyboard.send("numlock")
             sleep(0.01)
             keyboard.send("numlock")
-            while v := GetPid("PaddleOCR-json.exe"):
-                killprocess(v)
             # SGA窗口初始化
             QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
             QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
             QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
             application = QApplication(sys.argv)
             from maincode.thread.updatecheck import SGAMain8
-            loadui = True
-            if showconsole:
-                sys.argv.append("showconsole")
-                if "current" in sys.argv or "hideui" in sys.argv:
-                    loadui = False
-            sqmw = SGAMain8(loadui)
-            if not loadui:
+            if showconsole and ("current" in sys.argv or "hideui" in sys.argv):
+                spr["LoadUI"] = False
+            else:
+                spr["LoadUI"] = True
+            sqmw = SGAMain8()
+            if not spr["LoadUI"]:
                 logger.info("SGA启动完成, SGA运行中...")
                 if "current" in sys.argv:
                     sqmw.TaskStart("current")

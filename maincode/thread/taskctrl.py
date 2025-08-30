@@ -80,7 +80,7 @@ class SGAMain7(SGAMain6):
                 self.sleeptime = sleeptime if sleeptime > 0 else 0
                 keyboard.remove_all_hotkeys()
             elif tasktype == "update":
-                self.overall.btcheckupdate.setEnabled(True)
+                self.widget.btcheckupdate.setEnabled(True)
                 keyboard.remove_all_hotkeys()
                 return
             if para["Mute"] and (GetMute() != para["current_mute"]):
@@ -151,3 +151,21 @@ class SGAMain7(SGAMain6):
             _str = GetTracebackInfo(e) + "手动终止流程异常"
             logger.error(_str)
             self.infoAdd(f"手动终止流程异常")
+
+    def NewThread(self, tasktype, para, taskstop):
+        self.thread = QThread()
+        self.worker = SGAMainThread(tasktype, para)
+
+        # 将工作对象移动到线程中
+        self.worker.moveToThread(self.thread)
+        # self.thread = QThread()
+        # self.taskthread.moveToThread(self.thread)
+        self.worker.infoHead.connect(self.infoHead)
+        self.worker.infoAdd.connect(self.infoAdd)
+        self.worker.infoEnd.connect(self.infoEnd)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(lambda: taskstop(tasktype, para))
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.start()

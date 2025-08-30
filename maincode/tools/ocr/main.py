@@ -4,6 +4,7 @@ from io import BytesIO
 from os import path
 from maincode.main.info import info
 from maincode.tools.main import logger, SendMessageBox, GetTracebackInfo
+from maincode.tools.main import killprocess, GetPid
 
 
 class OCRControl:
@@ -13,6 +14,14 @@ class OCRControl:
         self.name = "PaddleOCR-json.exe" if info.CpuFeature else "RapidOCR-json.exe"
         self.running = None
         self.isrunning = False
+
+    def clear(self):
+        for _ in range(10):
+            if v := GetPid(self.name):
+                killprocess(v)
+            else:
+                return True
+        return False
 
     def check(self):
         if info.OcrPath:

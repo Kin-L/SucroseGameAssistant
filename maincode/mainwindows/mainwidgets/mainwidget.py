@@ -1,8 +1,11 @@
 from maincode.tools.controls import (Line, Stack, Widget,
                                      PicButton, InfoBox, OverallButton,
                                      tips, Support)
-from sys import argv
+from maincode.tools.controls import ConsoleButton
 from ctypes import windll
+from maincode.tools.constant import spr
+import os
+from pathlib import Path as libPath
 
 
 class MainWidget(Widget):
@@ -12,20 +15,27 @@ class MainWidget(Widget):
         Line(self, (5, 38, 625, 3))
         # 全局/模块 设置按钮
         self.btsetting = OverallButton(self)
-        if "showconsole" in argv:
+        if spr["ShowConsole"]:
             self.console_window = windll.kernel32.GetConsoleWindow()
         self.obstate = False
         self.obconsole = True
         self.support = Support()
         # 历史信息按钮
-        historypath = "resources/main/button/history.png"
-        savepath = "resources/main/button/save.png"
         sizetp = (25, 25)
-        self.bthistory = PicButton(self, (555, 0, 35, 35), historypath, sizetp)
-        self.btconfigsave = PicButton(self, (515, 0, 35, 35), savepath, sizetp)
+        self.bthistory = PicButton(self, (555, 0, 35, 35), spr["SGATitlePic"], sizetp)
+        self.btconfigsave = PicButton(self, (515, 0, 35, 35), spr["SavePic"], sizetp)
         tips(self.btconfigsave, "手动保存并应用当前页面设置(快捷键：ctrl+s)")
         # 指示信息窗口
         self.infobox = InfoBox(self)
+
+        if spr["ShowConsole"]:
+            self.btconsole = ConsoleButton(self.mainwidget)
+            self.btconsole.setChecked(True)
+            self.btconsole.toggled.connect(self.changecs)
+        self.btsetting.toggled.connect(self.changeob)
+        self.bthistory.clicked.connect(lambda: os.startfile(
+            max([f for f in libPath(spr["LogsDir"]).iterdir() if f.is_file()],
+                key=lambda f: f.stat().st_ctime)))
 
     def changeob(self):
         if self.obstate:

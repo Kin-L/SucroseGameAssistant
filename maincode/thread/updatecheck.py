@@ -9,7 +9,7 @@ class SGAMain8(SGAMain7):
     def __init__(self, userui):
         super().__init__(userui)
         if self.loadui:
-            self.overall.btcheckupdate.clicked.connect(self.updatecheck)
+            self.widget.btcheckupdate.clicked.connect(self.updatecheck)
             self.mainwidget.btconfigsave.clicked.connect(self.ManualSaveConfig)
             self.quicksave.activated.connect(self.ManualSaveConfig)
             # self.quickstop.activated.connect(self.ManualStop)

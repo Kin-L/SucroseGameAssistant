@@ -1,18 +1,43 @@
-from .module.main import SGAMain5
 from maincode.main.maingroup import sg
 from maincode.main.mainconfig import TimerConfigClass
-from maincode.tools.main import GetTracebackInfo, logger
+from maincode.tools.main import GetTracebackInfo
 from .timer.function import ApplyTimer
 import keyboard
+from maincode.mainwindows.mainwidgets.main import SGAMainWidgets
+from maincode.mainwindows.overall.main import SGAOverall
+from maincode.mainwindows.module.main import SGAModule
+from PyQt5.QtCore import QTimer
+from maincode.tools.main import logger
+from maincode.tools.ocr.main import OCR
+from maincode.tools.constant import spr
 
 
-class SGAMain6(SGAMain5):
-    def __init__(self, userui):
-        super().__init__(userui)
+class SGAMain:
+    def __init__(self):
+        self.SGAMWS = SGAMainWidgets()
+        if spr["LoadUI"]:
+            sg.infoHead.connect(self.SGAMWS.infoHead)
+            sg.infoAdd.connect(self.SGAMWS.infoAdd)
+            sg.infoEnd.connect(self.SGAMWS.infoEnd)
+            self.infoHead = self.SGAMWS.infoHead
+            self.infoAdd = self.SGAMWS.infoAdd
+            self.infoEnd = self.SGAMWS.infoEnd
+        sg.Load()
+        OCR.clear()
+        logger.info(sg.info.GetEnvironmentInfoStr())
+        self.timer = QTimer(self)
+        self.sleeptime = 0
         self.timerallow = True
+        if spr["LoadUI"]:
+            self.overall = SGAOverall()
+            self.SGAMWS.mainwidget.sksetting.addWidget(self.overall.widget)
+            self.overall.widget.btsupport.clicked.connect(self.SGAMWS.mainwidget.support.show)
+            self.module = SGAModule(self.overall.widget.timer.widgets.wdtime)
+            self.SGAMWS.mainwidget.sksetting.addWidget(self.module)
+            self.SGAMWS.mainwidget.sksetting.setCurrentIndex(1)
 
     def currentsave(self):
-        num = self.module.boxmodule.currentIndex()
+        num = self.module.widget.boxmodule.currentIndex()
         mk = sg.modules.GetInfos()[num][2]
         _dict = {'ModuleKey': mk, 'ConfigKey': "", 'ConfigName': "默认配置"}
         _subconfig = sg.modules.GetWidgets()[num].CollectConfig()
@@ -23,7 +48,7 @@ class SGAMain6(SGAMain5):
 
     def subconfigsave(self):
         _dict = {'ConfigKey': sg.mainconfig.ConfigKey,
-                 'ConfigName': self.module.ecbconfig.text()}
+                 'ConfigName': self.module.widget.ecbconfig.text()}
         _save = dict(sg.mainconfig.CurrentConfig)
         _save.update(_dict)
         sg.subconfig.Save(_save)
@@ -31,9 +56,9 @@ class SGAMain6(SGAMain5):
         sg.subconfig.filelist[num][2] = _save['ModuleKey']
 
     def SaveConfig(self):
-        if self.loadui:
+        if spr["LoadUI"]:
             self.currentsave()
-            sg.mainconfig.TimerConfig = TimerConfigClass(**self.CollectConfig())
+            sg.mainconfig.TimerConfig = TimerConfigClass(**self.overall.widget.timer.CollectConfig())
             smc = sg.mainconfig.model_dump()
             if smc != sg.currentmainconfig:
                 sg.SaveMain()
@@ -42,15 +67,15 @@ class SGAMain6(SGAMain5):
 
     def ManualSaveConfig(self):
         try:
-            if self.loadui and self.timerallow:
+            if spr["LoadUI"] and self.timerallow:
                 self.infoHead()
-                if self.mainwidget.sksetting.currentIndex():
+                if self.SGAMWS.mainwidget.sksetting.currentIndex():
                     self.currentsave()
                     self.subconfigsave()
                     self.infoAdd("保存成功", False)
                 else:
                     try:
-                        sg.mainconfig.TimerConfig = TimerConfigClass(**self.CollectConfig())
+                        sg.mainconfig.TimerConfig = TimerConfigClass(**self.overall.widget.timer.CollectConfig())
                         if ApplyTimer():
                             self.infoAdd("应用SGA定时自启/唤醒", False)
                         else:
@@ -85,9 +110,9 @@ class SGAMain6(SGAMain5):
                 self.OCR.disable()
             keyboard.unhook_all()
             # keyboard.remove_all_hotkeys()
-            if self.loadui:
-                sg.mainconfig.ModulesEnable = [self.overall.boxmodules.itemText(i) for i in
-                                               range(self.overall.boxmodules.count())]
+            if spr["LoadUI"]:
+                sg.mainconfig.ModulesEnable = [self.module.widget.boxmodules.itemText(i) for i in
+                                               range(self.module.widget.boxmodules.count())]
                 self.SaveConfig()
             super().closeEvent(event)
         except Exception as e:
