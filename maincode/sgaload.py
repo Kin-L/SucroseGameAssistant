@@ -49,11 +49,11 @@ def SGALoad(showconsole: bool = True):
                 if "current" in sys.argv:
                     sqmw.TaskStart("current")
             application.exec_()
+            logger.info("==================SGA关闭=================\n\n")
     except Exception as e:
         _str = GetTracebackInfo(e) + "SGA加载失败"
         logger.critical(_str)
         SendMessageBox(_str)
-    logger.info("==================SGA关闭=================\n\n")
 
 
 if __name__ == "__main__":

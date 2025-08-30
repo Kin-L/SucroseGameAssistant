@@ -99,5 +99,5 @@ ctler = Controller()
 if __name__ == '__main__':
     # pos = ctler.findcolor("FFFF8B", template=r"E:\Kin-Desktop\3333.png")
     # print(pos)
-    res = ctler.ocr(template=r"E:\Kin-Desktop\5555.png", mode=1)
+    res = ctler.ocr(template=r"E:\Kin-Picture\555.png", mode=1)
     print(res)
