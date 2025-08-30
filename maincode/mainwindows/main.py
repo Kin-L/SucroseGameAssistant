@@ -3,25 +3,28 @@ from maincode.main.mainconfig import TimerConfigClass
 from maincode.tools.main import GetTracebackInfo
 from .timer.function import ApplyTimer
 import keyboard
-from maincode.mainwindows.mainwidgets.main import SGAMainWidgets
 from maincode.mainwindows.overall.main import SGAOverall
 from maincode.mainwindows.module.main import SGAModule
 from PyQt5.QtCore import QTimer
 from maincode.tools.main import logger
 from maincode.tools.ocr.main import OCR
 from maincode.tools.constant import spr
+from maincode.mainwindows.sgaqmain import SGAQMainWindow
+from maincode.mainwindows.mainwidget import MainWidget
 
 
-class SGAMain:
+class SGAMainWindow(SGAQMainWindow):
     def __init__(self):
-        self.SGAMWS = SGAMainWidgets()
+        super().__init__()
         if spr["LoadUI"]:
-            sg.infoHead.connect(self.SGAMWS.infoHead)
-            sg.infoAdd.connect(self.SGAMWS.infoAdd)
-            sg.infoEnd.connect(self.SGAMWS.infoEnd)
-            self.infoHead = self.SGAMWS.infoHead
-            self.infoAdd = self.SGAMWS.infoAdd
-            self.infoEnd = self.SGAMWS.infoEnd
+            self.mainwidget = MainWidget()
+            self.setCentralWidget(self.mainwidget)
+            sg.infoHead.connect(self.mainwidget.infoHead)
+            sg.infoAdd.connect(self.mainwidget.infoAdd)
+            sg.infoEnd.connect(self.mainwidget.infoEnd)
+            self.infoHead = self.mainwidget.infoHead
+            self.infoAdd = self.mainwidget.infoAdd
+            self.infoEnd = self.mainwidget.infoEnd
         sg.Load()
         OCR.clear()
         logger.info(sg.info.GetEnvironmentInfoStr())
@@ -30,11 +33,11 @@ class SGAMain:
         self.timerallow = True
         if spr["LoadUI"]:
             self.overall = SGAOverall()
-            self.SGAMWS.mainwidget.sksetting.addWidget(self.overall.widget)
-            self.overall.widget.btsupport.clicked.connect(self.SGAMWS.mainwidget.support.show)
+            self.mainwidget.sksetting.addWidget(self.overall.widget)
+            self.overall.widget.btsupport.clicked.connect(self.mainwidget.support.show)
             self.module = SGAModule(self.overall.widget.timer.widgets.wdtime)
-            self.SGAMWS.mainwidget.sksetting.addWidget(self.module)
-            self.SGAMWS.mainwidget.sksetting.setCurrentIndex(1)
+            self.mainwidget.sksetting.addWidget(self.module)
+            self.mainwidget.sksetting.setCurrentIndex(1)
 
     def currentsave(self):
         num = self.module.widget.boxmodule.currentIndex()
@@ -69,7 +72,7 @@ class SGAMain:
         try:
             if spr["LoadUI"] and self.timerallow:
                 self.infoHead()
-                if self.SGAMWS.mainwidget.sksetting.currentIndex():
+                if self.mainwidget.sksetting.currentIndex():
                     self.currentsave()
                     self.subconfigsave()
                     self.infoAdd("保存成功", False)

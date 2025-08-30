@@ -1,11 +1,12 @@
 from maincode.tools.controls import (Line, Stack, Widget,
                                      PicButton, InfoBox, OverallButton,
-                                     tips, Support)
-from maincode.tools.controls import ConsoleButton
+                                     tips, Support, ConsoleButton)
 from ctypes import windll
 from maincode.tools.constant import spr
 import os
 from pathlib import Path as libPath
+from time import localtime, strftime
+from maincode.tools.main import logger
 
 
 class MainWidget(Widget):
@@ -29,7 +30,7 @@ class MainWidget(Widget):
         self.infobox = InfoBox(self)
 
         if spr["ShowConsole"]:
-            self.btconsole = ConsoleButton(self.mainwidget)
+            self.btconsole = ConsoleButton(self)
             self.btconsole.setChecked(True)
             self.btconsole.toggled.connect(self.changecs)
         self.btsetting.toggled.connect(self.changeob)
@@ -52,3 +53,38 @@ class MainWidget(Widget):
         else:
             windll.user32.ShowWindow(self.console_window, 1)
             self.obconsole = True
+    
+    def infoAdd(self, msg: str = "", addtime=True):
+        if addtime:
+            timestr = strftime("%H:%M:%S ", localtime())
+        else:
+            timestr = "  "
+        msg.strip("\n")
+        if "\n" in msg:
+            if addtime:
+                msg = ("\n" + msg).replace("\n", "\n  ")
+            else:
+                msg = ("\n" + msg).replace("\n", "\n  ").strip("\n")
+        if spr["ShowConsole"]:
+            self.infobox.append(timestr + msg)
+            self.infobox.ensureCursorVisible()
+        logger.info(msg)
+
+    def infoHead(self):
+        today = strftime("%Y-%m-%d", localtime())
+        if today != logger.date:
+            logger.new_handler(today)
+        now_time = strftime("%Y-%m-%d", localtime())
+        if spr["ShowConsole"]:
+            self.infobox.append(now_time)
+
+    def infoEnd(self):
+        _str = "------------------------------"
+        if spr["ShowConsole"]:
+            self.infobox.append(_str)
+            self.infobox.ensureCursorVisible()
+        logger.info(_str)
+
+    def infoClear(self):
+        if spr["ShowConsole"]:
+            self.infobox.clear()
