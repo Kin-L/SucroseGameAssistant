@@ -3,32 +3,30 @@ from maincode.tools.main import (CheckAdmin, GetWindow, logger,
 from PyQt5.QtCore import Qt
 from time import sleep
 from maincode.tools.constant import spr
-from maincode.mainwindows.main import SGAMainWindow
 from maincode.thread.updatecheck import timercheck, updatecheck
-from maincode.thread.taskctrl import TaskStart, TaskStop, ManualStop
+from maincode.thread.taskctrl import *
 from PyQt5.QtWidgets import QShortcut, QApplication
-from PyQt5.QtGui import QKeySequence
 import keyboard
 import sys
 
 
-class SGAMain:
+class SGAMain(SGAMainWindow):
     def __init__(self):
-        self.SMW = SGAMainWindow()
+        super().__init__()
         if spr["LoadUI"]:
-            self.SMW.module.btstart.clicked.connect(lambda: TaskStart("current"))
-            self.SMW.module.btpause.clicked.connect(ManualStop)
-            self.SMW.widget.btcheckupdate.clicked.connect(updatecheck)
-            self.SMW.mainwidget.btconfigsave.clicked.connect(self.SMW.ManualSaveConfig)
-            self.SMW.quicksave = QShortcut(QKeySequence("Ctrl+S"), self)
-            self.SMW.quicksave.activated.connect(self.SMW.ManualSaveConfig)
+            self.module.widget.btstart.clicked.connect(lambda: self.TaskStart("current"))
+            self.module.widget.btpause.clicked.connect(lambda: ManualStop(self))
+            self.overall.widget.btcheckupdate.clicked.connect(lambda: updatecheck(self))
+            self.mainwidget.btconfigsave.clicked.connect(self.ManualSaveConfig)
+            self.quicksave = QShortcut("Ctrl+S", self)
+            self.quicksave.activated.connect(self.ManualSaveConfig)
             # self.quickstop.activated.connect(self.ManualStop)
-            self.SMW.loading.hide()
-            self.SMW.loading.lower()
-            self.SMW.infoAdd("加载完成", False)
-            self.SMW.infoEnd()
-        self.SMW.timer.timeout.connect(timercheck)
-        self.SMW.timer.start(15000)
+            self.loading.hide()
+            self.loading.lower()
+            self.infoAdd("加载完成", False)
+            self.infoEnd()
+        self.timer.timeout.connect(lambda: timercheck(self))
+        self.timer.start(15000)
 
 
 def SGALoad(showconsole: bool = True):

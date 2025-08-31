@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QApplication
 from maincode.tools.main import killprocess, GetPid
 from .task import SGAMainThread
 from PyQt5.QtCore import QThread
+from maincode.tools.constant import spr
 
 
 def TaskStart(self: SGAMainWindow, tasktype: str, para: dict = None):
@@ -30,7 +31,7 @@ def TaskStart(self: SGAMainWindow, tasktype: str, para: dict = None):
             para.update(dict(sg.mainconfig.CurrentConfig))
             para["OtherConfig"] = sg.mainconfig.OtherConfig
             para["current_mute"] = GetMute()
-            NewThread(tasktype, para)
+            self.NewThread(tasktype, para)
             self.infoAdd("开始执行实时任务")
             self.module.btpause.setEnabled(True)
             self.module.btpause.show()
@@ -41,7 +42,7 @@ def TaskStart(self: SGAMainWindow, tasktype: str, para: dict = None):
             self.infoAdd("准备开始...")
             para["OtherConfig"] = sg.mainconfig.OtherConfig
             para["current_mute"] = GetMute()
-            NewThread(tasktype, para)
+            self.NewThread(tasktype, para)
             name = para["ConfigName"]
             self.infoAdd(f"开始执行定时任务：{name}")
             self.module.btpause.setEnabled(True)
@@ -50,7 +51,7 @@ def TaskStart(self: SGAMainWindow, tasktype: str, para: dict = None):
         elif tasktype == "update":
             self.infoHead()
             self.infoAdd("准备开始...")
-            NewThread(tasktype, para)
+            self.NewThread(tasktype, para)
     except Exception as e:
         _str = GetTracebackInfo(e) + "准备开始流程异常"
         logger.error(_str)
@@ -164,3 +165,8 @@ def NewThread(self: SGAMainWindow, tasktype, para):
     self.thread.finished.connect(lambda: TaskStop(tasktype, para))
     self.thread.finished.connect(self.thread.deleteLater)
     self.thread.start()
+
+
+SGAMainWindow.TaskStart = TaskStart
+SGAMainWindow.TaskStop = TaskStop
+SGAMainWindow.ManualStop = ManualStop

@@ -36,7 +36,7 @@ class SGAMainWindow(SGAQMainWindow):
             self.mainwidget.sksetting.addWidget(self.overall.widget)
             self.overall.widget.btsupport.clicked.connect(self.mainwidget.support.show)
             self.module = SGAModule(self.overall.widget.timer.widgets.wdtime)
-            self.mainwidget.sksetting.addWidget(self.module)
+            self.mainwidget.sksetting.addWidget(self.module.widget)
             self.mainwidget.sksetting.setCurrentIndex(1)
 
     def currentsave(self):
@@ -122,3 +122,4 @@ class SGAMainWindow(SGAQMainWindow):
             logger.error(f"SGA退出前清理资源异常: {GetTracebackInfo(e)}")
         finally:
             event.accept()  # 允许窗口关闭
+
