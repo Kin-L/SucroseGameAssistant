@@ -2,7 +2,7 @@ from .PPOCR_api import GetOcrApi
 from PIL import Image
 from io import BytesIO
 from os import path
-from maincode.main.info import info
+from maincode.config.info import info
 from maincode.tools.main import logger, SendMessageBox, GetTracebackInfo
 from maincode.tools.main import killprocess, GetPid
 

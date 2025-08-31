@@ -1,6 +1,6 @@
 import json
 from os import path, makedirs, startfile, getcwd
-from maincode.main.info import info
+from maincode.config.info import info
 
 
 def snowGachaRecog(self):

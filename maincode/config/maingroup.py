@@ -49,29 +49,40 @@ class SGAConfigGroup(QObject):
         if not path.exists(self.PersonalPath):
             makedirs(self.PersonalPath)
         _mainconfig = {}
+
+        # 尝试加载主配置
         if path.exists(self.MainConfigPath):
-            with open(self.MainConfigPath, 'r', encoding='utf-8') as c:
-                _mainconfig = json.load(c)
-            if checkmain(_mainconfig):
-                return MainConfig(**_mainconfig)
+            try:
+                with open(self.MainConfigPath, 'r', encoding='utf-8') as c:
+                    _mainconfig = json.load(c)
+                if checkmain(_mainconfig):
+                    return MainConfig(**_mainconfig)
+            except (json.JSONDecodeError, Exception):
+                pass  # 主配置损坏，继续尝试备份
+
+        # 尝试加载备份配置
         if path.exists(self.MainConfigBackupPath):
-            with open(self.MainConfigBackupPath, 'r', encoding='utf-8') as c:
-                _mainconfig: dict = json.load(c)
-            if checkmain(_mainconfig):
-                self.infoAdd.emit("主配置异常，从备份恢复", False)
-                return MainConfig(**_mainconfig)
-            else:
-                template = MainConfig().model_dump()
-                template.update(_mainconfig)
-                if checkmain(template):
-                    self.infoAdd("主配置异常，进行修复", False)
-                    return MainConfig(**template)
+            try:
+                with open(self.MainConfigBackupPath, 'r', encoding='utf-8') as c:
+                    _mainconfig = json.load(c)
+                if checkmain(_mainconfig):
+                    self.infoAdd.emit("主配置异常，从备份恢复", False)
+                    return MainConfig(**_mainconfig)
+                else:
+                    template = MainConfig().model_dump()
+                    template.update(_mainconfig)
+                    if checkmain(template):
+                        self.infoAdd.emit("主配置异常，进行修复", False)
+                        return MainConfig(**template)
+            except (json.JSONDecodeError, Exception):
+                pass  # 备份配置损坏
+
+        # 初始化配置
         if _mainconfig:
             self.infoAdd.emit("主配置损坏，进行初始化", False)
-            return MainConfig()
         else:
             self.infoAdd.emit("主配置初始化", False)
-            return MainConfig()
+        return MainConfig()
 
     def RecognizeModules(self):
         _l = self.mainconfig.ModulesEnable

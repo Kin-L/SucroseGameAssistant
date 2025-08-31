@@ -1,7 +1,7 @@
 from os import path, startfile
 import subprocess
 from time import sleep, time
-from maincode.main.info import info
+from maincode.config.info import info
 import re
 from contextlib import contextmanager
 

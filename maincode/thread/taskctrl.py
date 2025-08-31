@@ -1,16 +1,14 @@
 import keyboard
 from time import localtime
-from maincode.main.maingroup import sg
-from maincode.mainwindows.main import SGAMainWindow
+from maincode.config.maingroup import sg
 from maincode.tools.main import CmdRun, GetMute, ScreenOff, logger, GetTracebackInfo
 from PyQt5.QtWidgets import QApplication
 from maincode.tools.main import killprocess, GetPid
 from .task import SGAMainThread
 from PyQt5.QtCore import QThread
-from maincode.tools.constant import spr
 
 
-def TaskStart(self: SGAMainWindow, tasktype: str, para: dict = None):
+def TaskStart(self, tasktype: str, para: dict = None):
     if para is None:
         para = dict()
     try:
@@ -58,7 +56,7 @@ def TaskStart(self: SGAMainWindow, tasktype: str, para: dict = None):
         self.infoAdd(f"准备开始流程异常")
 
 
-def TaskStop(self: SGAMainWindow, tasktype: str, para=None):
+def TaskStop(self, tasktype: str, para=None):
     try:
         self.window.foreground()
         if sg.info.TaskError:
@@ -137,9 +135,9 @@ def ManualStop(self):
                 self.worker.wait()  # 可选：等待线程结束
                 self.module.btpause.hide()
                 self.worker.deleteLater()
-                self.thread.quit()
-                self.thread.wait()
-                self.thread.deleteLater()
+                self.threadpool.quit()
+                self.threadpool.wait()
+                self.threadpool.deleteLater()
             except:
                 ...
     except Exception as e:
@@ -148,25 +146,20 @@ def ManualStop(self):
         self.infoAdd(f"手动终止流程异常")
 
 
-def NewThread(self: SGAMainWindow, tasktype, para):
-    self.thread = QThread()
+def NewThread(self, tasktype, para):
+    self.threadpool = QThread()
     self.worker = SGAMainThread(tasktype, para)
 
     # 将工作对象移动到线程中
-    self.worker.moveToThread(self.thread)
-    # self.thread = QThread()
-    # self.taskthread.moveToThread(self.thread)
+    self.worker.moveToThread(self.threadpool)
     self.worker.infoHead.connect(self.infoHead)
     self.worker.infoAdd.connect(self.infoAdd)
     self.worker.infoEnd.connect(self.infoEnd)
-    self.thread.started.connect(self.worker.run)
-    self.worker.finished.connect(self.thread.quit)
+    self.threadpool.started.connect(self.worker.run)
+    self.worker.finished.connect(self.threadpool.quit)
     self.worker.finished.connect(self.worker.deleteLater)
-    self.thread.finished.connect(lambda: TaskStop(tasktype, para))
-    self.thread.finished.connect(self.thread.deleteLater)
-    self.thread.start()
+    self.threadpool.finished.connect(lambda: TaskStop(tasktype, para))
+    self.threadpool.finished.connect(self.threadpool.deleteLater)
+    self.threadpool.start()
 
 
-SGAMainWindow.TaskStart = TaskStart
-SGAMainWindow.TaskStop = TaskStop
-SGAMainWindow.ManualStop = ManualStop

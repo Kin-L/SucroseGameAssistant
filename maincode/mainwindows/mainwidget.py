@@ -3,8 +3,7 @@ from maincode.tools.controls import (Line, Stack, Widget,
                                      tips, Support, ConsoleButton)
 from ctypes import windll
 from maincode.tools.constant import spr
-import os
-from pathlib import Path as libPath
+
 from time import localtime, strftime
 from maincode.tools.main import logger
 
@@ -28,15 +27,9 @@ class MainWidget(Widget):
         tips(self.btconfigsave, "手动保存并应用当前页面设置(快捷键：ctrl+s)")
         # 指示信息窗口
         self.infobox = InfoBox(self)
-
         if spr["ShowConsole"]:
             self.btconsole = ConsoleButton(self)
             self.btconsole.setChecked(True)
-            self.btconsole.toggled.connect(self.changecs)
-        self.btsetting.toggled.connect(self.changeob)
-        self.bthistory.clicked.connect(lambda: os.startfile(
-            max([f for f in libPath(spr["LogsDir"]).iterdir() if f.is_file()],
-                key=lambda f: f.stat().st_ctime)))
 
     def changeob(self):
         if self.obstate:

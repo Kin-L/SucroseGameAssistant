@@ -1,6 +1,6 @@
 from maincode.tools.main import (GetTracebackInfo, logger, CmdRun)
 from os import path, makedirs, remove
-from maincode.main.maingroup import sg
+from maincode.config.maingroup import sg
 
 
 def update(self):

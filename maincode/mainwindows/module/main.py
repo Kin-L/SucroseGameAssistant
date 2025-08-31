@@ -1,5 +1,5 @@
 from .widget import ModuleWidget
-from maincode.main.maingroup import sg
+from maincode.config.maingroup import sg
 from maincode.tools.main import logger, GetTracebackInfo
 from os import path, remove, replace
 

@@ -3,30 +3,10 @@ from maincode.tools.main import (CheckAdmin, GetWindow, logger,
 from PyQt5.QtCore import Qt
 from time import sleep
 from maincode.tools.constant import spr
-from maincode.thread.updatecheck import timercheck, updatecheck
-from maincode.thread.taskctrl import *
-from PyQt5.QtWidgets import QShortcut, QApplication
+from maincode.sgamain import SGAMain
+from PyQt5.QtWidgets import QApplication
 import keyboard
 import sys
-
-
-class SGAMain(SGAMainWindow):
-    def __init__(self):
-        super().__init__()
-        if spr["LoadUI"]:
-            self.module.widget.btstart.clicked.connect(lambda: self.TaskStart("current"))
-            self.module.widget.btpause.clicked.connect(lambda: ManualStop(self))
-            self.overall.widget.btcheckupdate.clicked.connect(lambda: updatecheck(self))
-            self.mainwidget.btconfigsave.clicked.connect(self.ManualSaveConfig)
-            self.quicksave = QShortcut("Ctrl+S", self)
-            self.quicksave.activated.connect(self.ManualSaveConfig)
-            # self.quickstop.activated.connect(self.ManualStop)
-            self.loading.hide()
-            self.loading.lower()
-            self.infoAdd("加载完成", False)
-            self.infoEnd()
-        self.timer.timeout.connect(lambda: timercheck(self))
-        self.timer.start(15000)
 
 
 def SGALoad(showconsole: bool = True):
@@ -57,7 +37,7 @@ def SGALoad(showconsole: bool = True):
             if not spr["LoadUI"]:
                 logger.info("SGA启动完成, SGA运行中...")
                 if "current" in sys.argv:
-                    TaskStart(sqm.SMW, "current")
+                    sqm.TaskStart(sqm.SMW, "current")
             application.exec_()
             logger.info("==================SGA关闭=================\n\n")
     except Exception as e:

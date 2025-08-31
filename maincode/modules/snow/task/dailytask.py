@@ -1,5 +1,5 @@
 from maincode.tools.main import logger
-from maincode.main.maingroup import sg
+from maincode.config.maingroup import sg
 
 
 def snowDailyTask(self):

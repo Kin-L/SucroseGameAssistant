@@ -3,7 +3,7 @@ from maincode.tools.controls import (Button, TransPicButton,
                                      SLineEdit, PicButton, Combobox)
 from ..timer.main import SGATimer
 from PyQt5.QtWidgets import QWidget
-from maincode.main.maingroup import sg
+from maincode.config.maingroup import sg
 from maincode.tools.constant import spr
 
 

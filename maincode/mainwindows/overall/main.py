@@ -1,5 +1,5 @@
 from .widget import OverallWidget
-from maincode.main.maingroup import sg
+from maincode.config.maingroup import sg
 from webbrowser import open as weopen
 from PyQt5.QtWidgets import QFileDialog
 import os

@@ -1,5 +1,5 @@
 from maincode.tools.main import CmdRun
-from maincode.main.maingroup import sg
+from maincode.config.maingroup import sg
 import json
 
 

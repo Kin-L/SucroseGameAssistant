@@ -1,7 +1,7 @@
 from maincode.tools.myclass import SGAStop
 from maincode.tools.main import GetWindow, GetTracebackInfo, logger
 from time import sleep
-from maincode.main.maingroup import sg
+from maincode.config.maingroup import sg
 from win32gui import FindWindow
 from os import path
 from .energy import snowEnergy

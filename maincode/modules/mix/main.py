@@ -2,8 +2,8 @@ from ..main import ModuleClass
 from .widget import MixPage
 from maincode.modules.template import SubConfigTemplate
 from typing import List
-from maincode.main.subconfig import sc
-from maincode.main.info import info
+from maincode.config.subconfig import sc
+from maincode.config.info import info
 
 
 class MixConfig(SubConfigTemplate):

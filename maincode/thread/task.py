@@ -1,9 +1,9 @@
 from maincode.tools.main import GetTracebackInfo, logger, WindowsNotify
 from maincode.tools.myclass import SGAStop
-from maincode.main.maingroup import sg
+from maincode.config.maingroup import sg
 from PyQt5.QtCore import pyqtSignal, pyqtBoundSignal, QObject
 from .update import update
-from maincode.main.info import info
+from maincode.config.info import info
 import keyboard
 
 

@@ -1,5 +1,5 @@
 import json
-from maincode.main.info import info
+from maincode.config.info import info
 from maincode.tools.controls import (Combobox, SetStackPage, Check,
                                      ModuleStackPage, Widget, Line,
                                      Picture, TaskPanel, Label, tips,

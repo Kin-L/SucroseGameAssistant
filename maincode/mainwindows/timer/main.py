@@ -1,5 +1,5 @@
 from .widget import TimerWidgets
-from maincode.main.maingroup import sg
+from maincode.config.maingroup import sg
 from PyQt5.QtCore import QTime
 from .function import timer_delete
 from maincode.tools.main import GetTracebackInfo, logger

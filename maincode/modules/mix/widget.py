@@ -2,7 +2,7 @@ from maincode.tools.controls import (Combobox, SetStackPage,
                                      ModuleStackPage, Widget, Line,
                                      Picture, TaskPanel, Label)
 from typing import Optional
-from maincode.main.subconfig import sc
+from maincode.config.subconfig import sc
 
 
 class MixPage(ModuleStackPage):

@@ -1,12 +1,11 @@
 from requests import get, exceptions
-from maincode.main.maingroup import sg
+from maincode.config.maingroup import sg
 from maincode.tools.main import VersionsCompare, logger, GetTracebackInfo
 from time import localtime, strftime
-from maincode.mainwindows.main import SGAMainWindow
 from maincode.tools.constant import spr
 
 
-def timercheck(self: SGAMainWindow):
+def timercheck(self):
     try:
         if self.sleeptime > 0:
             self.sleeptime -= 15
@@ -46,7 +45,7 @@ def timercheck(self: SGAMainWindow):
         self.infoAdd(f"定时检测异常")
 
 
-def updatecheck(self: SGAMainWindow):
+def updatecheck(self):
     try:
         from json import loads
         url = "https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/releases/latest"

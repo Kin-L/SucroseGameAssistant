@@ -92,7 +92,7 @@ class Controller(Operate):
 
 
 if __name__ == '__main__':
-    from maincode.main.info import info
+    from maincode.config.info import info
     info.OcrPath = r"D:/Program Files (Green)/SGAv3/ocr-json/PaddleOCR-json.exe"
 
 ctler = Controller()
