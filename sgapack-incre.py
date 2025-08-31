@@ -52,7 +52,7 @@ for src, drc in lis:
                 continue
             lis2.append([src, drc])
 if lis2:
-    version = "3.0.5.4"
+    version = "3.0.5.6"
     _str = f"/SGAv3-{version}-replace/"
     if not path.exists(f"release/SGAv3-{version}-replace"):
         makedirs(f"release/SGAv3-{version}-replace")

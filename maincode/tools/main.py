@@ -73,20 +73,18 @@ def WindowsNotify(title: str, massage: str):
 
 # 查询静音状态
 def GetMute() -> bool:
-    return True
-    # devices = AudioUtilities.GetSpeakers()
-    # interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-    # volume = cast(interface, POINTER(IAudioEndpointVolume))
-    # return volume.GetMute()
+    devices = AudioUtilities.GetSpeakers()
+    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+    volume = cast(interface, POINTER(IAudioEndpointVolume))
+    return volume.GetMute()
 
 
 # 熄屏
 def ScreenOff() -> None:
-    return
-    # power_off = 2
-    # windll.user32.PostMessageW(0xffff, 0x0112, 0xF170, power_off)
-    # shell32 = windll.LoadLibrary("shell32.dll")
-    # shell32.ShellExecuteW(None, 'open', 'rundll32.exe', 'USER32', '', 5)
+    power_off = 2
+    windll.user32.PostMessageW(0xffff, 0x0112, 0xF170, power_off)
+    shell32 = windll.LoadLibrary("shell32.dll")
+    shell32.ShellExecuteW(None, 'open', 'rundll32.exe', 'USER32', '', 5)
 
 
 def GetTracebackInfo(e) -> str:
