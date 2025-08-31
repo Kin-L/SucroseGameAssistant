@@ -80,6 +80,10 @@ class SGAConfigGroup(QObject):
         if "尘白禁区" in _l or not _l:
             from maincode.modules.snow.main import SnowClass
             SnowClass()
+        if "原神" in _l or not _l:
+            from maincode.modules.genshin.main import GenshinClass
+            GenshinClass()
+
 
     def ReadCurrentConfig(self):
         _current = self.mainconfig.CurrentConfig
