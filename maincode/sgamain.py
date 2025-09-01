@@ -7,8 +7,6 @@ from maincode.thread.updatecheck import timercheck, updatecheck
 import keyboard
 from maincode.thread.taskctrl import TaskStart, TaskStop, ManualStop, NewThread
 from maincode.config.function import currentsave, subconfigsave, SaveConfig, ManualSaveConfig
-from maincode.config.maingroup import sg
-from maincode.tools.ocr.main import OCR
 from maincode.mainwindows.overall.main import SGAOverall
 from maincode.mainwindows.module.main import SGAModule
 
@@ -20,9 +18,9 @@ class SGAMain(SGAQMainWindow):
         self.__class__.subconfigsave = subconfigsave
         self.__class__.SaveConfig = SaveConfig
         self.__class__.ManualSaveConfig = ManualSaveConfig
-        sg.Load()
-        OCR.clear()
-        logger.info(sg.info.GetEnvironmentInfoStr())
+        self.SG.Load()
+        self.OCR.clear()
+        logger.info(self.SG.info.GetEnvironmentInfoStr())
         if spr["LoadUI"]:
             self.overall = SGAOverall()
             self.mainwidget.sksetting.addWidget(self.overall.widget)
@@ -71,7 +69,7 @@ class SGAMain(SGAQMainWindow):
             keyboard.unhook_all()
             # keyboard.remove_all_hotkeys()
             if spr["LoadUI"]:
-                sg.mainconfig.ModulesEnable = [self.module.widget.boxmodule.itemText(i) for i in
+                self.SG.mainconfig.ModulesEnable = [self.module.widget.boxmodule.itemText(i) for i in
                                                range(self.module.widget.boxmodule.count())]
                 self.SaveConfig()
             super().closeEvent(event)

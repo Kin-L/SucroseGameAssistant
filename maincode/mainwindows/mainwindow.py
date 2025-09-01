@@ -7,6 +7,7 @@ from maincode.tools.controls import palette
 from sys import argv
 from maincode.mainwindows.mainwidget import MainWidget
 from maincode.config.maingroup import sg
+from maincode.tools.ocr.main import OCR
 import os
 from pathlib import Path as libPath
 
@@ -25,6 +26,8 @@ class SGAQMainWindow(QMainWindow):
         # 窗口图标
         self.setWindowIcon(QIcon(spr["SGATitlePic"]))
         self.setPalette(palette)
+        self.SG = sg
+        self.OCR = OCR
         if spr["LoadUI"]:
             self.loading = LoadWidget(self)
             self.show()
@@ -36,9 +39,9 @@ class SGAQMainWindow(QMainWindow):
             self.mainwidget = MainWidget()
             self.setCentralWidget(self.mainwidget)
 
-            sg.infoHead.connect(self.mainwidget.infoHead)
-            sg.infoAdd.connect(self.mainwidget.infoAdd)
-            sg.infoEnd.connect(self.mainwidget.infoEnd)
+            self.SG.infoHead.connect(self.mainwidget.infoHead)
+            self.SG.infoAdd.connect(self.mainwidget.infoAdd)
+            self.SG.infoEnd.connect(self.mainwidget.infoEnd)
             self.infoHead = self.mainwidget.infoHead
             self.infoAdd = self.mainwidget.infoAdd
             self.infoEnd = self.mainwidget.infoEnd
