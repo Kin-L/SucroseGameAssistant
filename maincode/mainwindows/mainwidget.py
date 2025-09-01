@@ -22,7 +22,7 @@ class MainWidget(Widget):
         self.support = Support()
         # 历史信息按钮
         sizetp = (25, 25)
-        self.bthistory = PicButton(self, (555, 0, 35, 35), spr["SGATitlePic"], sizetp)
+        self.bthistory = PicButton(self, (555, 0, 35, 35), spr["HistoryPic"], sizetp)
         self.btconfigsave = PicButton(self, (515, 0, 35, 35), spr["SavePic"], sizetp)
         tips(self.btconfigsave, "手动保存并应用当前页面设置(快捷键：ctrl+s)")
         # 指示信息窗口
@@ -58,7 +58,7 @@ class MainWidget(Widget):
                 msg = ("\n" + msg).replace("\n", "\n  ")
             else:
                 msg = ("\n" + msg).replace("\n", "\n  ").strip("\n")
-        if spr["ShowConsole"]:
+        if spr["LoadUI"]:
             self.infobox.append(timestr + msg)
             self.infobox.ensureCursorVisible()
         logger.info(msg)
@@ -68,16 +68,16 @@ class MainWidget(Widget):
         if today != logger.date:
             logger.new_handler(today)
         now_time = strftime("%Y-%m-%d", localtime())
-        if spr["ShowConsole"]:
+        if spr["LoadUI"]:
             self.infobox.append(now_time)
 
     def infoEnd(self):
         _str = "------------------------------"
-        if spr["ShowConsole"]:
+        if spr["LoadUI"]:
             self.infobox.append(_str)
             self.infobox.ensureCursorVisible()
         logger.info(_str)
 
     def infoClear(self):
-        if spr["ShowConsole"]:
+        if spr["LoadUI"]:
             self.infobox.clear()

@@ -5,13 +5,14 @@ from ..timer.main import SGATimer
 from PyQt5.QtWidgets import QWidget
 from maincode.config.maingroup import sg
 from maincode.tools.constant import spr
+from maincode.mainwindows.mainwindow import SGAQMainWindow
 
 
 class OverallWidget(QWidget):
-    def __init__(self):
+    def __init__(self, SQMW: SGAQMainWindow):
         super().__init__()
         self.lbtitle = Label(self, (0, 0, 80, 40), "全局设置", 18)
-        self.timer = SGATimer(self, (0, 60, 620, 300))
+        self.timer = SGATimer(self, (0, 60, 620, 300), SQMW)
         self.lbocr = Label(self, (0, 250, 110, 40), f"指定OCR路径：")
         self.leocrpath = SLineEdit(self, (110, 255, 470, 33))
         tips(self.leocrpath, "请选择\"OCR-json.exe\"文件")

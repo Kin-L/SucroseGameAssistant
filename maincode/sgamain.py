@@ -22,10 +22,10 @@ class SGAMain(SGAQMainWindow):
         self.OCR.clear()
         logger.info(self.SG.info.GetEnvironmentInfoStr())
         if spr["LoadUI"]:
-            self.overall = SGAOverall()
+            self.overall = SGAOverall(self)
             self.mainwidget.sksetting.addWidget(self.overall.widget)
             self.overall.widget.btsupport.clicked.connect(self.mainwidget.support.show)
-            self.module = SGAModule(self.overall.widget.timer.widgets.wdtime)
+            self.module = SGAModule(self)
             self.mainwidget.sksetting.addWidget(self.module.widget)
             self.mainwidget.sksetting.setCurrentIndex(1)
 
@@ -37,7 +37,7 @@ class SGAMain(SGAQMainWindow):
         self.__class__.updatecheck = updatecheck
         if spr["LoadUI"]:
             self.module.widget.btstart.clicked.connect(lambda: self.TaskStart("current"))
-            self.module.widget.btpause.clicked.connect(lambda: self.ManualStop)
+            self.module.widget.btpause.clicked.connect(self.ManualStop)
             self.overall.widget.btcheckupdate.clicked.connect(self.updatecheck)
             self.mainwidget.btconfigsave.clicked.connect(self.ManualSaveConfig)
             self.quicksave.activated.connect(self.ManualSaveConfig)
@@ -45,7 +45,7 @@ class SGAMain(SGAQMainWindow):
             self.loading.lower()
             self.infoAdd("加载完成", False)
             self.infoEnd()
-        self.timer.timeout.connect(lambda: timercheck(self))
+        self.timer.timeout.connect(self.timercheck)
         self.timer.start(15000)
 
     def closeEvent(self, event):

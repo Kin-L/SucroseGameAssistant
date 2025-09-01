@@ -3,10 +3,14 @@ from maincode.config.maingroup import sg
 from PyQt5.QtCore import QTime
 from .function import timer_delete
 from maincode.tools.main import GetTracebackInfo, logger
+from maincode.mainwindows.mainwindow import SGAQMainWindow
 
 
 class SGATimer:
-    def __init__(self, wighet, location):
+    def __init__(self, wighet, location, SQMW: SGAQMainWindow):
+        self.infoHead = SQMW.infoHead
+        self.infoAdd = SQMW.infoAdd
+        self.infoEnd = SQMW.infoEnd
         self.widgets = TimerWidgets(wighet, location)
 
         _tw = self.widgets.wdtime
@@ -15,18 +19,17 @@ class SGATimer:
             getattr(_tw, f"text{i}").addItems(tl)
         self.SetConfig(sg.mainconfig.TimerConfig.model_dump())
         self.widgets.btdelete.clicked.connect(self.DeleteTimer)
-    
-    @staticmethod
-    def DeleteTimer():
-        sg.infoHead()
+
+    def DeleteTimer(self):
+        self.infoHead()
         try:
             timer_delete()
-            sg.infoAdd("取消SGA自启/唤醒行为", False)
+            self.infoAdd("取消SGA自启/唤醒行为", False)
         except Exception as e:
             _str = GetTracebackInfo(e) + "操作异常：取消SGA自启/唤醒行为"
             logger.error(_str)
-            sg.infoAdd("操作异常：取消SGA自启/唤醒行为", False)
-        sg.infoEnd()
+            self.infoAdd("操作异常：取消SGA自启/唤醒行为", False)
+        self.infoEnd()
 
     def SetConfig(self, config: dict):
         _tw = self.widgets.wdtime

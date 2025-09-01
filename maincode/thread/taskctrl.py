@@ -18,12 +18,12 @@ def TaskStart(self, tasktype: str, para: dict = None):
         sg.info.TaskError = False
         sg.info.StopFlag = False
         self.timerallow = False
-        self.module.statesigh.SetState(0)
+        self.module.widget.statesigh.SetState(0)
         sg.info.OcrPath = sg.mainconfig.OcrPath
-        self.module.btstart.setDisabled(True)
-        self.module.btstart.hide()
+        self.module.widget.btstart.setDisabled(True)
+        self.module.widget.btstart.hide()
         if tasktype == "current":
-            self.infoClear()
+            self.mainwidget.infoClear()
             self.infoHead()
             self.SaveConfig()
             para.update(dict(sg.mainconfig.CurrentConfig))
@@ -31,9 +31,9 @@ def TaskStart(self, tasktype: str, para: dict = None):
             para["current_mute"] = GetMute()
             self.NewThread(tasktype, para)
             self.infoAdd("开始执行实时任务")
-            self.module.btpause.setEnabled(True)
-            self.module.btpause.show()
-            keyboard.add_hotkey(sg.mainconfig.StopKeys, self.module.btpause.click)
+            self.module.widget.btpause.setEnabled(True)
+            self.module.widget.btpause.show()
+            keyboard.add_hotkey(sg.mainconfig.StopKeys, self.module.widget.btpause.click)
         elif tasktype == "timed":
             self.infoClear()
             self.infoHead()
@@ -43,9 +43,9 @@ def TaskStart(self, tasktype: str, para: dict = None):
             self.NewThread(tasktype, para)
             name = para["ConfigName"]
             self.infoAdd(f"开始执行定时任务：{name}")
-            self.module.btpause.setEnabled(True)
-            self.module.btpause.show()
-            keyboard.add_hotkey(sg.mainconfig.StopKeys, self.module.btpause.click)
+            self.module.widget.btpause.setEnabled(True)
+            self.module.widget.btpause.show()
+            keyboard.add_hotkey(sg.mainconfig.StopKeys, self.module.widget.btpause.click)
         elif tasktype == "update":
             self.infoHead()
             self.infoAdd("准备开始...")
@@ -60,19 +60,19 @@ def TaskStop(self, tasktype: str, para=None):
     try:
         self.window.foreground()
         if sg.info.TaskError:
-            self.module.statesigh.SetState(2)
+            self.module.widget.statesigh.SetState(2)
         self.infoEnd()
         self.timerallow = True
-        self.module.btstart.setEnabled(True)
-        self.module.btstart.show()
-        self.module.btpause.setEnabled(True)
-        self.module.btpause.hide()
+        self.module.widget.btstart.setEnabled(True)
+        self.module.widget.btstart.show()
+        self.module.widget.btpause.setEnabled(True)
+        self.module.widget.btpause.hide()
         if tasktype == "timed":
             sleeptime = 61 - localtime()[5]
             self.sleeptime = sleeptime if sleeptime > 0 else 0
             keyboard.remove_all_hotkeys()
         elif tasktype == "update":
-            self.widget.btcheckupdate.setEnabled(True)
+            self.overall.widget.btcheckupdate.setEnabled(True)
             keyboard.remove_all_hotkeys()
             return
         if para["Mute"] and (GetMute() != para["current_mute"]):
@@ -125,15 +125,15 @@ def TaskStop(self, tasktype: str, para=None):
 def ManualStop(self):
     try:
         if not self.timerallow:
-            self.module.btpause.setDisabled(True)
+            self.module.widget.btpause.setDisabled(True)
             self.infoAdd("手动终止,等待结束...")
             self.timerallow = True
             sg.info.StopFlag = True
-            self.module.statesigh.SetState(1)
+            self.module.widget.statesigh.SetState(1)
             try:
                 self.worker.quit()
                 self.worker.wait()  # 可选：等待线程结束
-                self.module.btpause.hide()
+                self.module.widget.btpause.hide()
                 self.worker.deleteLater()
                 self.threadpool.quit()
                 self.threadpool.wait()
@@ -158,7 +158,7 @@ def NewThread(self, tasktype, para):
     self.threadpool.started.connect(self.worker.run)
     self.worker.finished.connect(self.threadpool.quit)
     self.worker.finished.connect(self.worker.deleteLater)
-    self.threadpool.finished.connect(lambda: TaskStop(tasktype, para))
+    self.threadpool.finished.connect(lambda: self.TaskStop(tasktype, para))
     self.threadpool.finished.connect(self.threadpool.deleteLater)
     self.threadpool.start()
 

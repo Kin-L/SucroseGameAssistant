@@ -2,11 +2,15 @@ from .widget import ModuleWidget
 from maincode.config.maingroup import sg
 from maincode.tools.main import logger, GetTracebackInfo
 from os import path, remove, replace
+from maincode.mainwindows.mainwindow import SGAQMainWindow
 
 
 class SGAModule:
-    def __init__(self, wdtime):
-        self.wdtime = wdtime
+    def __init__(self, SQMW: SGAQMainWindow):
+        self.infoHead = SQMW.infoHead
+        self.infoAdd = SQMW.infoAdd
+        self.infoEnd = SQMW.infoEnd
+        self.wdtime = SQMW.overall.widget.timer.widgets.wdtime
         self.widget = ModuleWidget()
         for widget in sg.modules.GetWidgets():
             self.widget.skmodule.addWidget(widget)
@@ -61,7 +65,7 @@ class SGAModule:
         except Exception as e:
             _str = GetTracebackInfo(e) + "切换锁定流程异常"
             logger.error(_str)
-            sg.infoAdd.emit(f"切换锁定流程异常")
+            self.infoAdd(f"切换锁定流程异常")
 
     def configchange(self):
         try:
@@ -71,15 +75,15 @@ class SGAModule:
                 if sg.modules.CheckConfig(_config):
                     name = _config["ConfigName"]
                     configkey = _config["ConfigKey"]
-                    sg.infoHead()
-                    sg.infoAdd.emit(f"载入配置：{configkey}{name}")
-                    sg.infoEnd()
+                    self.infoHead()
+                    self.infoAdd(f"载入配置：{configkey}{name}")
+                    self.infoEnd()
                     self.LoadSet(_config)
             sg.mainconfig.ConfigKey = sg.subconfig.filelist[num][0]
         except Exception as e:
             _str = GetTracebackInfo(e) + "子配置变换流程异常"
             logger.error(_str)
-            sg.infoAdd.emit(f"子配置变换流程异常")
+            self.infoAdd(f"子配置变换流程异常")
 
     def ChangePage(self):
         try:
@@ -93,7 +97,7 @@ class SGAModule:
         except Exception as e:
             _str = GetTracebackInfo(e) + "切换模块子页面流程异常"
             logger.error(_str)
-            sg.infoAdd.emit(f"切换模块子页面流程异常")
+            self.infoAdd(f"切换模块子页面流程异常")
 
     def LoadSet(self, subconfig: dict):
         try:
@@ -116,7 +120,7 @@ class SGAModule:
         except Exception as e:
             _str = GetTracebackInfo(e) + "载入子配置流程异常"
             logger.error(_str)
-            sg.infoAdd.emit(f"载入子配置流程异常")
+            self.infoAdd(f"载入子配置流程异常")
 
     def configdelete(self):
         try:
@@ -133,13 +137,13 @@ class SGAModule:
                 _wdlist = sg.modules.GetWidgets()[0].wdlist
                 for i in range(1, 9):
                     getattr(_wdlist, f"task0{i}").removeItem(nn)
-            sg.infoHead()
-            sg.infoAdd.emit(f"删除配置：{ck}{name}")
-            sg.infoEnd()
+            self.infoHead()
+            self.infoAdd(f"删除配置：{ck}{name}")
+            self.infoEnd()
         except Exception as e:
             _str = GetTracebackInfo(e) + "子配置删除流程异常"
             logger.error(_str)
-            sg.infoAdd.emit(f"子配置删除流程异常")
+            self.infoAdd(f"子配置删除流程异常")
 
     def configadd(self):
         try:
@@ -162,13 +166,13 @@ class SGAModule:
                 _wdlist = sg.modules.GetWidgets()[0].wdlist
                 for i in range(1, 9):
                     getattr(_wdlist, f"task0{i}").addItem("默认配置")
-            sg.infoHead()
-            sg.infoAdd.emit(f"新建配置")
-            sg.infoEnd()
+            self.infoHead()
+            self.infoAdd(f"新建配置")
+            self.infoEnd()
         except Exception as e:
             _str = GetTracebackInfo(e) + "子配置新增流程异常"
             logger.error(_str)
-            sg.infoAdd.emit(f"子配置新增流程异常")
+            self.infoAdd(f"子配置新增流程异常")
 
     def ReadyToRename(self):
         try:
@@ -187,7 +191,7 @@ class SGAModule:
         except Exception as e:
             _str = GetTracebackInfo(e) + "子配置准备更名流程异常"
             logger.error(_str)
-            sg.infoAdd.emit(f"子配置准备更名流程异常")
+            self.infoAdd(f"子配置准备更名流程异常")
 
     def configrename(self):
         try:
@@ -214,10 +218,10 @@ class SGAModule:
                     _wdlist = sg.modules.GetWidgets()[0].wdlist
                     for i in range(1, 9):
                         getattr(_wdlist, f"task0{i}").setItemText(old_index, newname)
-                sg.infoHead()
-                sg.infoAdd.emit(f"重命名配置：{configkey}")
-                sg.infoAdd.emit(f"  {oldname} -> {newname}", False)
-                sg.infoEnd()
+                self.infoHead()
+                self.infoAdd(f"重命名配置：{configkey}")
+                self.infoAdd(f"  {oldname} -> {newname}", False)
+                self.infoEnd()
             self.widget.edlconfig.hide()
             self.widget.ecbconfig.show()
             self.widget.btconfigfinish.hide()
@@ -231,4 +235,4 @@ class SGAModule:
         except Exception as e:
             _str = GetTracebackInfo(e) + "子配置确认更名流程异常"
             logger.error(_str)
-            sg.infoAdd.emit(f"子配置确认更名流程异常")
+            self.infoAdd(f"子配置确认更名流程异常")

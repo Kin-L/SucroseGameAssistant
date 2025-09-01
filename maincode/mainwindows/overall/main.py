@@ -4,11 +4,15 @@ from webbrowser import open as weopen
 from PyQt5.QtWidgets import QFileDialog
 import os
 from maincode.tools.constant import spr
+from maincode.mainwindows.mainwindow import SGAQMainWindow
 
 
 class SGAOverall:
-    def __init__(self):
-        self.widget = OverallWidget()
+    def __init__(self, SQMW: SGAQMainWindow):
+        self.infoHead = SQMW.infoHead
+        self.infoAdd = SQMW.infoAdd
+        self.infoEnd = SQMW.infoEnd
+        self.widget = OverallWidget(SQMW)
         self.widget.leocrpath.setText(sg.mainconfig.OcrPath)
         self.widget.lekeyboard.setText(sg.mainconfig.StopKeys)
         if sg.mainconfig.ModulesEnable:
