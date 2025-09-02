@@ -2,7 +2,7 @@ from maincode.tools.system.notification import GetTracebackInfo
 from maincode.tools.core.logger import logger
 from maincode.mainwindows.mainwindow import SGAQMainWindow
 from maincode.tools.core.constant import spr
-from maincode.mainfunc.updatecheck import timercheck, updatecheck
+from maincode.mainfunc.check import timercheck, updatecheck
 from maincode.mainfunc.taskctrl import TaskStart, TaskStop, ManualStop, NewThread
 from maincode.mainfunc.config import currentsave, subconfigsave, SaveConfig, ManualSaveConfig
 from maincode.mainwindows.overall.main import SGAOverall
@@ -17,26 +17,14 @@ class SGAMain(SGAQMainWindow):
         self.SG.Load()
         self.OCR.clear()
         logger.info(self.SG.info.GetEnvironmentInfoStr())
-
-        load_ui = spr["LoadUI"]
-        if load_ui:
+        if spr["LoadUI"]:
             self.overall = SGAOverall(self)
-            self.mainwidget.sksetting.addWidget(self.overall.widget)
-            self.overall.widget.btsupport.clicked.connect(self.mainwidget.support.show)
             self.module = SGAModule(self)
-            self.mainwidget.sksetting.addWidget(self.module.widget)
-            self.mainwidget.sksetting.setCurrentIndex(1)
-
-        self._setup_threads()
-        if load_ui:
             self._connect_signals()
             self.loading.hide()
             self.loading.lower()
             self.infoAdd("加载完成", False)
             self.infoEnd()
-
-        self.timer.timeout.connect(self.timercheck)
-        self.timer.start(15000)
 
     def _bind_class_methods(self):
         self.__class__.currentsave = currentsave
@@ -50,10 +38,13 @@ class SGAMain(SGAQMainWindow):
         self.__class__.timercheck = timercheck
         self.__class__.updatecheck = updatecheck
 
-    def _setup_threads(self):
-        pass  # 可用于后续扩展线程初始化逻辑
-
     def _connect_signals(self):
+        self.mainwidget.sksetting.addWidget(self.overall.widget)
+        self.overall.widget.btsupport.clicked.connect(self.mainwidget.support.show)
+        self.mainwidget.sksetting.addWidget(self.module.widget)
+        self.mainwidget.sksetting.setCurrentIndex(1)
+        self.timer.timeout.connect(self.timercheck)
+        self.timer.start(15000)
         self.module.widget.btstart.clicked.connect(lambda: self.TaskStart("current"))
         self.module.widget.btpause.clicked.connect(self.ManualStop)
         self.overall.widget.btcheckupdate.clicked.connect(self.updatecheck)
