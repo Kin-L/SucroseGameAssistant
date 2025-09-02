@@ -1,5 +1,6 @@
 from maincode.modules.template import SubConfigTemplate, ModuleStackPage
-from typing import List, Tuple, Callable
+from typing import List, Tuple, Callable, Optional
+from maincode.tools.main import logger
 
 
 class ModuleClass:
@@ -32,8 +33,10 @@ class ModuleClass:
         return cls.Configs
 
     @classmethod
-    def GetConfig(cls, num) -> SubConfigTemplate:
-        return cls.Configs[num]()
+    def GetConfig(cls, num: int) -> Optional[SubConfigTemplate]:
+        if 0 <= num < len(cls.Configs):
+            return cls.Configs[num]()
+        return None
 
     @classmethod
     def GetWidgets(cls):
@@ -48,7 +51,9 @@ class ModuleClass:
         return cls.Infos
 
     @classmethod
-    def GetInfosT(cls):
+    def GetInfosT(cls) -> List[Tuple]:
+        if not cls.Infos:
+            return []
         return list(zip(*cls.Infos))
 
     @classmethod
@@ -67,5 +72,5 @@ class ModuleClass:
                 cls.Configs[num](**subconfig)
                 return True
             except Exception as e:
-                print(str(e))
+                logger.error(str(e))
         return False

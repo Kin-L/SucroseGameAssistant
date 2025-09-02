@@ -16,7 +16,7 @@ class SGATimer:
         _tw = self.widgets.wdtime
         tl = ["<未选择>"] + list(sg.subconfig.GetFilesT()[1])
         for i in range(10):
-            getattr(_tw, f"text{i}").addItems(tl)
+            _tw.texts[i].addItems(tl)
         self.SetConfig(sg.mainconfig.TimerConfig.model_dump())
         self.widgets.btdelete.clicked.connect(self.DeleteTimer)
 
@@ -38,20 +38,24 @@ class SGATimer:
         _list2 = list(map(lambda x: -1 if not x else list(sg.subconfig.GetFilesT()[0]).index(x), config['ConfigKeys']))
         _list3 = config['Awake']
         for i in range(10):
-            getattr(_tw, f"execute{i}").setCurrentIndex(_list0[i])
-            getattr(_tw, f"timer{i}").setTime(QTime(*_list1[i]))
-            getattr(_tw, f"text{i}").setCurrentIndex(_list2[i] + 1)
-            getattr(_tw, f"awake{i}").setChecked(_list3[i])
+            _tw.executes[i].setCurrentIndex(_list0[i])
+            _tw.timers[i].setTime(QTime(*_list1[i]))
+            _tw.texts[i].setCurrentIndex(_list2[i] + 1)
+            _tw.awakes[i].setChecked(_list3[i])
 
     def CollectConfig(self):
         _tw = self.widgets.wdtime
-        _dict = dict()
-
-        _dict['Execute'] = [getattr(_tw, f"execute{i}").currentIndex() for i in range(10)]
-        _dict['Time'] = [[getattr(_tw, f'timer{i}').getTime().hour(),
-                          getattr(_tw, f'timer{i}').getTime().minute()]
-                         for i in range(10)]
-        _list = [getattr(_tw, f'text{i}').currentIndex() - 1 for i in range(10)]
-        _dict['ConfigKeys'] = list(map(lambda x: "" if x < 0 else sg.subconfig.GetFilesT()[0][x], _list))
-        _dict['Awake'] = [getattr(_tw, f'awake{i}').isChecked() for i in range(10)]
-        return _dict
+        config_dict = {
+            'Execute': [],
+            'Time': [],
+            'ConfigKeys': [],
+            'Awake': []
+        }
+        text_indices = []
+        for i in range(10):
+            config_dict['Execute'].append(_tw.executes[i].currentIndex())
+            config_dict['Time'].append([_tw.timers[i].getTime().hour(), _tw.timers[i].getTime().minute()])
+            text_indices.append(_tw.texts[i].currentIndex() - 1)
+            config_dict['Awake'].append(_tw.awakes[i].isChecked())
+        config_dict['ConfigKeys'] = list(map(lambda x: "" if x < 0 else sg.subconfig.GetFilesT()[0][x], text_indices))
+        return config_dict

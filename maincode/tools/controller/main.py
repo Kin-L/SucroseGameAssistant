@@ -14,12 +14,12 @@ class Controller(Operate):
         self.window = None
         self.DeviceMode()
 
-    def ChooseWindow(self, para, ref):  # title hwnd
-        for _ in range(10):
+    def ChooseWindow(self, para, ref, max_retries=10, interval=0.5):  # title hwnd
+        for _ in range(max_retries):
             self.window = GetWindow(para)
             if self.window is not None:
                 break
-            time.sleep(0.5)
+            time.sleep(interval)
         else:
             raise ValueError("GetWindow 未获取到有效值")
         self.window.foreground()
@@ -53,14 +53,17 @@ class Controller(Operate):
                                     paths.append(install_path)
                     except (WindowsError, FileNotFoundError):
                         continue
-            except WindowsError:
+            except WindowsError as e:
+                logger.warning(f"无法访问注册表路径 {reg_path}: {e}")
                 continue
-        return paths
+        return list(paths)
 
     def SetLocal(self):
         user32 = windll.user32
-        now_wid = user32.GetSystemMetrics(0)
         user32.SetProcessDPIAware()
+        now_wid = user32.GetSystemMetrics(0)
+        if now_wid == 0:
+            raise RuntimeError("获取屏幕宽度失败")
         ori_wid = user32.GetSystemMetrics(0)
         ori_hig = user32.GetSystemMetrics(1)
         self.InitLocal((0, 0, ori_wid, ori_hig))
@@ -76,7 +79,7 @@ class Controller(Operate):
                         return i
                 else:
                     CmdRun(_cmdline)
-                    ctler.wait(0.5)
+                    self.wait(0.5)
         return 0
 
     def DeviceMode(self, device="windows", exe_path=None):
@@ -85,10 +88,14 @@ class Controller(Operate):
         elif device == "emulator":
             self.exe_path = exe_path
             self.__class__.screenshot = self.__class__.screenshot_adb
-            self.connect_to_emulator()
-            self.WaitTime = (0, 10)
-            h, w = self.getresolution()
-            self.ChangeOperate((0, 0, w, h))
+            try:
+                self.connect_to_emulator()
+                self.WaitTime = (0, 10)
+                h, w = self.getresolution()
+                self.ChangeOperate((0, 0, w, h))
+            except Exception as e:
+                logger.error(f"连接模拟器失败: {e}")
+                raise
 
 
 if __name__ == '__main__':

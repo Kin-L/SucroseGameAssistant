@@ -14,7 +14,6 @@ def TaskStart(self, tasktype: str, para: dict = None):
     try:
         while v := GetPid("PaddleOCR-json.exe"):
             killprocess(v)
-        # print("TaskStart")
         sg.info.TaskError = False
         sg.info.StopFlag = False
         self.timerallow = False
@@ -70,10 +69,10 @@ def TaskStop(self, tasktype: str, para=None):
         if tasktype == "timed":
             sleeptime = 61 - localtime()[5]
             self.sleeptime = sleeptime if sleeptime > 0 else 0
-            keyboard.remove_all_hotkeys()
+            keyboard.remove_hotkey(sg.mainconfig.StopKeys)  # 仅移除特定热键
         elif tasktype == "update":
             self.overall.widget.btcheckupdate.setEnabled(True)
-            keyboard.remove_all_hotkeys()
+            keyboard.remove_hotkey(sg.mainconfig.StopKeys)
             return
         if para["Mute"] and (GetMute() != para["current_mute"]):
             keyboard.send('volume mute')
@@ -82,44 +81,47 @@ def TaskStop(self, tasktype: str, para=None):
             para["Finished"] = 0
             para["SGAClose"] = False
         sg.info.StopFlag = None
-        if para["Finished"] == 1:
-            if para["SGAClose"]:
-                self.infoAdd("SGA关闭 电脑熄屏")
-                self.infoEnd()
-                CmdRun("start "" /d \"resources/main/script\" screen_off.vbs")
-                app = QApplication.instance()
-                if app:
-                    app.quit()
-            else:
-                self.infoAdd("SGA等待 电脑熄屏")
-                self.infoEnd()
-                ScreenOff()
-        elif para["Finished"] == 2:
-            if para["SGAClose"]:
-                self.infoAdd("SGA关闭 电脑睡眠")
-                self.infoEnd()
-                CmdRun("start "" /d \"resources/main/script\" sleep.vbs")
-                app = QApplication.instance()
-                if app:
-                    app.quit()
-            else:
-                self.infoAdd("SGA等待 电脑睡眠")
-                self.infoEnd()
-                CmdRun("start "" /d \"resources/main/script\" sleep.vbs")
-        else:
-            if para["SGAClose"]:
-                self.infoAdd("SGA关闭 电脑无操作")
-                self.infoEnd()
-                app = QApplication.instance()
-                if app:
-                    app.quit()
-            else:
-                self.infoAdd("SGA等待 电脑无操作")
-                self.infoEnd()
+        self.handle_finished_action(para)
     except Exception as e:
         _str = GetTracebackInfo(e) + "终止流程异常"
         logger.error(_str)
         self.infoAdd(f"终止流程异常")
+
+
+def handle_finished_action(self, para):
+    """处理任务完成后的操作"""
+    action_map = {
+        1: ("SGA关闭 电脑熄屏", "SGA等待 电脑熄屏", "screen_off.vbs"),
+        2: ("SGA关闭 电脑睡眠", "SGA等待 电脑睡眠", "sleep.vbs"),
+    }
+    finished = para["Finished"]
+    close = para["SGAClose"]
+    if finished in action_map:
+        close_msg, wait_msg, script = action_map[finished]
+        if close:
+            self.infoAdd(close_msg)
+            self.infoEnd()
+            CmdRun(f"start \"\" /d \"resources/main/script\" {script}")
+            app = QApplication.instance()
+            if app:
+                app.quit()
+        else:
+            self.infoAdd(wait_msg)
+            self.infoEnd()
+            if finished == 1:
+                ScreenOff()
+            else:
+                CmdRun(f"start \"\" /d \"resources/main/script\" {script}")
+    else:
+        if close:
+            self.infoAdd("SGA关闭 电脑无操作")
+            self.infoEnd()
+            app = QApplication.instance()
+            if app:
+                app.quit()
+        else:
+            self.infoAdd("SGA等待 电脑无操作")
+            self.infoEnd()
 
 
 def ManualStop(self):
@@ -130,16 +132,18 @@ def ManualStop(self):
             self.timerallow = True
             sg.info.StopFlag = True
             self.module.widget.statesigh.SetState(1)
+            self.module.widget.btpause.hide()
             try:
-                self.worker.quit()
-                self.worker.wait()  # 可选：等待线程结束
-                self.module.widget.btpause.hide()
-                self.worker.deleteLater()
-                self.threadpool.quit()
-                self.threadpool.wait()
-                self.threadpool.deleteLater()
-            except:
-                ...
+                if hasattr(self, 'worker') and self.worker.isRunning():
+                    self.worker.quit()
+                    self.worker.wait()
+                    self.worker.deleteLater()
+                if hasattr(self, 'threadpool'):
+                    self.threadpool.quit()
+                    self.threadpool.wait()
+                    self.threadpool.deleteLater()
+            except Exception as e:
+                logger.error(f"手动终止线程异常: {GetTracebackInfo(e)}")
     except Exception as e:
         _str = GetTracebackInfo(e) + "手动终止流程异常"
         logger.error(_str)
@@ -161,5 +165,3 @@ def NewThread(self, tasktype, para):
     self.threadpool.finished.connect(lambda: self.TaskStop(tasktype, para))
     self.threadpool.finished.connect(self.threadpool.deleteLater)
     self.threadpool.start()
-
-

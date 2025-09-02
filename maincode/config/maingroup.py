@@ -105,28 +105,32 @@ class SGAConfigGroup(QObject):
             self.infoAdd.emit("进行子设置初始化", False)
             self.mainconfig.CurrentConfig = self.modules.GetConfig(0).model_dump()
 
-    def SaveMain(self):
+    def _SaveConfig(self, config_path: str):
         if not path.exists(self.PersonalPath):
             makedirs(self.PersonalPath)
         _mainconfig = self.mainconfig.model_dump()
-        with open(self.MainConfigPath, 'w', encoding='utf-8') as c:
+        with open(config_path, 'w', encoding='utf-8') as c:
             json.dump(_mainconfig, c, ensure_ascii=False, indent=1)
+
+    def SaveMain(self):
+        self._SaveConfig(self.MainConfigPath)
 
     def SaveBackUp(self):
-        if not path.exists(self.PersonalPath):
-            makedirs(self.PersonalPath)
-        _mainconfig = self.mainconfig.model_dump()
-        with open(self.MainConfigBackupPath, 'w', encoding='utf-8') as c:
-            json.dump(_mainconfig, c, ensure_ascii=False, indent=1)
+        self._SaveConfig(self.MainConfigBackupPath)
 
     def NewSubFile(self):
+        max_attempts = 10000  # 防止无限循环
+        attempts = 0
         newconfig = self.modules.GetConfig(0)
-        while 1:
+        while attempts < max_attempts:
             ConfigKey = f"{random.randint(0, 9999):04d}"
             if self.modules.FindItem(ConfigKey):
+                attempts += 1
                 continue
             else:
                 break
+        else:
+            raise RuntimeError("无法生成唯一的ConfigKey")
         newconfig.ConfigKey = ConfigKey
         self.subconfig.filelist.append((newconfig.ConfigKey,
                                         newconfig.ConfigName,

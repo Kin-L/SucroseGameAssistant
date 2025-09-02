@@ -1,58 +1,47 @@
 from maincode.tools.main import (GetTracebackInfo, logger, CmdRun)
 from os import path, makedirs, remove
 from maincode.config.maingroup import sg
+from urllib.request import urlretrieve
+from shutil import unpack_archive, copytree, rmtree
+from PyQt5.QtWidgets import QApplication
 
 
 def update(self):
     try:
-        from urllib.request import urlretrieve
+        # 确保缓存目录存在
         if not path.exists("cache"):
             makedirs("cache")
+
         temp_path = path.join(sg.info.Workdir, "cache")
-        load_path = path.join(temp_path, self.para["name"])
+        safe_filename = path.basename(self.para["name"])
+        load_path = path.join(temp_path, safe_filename)
+
+        # 下载文件
         urlretrieve(self.para["browser_download_url"], load_path)
-    except Exception as e:
-        sg.TaskError = False
-        _str = GetTracebackInfo(e)
-        logger.error(_str + "更新异常：下载异常")
-        return
-    else:
         self.send("下载完成")
-    # noinspection PyBroadException
-    try:
-        from shutil import unpack_archive
+
+        # 解压文件
         unpack_archive(load_path, temp_path)
-    except Exception as e:
-        sg.TaskError = False
-        _str = GetTracebackInfo(e)
-        logger.error(_str + "更新异常：解压异常")
-        return
-    else:
         self.send("解压完成")
-    # noinspection PyBroadException
-    try:
-        from shutil import copytree
+
+        # 替换文件
         extract_folder = path.splitext(load_path)[0]
         cover_folder = sg.info.Workdir
         copytree(extract_folder, cover_folder, dirs_exist_ok=True)
-    except Exception as e:
-        sg.TaskError = False
-        _str = GetTracebackInfo(e)
-        logger.error(_str + "更新异常：替换异常")
-        return
-    else:
         self.send("替换完成")
-    # noinspection PyBroadException
-    try:
-        from shutil import rmtree
+
+        # 清理临时文件
         remove(load_path)
         rmtree(extract_folder)
-    except Exception as e:
-        sg.TaskError = False
-        _str = GetTracebackInfo(e)
-        logger.error(_str + "更新异常：删除临时文件异常")
-    else:
         self.send("删除临时文件完成,准备重启")
         logger.info("更新成功")
-        CmdRun("start "" /d \"personal/script\" start-SGA.vbs")
-        exit()
+
+        # 重启程序
+        CmdRun("start \"\" /d \"personal/script\" start-SGA.vbs")
+        app = QApplication.instance()
+        if app:
+            app.quit()
+    except Exception as e:
+        sg.TaskError = False
+        logger.error("更新异常：%s", GetTracebackInfo(e))
+        return

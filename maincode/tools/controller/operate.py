@@ -84,11 +84,11 @@ class Operate(SGAImage):
                     if flag:
                         return True
                     num -= 1
-        if errsc:
-            _path1 = self.SaveShot(bef, "bef")
-            _path2 = self.SaveShot(aft, "aft")
-            logger.error(f"截图导出bef: {_path1}")
-            logger.error(f"截图导出aft: {_path2}")
+            if errsc:
+                _path1 = self.SaveShot(bef, "bef")
+                _path2 = self.SaveShot(aft, "aft")
+                logger.error(f"截图导出bef: {_path1}")
+                logger.error(f"截图导出aft: {_path2}")
         elif isinstance(target, str):
             if path.isfile(target) and path.exists(target):
                 while num > 0:

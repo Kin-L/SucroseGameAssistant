@@ -13,48 +13,64 @@ class SGAOverall:
         self.infoAdd = SQMW.infoAdd
         self.infoEnd = SQMW.infoEnd
         self.widget = OverallWidget(SQMW)
+        self._setup_ui()
+        self._bind_signals()
+
+    def _setup_ui(self):
         self.widget.leocrpath.setText(sg.mainconfig.OcrPath)
         self.widget.lekeyboard.setText(sg.mainconfig.StopKeys)
+        self.widget.ckautoupdate.setChecked(sg.mainconfig.AutoUpdate)
+
         if sg.mainconfig.ModulesEnable:
-            _l = sg.mainconfig.ModulesEnable
+            enabled_modules = sg.mainconfig.ModulesEnable
         else:
-            _l = list(sg.modules.GetInfosT()[0])
-            sg.mainconfig.ModulesEnable = _l
-        self.widget.boxmodules.addItems(_l)
+            enabled_modules = list(sg.modules.GetInfosT()[0])
+            sg.mainconfig.ModulesEnable = enabled_modules
+        self.widget.boxmodules.addItems(enabled_modules)
+
+    def _bind_signals(self):
         self.widget.btmodulesdisable.clicked.connect(self.DisableModules)
         self.widget.btmodulesrefresh.clicked.connect(self.RefreshModules)
-        self.widget.ckautoupdate.setChecked(sg.mainconfig.AutoUpdate)
 
         self.widget.btgithub.clicked.connect(lambda: weopen(spr["GithubURL"]))
         self.widget.btgitee.clicked.connect(lambda: weopen(spr["GiteeURL"]))
         self.widget.btbilibili.clicked.connect(lambda: weopen(spr["BilibiliURL"]))
-        self.widget.btrunhistory.clicked.connect(lambda: os.startfile(f"{os.getcwd()}/"+spr["LogsDir"]))
-        self.widget.btupdatehistory.clicked.connect(lambda: os.startfile(f"{os.getcwd()}/update.txt"))
 
-        self.widget.ckautoupdate.clicked.connect(lambda: self.changeAutoUpdate())
-        self.widget.leocrpath.editingFinished.connect(lambda: self.changeOcrPath())
-        self.widget.lekeyboard.editingFinished.connect(lambda: self.changeStopKeys())
+        logs_dir = os.path.join(os.getcwd(), spr["LogsDir"])
+        self.widget.btrunhistory.clicked.connect(lambda: os.startfile(logs_dir))
+        update_file = os.path.join(os.getcwd(), "update.txt")
+        self.widget.btupdatehistory.clicked.connect(lambda: os.startfile(update_file))
+
+        self.widget.ckautoupdate.clicked.connect(self.changeAutoUpdate)
+        self.widget.leocrpath.editingFinished.connect(self.changeOcrPath)
+        self.widget.lekeyboard.editingFinished.connect(self.changeStopKeys)
         self.widget.fileselect.clicked.connect(self.SelectOCRPath)
 
     def changeAutoUpdate(self):
         sg.mainconfig.AutoUpdate = self.widget.ckautoupdate.isChecked()
 
+    @staticmethod
+    def _update_ocr_path(path: str):
+        sg.mainconfig.OcrPath = path
+        sg.info.OcrPath = path
+
     def changeOcrPath(self):
-        sg.mainconfig.OcrPath = self.widget.leocrpath.text()
-        sg.info.OcrPath = sg.mainconfig.OcrPath
+        self._update_ocr_path(self.widget.leocrpath.text())
 
     def changeStopKeys(self):
         sg.mainconfig.StopKeys = self.widget.lekeyboard.text()
 
     def SelectOCRPath(self):
-        _path = QFileDialog.getOpenFileName(self.widget, "选择OCR组件exe文件")
-        self.widget.leocrpath.setText(_path[0])
-        sg.mainconfig.OcrPath = _path[0]
-        sg.info.OcrPath = sg.mainconfig.OcrPath
+        _path, _ = QFileDialog.getOpenFileName(self.widget, "选择OCR组件exe文件")
+        if _path and os.path.isfile(_path):  # 增加路径有效性校验
+            self.widget.leocrpath.setText(_path)
+            self._update_ocr_path(_path)
 
     def DisableModules(self):
-        sg.mainconfig.ModulesEnable.remove(self.widget.boxmodules.currentText())
-        self.widget.boxmodules.removeItem(self.widget.boxmodules.currentIndex())
+        current_text = self.widget.boxmodules.currentText()
+        if current_text in sg.mainconfig.ModulesEnable:
+            sg.mainconfig.ModulesEnable.remove(current_text)
+            self.widget.boxmodules.removeItem(self.widget.boxmodules.currentIndex())
 
     def RefreshModules(self):
         sg.mainconfig.ModulesEnable = list(sg.modules.GetInfosT()[0])

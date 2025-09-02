@@ -1,8 +1,7 @@
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QIcon
-from maincode.tools.constant import spr
+from PyQt5.QtGui import QIcon, QMovie, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QShortcut
-from PyQt5.QtGui import QMovie, QPixmap
+from maincode.tools.constant import spr
 from maincode.tools.controls import palette
 from sys import argv
 from maincode.mainwindows.mainwidget import MainWidget
@@ -16,45 +15,58 @@ class SGAQMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setObjectName("mainwindow")
-        # 窗口大小
         self.resize(910, 580)
-        # 窗口名
         self.setWindowTitle("砂糖代理")
         self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
-        # 窗口锁定大小
         self.setFixedSize(self.width(), self.height())
-        # 窗口图标
         self.setWindowIcon(QIcon(spr["SGATitlePic"]))
         self.setPalette(palette)
         self.SG = sg
         self.OCR = OCR
-        if spr["LoadUI"]:
-            self.loading = LoadWidget(self)
-            self.show()
-            # 窗口显现
-            from maincode.tools.main import GetWindow
-            self.window = GetWindow("砂糖代理")
-            if "back" not in argv:
-                self.window.foreground()
-            self.mainwidget = MainWidget()
-            self.setCentralWidget(self.mainwidget)
+        self.loading = None  # 防止未初始化访问
+        self.timer = QTimer(self)
+        self.quicksave = QShortcut("Ctrl+S", self)
 
-            self.SG.infoHead.connect(self.mainwidget.infoHead)
-            self.SG.infoAdd.connect(self.mainwidget.infoAdd)
-            self.SG.infoEnd.connect(self.mainwidget.infoEnd)
-            self.infoHead = self.mainwidget.infoHead
-            self.infoAdd = self.mainwidget.infoAdd
-            self.infoEnd = self.mainwidget.infoEnd
+        if spr["LoadUI"]:
+            self._init_loading_ui()
+
+        self.sleeptime = 0
+        self.timerallow = True
+
+    def _init_loading_ui(self):
+        self.loading = LoadWidget(self)
+        self.show()
+
+        from maincode.tools.main import GetWindow
+        self.window = GetWindow("砂糖代理")
+        if "back" not in argv:
+            self.window.foreground()
+
+        self.mainwidget = MainWidget()
+        self.setCentralWidget(self.mainwidget)
+
+        self.SG.infoHead.connect(self.mainwidget.infoHead)
+        self.SG.infoAdd.connect(self.mainwidget.infoAdd)
+        self.SG.infoEnd.connect(self.mainwidget.infoEnd)
+        self.infoHead = self.mainwidget.infoHead
+        self.infoAdd = self.mainwidget.infoAdd
+        self.infoEnd = self.mainwidget.infoEnd
+
         if spr["ShowConsole"]:
             self.mainwidget.btconsole.toggled.connect(self.mainwidget.changecs)
         self.mainwidget.btsetting.toggled.connect(self.mainwidget.changeob)
-        self.mainwidget.bthistory.clicked.connect(lambda: os.startfile(
-            max([f for f in libPath(spr["LogsDir"]).iterdir() if f.is_file()],
-                key=lambda f: f.stat().st_ctime)))
-        self.sleeptime = 0
-        self.timerallow = True
-        self.quicksave = QShortcut("Ctrl+S", self)
-        self.timer = QTimer(self)
+
+        logs_dir = spr["LogsDir"]
+        if os.path.exists(logs_dir):
+            try:
+                latest_file = max(
+                    [f for f in libPath(logs_dir).iterdir() if f.is_file()],
+                    key=lambda f: f.stat().st_ctime
+                )
+                self.mainwidget.bthistory.clicked.connect(lambda: os.startfile(str(latest_file)))
+            except ValueError:
+                # 目录为空时忽略
+                pass
 
 
 class LoadWidget(QWidget):
@@ -75,3 +87,9 @@ class LoadWidget(QWidget):
         self.loadgiflab.setScaledContents(True)
         self.loadgifmov.start()
         self.raise_()
+
+    def closeEvent(self, event):
+        # 确保资源释放
+        if self.loadgifmov:
+            self.loadgifmov.stop()
+        super().closeEvent(event)

@@ -1,6 +1,6 @@
 from os import path, startfile
 import subprocess
-from time import sleep, time
+from time import sleep
 from maincode.config.info import info
 import re
 from contextlib import contextmanager
@@ -17,8 +17,8 @@ class Zone:
 
 
 class LocTuple(tuple):
-    def __init__(self, *args):
-        pass
+    def __new__(cls, iterable):
+        return super().__new__(cls, iterable)
 
 
 class CtrlBase:
@@ -53,33 +53,38 @@ class CtrlBase:
             return LocTuple(self.Operate.zone)
         if len(args) == 2:
             x, y = args
-            if type(args[0]) is int:
+            if isinstance(x, int):
                 return LocTuple((int(x * self.ZoomW) + self.Ox, int(y * self.ZoomH) + self.Oy))
-            elif type(args[0]) is float:
+            elif isinstance(x, float):
                 return LocTuple((int(x * self.Ow) + self.Ox, int(y * self.Oh) + self.Oy))
         elif len(args) == 4:
             x1, y1, x2, y2 = args
-            # print(args, self.ZoomW, self.ZoomH, (self.Ox, self.Oy))
-            if type(args[0]) is int:
-                return LocTuple(((int(x1 * self.ZoomW) + self.Ox, int(y1 * self.ZoomH) + self.Oy,
-                                  int(x2 * self.ZoomW) + self.Ox, int(y2 * self.ZoomH) + self.Oy)))
-            elif type(args[0]) is float:
-                return LocTuple((int(x1 * self.Ow) + self.Ox, int(y1 * self.Oh) + self.Oy,
-                                 int(x2 * self.Ow) + self.Ox, int(y2 * self.Oh) + self.Oy,))
-        raise ValueError
+            if isinstance(x1, int):
+                return LocTuple((
+                    int(x1 * self.ZoomW) + self.Ox, int(y1 * self.ZoomH) + self.Oy,
+                    int(x2 * self.ZoomW) + self.Ox, int(y2 * self.ZoomH) + self.Oy
+                ))
+            elif isinstance(x1, float):
+                return LocTuple((
+                    int(x1 * self.Ow) + self.Ox, int(y1 * self.Oh) + self.Oy,
+                    int(x2 * self.Ow) + self.Ox, int(y2 * self.Oh) + self.Oy
+                ))
+        raise ValueError("Invalid coordinate format")
 
     # 本地坐标 -> 代码坐标
     def convertR(self, args):
         if len(args) == 2:
             x, y = args
-            if type(args[0]) is int:
+            if isinstance(x, int):
                 return int(x / self.ZoomW) - self.Ox, int(y / self.ZoomH) - self.Oy
         elif len(args) == 4:
             x1, y1, x2, y2 = args
-            if type(args[0]) is int:
-                return (int(x1 / self.ZoomW) - self.Ox, int(y1 / self.ZoomH) - self.Oy,
-                        int(x2 / self.ZoomW) - self.Ox, int(y2 / self.ZoomH) - self.Oy)
-            raise ValueError
+            if isinstance(x1, int):
+                return (
+                    int(x1 / self.ZoomW) - self.Ox, int(y1 / self.ZoomH) - self.Oy,
+                    int(x2 / self.ZoomW) - self.Ox, int(y2 / self.ZoomH) - self.Oy
+                )
+        raise ValueError("Invalid coordinate format")
 
     # 代码坐标 -> 本地坐标
     def convertVector(self, args):
@@ -87,17 +92,17 @@ class CtrlBase:
             return args
         if len(args) == 2:
             x, y = args
-            if type(args[0]) is int:
+            if isinstance(x, int):
                 return LocTuple((int(x * self.ZoomW), int(y * self.ZoomH)))
-        raise ValueError
+        raise ValueError("Invalid vector format")
 
     # 本地坐标 -> 代码坐标
     def convertVectorR(self, args):
         if len(args) == 2:
             x, y = args
-            if type(x) is int:
+            if isinstance(x, int):
                 return int(x / self.ZoomW), int(y / self.ZoomH)
-        raise ValueError
+        raise ValueError("Invalid vector format")
 
     @classmethod
     def ChangeReference(cls, zone):
@@ -151,11 +156,15 @@ class ADBController:
             return True
         else:
             for _ in range(3):
-                startfile(self.exe_path)
+                try:
+                    startfile(self.exe_path)
+                except Exception as e:
+                    print(f"启动模拟器失败: {e}")
                 for _ in range(20):
                     if self.adbconnect():
                         return True
-            raise RuntimeError(f"无法连接到 {emulator_ip}:{self.port}")
+                    sleep(2)
+            raise RuntimeError(f"无法连接到 {emulator_ip}:{port}")
 
     def adbconnect(self):
         try:

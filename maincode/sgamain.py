@@ -1,27 +1,24 @@
-from maincode.tools.main import (logger,
-                                 GetTracebackInfo)
+from maincode.tools.main import logger, GetTracebackInfo
 from maincode.mainwindows.mainwindow import SGAQMainWindow
 from maincode.tools.constant import spr
 from maincode.thread.updatecheck import timercheck, updatecheck
-
-import keyboard
 from maincode.thread.taskctrl import TaskStart, TaskStop, ManualStop, NewThread
 from maincode.config.function import currentsave, subconfigsave, SaveConfig, ManualSaveConfig
 from maincode.mainwindows.overall.main import SGAOverall
 from maincode.mainwindows.module.main import SGAModule
+import keyboard
 
 
 class SGAMain(SGAQMainWindow):
     def __init__(self):
         super().__init__()
-        self.__class__.currentsave = currentsave
-        self.__class__.subconfigsave = subconfigsave
-        self.__class__.SaveConfig = SaveConfig
-        self.__class__.ManualSaveConfig = ManualSaveConfig
+        self._bind_class_methods()
         self.SG.Load()
         self.OCR.clear()
         logger.info(self.SG.info.GetEnvironmentInfoStr())
-        if spr["LoadUI"]:
+
+        load_ui = spr["LoadUI"]
+        if load_ui:
             self.overall = SGAOverall(self)
             self.mainwidget.sksetting.addWidget(self.overall.widget)
             self.overall.widget.btsupport.clicked.connect(self.mainwidget.support.show)
@@ -29,48 +26,65 @@ class SGAMain(SGAQMainWindow):
             self.mainwidget.sksetting.addWidget(self.module.widget)
             self.mainwidget.sksetting.setCurrentIndex(1)
 
+        self._setup_threads()
+        if load_ui:
+            self._connect_signals()
+            self.loading.hide()
+            self.loading.lower()
+            self.infoAdd("加载完成", False)
+            self.infoEnd()
+
+        self.timer.timeout.connect(self.timercheck)
+        self.timer.start(15000)
+
+    def _bind_class_methods(self):
+        self.__class__.currentsave = currentsave
+        self.__class__.subconfigsave = subconfigsave
+        self.__class__.SaveConfig = SaveConfig
+        self.__class__.ManualSaveConfig = ManualSaveConfig
         self.__class__.TaskStart = TaskStart
         self.__class__.TaskStop = TaskStop
         self.__class__.NewThread = NewThread
         self.__class__.ManualStop = ManualStop
         self.__class__.timercheck = timercheck
         self.__class__.updatecheck = updatecheck
-        if spr["LoadUI"]:
-            self.module.widget.btstart.clicked.connect(lambda: self.TaskStart("current"))
-            self.module.widget.btpause.clicked.connect(self.ManualStop)
-            self.overall.widget.btcheckupdate.clicked.connect(self.updatecheck)
-            self.mainwidget.btconfigsave.clicked.connect(self.ManualSaveConfig)
-            self.quicksave.activated.connect(self.ManualSaveConfig)
-            self.loading.hide()
-            self.loading.lower()
-            self.infoAdd("加载完成", False)
-            self.infoEnd()
-        self.timer.timeout.connect(self.timercheck)
-        self.timer.start(15000)
+
+    def _setup_threads(self):
+        pass  # 可用于后续扩展线程初始化逻辑
+
+    def _connect_signals(self):
+        self.module.widget.btstart.clicked.connect(lambda: self.TaskStart("current"))
+        self.module.widget.btpause.clicked.connect(self.ManualStop)
+        self.overall.widget.btcheckupdate.clicked.connect(self.updatecheck)
+        self.mainwidget.btconfigsave.clicked.connect(self.ManualSaveConfig)
+        self.quicksave.activated.connect(self.ManualSaveConfig)
 
     def closeEvent(self, event):
         try:
-            if hasattr(self, 'worker'):
+            if hasattr(self, 'worker') and hasattr(self.worker, 'quit'):
                 self.worker.quit()
                 self.worker.wait()
                 self.worker.deleteLater()
-        except:
-            ...
+        except Exception as e:
+            logger.error(f"Worker线程退出异常: {GetTracebackInfo(e)}")
+
         try:
-            if hasattr(self, 'thread'):
+            if hasattr(self, 'threadpool') and hasattr(self.threadpool, 'quit'):
                 self.threadpool.quit()
                 self.threadpool.wait()
                 self.threadpool.deleteLater()
-        except:
-            ...
+        except Exception as e:
+            logger.error(f"线程池退出异常: {GetTracebackInfo(e)}")
+
         try:
             if hasattr(self, 'OCR'):
                 self.OCR.disable()
             keyboard.unhook_all()
-            # keyboard.remove_all_hotkeys()
             if spr["LoadUI"]:
-                self.SG.mainconfig.ModulesEnable = [self.module.widget.boxmodule.itemText(i) for i in
-                                               range(self.module.widget.boxmodule.count())]
+                self.SG.mainconfig.ModulesEnable = [
+                    self.module.widget.boxmodule.itemText(i)
+                    for i in range(self.module.widget.boxmodule.count())
+                ]
                 self.SaveConfig()
             super().closeEvent(event)
         except Exception as e:

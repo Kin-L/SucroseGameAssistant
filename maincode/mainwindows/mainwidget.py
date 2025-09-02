@@ -8,22 +8,34 @@ from time import localtime, strftime
 from maincode.tools.main import logger
 
 
+# 常量定义
+UI_WIDTH = 625
+UI_HEIGHT = 575
+BUTTON_SIZE_TP = (25, 25)
+HISTORY_BUTTON_POS = (555, 0, 35, 35)
+SAVE_BUTTON_POS = (515, 0, 35, 35)
+SEPARATOR_LINE = "------------------------------"
+
+
 class MainWidget(Widget):
     def __init__(self):
         super().__init__()
-        self.sksetting = Stack(self, (5, 0, 625, 575))
-        Line(self, (5, 38, 625, 3))
+        self.sksetting = Stack(self, (5, 0, UI_WIDTH, UI_HEIGHT))
+        Line(self, (5, 38, UI_WIDTH, 3))
         # 全局/模块 设置按钮
         self.btsetting = OverallButton(self)
+        self.console_window = None
         if spr["ShowConsole"]:
-            self.console_window = windll.kernel32.GetConsoleWindow()
+            try:
+                self.console_window = windll.kernel32.GetConsoleWindow()
+            except Exception as e:
+                logger.error(f"Failed to get console window: {e}")
         self.obstate = False
         self.obconsole = True
         self.support = Support()
         # 历史信息按钮
-        sizetp = (25, 25)
-        self.bthistory = PicButton(self, (555, 0, 35, 35), spr["HistoryPic"], sizetp)
-        self.btconfigsave = PicButton(self, (515, 0, 35, 35), spr["SavePic"], sizetp)
+        self.bthistory = PicButton(self, HISTORY_BUTTON_POS, spr["HistoryPic"], BUTTON_SIZE_TP)
+        self.btconfigsave = PicButton(self, SAVE_BUTTON_POS, spr["SavePic"], BUTTON_SIZE_TP)
         tips(self.btconfigsave, "手动保存并应用当前页面设置(快捷键：ctrl+s)")
         # 指示信息窗口
         self.infobox = InfoBox(self)
@@ -40,26 +52,29 @@ class MainWidget(Widget):
             self.obstate = True
 
     def changecs(self):
-        if self.obconsole:
-            windll.user32.ShowWindow(self.console_window, 0)
-            self.obconsole = False
-        else:
-            windll.user32.ShowWindow(self.console_window, 1)
-            self.obconsole = True
-    
+        if not self.console_window:
+            return
+        try:
+            if self.obconsole:
+                windll.user32.ShowWindow(self.console_window, 0)
+                self.obconsole = False
+            else:
+                windll.user32.ShowWindow(self.console_window, 1)
+                self.obconsole = True
+        except Exception as e:
+            logger.error(f"Failed to toggle console visibility: {e}")
+
     def infoAdd(self, msg: str = "", addtime=True):
+        timestr = ""
         if addtime:
             timestr = strftime("%H:%M:%S ", localtime())
-        else:
-            timestr = "  "
-        msg.strip("\n")
+        msg = msg.strip("\n")  # 修复原逻辑错误
         if "\n" in msg:
-            if addtime:
-                msg = ("\n" + msg).replace("\n", "\n  ")
-            else:
-                msg = ("\n" + msg).replace("\n", "\n  ").strip("\n")
+            prefix = "\n  " if addtime else "\n"
+            msg = prefix + msg.replace("\n", "\n  ")
+        full_msg = timestr + msg
         if spr["LoadUI"]:
-            self.infobox.append(timestr + msg)
+            self.infobox.append(full_msg)
             self.infobox.ensureCursorVisible()
         logger.info(msg)
 
@@ -67,16 +82,14 @@ class MainWidget(Widget):
         today = strftime("%Y-%m-%d", localtime())
         if today != logger.date:
             logger.new_handler(today)
-        now_time = strftime("%Y-%m-%d", localtime())
         if spr["LoadUI"]:
-            self.infobox.append(now_time)
+            self.infobox.append(today)
 
     def infoEnd(self):
-        _str = "------------------------------"
         if spr["LoadUI"]:
-            self.infobox.append(_str)
+            self.infobox.append(SEPARATOR_LINE)
             self.infobox.ensureCursorVisible()
-        logger.info(_str)
+        logger.info(SEPARATOR_LINE)
 
     def infoClear(self):
         if spr["LoadUI"]:

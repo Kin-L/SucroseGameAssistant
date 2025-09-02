@@ -21,13 +21,14 @@ class OCRControl:
                 killprocess(v)
             else:
                 return True
+        self.logger.warning(f"尝试10次仍未成功终止进程 {self.name}")
         return False
 
     def check(self):
         if info.OcrPath:
             self.path = info.OcrPath
         else:
-            self.path = "ocr-json/PaddleOCR-json.exe" if info.CpuFeature else "ocr-json/RapidOCR-json.exe"
+            self.path = path.join("ocr-json", self.name)
         if self.path and path.exists(self.path) and path.basename(self.path) == self.name:
             return True
         else:
@@ -64,77 +65,69 @@ class OCRControl:
             self.logger.debug("OCR早已关闭")
 
     @staticmethod
-    def convert_format(result):
+    def _convert_result(result):
         if result['code'] != 100:
             return False
         converted_result = []
-
         for item in result['data']:
             box = item['box']
             text = item['text']
             score = item['score']
-
             converted_item = [
                 [box[0], box[1], box[2], box[3]],
                 (text, score)
             ]
-
             converted_result.append(converted_item)
-
         return converted_result
 
-    def run(self, image):
-        # self.instance_ocr()
-        try:
-            if isinstance(image, Image.Image):
-                pass
-            elif isinstance(image, str):
-                return self.running.run(path.abspath(image))
-            else:  # 默认为 np.ndarray，避免需要import numpy
-                image = Image.fromarray(image)
-            image_stream = BytesIO()
-            image.save(image_stream, format="PNG")
-            image_bytes = image_stream.getvalue()
-            return self.running.runBytes(image_bytes)
-        except Exception as e:
-            self.logger.error(e)
-            return r"{}"
-
-    def recognize_single_line(self, image, blacklist=None):
-        results = self.convert_format(self.run(image))
-        if results:
-            for i in range(len(results)):
-                line_text = results[i][1][0] if results and len(results[i]) > 0 else ""
-                if blacklist and any(char == line_text for char in blacklist):
-                    continue
-                else:
-                    return line_text, results[i][1][1]
-        return None
-
-    def output(self, image):
+    @staticmethod
+    def _prepare_image_bytes(image):
         if isinstance(image, Image.Image):
             pass
         elif isinstance(image, str):
-            return self.running.run(path.abspath(image))
+            return path.abspath(image), None
         else:  # 默认为 np.ndarray，避免需要import numpy
             image = Image.fromarray(image)
         image_stream = BytesIO()
         image.save(image_stream, format="PNG")
         image_bytes = image_stream.getvalue()
-        result = self.running.runBytes(image_bytes)
+        return None, image_bytes
+
+    def run(self, image):
+        try:
+            file_path, image_bytes = self._prepare_image_bytes(image)
+            if file_path:
+                return self.running.run(file_path)
+            else:
+                return self.running.runBytes(image_bytes)
+        except Exception as e:
+            self.logger.error(e)
+            return r"{}"
+
+    def recognize_single_line(self, image, blacklist=None):
+        results = self._convert_result(self.run(image))
+        if not results:
+            return None
+        for item in results:
+            line_text, score = item[1]
+            if blacklist and line_text in blacklist:
+                continue
+            return line_text, score
+        return None
+
+    def output(self, image):
+        file_path, image_bytes = self._prepare_image_bytes(image)
+        if file_path:
+            result = self.running.run(file_path)
+        else:
+            result = self.running.runBytes(image_bytes)
+
         if result['code'] == 101:
             return None
         elif result['code'] != 100:
             self.logger.debug(result)
-            return False
-        converted_result = []
-        for item in result['data']:
-            box = item['box']
-            text = item['text']
-            score = item['score']
-            converted_item = [[box[0], box[1], box[2], box[3]], (text, score)]
-            converted_result.append(converted_item)
-        return converted_result
+            return []  # 统一返回类型
+        return self._convert_result(result)
 
 
 OCR = OCRControl()

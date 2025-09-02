@@ -26,13 +26,17 @@ class KeyMouse(CtrlBase, ADBController):
         self.checkrun()
         self.moveto(pos)
         pyautogui.mouseUp(None, None, button=key)
-    
+
     def moveto(self, pos):
-        self.checkrun(), pyautogui.moveTo(*(None, None) if pos is None else self.convert(pos))
+        self.checkrun()
+        target_pos = (None, None) if pos is None else self.convert(pos)
+        if target_pos[0] is not None and target_pos[1] is not None:
+            pyautogui.moveTo(*target_pos)
         sleep(0.1)
-    
+
     def move(self, pos):
-        self.checkrun(), pyautogui.moveRel(*self.convertVector(pos))
+        self.checkrun()
+        pyautogui.moveRel(*self.convertVector(pos))
     
     def roll(self, pos, num, hori=False):
         self.checkrun()
@@ -60,9 +64,13 @@ class KeyMouse(CtrlBase, ADBController):
         self.checkrun(), keyboard.release(_key)
 
     def wait(self, t):  # 单位秒
-        a, b = divmod(t, 1)
-        a = int(a)
-        for i in [1] * a + [b] if b else [1] * a:
+        self.checkrun()
+        integer_part, decimal_part = divmod(t, 1)
+        integer_part = int(integer_part)
+        steps = [1] * integer_part
+        if decimal_part > 0:
+            steps.append(decimal_part)
+        for i in steps:
             self.checkrun()
             sleep(i)
 
@@ -73,20 +81,28 @@ class KeyMouse(CtrlBase, ADBController):
         :return:
         """
         self.checkrun()
-        if isinstance(para, tuple):
-            x, y = self.convert(para)
-            if duration_ms <= 100:
-                self._exec_shell_command(f"input tap {x} {y}")
-            else:
-                self._exec_shell_command(f"input swipe {x} {y} {x} {y} {duration_ms}")
-        elif isinstance(para, str):
-            self._exec_shell_command(f"input keyevent {para}")
+        try:
+            if isinstance(para, tuple):
+                x, y = self.convert(para)
+                if duration_ms <= 100:
+                    self._exec_shell_command(f"input tap {x} {y}")
+                else:
+                    self._exec_shell_command(f"input swipe {x} {y} {x} {y} {duration_ms}")
+            elif isinstance(para, str):
+                self._exec_shell_command(f"input keyevent {para}")
+        except Exception as e:
+            print(f"[Error] ADB command failed: {e}")
+            raise
 
     def swip(self, pos1, pos2, duration_ms=500):
         self.checkrun()
-        x1, y1 = self.convert(pos1)
-        x2, y2 = self.convert(pos2)
-        self._exec_shell_command(f"input swipe {x1} {y1} {x2} {y2} {duration_ms}")
+        try:
+            x1, y1 = self.convert(pos1)
+            x2, y2 = self.convert(pos2)
+            self._exec_shell_command(f"input swipe {x1} {y1} {x2} {y2} {duration_ms}")
+        except Exception as e:
+            print(f"[Error] ADB command failed: {e}")
+            raise
 
 
 if __name__ == '__main__':

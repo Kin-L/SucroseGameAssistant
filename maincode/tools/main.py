@@ -17,17 +17,18 @@ from win32gui import ClientToScreen, GetClientRect
 
 
 def CmdRun(_str: str):
+    logger.info(f"执行命令: {_str}")
     sprun(_str, shell=True)
 
 
 # 从exe名称获取pid
 def GetPid(name: str) -> int:
     for proc in psutil.process_iter():
-        # noinspection PyBroadException
         try:
             if proc.name() == name:
                 return proc.pid
-        except Exception:
+        except Exception as e:
+            logger.warning(f"获取进程PID时异常: {e}")
             continue
     return 0
 
@@ -35,10 +36,8 @@ def GetPid(name: str) -> int:
 # 关闭进程
 def killprocess(_process: Union[int, str]):
     if isinstance(_process, int):
-        # 根据pid杀死进程
         _pid = _process
     elif isinstance(_process, str):
-        # 根据进程名杀死进程
         _pid = GetPid(_process)
     else:
         raise ValueError(f"close异常传输值：{_process}")
@@ -48,13 +47,15 @@ def killprocess(_process: Union[int, str]):
         gone, still_alive = psutil.wait_procs([process], timeout=5)
         if still_alive:
             process.kill()
-            return
+            logger.warning(f"强制杀死进程 PID: {_pid}")
         else:
-            return 0
-
+            logger.info(f"成功终止进程 PID: {_pid}")
+        return 0
     except psutil.NoSuchProcess:
+        logger.error(f"进程不存在 PID: {_pid}")
         return 1
     except psutil.AccessDenied:
+        logger.error(f"无权限终止进程 PID: {_pid}")
         return 2
 
 
@@ -67,26 +68,31 @@ def WindowsNotify(title: str, massage: str):
                            icon_path="resources/main/SGA/title.ico",
                            duration=5,
                            threaded=True)
-    except:
-        ...
+    except Exception as e:
+        logger.error(f"通知失败: {e}")
 
 
 # 查询静音状态
 def GetMute() -> bool:
-    return True
-    # devices = AudioUtilities.GetSpeakers()
-    # interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-    # volume = cast(interface, POINTER(IAudioEndpointVolume))
-    # return volume.GetMute()
+    try:
+        devices = AudioUtilities.GetSpeakers()
+        interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+        volume = cast(interface, POINTER(IAudioEndpointVolume))
+        return bool(volume.GetMute())
+    except Exception as e:
+        logger.error(f"查询静音状态(GetMute)异常: {GetTracebackInfo(e)}")
+        return False
 
 
 # 熄屏
 def ScreenOff() -> None:
-    return
-    # power_off = 2
-    # windll.user32.PostMessageW(0xffff, 0x0112, 0xF170, power_off)
-    # shell32 = windll.LoadLibrary("shell32.dll")
-    # shell32.ShellExecuteW(None, 'open', 'rundll32.exe', 'USER32', '', 5)
+    try:
+        power_off = 2
+        windll.user32.PostMessageW(0xffff, 0x0112, 0xF170, power_off)
+        shell32 = windll.LoadLibrary("shell32.dll")
+        shell32.ShellExecuteW(None, 'open', 'rundll32.exe', 'USER32', '', 5)
+    except Exception as e:
+        logger.error(f"熄屏(ScreenOff)异常: {GetTracebackInfo(e)}")
 
 
 def GetTracebackInfo(e) -> str:
@@ -94,7 +100,9 @@ def GetTracebackInfo(e) -> str:
 
 
 def GetTracebackValue() -> (str, str):
-    _, _, exc_traceback = sys.exc_info()
+    exc_type, exc_value, exc_traceback = sys.exc_info()
+    if exc_traceback is None:
+        return {}, {}
     frame = exc_traceback.tb_frame
     return frame.f_locals, frame.f_globals
 
@@ -113,20 +121,20 @@ def CheckAdmin():
     return True
 
 
-def foreground(self, num=20):
+def foreground(self, num=20, timeout=0.2):
     for _ in range(num):
-        if self.isActive:
+        if getattr(self, 'isActive', False):
             return True
         else:
             if _:
-                sleep(0.3)
+                sleep(timeout)
             try:
-                if self.isMinimized:
+                if getattr(self, 'isMinimized', False):
                     self.restore()
                 self.activate()
-            except:
-                ...
-            sleep(0.2)
+            except Exception as e:
+                logger.warning(f"窗口激活失败: {e}")
+            sleep(timeout)
     logger.error("foreground 超时")
     return False
 
@@ -140,24 +148,19 @@ def GetWindow(para, accurate=False):  # 标题, 句柄
         windows = gw.getWindowsWithTitle(para)
         if not windows:
             return None
-        else:
-            if accurate:
-                for win in windows:
-                    if para == win.title:
-                        window = win
-                        break
-                else:
-                    return None
+        if accurate:
+            for win in windows:
+                if para == win.title:
+                    window = win
+                    break
             else:
-                window = windows[0]
-    elif isinstance(para, int):
-        windows = gw.getWindowsWithTitle("")
-
-        for win in windows:
-            if para == win._hWnd:
-                window = win
-                break
+                return None
         else:
+            window = windows[0]
+    elif isinstance(para, int):
+        try:
+            window = gw.Win32Window(para)
+        except Exception:
             return None
     else:
         return None
@@ -171,26 +174,18 @@ def GetWindow(para, accurate=False):  # 标题, 句柄
 
 
 def VersionsCompare(version1: str, version2: str) -> int:
-    def split_version(v: str):
-        components = []
-        for item in v.split('.'):
-            try:
-                components.append(int(item))
-            except ValueError:
-                components.append(item)
-        return components
-    v1_parts = split_version(version1)
-    v2_parts = split_version(version2)
-    for v1, v2 in zip(v1_parts, v2_parts):
-        if v1 != v2:
-            return -1 if v1 < v2 else 1
-    if len(v1_parts) != len(v2_parts):
-        return -1 if len(v1_parts) < len(v2_parts) else 1
-    return -1 if version1 < version2 else (1 if version1 > version2 else 0)
+    from packaging.version import parse
+    v1 = parse(version1)
+    v2 = parse(version2)
+    if v1 < v2:
+        return -1
+    elif v1 > v2:
+        return 1
+    else:
+        return 0
 
 
 logger = Logger().getlogger()
-
 
 
 if __name__ == '__main__':

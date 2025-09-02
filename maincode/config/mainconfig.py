@@ -3,10 +3,10 @@ from typing import List
 
 
 class TimerConfigClass(BaseModel):
-    Execute: List[int] = [0] * 10
-    Time: List[List[int]] = [[0, 0]] * 10
-    ConfigKeys: List[str] = [""] * 10
-    Awake: List[bool] = [False] * 10
+    Execute: List[int] = Field(default_factory=lambda: [0] * 10)
+    Time: List[List[int]] = Field(default_factory=lambda: [[0, 0] for _ in range(10)])
+    ConfigKeys: List[str] = Field(default_factory=lambda: [""] * 10)
+    Awake: List[bool] = Field(default_factory=lambda: [False] * 10)
 
 
 class MainConfig(BaseModel):
@@ -14,13 +14,13 @@ class MainConfig(BaseModel):
     WorkDir: str = ""
     OcrPath: str = ""
     StopKeys: str = "ctrl+/"
-    AutoUpdate: int = True
+    AutoUpdate: int = 1  # 修正为整数类型
     TimerConfig: TimerConfigClass = Field(default_factory=TimerConfigClass)
     ConfigKey: str = ""
     ConfigLock: bool = True
-    CurrentConfig: dict = {}
-    OtherConfig: dict = {"License": False}
-    ModulesEnable: list = []
+    CurrentConfig: dict = Field(default_factory=dict)
+    OtherConfig: dict = Field(default_factory=lambda: {"License": False})
+    ModulesEnable: list = Field(default_factory=list)
 
 
 def checkmain(configdict: dict):

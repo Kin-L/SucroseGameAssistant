@@ -3,6 +3,9 @@ from maincode.config.maingroup import sg
 from maincode.tools.main import logger, GetTracebackInfo
 from os import path, remove, replace
 from maincode.mainwindows.mainwindow import SGAQMainWindow
+import random
+_Range10 = range(10)
+_Range9 = range(1, 9)
 
 
 class SGAModule:
@@ -15,16 +18,7 @@ class SGAModule:
         for widget in sg.modules.GetWidgets():
             self.widget.skmodule.addWidget(widget)
 
-        if sg.mainconfig.ConfigLock:
-            self.widget.btconfiglock.show()
-            self.widget.btconfigunlock.hide()
-            self.widget.btconfigdelete.hide()
-            self.widget.btconfigadd.show()
-        else:
-            self.widget.btconfiglock.hide()
-            self.widget.btconfigunlock.show()
-            self.widget.btconfigdelete.show()
-            self.widget.btconfigadd.hide()
+        self._update_lock_ui(sg.mainconfig.ConfigLock)
         self.widget.ecbconfig.addItems(sg.subconfig.GetFilesT()[1])
         self.widget.boxmodule.addItems(sg.modules.GetInfosT()[0])
 
@@ -46,22 +40,38 @@ class SGAModule:
         self.widget.btconfigfinish.clicked.connect(self.configrename)
         self.widget.ecbconfig.currentIndexChanged.connect(self.configchange)
 
+    def _update_lock_ui(self, locked: bool):
+        """更新锁定状态下的UI显示"""
+        if locked:
+            self.widget.btconfiglock.show()
+            self.widget.btconfigunlock.hide()
+            self.widget.btconfigdelete.hide()
+            self.widget.btconfigadd.show()
+        else:
+            self.widget.btconfiglock.hide()
+            self.widget.btconfigunlock.show()
+            self.widget.btconfigdelete.show()
+            self.widget.btconfigadd.hide()
+
+    def _disable_buttons(self, disable: bool):
+        """统一控制按钮启用/禁用"""
+        buttons = [
+            self.widget.btconfigunlock,
+            self.widget.btconfiglock,
+            self.widget.btstart,
+            self.widget.btpause,
+            self.widget.btconfigadd,
+            self.widget.btconfigdelete,
+        ]
+        for btn in buttons:
+            btn.setDisabled(disable)
+
     def setlock(self, lock: bool):
         try:
-            if lock:
-                self.widget.btconfiglock.show()
-                self.widget.btconfigunlock.hide()
-                self.widget.btconfigdelete.hide()
-                self.widget.btconfigadd.show()
-                sg.mainconfig.ConfigLock = True
-                self.configchange()
-            else:
-                self.widget.btconfiglock.hide()
-                self.widget.btconfigunlock.show()
-                self.widget.btconfigdelete.show()
-                self.widget.btconfigadd.hide()
-                sg.mainconfig.ConfigLock = False
+            self._update_lock_ui(lock)
             sg.mainconfig.ConfigLock = lock
+            if lock:
+                self.configchange()
         except Exception as e:
             _str = GetTracebackInfo(e) + "切换锁定流程异常"
             logger.error(_str)
@@ -116,7 +126,6 @@ class SGAModule:
             _path = sg.modules.GetInfosT()[-1][seq]
             self.widget.picicon.setIcon(_path)
             self.widget.boxmodule.setCurrentIndex(seq)
-            # self.module.skmodule.setCurrentIndex(seq)
         except Exception as e:
             _str = GetTracebackInfo(e) + "载入子配置流程异常"
             logger.error(_str)
@@ -126,16 +135,16 @@ class SGAModule:
         try:
             num = self.widget.ecbconfig.currentIndex()
             ck, name, mk = sg.subconfig.GetFiles()[num]
-            filepath = f"personal/config/{ck}{name}.json"
+            filepath = path.join("personal/config", f"{ck}{name}.json")
             del sg.subconfig.filelist[num]
             self.widget.ecbconfig.removeItem(num)
             remove(filepath)
-            nn = num+1
-            for i in range(10):
+            nn = num + 1
+            for i in _Range10:
                 getattr(self.wdtime, f"text{i}").removeItem(nn)
             if sg.modules.WidgetsLoad[0]:
                 _wdlist = sg.modules.GetWidgets()[0].wdlist
-                for i in range(1, 9):
+                for i in _Range9:
                     getattr(_wdlist, f"task0{i}").removeItem(nn)
             self.infoHead()
             self.infoAdd(f"删除配置：{ck}{name}")
@@ -147,24 +156,21 @@ class SGAModule:
 
     def configadd(self):
         try:
-            import random
             default = sg.modules.GetConfig(0).model_dump()
-            while 1:
+            while True:
                 key = f"{random.randint(0, 9999):04d}"
-                if key in sg.subconfig.GetFilesT()[0]:
-                    continue
-                else:
+                if key not in sg.subconfig.GetFilesT()[0]:
                     break
             default['ConfigKey'] = key
             sg.subconfig.Save(default)
             self.widget.ecbconfig.addItem("默认配置")
             sg.subconfig.filelist.append([key, "默认配置", 0])
             self.widget.ecbconfig.setCurrentIndex(len(sg.subconfig.filelist) - 1)
-            for i in range(10):
+            for i in _Range10:
                 getattr(self.wdtime, f"text{i}").addItem("默认配置")
             if sg.modules.WidgetsLoad[0]:
                 _wdlist = sg.modules.GetWidgets()[0].wdlist
-                for i in range(1, 9):
+                for i in _Range9:
                     getattr(_wdlist, f"task0{i}").addItem("默认配置")
             self.infoHead()
             self.infoAdd(f"新建配置")
@@ -182,12 +188,7 @@ class SGAModule:
             self.widget.edlconfig.show()
             self.widget.btconfigfinish.show()
             self.widget.btconfigedit.hide()
-            self.widget.btconfigunlock.setDisabled(True)
-            self.widget.btconfiglock.setDisabled(True)
-            self.widget.btstart.setDisabled(True)
-            self.widget.btpause.setDisabled(True)
-            self.widget.btconfigadd.setDisabled(True)
-            self.widget.btconfigdelete.setDisabled(True)
+            self._disable_buttons(True)
         except Exception as e:
             _str = GetTracebackInfo(e) + "子配置准备更名流程异常"
             logger.error(_str)
@@ -198,6 +199,9 @@ class SGAModule:
             num = self.widget.ecbconfig.currentIndex()
             oldname = self.widget.ecbconfig.currentText()
             newname = self.widget.edlconfig.text()
+            if not newname.strip():
+                self.infoAdd("配置名称不能为空")
+                return
             if newname != oldname:
                 _dict = sg.subconfig.Read(num)
                 self.widget.ecbconfig.setItemText(num, newname)
@@ -205,18 +209,18 @@ class SGAModule:
                 fl[num][1] = newname
                 sg.subconfig.filelist = fl
                 configkey = sg.mainconfig.ConfigKey
-                oldpath = path.join(sg.info.Workdir, f"personal/config/{configkey}{oldname}.json")
-                newpath = path.join(sg.info.Workdir, f"personal/config/{configkey}{newname}.json")
+                oldpath = path.join(sg.info.Workdir, "personal/config", f"{configkey}{oldname}.json")
+                newpath = path.join(sg.info.Workdir, "personal/config", f"{configkey}{newname}.json")
 
                 _dict["ConfigName"] = newname
                 replace(oldpath, newpath)
                 sg.subconfig.Save(_dict)
                 old_index = num + 1
-                for i in range(10):
+                for i in _Range10:
                     getattr(self.wdtime, f"text{i}").setItemText(old_index, newname)
                 if sg.modules.WidgetsLoad[0]:
                     _wdlist = sg.modules.GetWidgets()[0].wdlist
-                    for i in range(1, 9):
+                    for i in _Range9:
                         getattr(_wdlist, f"task0{i}").setItemText(old_index, newname)
                 self.infoHead()
                 self.infoAdd(f"重命名配置：{configkey}")
@@ -226,13 +230,9 @@ class SGAModule:
             self.widget.ecbconfig.show()
             self.widget.btconfigfinish.hide()
             self.widget.btconfigedit.show()
-            self.widget.btconfigunlock.setEnabled(True)
-            self.widget.btconfiglock.setEnabled(True)
-            self.widget.btstart.setEnabled(True)
-            self.widget.btpause.setEnabled(True)
-            self.widget.btconfigadd.setEnabled(True)
-            self.widget.btconfigdelete.setEnabled(True)
+            self._disable_buttons(False)
         except Exception as e:
             _str = GetTracebackInfo(e) + "子配置确认更名流程异常"
             logger.error(_str)
             self.infoAdd(f"子配置确认更名流程异常")
+            self._disable_buttons(False)
