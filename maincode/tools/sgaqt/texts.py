@@ -1,8 +1,9 @@
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QFrame, QTextBrowser
-from qfluentwidgets import StrongBodyLabel, setFont, LineEdit, ToolTipFilter, ToolTipPosition
+from qfluentwidgets import StrongBodyLabel, setFont, LineEdit, ToolTipFilter, ToolTipPosition, PushButton
+from typing import Tuple
 
-from maincode.tools.sgaqt.widgets import int4
+int4 = Tuple[int, int, int, int]
 
 
 class Label(StrongBodyLabel):
@@ -59,3 +60,11 @@ class InfoBox(QTextBrowser):
                  "鼠标悬停部分按钮上会有提示信息，或参考B站账号:绘星痕 的SGA介绍视频。\n" \
                  "------------------------------"
         self.append(notify)
+
+
+class TipsButton(PushButton):
+    def __init__(self, widget: QWidget, position: tuple[int, int], text: str):
+        super().__init__(widget)
+        self.setText("!")
+        self.setGeometry(*position, 20, 23)
+        tips(self, text)

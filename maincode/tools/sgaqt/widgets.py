@@ -3,8 +3,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QFrame
 from qfluentwidgets import SmoothScrollArea
-from maincode.tools.sgaqt.texts import Label, Picture, Line
-from maincode.tools.sgaqt.buttons import Check, Combobox, TipsButton
+from maincode.tools.sgaqt.texts import Label, Picture, Line, TipsButton
+from maincode.tools.sgaqt.buttons import Check, Combobox
 
 palette = QPalette()
 palette.setColor(QPalette.Background, QColor(255, 255, 255))

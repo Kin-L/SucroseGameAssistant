@@ -2,9 +2,9 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QWidget
 from qfluentwidgets import PushButton, ToolButton, TransparentToolButton, CheckBox, ComboBox, SwitchButton, TimePicker, \
     ToggleToolButton
+from typing import Tuple
 
-from maincode.tools.sgaqt.texts import tips
-from maincode.tools.sgaqt.widgets import int4
+int4 = Tuple[int, int, int, int]
 
 
 class Button(PushButton):
@@ -79,11 +79,3 @@ class SetButton(ToolButton):
         self.setIcon(setpath)
         self.setGeometry(*location)
         self.setIconSize(QSize(*size))
-
-
-class TipsButton(PushButton):
-    def __init__(self, widget: QWidget, position: tuple[int, int], text: str):
-        super().__init__(widget)
-        self.setText("!")
-        self.setGeometry(*position, 20, 23)
-        tips(self, text)

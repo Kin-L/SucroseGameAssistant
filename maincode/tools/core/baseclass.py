@@ -1,6 +1,3 @@
-from maincode.config.info import info
-
-
 class Zone:
     def __init__(self, *args):
         self.zone = args

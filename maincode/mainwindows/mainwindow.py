@@ -42,7 +42,7 @@ class SGAQMainWindow(QMainWindow):
         from maincode.tools.system.window import GetWindow
         self.window = GetWindow("砂糖代理")
         if "back" not in argv:
-            maincode.tools.system.window.foreground()
+            self.window.foreground()
 
         self.mainwidget = MainWidget()
         self.setCentralWidget(self.mainwidget)
