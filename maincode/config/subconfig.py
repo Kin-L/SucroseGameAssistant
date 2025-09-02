@@ -1,7 +1,7 @@
 from typing import List, Tuple, Union, Optional, Any
 from os import path, makedirs, listdir
 import json
-from maincode.tools.main import logger
+from maincode.tools.core.logger import logger
 
 
 class SubConfigs:
@@ -106,4 +106,4 @@ class SubConfigs:
             return False
 
 
-sc = SubConfigs()
+subconfig = SubConfigs()

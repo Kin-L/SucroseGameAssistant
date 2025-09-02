@@ -1,6 +1,6 @@
 from maincode.modules.template import SubConfigTemplate, ModuleStackPage
 from typing import List, Tuple, Callable, Optional
-from maincode.tools.main import logger
+from maincode.tools.core.logger import logger
 
 
 class ModuleClass:

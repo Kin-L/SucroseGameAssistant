@@ -1,12 +1,14 @@
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QIcon, QMovie, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QShortcut
-from maincode.tools.constant import spr
-from maincode.tools.controls import palette
+
+import maincode.tools.system.window
+from maincode.tools.core.constant import spr
+from maincode.tools.sgaqt.widgets import palette
 from sys import argv
 from maincode.mainwindows.mainwidget import MainWidget
-from maincode.config.maingroup import sg
-from maincode.tools.ocr.main import OCR
+from maincode.config.configctrl import scc
+from maincode.tools.controller.ocr import OCR
 import os
 from pathlib import Path as libPath
 
@@ -21,7 +23,7 @@ class SGAQMainWindow(QMainWindow):
         self.setFixedSize(self.width(), self.height())
         self.setWindowIcon(QIcon(spr["SGATitlePic"]))
         self.setPalette(palette)
-        self.SG = sg
+        self.SG = scc
         self.OCR = OCR
         self.loading = None  # 防止未初始化访问
         self.timer = QTimer(self)
@@ -37,10 +39,10 @@ class SGAQMainWindow(QMainWindow):
         self.loading = LoadWidget(self)
         self.show()
 
-        from maincode.tools.main import GetWindow
+        from maincode.tools.system.window import GetWindow
         self.window = GetWindow("砂糖代理")
         if "back" not in argv:
-            self.window.foreground()
+            maincode.tools.system.window.foreground()
 
         self.mainwidget = MainWidget()
         self.setCentralWidget(self.mainwidget)

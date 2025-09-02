@@ -1,10 +1,11 @@
-from .PPOCR_api import GetOcrApi
+from maincode.tools.core.PPOCR_api import GetOcrApi
 from PIL import Image
 from io import BytesIO
 from os import path
 from maincode.config.info import info
-from maincode.tools.main import logger, SendMessageBox, GetTracebackInfo
-from maincode.tools.main import killprocess, GetPid
+from maincode.tools.core.logger import logger
+from maincode.tools.system.notification import SendMessageBox, GetTracebackInfo
+from maincode.tools.system.process import GetPid, killprocess
 
 
 class OCRControl:

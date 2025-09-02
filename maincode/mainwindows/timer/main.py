@@ -1,8 +1,9 @@
 from .widget import TimerWidgets
-from maincode.config.maingroup import sg
+from maincode.config.configctrl import scc
 from PyQt5.QtCore import QTime
 from .function import timer_delete
-from maincode.tools.main import GetTracebackInfo, logger
+from ...tools.system.notification import GetTracebackInfo
+from ...tools.core.logger import logger
 from maincode.mainwindows.mainwindow import SGAQMainWindow
 
 
@@ -14,10 +15,10 @@ class SGATimer:
         self.widgets = TimerWidgets(wighet, location)
 
         _tw = self.widgets.wdtime
-        tl = ["<未选择>"] + list(sg.subconfig.GetFilesT()[1])
+        tl = ["<未选择>"] + list(scc.sc.GetFilesT()[1])
         for i in range(10):
             _tw.texts[i].addItems(tl)
-        self.SetConfig(sg.mainconfig.TimerConfig.model_dump())
+        self.SetConfig(scc.mc.TimerConfig.model_dump())
         self.widgets.btdelete.clicked.connect(self.DeleteTimer)
 
     def DeleteTimer(self):
@@ -35,7 +36,7 @@ class SGATimer:
         _tw = self.widgets.wdtime
         _list0 = config['Execute']
         _list1 = config['Time']
-        _list2 = list(map(lambda x: -1 if not x else list(sg.subconfig.GetFilesT()[0]).index(x), config['ConfigKeys']))
+        _list2 = list(map(lambda x: -1 if not x else list(scc.sc.GetFilesT()[0]).index(x), config['ConfigKeys']))
         _list3 = config['Awake']
         for i in range(10):
             _tw.executes[i].setCurrentIndex(_list0[i])
@@ -57,5 +58,5 @@ class SGATimer:
             config_dict['Time'].append([_tw.timers[i].getTime().hour(), _tw.timers[i].getTime().minute()])
             text_indices.append(_tw.texts[i].currentIndex() - 1)
             config_dict['Awake'].append(_tw.awakes[i].isChecked())
-        config_dict['ConfigKeys'] = list(map(lambda x: "" if x < 0 else sg.subconfig.GetFilesT()[0][x], text_indices))
+        config_dict['ConfigKeys'] = list(map(lambda x: "" if x < 0 else scc.sc.GetFilesT()[0][x], text_indices))
         return config_dict

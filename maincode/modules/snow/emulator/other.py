@@ -1,4 +1,3 @@
-
 def snowOther(self):
     if self.para["Simulation"]:
         self.ctler.clickChange((1690, 470), zone=(1552, 468, 1626, 515))
@@ -35,7 +34,7 @@ def snowOther(self):
             cpos = (1781, 1025)  # 逆光怒放
             if pos:
                 x, y = self.ctler.convertR(pos)
-                self.ctler.clickChange(pos, zone=(x-10, y-10, x+10,  y+10))
+                self.ctler.clickChange(pos, zone=(x - 10, y - 10, x + 10, y + 10))
                 pos = self.ctler.findtext("领取", (0, 605, 578, 1080))
 
             else:

@@ -1,5 +1,6 @@
-from maincode.tools.controls import (Button, Stack, Combobox,
-                                     PicButton, StateSigh, SLineEdit)
+from maincode.tools.sgaqt.texts import SLineEdit
+from maincode.tools.sgaqt.buttons import Button, PicButton, Combobox
+from maincode.tools.sgaqt.widgets import Stack, StateSigh
 from PyQt5.QtWidgets import QWidget
 
 

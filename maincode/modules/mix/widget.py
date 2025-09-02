@@ -1,8 +1,8 @@
-from maincode.tools.controls import (Combobox, SetStackPage,
-                                     ModuleStackPage, Widget, Line,
-                                     Picture, TaskPanel, Label)
+from maincode.tools.sgaqt.texts import Label, Picture, Line
+from maincode.tools.sgaqt.buttons import Combobox
+from maincode.tools.sgaqt.widgets import Widget, SetStackPage, ModuleStackPage, TaskPanel
 from typing import Optional
-from maincode.config.subconfig import sc
+from maincode.config.subconfig import subconfig
 
 
 class MixPage(ModuleStackPage):
@@ -23,7 +23,7 @@ class MixPage(ModuleStackPage):
         # self.picbt =
 
     def SetWidget(self, config: dict):
-        seql = [sc.FindItem(k)[-1]+1 if k else 0 for k in config['ConfigKeyList']]
+        seql = [subconfig.FindItem(k)[-1] + 1 if k else 0 for k in config['ConfigKeyList']]
         self.wdlist.task01.setCurrentIndex(seql[0])
         self.wdlist.task02.setCurrentIndex(seql[1])
         self.wdlist.task03.setCurrentIndex(seql[2])
@@ -48,7 +48,7 @@ class MixPage(ModuleStackPage):
             self.wdlist.task06.currentIndex()-1,
             self.wdlist.task07.currentIndex()-1,
             self.wdlist.task08.currentIndex()-1, ]
-        _dict['ConfigKeyList'] = [sc.filelist[i][0] if i > -1 else "" for i in _list]
+        _dict['ConfigKeyList'] = [subconfig.filelist[i][0] if i > -1 else "" for i in _list]
         _dict["Mute"] = self.page01.taskpanel.ckmute.isChecked()
         _dict["SoftClose"] = True
         _dict["Finished"] = self.page01.taskpanel.cbafter.currentIndex()
@@ -69,7 +69,7 @@ class MixList(Widget):
         self.task07 = Combobox(self, (0, 310, 210, 35))
         self.task08 = Combobox(self, (0, 355, 210, 35))
 
-        namelist: list = ["<未选择>"] + [name for ck, name, mk in sc.filelist]
+        namelist: list = ["<未选择>"] + [name for ck, name, mk in subconfig.filelist]
         self.task01.addItems(namelist)
         self.task02.addItems(namelist)
         self.task03.addItems(namelist)

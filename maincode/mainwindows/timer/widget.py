@@ -1,6 +1,6 @@
-from maincode.tools.controls import (Button, Widget, Label,
-                                     Combobox, Check, tips,
-                                     ScrollArea, Timepicker)
+from maincode.tools.sgaqt.texts import Label, tips
+from maincode.tools.sgaqt.buttons import Button, Check, Combobox, Timepicker
+from maincode.tools.sgaqt.widgets import Widget, ScrollArea
 
 # 常量定义
 EXECUTE_COMBO_WIDTH = 90

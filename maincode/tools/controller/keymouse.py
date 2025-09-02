@@ -2,11 +2,13 @@
 import keyboard
 import pyautogui
 from time import sleep
-from maincode.tools.myclass import CtrlBase, ADBController
+from maincode.tools.core.baseclass import CtrlBase
+from maincode.tools.controller.adb import ADBController
+
 pyautogui.FAILSAFE = False
 
 
-class KeyMouse(CtrlBase, ADBController):
+class SGAKeyMouse(CtrlBase, ADBController):
     def click(self, pos=None, key="left"):
         """
         :param pos: (x, y)

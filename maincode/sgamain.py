@@ -1,9 +1,10 @@
-from maincode.tools.main import logger, GetTracebackInfo
+from maincode.tools.system.notification import GetTracebackInfo
+from maincode.tools.core.logger import logger
 from maincode.mainwindows.mainwindow import SGAQMainWindow
-from maincode.tools.constant import spr
-from maincode.thread.updatecheck import timercheck, updatecheck
-from maincode.thread.taskctrl import TaskStart, TaskStop, ManualStop, NewThread
-from maincode.config.function import currentsave, subconfigsave, SaveConfig, ManualSaveConfig
+from maincode.tools.core.constant import spr
+from maincode.mainfunc.updatecheck import timercheck, updatecheck
+from maincode.mainfunc.taskctrl import TaskStart, TaskStop, ManualStop, NewThread
+from maincode.mainfunc.config import currentsave, subconfigsave, SaveConfig, ManualSaveConfig
 from maincode.mainwindows.overall.main import SGAOverall
 from maincode.mainwindows.module.main import SGAModule
 import keyboard
@@ -81,7 +82,7 @@ class SGAMain(SGAQMainWindow):
                 self.OCR.disable()
             keyboard.unhook_all()
             if spr["LoadUI"]:
-                self.SG.mainconfig.ModulesEnable = [
+                self.SG.mc.ModulesEnable = [
                     self.module.widget.boxmodule.itemText(i)
                     for i in range(self.module.widget.boxmodule.count())
                 ]

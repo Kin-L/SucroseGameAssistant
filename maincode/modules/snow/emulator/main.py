@@ -1,10 +1,8 @@
 import subprocess
-
-from maincode.tools.myclass import SGAStop
-from maincode.tools.main import GetTracebackInfo, logger
+from maincode.tools.core.baseclass import SGAStop
+from maincode.tools.system.notification import GetTracebackInfo
+from maincode.tools.core.logger import logger
 from time import sleep
-from win32gui import FindWindow
-from os import path
 from .energy import snowEnergy
 from .dailytask import snowDailyTask
 from .other import snowOther

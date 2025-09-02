@@ -1,8 +1,10 @@
-from maincode.tools.main import GetTracebackInfo, logger, WindowsNotify
-from maincode.tools.myclass import SGAStop
-from maincode.config.maingroup import sg
+from maincode.tools.controller.main import Controller
+from maincode.tools.core.logger import logger
+from maincode.tools.system.notification import WindowsNotify, GetTracebackInfo
+from maincode.tools.core.baseclass import SGAStop
+from maincode.config.configctrl import scc
 from PyQt5.QtCore import pyqtSignal, pyqtBoundSignal, QObject
-from .update import update
+from maincode.mainfunc.update import update
 from maincode.config.info import info
 import keyboard
 
@@ -34,12 +36,12 @@ class SGAMainThread(QObject):
         elif self.tasktype in ["current", "timed"]:
             if self.para["Mute"] and (not self.para["current_mute"]):
                 keyboard.send('volume mute')
-            num = sg.modules.FindItem(self.para["ModuleKey"])[-1]
-            _func = sg.modules.Tasks[num]
+            num = scc.modules.FindItem(self.para["ModuleKey"])[-1]
+            _func = scc.modules.Tasks[num]
             self.__class__.taskstart = _func
-            from maincode.tools.controller.main import ctler
             try:
-                self.ctler = ctler
+                self.ctler = Controller()
+                self.ctler.checkrun = info.checkrun
             except FileExistsError:
                 self.send("未找到有效ocr-json.exe文件")
                 self.finished.emit()
@@ -56,12 +58,12 @@ class SGAMainThread(QObject):
                 if self.para["Finished"] == 1:
                     WindowsNotify(_tit, "任务完成，20秒后熄屏")
                     self.send("任务完成,20s后熄屏")
-                    self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
+                    self.send(f"可按快捷键\"{scc.mc.StopKeys}\"取消")
                     self.ctler.wait(20)
                 elif self.para["Finished"] == 2:
                     WindowsNotify(_tit, "任务完成，60秒后睡眠")
                     self.send("任务完成,60s后睡眠")
-                    self.send(f"可按快捷键\"{sg.mainconfig.StopKeys}\"取消")
+                    self.send(f"可按快捷键\"{scc.mc.StopKeys}\"取消")
                     self.ctler.wait(60)
                 else:
                     WindowsNotify(_tit, "任务完成")

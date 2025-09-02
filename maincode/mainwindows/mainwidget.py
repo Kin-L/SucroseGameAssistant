@@ -1,12 +1,11 @@
-from maincode.tools.controls import (Line, Stack, Widget,
-                                     PicButton, InfoBox, OverallButton,
-                                     tips, Support, ConsoleButton)
+from maincode.tools.sgaqt.texts import Line, tips, InfoBox
+from maincode.tools.sgaqt.buttons import PicButton, OverallButton, ConsoleButton
+from maincode.tools.sgaqt.widgets import Widget, Stack, Support
 from ctypes import windll
-from maincode.tools.constant import spr
+from maincode.tools.core.constant import spr
 
 from time import localtime, strftime
-from maincode.tools.main import logger
-
+from maincode.tools.core.logger import logger
 
 # 常量定义
 UI_WIDTH = 625

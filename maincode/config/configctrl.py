@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtBoundSignal
 from maincode.modules.main import ModuleClass
-from .subconfig import sc, SubConfigs
+from .subconfig import subconfig, SubConfigs
 from .mainconfig import MainConfig, checkmain
 from .info import SGAInfo, info
 from os import path, makedirs
@@ -9,7 +9,7 @@ import json
 import random
 
 
-class SGAConfigGroup(QObject):
+class SGAConfigController(QObject):
     infoAdd: pyqtBoundSignal = pyqtSignal(str, bool)
     infoHead: pyqtBoundSignal = pyqtSignal()
     infoEnd: pyqtBoundSignal = pyqtSignal()
@@ -20,29 +20,29 @@ class SGAConfigGroup(QObject):
     def __init__(self):
         super().__init__()
         self.modules: Optional[ModuleClass] = None
-        self.mainconfig: Optional[MainConfig] = None
+        self.mc: Optional[MainConfig] = None
         self.currentmainconfig: Optional[dict] = None
-        self.subconfig: Optional[SubConfigs] = None
+        self.sc: Optional[SubConfigs] = None
         self.info: Optional[SGAInfo] = None
 
     def Load(self):
         self.modules = ModuleClass
-        self.mainconfig: MainConfig = self.ReadMainConfig()
+        self.mc: MainConfig = self.ReadMainConfig()
         self.RecognizeModules()
         self.ReadCurrentConfig()
-        self.currentmainconfig: dict = self.mainconfig.model_dump()
-        self.subconfig = sc
-        if not self.subconfig.filelist:
+        self.currentmainconfig: dict = self.mc.model_dump()
+        self.sc = subconfig
+        if not self.sc.filelist:
             self.NewSubFile()
         self.info = info
-        self.info.OtherConfig = self.mainconfig.OtherConfig
-        self.info.OcrPath = self.mainconfig.OcrPath
-        self.mainconfig.Version = self.info.Version
+        self.info.OtherConfig = self.mc.OtherConfig
+        self.info.OcrPath = self.mc.OcrPath
+        self.mc.Version = self.info.Version
         self.SaveMain()
         self.SaveBackUp()
-        if self.mainconfig.WorkDir != self.info.Workdir:
+        if self.mc.WorkDir != self.info.Workdir:
             self.info.BasisFileInit()
-            self.mainconfig.WorkDir = self.info.Workdir
+            self.mc.WorkDir = self.info.Workdir
 
     def ReadMainConfig(self):
         # 加载主配置，若损坏则从备份恢复，若备份损坏或没有则进行初始化修复或者初始化
@@ -85,7 +85,7 @@ class SGAConfigGroup(QObject):
         return MainConfig()
 
     def RecognizeModules(self):
-        _l = self.mainconfig.ModulesEnable
+        _l = self.mc.ModulesEnable
         if "连续任务" in _l or not _l:
             from maincode.modules.mix.main import MixClass
             MixClass()
@@ -94,21 +94,21 @@ class SGAConfigGroup(QObject):
             SnowClass()
 
     def ReadCurrentConfig(self):
-        _current = self.mainconfig.CurrentConfig
+        _current = self.mc.CurrentConfig
         if _current:
             if self.modules.CheckConfig(_current):
                 return
             else:
                 self.infoAdd.emit("当前子设置损坏，进行初始化", False)
-                self.mainconfig.CurrentConfig = self.modules.GetConfig(0).model_dump()
+                self.mc.CurrentConfig = self.modules.GetConfig(0).model_dump()
         else:
             self.infoAdd.emit("进行子设置初始化", False)
-            self.mainconfig.CurrentConfig = self.modules.GetConfig(0).model_dump()
+            self.mc.CurrentConfig = self.modules.GetConfig(0).model_dump()
 
     def _SaveConfig(self, config_path: str):
         if not path.exists(self.PersonalPath):
             makedirs(self.PersonalPath)
-        _mainconfig = self.mainconfig.model_dump()
+        _mainconfig = self.mc.model_dump()
         with open(config_path, 'w', encoding='utf-8') as c:
             json.dump(_mainconfig, c, ensure_ascii=False, indent=1)
 
@@ -132,13 +132,13 @@ class SGAConfigGroup(QObject):
         else:
             raise RuntimeError("无法生成唯一的ConfigKey")
         newconfig.ConfigKey = ConfigKey
-        self.subconfig.filelist.append((newconfig.ConfigKey,
-                                        newconfig.ConfigName,
-                                        newconfig.ModuleKey))
-        self.subconfig.Save(newconfig.model_dump())
+        self.sc.filelist.append((newconfig.ConfigKey,
+                                 newconfig.ConfigName,
+                                 newconfig.ModuleKey))
+        self.sc.Save(newconfig.model_dump())
 
     def ReadSubFile(self, num: int) -> [dict, bool]:
-        ck, cn, mk = self.subconfig.filelist[num]
+        ck, cn, mk = self.sc.filelist[num]
         with open(f"personal/config/{ck + cn}.json", 'r', encoding='utf-8') as c:
             _config = json.load(c)
         if self.modules.CheckConfig(_config):
@@ -147,4 +147,4 @@ class SGAConfigGroup(QObject):
             return False
 
 
-sg = SGAConfigGroup()
+scc = SGAConfigController()

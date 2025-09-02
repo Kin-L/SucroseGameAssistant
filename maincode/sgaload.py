@@ -1,8 +1,10 @@
-from maincode.tools.main import (CheckAdmin, GetWindow, logger,
-                                 GetTracebackInfo, SendMessageBox)
+import maincode.tools.system.window
+from maincode.tools.core.logger import logger
+from maincode.tools.system.notification import SendMessageBox, GetTracebackInfo, CheckAdmin
+from maincode.tools.system.window import GetWindow
 from PyQt5.QtCore import Qt
 from time import sleep
-from maincode.tools.constant import spr
+from maincode.tools.core.constant import spr
 from maincode.sgamain import SGAMain
 from PyQt5.QtWidgets import QApplication
 import keyboard
@@ -19,7 +21,7 @@ def SGALoad(showconsole: bool = True):
 
         window = GetWindow("砂糖代理", True)
         if window is not None:
-            window.foreground()
+            maincode.tools.system.window.foreground()
         else:
             print("")
             logger.info("================SGA开始启动================")

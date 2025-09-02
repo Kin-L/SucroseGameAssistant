@@ -1,10 +1,9 @@
-from maincode.tools.controls import (Button, TransPicButton,
-                                     Label, Line, Check, tips,
-                                     SLineEdit, PicButton, Combobox)
+from ...tools.sgaqt.texts import Label, SLineEdit, Line, tips
+from ...tools.sgaqt.buttons import Button, PicButton, TransPicButton, Check, Combobox
 from ..timer.main import SGATimer
 from PyQt5.QtWidgets import QWidget
-from maincode.config.maingroup import sg
-from maincode.tools.constant import spr
+from maincode.config.configctrl import scc
+from maincode.tools.core.constant import spr
 from maincode.mainwindows.mainwindow import SGAQMainWindow
 
 
@@ -35,7 +34,7 @@ class OverallWidget(QWidget):
         self.btstartupdate = Button(self, (90, 395, 80, 30), "开始更新")
         self.btstartupdate.hide()
         self.btstartupdate.setEnabled(False)
-        self.lbversion = Label(self, (180, 390, 120, 40), f"版本号 {sg.info.Version}", 14)
+        self.lbversion = Label(self, (180, 390, 120, 40), f"版本号 {scc.info.Version}", 14)
         self.btupdatehistory = Button(self, (280, 395, 80, 30), "更新日志")
         self.btrunhistory = Button(self, (370, 395, 80, 30), "运行日志")
 

@@ -1,6 +1,8 @@
-from maincode.tools.main import (GetTracebackInfo, logger, CmdRun)
+from maincode.tools.system.other import (CmdRun)
+from maincode.tools.system.notification import GetTracebackInfo
+from maincode.tools.core.logger import logger
 from os import path, makedirs, remove
-from maincode.config.maingroup import sg
+from maincode.config.configctrl import scc
 from urllib.request import urlretrieve
 from shutil import unpack_archive, copytree, rmtree
 from PyQt5.QtWidgets import QApplication
@@ -12,7 +14,7 @@ def update(self):
         if not path.exists("cache"):
             makedirs("cache")
 
-        temp_path = path.join(sg.info.Workdir, "cache")
+        temp_path = path.join(scc.info.Workdir, "cache")
         safe_filename = path.basename(self.para["name"])
         load_path = path.join(temp_path, safe_filename)
 
@@ -26,7 +28,7 @@ def update(self):
 
         # 替换文件
         extract_folder = path.splitext(load_path)[0]
-        cover_folder = sg.info.Workdir
+        cover_folder = scc.info.Workdir
         copytree(extract_folder, cover_folder, dirs_exist_ok=True)
         self.send("替换完成")
 
@@ -42,6 +44,6 @@ def update(self):
         if app:
             app.quit()
     except Exception as e:
-        sg.TaskError = False
+        scc.TaskError = False
         logger.error("更新异常：%s", GetTracebackInfo(e))
         return

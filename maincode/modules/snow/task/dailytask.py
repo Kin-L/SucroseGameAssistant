@@ -1,5 +1,5 @@
-from maincode.tools.main import logger
-from maincode.config.maingroup import sg
+from maincode.tools.core.logger import logger
+from maincode.config.configctrl import scc
 
 
 def snowDailyTask(self):
@@ -36,7 +36,7 @@ def snowDailyTask(self):
                     pos = self.ctler.StrFind(_r, res)
                     if pos:
                         (_x, _y) = self.ctler.convertR(pos)
-                        _str = self.ctler.ocr((_x+247, 177,  _x+447, 233))[0]
+                        _str = self.ctler.ocr((_x + 247, 177, _x + 447, 233))[0]
                         # print(_str, i)
                         if _str[-3] == "0":
                             self.send(f"今日已完成：角色 {i}")
@@ -52,7 +52,7 @@ def snowDailyTask(self):
                         _f = True
                         self.send(f"未识别到角色: {i}")
                         logger.debug(f"{cah}")
-                        sg.info.TaskError = True
+                        scc.info.TaskError = True
                     else:
                         self.ctler.roll((1002, 581), -5620, True)
                         self.ctler.wait(0.8)

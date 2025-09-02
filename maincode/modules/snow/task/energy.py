@@ -1,4 +1,4 @@
-from maincode.tools.main import logger
+from maincode.tools.core.logger import logger
 
 
 def FightCommon(self, common):

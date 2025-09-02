@@ -1,8 +1,9 @@
+import maincode.mainthread
 from ..main import ModuleClass
 from .widget import MixPage
 from maincode.modules.template import SubConfigTemplate
 from typing import List
-from maincode.config.subconfig import sc
+from maincode.config.subconfig import subconfig
 from maincode.config.info import info
 
 
@@ -17,12 +18,12 @@ def taskstart(self):
     self.send(1)
     for num, (ck_, ac) in enumerate(zip(self.para["ConfigKeyList"], self.mixpara["Accomplish"])):
         if ck_ and not ac:
-            _, na, mk, n = sc.FindItem(ck_)
+            _, na, mk, n = subconfig.FindItem(ck_)
             if not mk:
                 self.send(f"连续任务 {num + 1} 无效")
                 self.send(1)
                 continue
-            _dict = sc.Read(n)
+            _dict = subconfig.Read(n)
             if ModuleClass.CheckConfig(_dict):
                 self.__class__.substart = ModuleClass.Tasks[ModuleClass.FindItem(mk)[-1]]
                 self.para = _dict
@@ -30,7 +31,7 @@ def taskstart(self):
                 self.para["SoftClose"] = True
                 if num:
                     self.send(f"等待5秒...")
-                    self.ctler.wait(5)
+                    maincode.thread.task.ctler.wait(5)
                 self.send(f"连续任务 {num + 1} 开始执行")
                 self.send(f"       {ck_}{na}", False)
                 self.substart()

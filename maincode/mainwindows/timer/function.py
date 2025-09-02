@@ -1,5 +1,5 @@
-from maincode.tools.main import CmdRun
-from maincode.config.maingroup import sg
+from maincode.tools.system.other import CmdRun
+from maincode.config.configctrl import scc
 import json
 
 
@@ -39,7 +39,7 @@ def ApplyTimer():
         return False
 
     autos, awakes = [], []
-    timerconfig = sg.mainconfig.TimerConfig.model_dump()
+    timerconfig = scc.mc.TimerConfig.model_dump()
     l1, l2, l3, l4 = timerconfig['Execute'], timerconfig['Time'], timerconfig['ConfigKeys'], timerconfig['Awake']
 
     for daily, time, filekey, awake in zip(l1, l2, l3, l4):

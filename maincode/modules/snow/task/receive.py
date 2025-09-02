@@ -1,4 +1,3 @@
-
 def snowOther(self):
     if self.para["DailyTaskReceive"]:
         self.ctler.clickChange(target="任务", zone=(1440, 311, 1555, 403))
@@ -47,7 +46,7 @@ def snowOther(self):
             if pos:
                 self.send("识别到：任务")
                 x, y = self.ctler.convertR(pos)
-                self.ctler.clickChange(pos, zone=(x-10, y-10, x+10,  y+10))
+                self.ctler.clickChange(pos, zone=(x - 10, y - 10, x + 10, y + 10))
                 pos = self.ctler.findtext("领取", (0, 605, 578, 1080))
 
             else:

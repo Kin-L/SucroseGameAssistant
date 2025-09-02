@@ -1,8 +1,9 @@
-from maincode.config.maingroup import sg
+from maincode.config.configctrl import scc
 from maincode.config.mainconfig import TimerConfigClass
-from maincode.tools.main import GetTracebackInfo, logger
+from maincode.tools.system.notification import GetTracebackInfo
+from maincode.tools.core.logger import logger
 from maincode.mainwindows.timer.function import ApplyTimer
-from maincode.tools.constant import spr
+from maincode.tools.core.constant import spr
 
 
 def currentsave(self):
@@ -18,7 +19,7 @@ def currentsave(self):
     current_index = self.module.widget.boxmodule.currentIndex()
 
     # 获取模块的关键信息
-    module_infos = sg.modules.GetInfos()
+    module_infos = scc.modules.GetInfos()
     module_key = module_infos[current_index][2]  # 获取模块标识键
 
     # 构建基础配置字典
@@ -29,7 +30,7 @@ def currentsave(self):
     }
 
     # 收集当前模块的配置
-    module_widgets = sg.modules.GetWidgets()
+    module_widgets = scc.modules.GetWidgets()
     module_config = module_widgets[current_index].CollectConfig()
 
     # 合并配置，优先使用模块配置
@@ -39,10 +40,10 @@ def currentsave(self):
     # 处理额外配置（如果有）
     other_config = merged_config.pop("OtherConfig", {})
     if other_config:
-        sg.mainconfig.OtherConfig.update(other_config)
+        scc.mc.OtherConfig.update(other_config)
 
     # 更新主配置的当前配置
-    sg.mainconfig.CurrentConfig = merged_config
+    scc.mc.CurrentConfig = merged_config
 
 
 def subconfigsave(self):
@@ -56,23 +57,23 @@ def subconfigsave(self):
     """
     # 构建子配置标识信息
     subconfig_info = {
-        'ConfigKey': sg.mainconfig.ConfigKey,  # 使用主配置的ConfigKey
+        'ConfigKey': scc.mc.ConfigKey,  # 使用主配置的ConfigKey
         'ConfigName': self.module.widget.ecbconfig.text().strip()  # 清理空白字符
     }
 
     # 复制当前配置并更新子配置信息
-    current_config_copy = sg.mainconfig.CurrentConfig.copy()
+    current_config_copy = scc.mc.CurrentConfig.copy()
     current_config_copy.update(subconfig_info)
 
     # 保存子配置
-    sg.subconfig.Save(current_config_copy)
+    scc.sc.Save(current_config_copy)
 
     # 更新子配置列表中的模块键信息
     config_key = current_config_copy['ConfigKey']
-    item_index = sg.subconfig.FindItem(config_key)[-1]  # 获取配置项索引
+    item_index = scc.sc.FindItem(config_key)[-1]  # 获取配置项索引
 
-    if 0 <= item_index < len(sg.subconfig.filelist):
-        sg.subconfig.filelist[item_index][2] = current_config_copy['ModuleKey']
+    if 0 <= item_index < len(scc.sc.filelist):
+        scc.sc.filelist[item_index][2] = current_config_copy['ModuleKey']
 
 
 def SaveConfig(self):
@@ -92,14 +93,14 @@ def SaveConfig(self):
 
     # 收集并保存定时器配置
     timer_config_data = self.overall.widget.timer.CollectConfig()
-    sg.mainconfig.TimerConfig = TimerConfigClass(**timer_config_data)
+    scc.mc.TimerConfig = TimerConfigClass(**timer_config_data)
 
     # 检查配置是否有变化
-    current_config_dump = sg.mainconfig.model_dump()
-    if current_config_dump != sg.currentmainconfig:
-        sg.SaveMain()  # 保存主配置
-        sg.SaveBackUp()  # 创建备份
-        sg.currentmainconfig = current_config_dump  # 更新当前配置缓存
+    current_config_dump = scc.mc.model_dump()
+    if current_config_dump != scc.currentmainconfig:
+        scc.SaveMain()  # 保存主配置
+        scc.SaveBackUp()  # 创建备份
+        scc.currentmainconfig = current_config_dump  # 更新当前配置缓存
 
 
 def ManualSaveConfig(self):
@@ -131,7 +132,7 @@ def ManualSaveConfig(self):
             try:
                 # 收集并验证定时器配置
                 timer_config_data = self.overall.widget.timer.CollectConfig()
-                sg.mainconfig.TimerConfig = TimerConfigClass(**timer_config_data)
+                scc.mc.TimerConfig = TimerConfigClass(**timer_config_data)
 
                 # 应用定时器设置
                 if ApplyTimer():

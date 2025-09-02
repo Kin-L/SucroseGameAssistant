@@ -49,8 +49,8 @@ def snowGachaRecog(self):
             pos = self.ctler.findtext("常守", (3, 67, 280, 1066))
             self.ctler.clickTo(pos, "出", (377, 227, 490, 292))
             x, y = self.ctler.findtext("100", (3, 67, 280, 1066))
-            self.ctler.clickChange((x-90, y+35), zone=(349, 854, 389, 897))
-            self.ctler.clickTo((x-90, y+120), "角色", (465, 959, 702, 1002))
+            self.ctler.clickChange((x - 90, y + 35), zone=(349, 854, 389, 897))
+            self.ctler.clickTo((x - 90, y + 120), "角色", (465, 959, 702, 1002))
         elif i == "特选武器共鸣":
             pos = self.ctler.findtext("常守", (3, 67, 280, 1066))
             self.ctler.clickTo(pos, "出", (377, 227, 490, 292))

@@ -6,8 +6,8 @@ import json
 import platform
 from screeninfo import get_monitors
 from pathlib import Path
-
-from maincode.tools.main import GetWindow
+from maincode.tools.core.baseclass import SGAStop
+from maincode.tools.system.window import GetWindow
 
 
 class SGAInfo:
@@ -40,6 +40,10 @@ class SGAInfo:
         self.getmonitors()
         self.getplatform()
         self.BasisFileInit()
+
+    def checkrun(self):
+        if self.StopFlag:
+            raise SGAStop
 
     def getmonitors(self) -> None:
         for i, monitor in enumerate(get_monitors(), start=1):

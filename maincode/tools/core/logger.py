@@ -94,5 +94,8 @@ class Logger:
             self.logger.error(f"Error during cleanup of {directory}: {e}")
 
 
+logger = Logger().getlogger()
+
+
 if __name__ == '__main__':
     pass

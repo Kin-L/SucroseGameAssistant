@@ -1,9 +1,9 @@
 from .widget import OverallWidget
-from maincode.config.maingroup import sg
+from maincode.config.configctrl import scc
 from webbrowser import open as weopen
 from PyQt5.QtWidgets import QFileDialog
 import os
-from maincode.tools.constant import spr
+from maincode.tools.core.constant import spr
 from maincode.mainwindows.mainwindow import SGAQMainWindow
 
 
@@ -17,15 +17,15 @@ class SGAOverall:
         self._bind_signals()
 
     def _setup_ui(self):
-        self.widget.leocrpath.setText(sg.mainconfig.OcrPath)
-        self.widget.lekeyboard.setText(sg.mainconfig.StopKeys)
-        self.widget.ckautoupdate.setChecked(sg.mainconfig.AutoUpdate)
+        self.widget.leocrpath.setText(scc.mc.OcrPath)
+        self.widget.lekeyboard.setText(scc.mc.StopKeys)
+        self.widget.ckautoupdate.setChecked(scc.mc.AutoUpdate)
 
-        if sg.mainconfig.ModulesEnable:
-            enabled_modules = sg.mainconfig.ModulesEnable
+        if scc.mc.ModulesEnable:
+            enabled_modules = scc.mc.ModulesEnable
         else:
-            enabled_modules = list(sg.modules.GetInfosT()[0])
-            sg.mainconfig.ModulesEnable = enabled_modules
+            enabled_modules = list(scc.modules.GetInfosT()[0])
+            scc.mc.ModulesEnable = enabled_modules
         self.widget.boxmodules.addItems(enabled_modules)
 
     def _bind_signals(self):
@@ -47,18 +47,18 @@ class SGAOverall:
         self.widget.fileselect.clicked.connect(self.SelectOCRPath)
 
     def changeAutoUpdate(self):
-        sg.mainconfig.AutoUpdate = self.widget.ckautoupdate.isChecked()
+        scc.mc.AutoUpdate = self.widget.ckautoupdate.isChecked()
 
     @staticmethod
     def _update_ocr_path(path: str):
-        sg.mainconfig.OcrPath = path
-        sg.info.OcrPath = path
+        scc.mc.OcrPath = path
+        scc.info.OcrPath = path
 
     def changeOcrPath(self):
         self._update_ocr_path(self.widget.leocrpath.text())
 
     def changeStopKeys(self):
-        sg.mainconfig.StopKeys = self.widget.lekeyboard.text()
+        scc.mc.StopKeys = self.widget.lekeyboard.text()
 
     def SelectOCRPath(self):
         _path, _ = QFileDialog.getOpenFileName(self.widget, "选择OCR组件exe文件")
@@ -68,11 +68,11 @@ class SGAOverall:
 
     def DisableModules(self):
         current_text = self.widget.boxmodules.currentText()
-        if current_text in sg.mainconfig.ModulesEnable:
-            sg.mainconfig.ModulesEnable.remove(current_text)
+        if current_text in scc.mc.ModulesEnable:
+            scc.mc.ModulesEnable.remove(current_text)
             self.widget.boxmodules.removeItem(self.widget.boxmodules.currentIndex())
 
     def RefreshModules(self):
-        sg.mainconfig.ModulesEnable = list(sg.modules.GetInfosT()[0])
+        scc.mc.ModulesEnable = list(scc.modules.GetInfosT()[0])
         self.widget.boxmodules.clear()
-        self.widget.boxmodules.addItems(sg.mainconfig.ModulesEnable)
+        self.widget.boxmodules.addItems(scc.mc.ModulesEnable)

@@ -1,6 +1,7 @@
 from .widget import ModuleWidget
-from maincode.config.maingroup import sg
-from maincode.tools.main import logger, GetTracebackInfo
+from maincode.config.configctrl import scc
+from ...tools.system.notification import GetTracebackInfo
+from ...tools.core.logger import logger
 from os import path, remove, replace
 from maincode.mainwindows.mainwindow import SGAQMainWindow
 import random
@@ -15,22 +16,22 @@ class SGAModule:
         self.infoEnd = SQMW.infoEnd
         self.wdtime = SQMW.overall.widget.timer.widgets.wdtime
         self.widget = ModuleWidget()
-        for widget in sg.modules.GetWidgets():
+        for widget in scc.modules.GetWidgets():
             self.widget.skmodule.addWidget(widget)
 
-        self._update_lock_ui(sg.mainconfig.ConfigLock)
-        self.widget.ecbconfig.addItems(sg.subconfig.GetFilesT()[1])
-        self.widget.boxmodule.addItems(sg.modules.GetInfosT()[0])
+        self._update_lock_ui(scc.mc.ConfigLock)
+        self.widget.ecbconfig.addItems(scc.sc.GetFilesT()[1])
+        self.widget.boxmodule.addItems(scc.modules.GetInfosT()[0])
 
-        item = sg.subconfig.FindItem(sg.mainconfig.ConfigKey)
+        item = scc.sc.FindItem(scc.mc.ConfigKey)
         if item:
             seq = item[-1]
         else:
             seq = 0
-            sg.mainconfig.ConfigKey = str(sg.subconfig.filelist[0][0])
+            scc.mc.ConfigKey = str(scc.sc.filelist[0][0])
         self.widget.ecbconfig.setCurrentIndex(seq)
         self.widget.boxmodule.currentIndexChanged.connect(self.ChangePage)
-        self.LoadSet(sg.mainconfig.CurrentConfig)
+        self.LoadSet(scc.mc.CurrentConfig)
 
         self.widget.btconfiglock.clicked.connect(lambda: self.setlock(False))
         self.widget.btconfigunlock.clicked.connect(lambda: self.setlock(True))
@@ -69,7 +70,7 @@ class SGAModule:
     def setlock(self, lock: bool):
         try:
             self._update_lock_ui(lock)
-            sg.mainconfig.ConfigLock = lock
+            scc.mc.ConfigLock = lock
             if lock:
                 self.configchange()
         except Exception as e:
@@ -80,16 +81,16 @@ class SGAModule:
     def configchange(self):
         try:
             num = self.widget.ecbconfig.currentIndex()
-            if sg.mainconfig.ConfigLock:
-                _config = sg.subconfig.Read(num)
-                if sg.modules.CheckConfig(_config):
+            if scc.mc.ConfigLock:
+                _config = scc.sc.Read(num)
+                if scc.modules.CheckConfig(_config):
                     name = _config["ConfigName"]
                     configkey = _config["ConfigKey"]
                     self.infoHead()
                     self.infoAdd(f"载入配置：{configkey}{name}")
                     self.infoEnd()
                     self.LoadSet(_config)
-            sg.mainconfig.ConfigKey = sg.subconfig.filelist[num][0]
+            scc.mc.ConfigKey = scc.sc.filelist[num][0]
         except Exception as e:
             _str = GetTracebackInfo(e) + "子配置变换流程异常"
             logger.error(_str)
@@ -99,11 +100,11 @@ class SGAModule:
         try:
             seq = self.widget.boxmodule.currentIndex()
             self.widget.skmodule.setCurrentIndex(seq)
-            _path = sg.modules.GetInfosT()[-1][seq]
+            _path = scc.modules.GetInfosT()[-1][seq]
             self.widget.picicon.setIcon(_path)
-            if not sg.modules.WidgetsLoad[seq]:
-                sg.modules.GetWidgets()[seq].LoadWidget()
-                sg.modules.WidgetsLoad[seq] = True
+            if not scc.modules.WidgetsLoad[seq]:
+                scc.modules.GetWidgets()[seq].LoadWidget()
+                scc.modules.WidgetsLoad[seq] = True
         except Exception as e:
             _str = GetTracebackInfo(e) + "切换模块子页面流程异常"
             logger.error(_str)
@@ -112,18 +113,18 @@ class SGAModule:
     def LoadSet(self, subconfig: dict):
         try:
             modulekey = subconfig["ModuleKey"]
-            subconfig.update(sg.mainconfig.OtherConfig)
-            seq = sg.modules.FindItem(modulekey)[-1]
+            subconfig.update(scc.mc.OtherConfig)
+            seq = scc.modules.FindItem(modulekey)[-1]
             self.widget.boxmodule.setDisabled(True)
             self.widget.boxmodule.setCurrentIndex(seq)
             self.widget.skmodule.setCurrentIndex(seq)
-            if not sg.modules.WidgetsLoad[seq]:
-                sg.modules.GetWidgets()[seq].LoadWidget()
-                sg.modules.WidgetsLoad[seq] = True
+            if not scc.modules.WidgetsLoad[seq]:
+                scc.modules.GetWidgets()[seq].LoadWidget()
+                scc.modules.WidgetsLoad[seq] = True
             self.widget.boxmodule.setDisabled(False)
-            sg.info.OtherConfig = sg.mainconfig.OtherConfig
-            sg.modules.GetWidgets()[seq].SetWidget(subconfig)
-            _path = sg.modules.GetInfosT()[-1][seq]
+            scc.info.OtherConfig = scc.mc.OtherConfig
+            scc.modules.GetWidgets()[seq].SetWidget(subconfig)
+            _path = scc.modules.GetInfosT()[-1][seq]
             self.widget.picicon.setIcon(_path)
             self.widget.boxmodule.setCurrentIndex(seq)
         except Exception as e:
@@ -134,16 +135,16 @@ class SGAModule:
     def configdelete(self):
         try:
             num = self.widget.ecbconfig.currentIndex()
-            ck, name, mk = sg.subconfig.GetFiles()[num]
+            ck, name, mk = scc.sc.GetFiles()[num]
             filepath = path.join("personal/config", f"{ck}{name}.json")
-            del sg.subconfig.filelist[num]
+            del scc.sc.filelist[num]
             self.widget.ecbconfig.removeItem(num)
             remove(filepath)
             nn = num + 1
             for i in _Range10:
                 getattr(self.wdtime, f"text{i}").removeItem(nn)
-            if sg.modules.WidgetsLoad[0]:
-                _wdlist = sg.modules.GetWidgets()[0].wdlist
+            if scc.modules.WidgetsLoad[0]:
+                _wdlist = scc.modules.GetWidgets()[0].wdlist
                 for i in _Range9:
                     getattr(_wdlist, f"task0{i}").removeItem(nn)
             self.infoHead()
@@ -156,20 +157,20 @@ class SGAModule:
 
     def configadd(self):
         try:
-            default = sg.modules.GetConfig(0).model_dump()
+            default = scc.modules.GetConfig(0).model_dump()
             while True:
                 key = f"{random.randint(0, 9999):04d}"
-                if key not in sg.subconfig.GetFilesT()[0]:
+                if key not in scc.sc.GetFilesT()[0]:
                     break
             default['ConfigKey'] = key
-            sg.subconfig.Save(default)
+            scc.sc.Save(default)
             self.widget.ecbconfig.addItem("默认配置")
-            sg.subconfig.filelist.append([key, "默认配置", 0])
-            self.widget.ecbconfig.setCurrentIndex(len(sg.subconfig.filelist) - 1)
+            scc.sc.filelist.append([key, "默认配置", 0])
+            self.widget.ecbconfig.setCurrentIndex(len(scc.sc.filelist) - 1)
             for i in _Range10:
                 getattr(self.wdtime, f"text{i}").addItem("默认配置")
-            if sg.modules.WidgetsLoad[0]:
-                _wdlist = sg.modules.GetWidgets()[0].wdlist
+            if scc.modules.WidgetsLoad[0]:
+                _wdlist = scc.modules.GetWidgets()[0].wdlist
                 for i in _Range9:
                     getattr(_wdlist, f"task0{i}").addItem("默认配置")
             self.infoHead()
@@ -203,23 +204,23 @@ class SGAModule:
                 self.infoAdd("配置名称不能为空")
                 return
             if newname != oldname:
-                _dict = sg.subconfig.Read(num)
+                _dict = scc.sc.Read(num)
                 self.widget.ecbconfig.setItemText(num, newname)
-                fl = sg.subconfig.GetFiles()
+                fl = scc.sc.GetFiles()
                 fl[num][1] = newname
-                sg.subconfig.filelist = fl
-                configkey = sg.mainconfig.ConfigKey
-                oldpath = path.join(sg.info.Workdir, "personal/config", f"{configkey}{oldname}.json")
-                newpath = path.join(sg.info.Workdir, "personal/config", f"{configkey}{newname}.json")
+                scc.sc.filelist = fl
+                configkey = scc.mc.ConfigKey
+                oldpath = path.join(scc.info.Workdir, "personal/config", f"{configkey}{oldname}.json")
+                newpath = path.join(scc.info.Workdir, "personal/config", f"{configkey}{newname}.json")
 
                 _dict["ConfigName"] = newname
                 replace(oldpath, newpath)
-                sg.subconfig.Save(_dict)
+                scc.sc.Save(_dict)
                 old_index = num + 1
                 for i in _Range10:
                     getattr(self.wdtime, f"text{i}").setItemText(old_index, newname)
-                if sg.modules.WidgetsLoad[0]:
-                    _wdlist = sg.modules.GetWidgets()[0].wdlist
+                if scc.modules.WidgetsLoad[0]:
+                    _wdlist = scc.modules.GetWidgets()[0].wdlist
                     for i in _Range9:
                         getattr(_wdlist, f"task0{i}").setItemText(old_index, newname)
                 self.infoHead()

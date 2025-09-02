@@ -1,7 +1,9 @@
-from maincode.tools.myclass import SGAStop
-from maincode.tools.main import GetWindow, GetTracebackInfo, logger
+from maincode.tools.core.baseclass import SGAStop
+from maincode.tools.system.notification import GetTracebackInfo
+from maincode.tools.core.logger import logger
+from maincode.tools.system.window import GetWindow
 from time import sleep
-from maincode.config.maingroup import sg
+from maincode.config.configctrl import scc
 from win32gui import FindWindow
 from os import path
 from .energy import snowEnergy
@@ -126,7 +128,7 @@ def taskstart(self):
             else:
                 CloseSnow(self)
                 self.send(f"尘白禁区:执行异常,跳过流程")
-                sg.info.TaskError = True
+                scc.info.TaskError = True
                 break
         else:
             self.send(f"任务完成:尘白禁区")

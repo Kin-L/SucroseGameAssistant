@@ -1,8 +1,10 @@
 from requests import get, exceptions
-from maincode.config.maingroup import sg
-from maincode.tools.main import VersionsCompare, logger, GetTracebackInfo
+from maincode.config.configctrl import scc
+from maincode.tools.system.other import VersionsCompare
+from maincode.tools.system.notification import GetTracebackInfo
+from maincode.tools.core.logger import logger
 from time import localtime, strftime
-from maincode.tools.constant import spr
+from maincode.tools.core.constant import spr
 
 
 def timercheck(self) -> None:
@@ -31,9 +33,9 @@ def timercheck(self) -> None:
         date = (y, M, d)
 
         # 自动更新检查
-        if sg.mainconfig.AutoUpdate and (date != sg.info.CurrentDate):
+        if scc.mc.AutoUpdate and (date != scc.info.CurrentDate):
             if self.updatecheck():
-                sg.info.CurrentDate = date
+                scc.info.CurrentDate = date
                 return
 
         # 构造当前时间和配置时间元组
@@ -41,7 +43,7 @@ def timercheck(self) -> None:
             (w + 2, [h, m]),
             (1, [h, m])
         )
-        tc = sg.mainconfig.TimerConfig.model_dump()
+        tc = scc.mc.TimerConfig.model_dump()
         timetup = tuple(zip(tc['Execute'], tc['Time']))
 
         # 遍历定时任务
@@ -49,8 +51,8 @@ def timercheck(self) -> None:
             if ti in nowtup:
                 ck = tc['ConfigKeys'][n]
                 if ck:
-                    num = sg.subconfig.FindItem(ck)[-1]
-                    _config = sg.ReadSubFile(num)
+                    num = scc.sc.FindItem(ck)[-1]
+                    _config = scc.ReadSubFile(num)
                     self.TaskStart("timed", _config)
                     return
     except Exception as e:
@@ -72,14 +74,14 @@ def updatecheck(self) -> bool:
                 if response.status_code == 200:
                     data = loads(response.text)
                     newversion = data["tag_name"]
-                    ver = VersionsCompare(newversion, sg.info.Version)
+                    ver = VersionsCompare(newversion, scc.info.Version)
                     if ver == 1:
                         self.infoAdd(f"检测到新版本：{newversion}")
                         text: str = data["body"]
                         try:
                             if "Latestv" in text:
                                 lversion = text.split("Latest")[1].split("#")[0]
-                                if VersionsCompare(lversion, sg.info.Version) == 1:
+                                if VersionsCompare(lversion, scc.info.Version) == 1:
                                     self.infoAdd(f"不符合更新条件，请手动更新到以下版本及以上：{lversion},或重新安装最新版本")
                                     self.infoEnd()
                                     break
