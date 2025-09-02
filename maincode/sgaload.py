@@ -21,7 +21,7 @@ def SGALoad(showconsole: bool = True):
 
         window = GetWindow("砂糖代理", True)
         if window is not None:
-            maincode.tools.system.window.foreground()
+            window.foreground()
         else:
             print("")
             logger.info("================SGA开始启动================")

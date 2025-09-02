@@ -22,7 +22,7 @@ class Controller(Operate):
             time.sleep(interval)
         else:
             raise ValueError("GetWindow 未获取到有效值")
-        maincode.tools.system.window.foreground()
+        self.window.foreground()
         self.ChangeReference(ref)
         self.ChangeOperate(self.window.rect)
         logger.info(f"当前窗口：{self.window.rect}")

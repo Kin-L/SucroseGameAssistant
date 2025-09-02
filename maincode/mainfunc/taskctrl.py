@@ -37,7 +37,7 @@ def TaskStart(self, tasktype: str, para: dict = None):
             self.module.widget.btpause.show()
             keyboard.add_hotkey(scc.mc.StopKeys, self.module.widget.btpause.click)
         elif tasktype == "timed":
-            self.infoClear()
+            self.mainwidget.infoClear()
             self.infoHead()
             self.infoAdd("准备开始...")
             para["OtherConfig"] = scc.mc.OtherConfig
@@ -60,7 +60,7 @@ def TaskStart(self, tasktype: str, para: dict = None):
 
 def TaskStop(self, tasktype: str, para=None):
     try:
-        maincode.tools.system.window.foreground()
+        self.window.foreground()
         if scc.info.TaskError:
             self.module.widget.statesigh.SetState(2)
         self.infoEnd()
