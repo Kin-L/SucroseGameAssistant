@@ -1,6 +1,5 @@
 import keyboard
 from time import localtime
-import maincode.tools.system.window
 from maincode.config.configctrl import scc
 from maincode.tools.system.other import CmdRun, GetMute, ScreenOff
 from maincode.tools.system.notification import GetTracebackInfo
@@ -137,16 +136,12 @@ def ManualStop(self):
             self.module.widget.statesigh.SetState(1)
             self.module.widget.btpause.hide()
             try:
-                if hasattr(self, 'worker') and self.worker.isRunning():
-                    self.worker.quit()
-                    self.worker.wait()
-                    self.worker.deleteLater()
                 if hasattr(self, 'threadpool'):
                     self.threadpool.quit()
                     self.threadpool.wait()
                     self.threadpool.deleteLater()
             except Exception as e:
-                logger.error(f"手动终止线程异常: {GetTracebackInfo(e)}")
+                print(f"终止线程异常: {GetTracebackInfo(e)}")
     except Exception as e:
         _str = GetTracebackInfo(e) + "手动终止流程异常"
         logger.error(_str)
@@ -156,7 +151,6 @@ def ManualStop(self):
 def NewThread(self, tasktype, para):
     self.threadpool = QThread()
     self.worker = SGAMainThread(tasktype, para)
-
     # 将工作对象移动到线程中
     self.worker.moveToThread(self.threadpool)
     self.worker.infoHead.connect(self.infoHead)

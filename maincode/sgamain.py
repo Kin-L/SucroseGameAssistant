@@ -3,7 +3,7 @@ from maincode.tools.core.logger import logger
 from maincode.mainwindows.mainwindow import SGAQMainWindow
 from maincode.tools.core.constant import spr
 from maincode.mainfunc.check import timercheck, updatecheck
-from maincode.mainfunc.taskctrl import TaskStart, TaskStop, ManualStop, NewThread
+from maincode.mainfunc.taskctrl import TaskStart, TaskStop, ManualStop, NewThread, handle_finished_action
 from maincode.mainfunc.config import currentsave, subconfigsave, SaveConfig, ManualSaveConfig
 from maincode.mainwindows.overall.main import SGAOverall
 from maincode.mainwindows.module.main import SGAModule
@@ -33,6 +33,7 @@ class SGAMain(SGAQMainWindow):
         self.__class__.ManualSaveConfig = ManualSaveConfig
         self.__class__.TaskStart = TaskStart
         self.__class__.TaskStop = TaskStop
+        self.__class__.handle_finished_action = handle_finished_action
         self.__class__.NewThread = NewThread
         self.__class__.ManualStop = ManualStop
         self.__class__.timercheck = timercheck
