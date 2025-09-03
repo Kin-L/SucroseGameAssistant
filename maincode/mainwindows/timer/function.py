@@ -16,20 +16,6 @@ def timer_delete():
     CmdRun("schtasks.exe /DELETE /tn SGA-awake /f")
 
 
-def create_task(xml_content, task_name, wake_to_run):
-    xml_dir = xml_content
-    part2 = xml_dir["part2"].copy()
-    part2[22] = f"<WakeToRun>{str(wake_to_run).lower()}</WakeToRun>"
-    full_xml = xml_dir["part1"] + xml_content + part2
-    xml_path = rf"cache/{task_name}.xml"
-    try:
-        with open(xml_path, 'w', encoding='utf-16') as f:
-            f.writelines(full_xml)
-        CmdRun(f'schtasks.exe /create /tn {task_name} /xml "{xml_path}" /f')
-    except Exception as e:
-        print(f"Failed to create task {task_name}: {e}")
-
-
 def ApplyTimer():
     try:
         with open("personal/schtasks.json", 'r', encoding='utf-8') as x:
@@ -67,6 +53,17 @@ def ApplyTimer():
         timer_delete()
         return False
 
+    def create_task(xml_content, task_name, wake_to_run):
+        part2 = xml_dir["part2"].copy()
+        part2[22] = f"<WakeToRun>{str(wake_to_run).lower()}</WakeToRun>"
+        full_xml = xml_dir["part1"] + xml_content + part2
+        xml_path = rf"cache/{task_name}.xml"
+        try:
+            with open(xml_path, 'w', encoding='utf-16') as f:
+                f.writelines(full_xml)
+            CmdRun(f'schtasks.exe /create /tn {task_name} /xml "{xml_path}" /f')
+        except Exception as e:
+            print(f"Failed to create task {task_name}: {e}")
     if autos:
         create_task(autos, "SGA-auto", False)
     else:

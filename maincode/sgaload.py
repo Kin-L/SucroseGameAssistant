@@ -1,4 +1,3 @@
-import maincode.tools.system.window
 from maincode.tools.core.logger import logger
 from maincode.tools.system.notification import SendMessageBox, GetTracebackInfo, CheckAdmin
 from maincode.tools.system.window import GetWindow
@@ -9,6 +8,11 @@ from maincode.sgamain import SGAMain
 from PyQt5.QtWidgets import QApplication
 import keyboard
 import sys
+import warnings
+from pkg_resources import PkgResourcesDeprecationWarning
+
+# 过滤特定的弃用警告
+warnings.filterwarnings("ignore", category=PkgResourcesDeprecationWarning)
 
 
 def SGALoad(showconsole: bool = True):

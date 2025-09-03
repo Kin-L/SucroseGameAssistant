@@ -141,7 +141,7 @@ def ManualStop(self):
                     self.threadpool.wait()
                     self.threadpool.deleteLater()
             except Exception as e:
-                print(f"终止线程异常: {GetTracebackInfo(e)}")
+                logger.error(f"手动终止线程异常: {GetTracebackInfo(e)}")
     except Exception as e:
         _str = GetTracebackInfo(e) + "手动终止流程异常"
         logger.error(_str)
