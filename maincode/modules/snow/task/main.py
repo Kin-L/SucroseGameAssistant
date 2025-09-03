@@ -17,13 +17,16 @@ from .guess import snowGuess
 
 def CloseSnow(self):
     for _ in range(20):
-        win = GetWindow("尘白禁区")
-        if win is None:
-            self.send(f"尘白禁区已关闭")
-            self.para["startwait"] = True
-            return True
-        else:
-            win.close()
+        try:
+            win = GetWindow("尘白禁区")
+            if win is None:
+                self.send(f"尘白禁区已关闭")
+                self.para["startwait"] = True
+                return True
+            else:
+                win.close()
+        except Exception as e:
+            logger.error(f"关闭窗口时发生异常: {e}")
         sleep(0.5)
     self.send(f"尘白禁区关闭超时")
     return False
@@ -34,12 +37,14 @@ def SnowHome(self):
     flag = False
     while num > 0:
         sc = self.ctler.screenshot()
-        if "任务" in self.ctler.ocr((1458, 330, 1529, 379), sc)[0]:
+        task_ocr_result = self.ctler.ocr((1458, 330, 1529, 379), sc)[0]
+        exit_ocr_result = self.ctler.ocr((1617, 23, 1701, 70), sc)[0]
+        if "任务" in task_ocr_result:
             if flag:
                 return True
             else:
                 flag = True
-        elif "退出" in self.ctler.ocr((1617, 23, 1701, 70), sc)[0]:
+        elif "退出" in exit_ocr_result:
             self.ctler.clickChange(target="退出", zone=(1617, 23, 1701, 70))
             self.ctler.waitTo("任务", (1458, 330, 1529, 379), (0.4, 30))
             return True

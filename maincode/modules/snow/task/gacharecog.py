@@ -1,13 +1,29 @@
 import json
+import time
+import shutil
 from os import path, makedirs, startfile, getcwd
-from maincode.config.info import info
+from openpyxl import load_workbook
+from openpyxl.styles import Font, Alignment
 
 
 def snowGachaRecog(self):
+    """
+    获取尘白禁区游戏的抽卡记录并导出到Excel
+
+    功能：
+    1. 进入抽卡记录界面
+    2. 遍历所有选中的卡池类型
+    3. 识别并记录抽卡结果
+    4. 导出到Excel文件并进行数据统计
+    """
     self.send("开始获取抽卡记录")
+
+    # 进入抽卡记录界面
     self.ctler.clickChange((1655, 606), zone=(1525, 573, 1611, 624))
     self.ctler.waitTo("resources/snow/picture/home.png", (1504, 0, 1771, 117))
-    current = {
+
+    # 初始化抽卡记录数据结构
+    gacha_records = {
         "特选角色共鸣": [],
         "特选武器共鸣": [],
         "限定角色共鸣": [],
@@ -17,360 +33,392 @@ def snowGachaRecog(self):
         "新手池": []
     }
 
-    # if os.path.exists(his_path):
-    #     with open(his_path, 'r', encoding='utf-8') as m:
-    #         _dir = json.load(m)
-    #     current.update(_dir)
-    # else:
-    #     open(his_path, 'a', encoding='utf-8')
-
-    if True in self.para["GachaList"]:
-        pass
-    else:
+    # 检查是否至少选择了一个卡池
+    if not any(self.para["GachaList"]):
         self.send("共鸣记录：请至少勾选一个卡池选项")
         return True
-    roll_list = []
-    if self.para["GachaList"][0]:
-        roll_list += ["特选角色共鸣"]
-    if self.para["GachaList"][1]:
-        roll_list += ["特选武器共鸣"]
-    if self.para["GachaList"][2]:
-        roll_list += ["限定角色共鸣"]
-    if self.para["GachaList"][3]:
-        roll_list += ["限定武器共鸣"]
-    if self.para["GachaList"][4]:
-        roll_list += ["常守之誓"]
-    if self.para["GachaList"][5]:
-        roll_list += ["中庭炉心"]
-    if self.para["GachaList"][6]:
-        roll_list += ["新手池"]
-    for i in roll_list:
-        if i == "特选角色共鸣":
-            pos = self.ctler.findtext("常守", (3, 67, 280, 1066))
-            self.ctler.clickTo(pos, "出", (377, 227, 490, 292))
-            x, y = self.ctler.findtext("100", (3, 67, 280, 1066))
-            self.ctler.clickChange((x - 90, y + 35), zone=(349, 854, 389, 897))
-            self.ctler.clickTo((x - 90, y + 120), "角色", (465, 959, 702, 1002))
-        elif i == "特选武器共鸣":
-            pos = self.ctler.findtext("常守", (3, 67, 280, 1066))
-            self.ctler.clickTo(pos, "出", (377, 227, 490, 292))
-            x, y = self.ctler.findtext("100", (3, 67, 280, 1066))
-            self.ctler.clickChange((x - 90, y + 35), zone=(349, 854, 389, 897))
-            self.ctler.clickTo((x - 90, y + 210), "武器", (465, 959, 702, 1002))
-        elif i == "限定角色共鸣":
-            pos = self.ctler.findtext("常守", (3, 67, 280, 1066))
-            self.ctler.clickTo(pos, "出", (377, 227, 490, 292))
-            x, y = self.ctler.findtext("50", (3, 67, 280, 1066))
-            self.ctler.clickChange((x - 90, y + 35), zone=(349, 854, 389, 897))
-            self.ctler.clickTo((x - 90, y + 120), "角色", (494, 994, 645, 1035))
-        elif i == "限定武器共鸣":
-            pos = self.ctler.findtext("常守", (3, 67, 280, 1066))
-            self.ctler.clickTo(pos, "出", (377, 227, 490, 292))
-            x, y = self.ctler.findtext("50", (3, 67, 280, 1066))
-            self.ctler.clickChange((x - 90, y + 35), zone=(349, 854, 389, 897))
-            self.ctler.clickTo((x - 90, y + 210), "武器", (494, 994, 645, 1035))
-        elif i == "常守之誓":
-            pos = self.ctler.findtext("常守", (3, 67, 280, 1066))
-            self.ctler.clickTo(pos, "出", (377, 227, 490, 292))
-        elif i == "中庭炉心":
-            pos = self.ctler.findtext("中庭炉心", (3, 67, 280, 1066))
-            self.ctler.clickTo(pos, "出", (377, 227, 490, 292))
-        elif i == "新手池":
-            pos = self.ctler.findtext("启程", (3, 67, 280, 1066))
-            if pos:
-                self.ctler.clickTo(pos, "到", (324, 71, 500, 129))
-        self.ctler.wait(0.5)
-        self.ctler.clickChange((1877, 141), zone=(1858, 117, 1903, 163))
-        self.ctler.wait(0.5)
-        self.ctler.clickChange((1081, 84), zone=(379, 177, 579, 215))
-        _num = 0
-        _time = 0
-        while 1:
-            self.ctler.wait(0.1)
-            if self.ctler.findpic("resources/snow/picture/rollcheck.png")[1]:
-                _num = 0
-            else:
-                _num += 1
-            _time += 1
-            if _time == 200:
-                self.send("尘白禁区: 获取共鸣记录等待超时")
-                raise RuntimeError("尘白禁区: 获取共鸣记录等待超时")
-            else:
-                if _num == 4:
-                    break
-                else:
-                    pass
 
-        _nl = []
-        _p = 0
-        while 1:
-            try:
-                self.ctler.clickChange((1666, 602), zone = (1635, 488, 1716, 555), wait=(0.6, 3))
-            except TimeoutError:
-                break
-            _sc = self.ctler.screenshot()
-            _list1 = self.ctler.ocr((357, 185, 685, 866), _sc, 1)
-            _list2 = self.ctler.ocr((1357, 185, 1561, 866), _sc, 1)
+    # 获取选中的卡池列表
+    selected_pools = _get_selected_pools(self.para["GachaList"])
 
-            num = 0
-            _p += 1
-            _line = []
-            _lf = 0
-            for row in _list1:
-                if row := row[0].strip():
-                    _tline = _list2[num][0]
-                    _tline = _tline[:10] + " " + _tline[10:] if _tline[10] != " " else _tline
-                    _color = "未知"
-                    _zone = (342, 216+68*num, 362, 216+68*num+5)
-                    if self.ctler.findcolor("3662F2", _zone, _sc):
-                        _color = "blue"
-                    elif self.ctler.findcolor("C069D6", _zone, _sc):
-                        _color = "purple"
-                    elif self.ctler.findcolor("EA9B36", _zone, _sc):
-                        _color = "orange"
-                    _line = [row, _tline, _color]
-                    if _p != 1 and _line[:2] == _nl[9][:2]:
-                        _lf += 1
-                    _nl = [_line] + _nl
-                    _line = []
-                    num += 1
-                else:
-                    break
-            if num < 10:
-                break
-            else:
-                self.ctler.click((1666, 602))
-                self.ctler.wait(0.6)
-        current[i] += _nl
-        self.ctler.clickChange((1851, 81), zone=(1834, 64, 1872, 103))
-        self.ctler.wait(1)
+    # 遍历所有选中的卡池并获取记录
+    for pool_name in selected_pools:
+        _process_gacha_pool(self, pool_name, gacha_records)
+
+    # 返回主页并整理记录
     self.ctler.clickChange(target="resources/snow/picture/home.png", zone=(1504, 0, 1771, 117))
     self.ctler.wait(0.5)
     self.send("获取抽卡记录完成")
-    roll_arrange(self, current)
+
+    # 导出记录到Excel
+    export_gacha_records(self, gacha_records)
 
 
-def roll_arrange(self, _dir):
-    import time
-    now = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
-    his_path = f"personal/snow/roll/cache/history - {now}.json"
-    _path = r"personal/snow/roll/cache"
-    if not path.exists(_path):
-        makedirs("personal/snow/roll/cache")
-    with open(his_path, 'a', encoding='utf-8') as x:
-        json.dump(_dir, x, ensure_ascii=False, indent=1)
+def _get_selected_pools(gacha_list):
+    """根据配置获取选中的卡池列表"""
+    pool_names = [
+        "特选角色共鸣", "特选武器共鸣", "限定角色共鸣",
+        "限定武器共鸣", "常守之誓", "中庭炉心", "新手池"
+    ]
+
+    selected_pools = []
+    for i, is_selected in enumerate(gacha_list):
+        if is_selected and i < len(pool_names):
+            selected_pools.append(pool_names[i])
+
+    return selected_pools
+
+
+def _process_gacha_pool(self, pool_name, gacha_records):
+    """处理单个卡池的记录获取"""
+    # 进入对应的卡池界面
+    _enter_gacha_pool(self, pool_name)
+
+    # 打开记录页面
+    self.ctler.clickChange((1877, 141), zone=(1858, 117, 1903, 163))
+    self.ctler.wait(0.5)
+    self.ctler.clickChange((1081, 84), zone=(379, 177, 579, 215))
+
+    # 等待记录加载完成
+    if not _wait_for_records_loaded(self):
+        self.send(f"{pool_name}: 获取共鸣记录等待超时")
+        raise RuntimeError("尘白禁区: 获取共鸣记录等待超时")
+
+    # 读取当前页面的记录
+    pool_records = _read_current_pool_records(self)
+    gacha_records[pool_name].extend(pool_records)
+
+    # 返回卡池选择界面
+    self.ctler.clickChange((1851, 81), zone=(1834, 64, 1872, 103))
+    self.ctler.wait(1)
+
+
+def _enter_gacha_pool(self, pool_name):
+    """进入指定的卡池界面"""
+    # 查找常守入口（基础入口）
+    changshou_pos = self.ctler.findtext("常守", (3, 67, 280, 1066))
+
+    if pool_name == "特选角色共鸣":
+        self.ctler.clickTo(changshou_pos, "出", (377, 227, 490, 292))
+        x, y = self.ctler.findtext("100", (3, 67, 280, 1066))
+        self.ctler.clickChange((x - 90, y + 35), zone=(349, 854, 389, 897))
+        self.ctler.clickTo((x - 90, y + 120), "角色", (465, 959, 702, 1002))
+
+    elif pool_name == "特选武器共鸣":
+        self.ctler.clickTo(changshou_pos, "出", (377, 227, 490, 292))
+        x, y = self.ctler.findtext("100", (3, 67, 280, 1066))
+        self.ctler.clickChange((x - 90, y + 35), zone=(349, 854, 389, 897))
+        self.ctler.clickTo((x - 90, y + 210), "武器", (465, 959, 702, 1002))
+
+    elif pool_name == "限定角色共鸣":
+        self.ctler.clickTo(changshou_pos, "出", (377, 227, 490, 292))
+        x, y = self.ctler.findtext("50", (3, 67, 280, 1066))
+        self.ctler.clickChange((x - 90, y + 35), zone=(349, 854, 389, 897))
+        self.ctler.clickTo((x - 90, y + 120), "角色", (494, 994, 645, 1035))
+
+    elif pool_name == "限定武器共鸣":
+        self.ctler.clickTo(changshou_pos, "出", (377, 227, 490, 292))
+        x, y = self.ctler.findtext("50", (3, 67, 280, 1066))
+        self.ctler.clickChange((x - 90, y + 35), zone=(349, 854, 389, 897))
+        self.ctler.clickTo((x - 90, y + 210), "武器", (494, 994, 645, 1035))
+
+    elif pool_name == "常守之誓":
+        self.ctler.clickTo(changshou_pos, "出", (377, 227, 490, 292))
+
+    elif pool_name == "中庭炉心":
+        zhongting_pos = self.ctler.findtext("中庭炉心", (3, 67, 280, 1066))
+        self.ctler.clickTo(zhongting_pos, "出", (377, 227, 490, 292))
+
+    elif pool_name == "新手池":
+        qicheng_pos = self.ctler.findtext("启程", (3, 67, 280, 1066))
+        if qicheng_pos:
+            self.ctler.clickTo(qicheng_pos, "到", (324, 71, 500, 129))
+
+    self.ctler.wait(0.5)
+
+
+def _wait_for_records_loaded(self):
+    """等待抽卡记录加载完成"""
+    check_count = 0
+    timeout_counter = 0
+
+    while timeout_counter < 200:  # 20秒超时
+        self.ctler.wait(0.1)
+
+        # 检查记录加载完成的图片标识
+        if self.ctler.findpic("resources/snow/picture/rollcheck.png")[1]:
+            check_count = 0  # 重置计数
+        else:
+            check_count += 1
+
+        # 连续4次检查不到标识则认为加载完成
+        if check_count >= 4:
+            return True
+
+        timeout_counter += 1
+
+    return False
+
+
+def _read_current_pool_records(self):
+    """读取当前卡池的所有记录"""
+    all_records = []
+    page_count = 0
+
+    while True:
+        try:
+            # 尝试点击下一页
+            self.ctler.clickChange((1666, 602), zone=(1635, 488, 1716, 555), wait=(0.6, 3))
+        except TimeoutError:
+            break  # 没有更多页面
+
+        # 截图并识别记录
+        screenshot = self.ctler.screenshot()
+        item_names = self.ctler.ocr((357, 185, 685, 866), screenshot, 1)
+        item_dates = self.ctler.ocr((1357, 185, 1561, 866), screenshot, 1)
+
+        page_count += 1
+        duplicate_count = 0
+        current_page_records = []
+
+        # 处理当前页的记录
+        for idx, (name_row, date_row) in enumerate(zip(item_names, item_dates)):
+            name = name_row[0].strip()
+            if not name:
+                break  # 空行，结束当前页
+
+            date = date_row[0]
+            # 处理日期格式（添加空格分隔）
+            if len(date) > 10 and date[10] != " ":
+                date = date[:10] + " " + date[10:]
+
+            # 识别稀有度颜色
+            rarity = _detect_item_rarity(self, idx, screenshot)
+
+            record = [name, date, rarity]
+            current_page_records.append(record)
+
+            # 检查是否与上一页重复（去重）
+            if page_count > 1 and idx < len(all_records) and record[:2] == all_records[idx][:2]:
+                duplicate_count += 1
+
+        # 添加当前页记录到总记录
+        all_records = current_page_records + all_records
+
+        # 如果整页都是重复记录，停止翻页
+        if duplicate_count >= 10:
+            break
+
+        # 继续翻页
+        self.ctler.click((1666, 602))
+        self.ctler.wait(0.6)
+
+    return all_records
+
+
+def _detect_item_rarity(self, item_index, screenshot):
+    """检测物品的稀有度"""
+    # 定义检测区域（根据物品索引）
+    detect_zone = (342, 216 + 68 * item_index, 362, 216 + 68 * item_index + 5)
+
+    # 检测颜色对应的稀有度
+    if self.ctler.findcolor("3662F2", detect_zone, screenshot):  # 蓝色
+        return "blue"
+    elif self.ctler.findcolor("C069D6", detect_zone, screenshot):  # 紫色
+        return "purple"
+    elif self.ctler.findcolor("EA9B36", detect_zone, screenshot):  # 橙色
+        return "orange"
+    else:
+        return "unknown"
+
+
+def _normalize_item_name(item_name):
+    """标准化物品名称"""
+    name_mappings = {
+        "日王牌": "晴-旧日王牌",
+        "芬妮": "芬妮-咎冠",
+        "琴诺": "琴诺-悖谬",
+        "不予显示": "安卡希雅-[不予显示]",
+        "热年代": "灸热年代",
+        "姐姐大人": "恩雅-姐姐大人",
+        "王权连": "王权连枷",
+        "瑞斯": "瑟瑞斯-瞬刻",
+        "九夜之": "九夜之冕",
+        "龙舌兰": "薇蒂雅-龙舌兰"
+    }
+
+    for keyword, normalized_name in name_mappings.items():
+        if keyword in item_name:
+            return normalized_name
+
+    return item_name
+
+
+def export_gacha_records(self, gacha_records):
+    """导出抽卡记录到Excel文件"""
+    # 创建时间戳
+    timestamp = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
+
+    # 保存原始JSON记录
+    cache_dir = "personal/snow/roll/cache"
+    if not path.exists(cache_dir):
+        makedirs(cache_dir)
+
+    json_path = f"{cache_dir}/history - {timestamp}.json"
+    with open(json_path, 'w', encoding='utf-8') as f:
+        json.dump(gacha_records, f, ensure_ascii=False, indent=2)
+
     self.send("抽卡记录已暂存")
-    from openpyxl import load_workbook
-    from openpyxl.styles import Font, Alignment
-    zipfile = path.join(getcwd(), "resources/snow/default.zip")
-    deffile = path.join(getcwd(), "resources/snow/default.xlsx")
-    if not path.exists(deffile):
-        from shutil import unpack_archive
-        unpack_archive(zipfile, path.join(getcwd(), "resources/snow"))
-    dst = path.join(getcwd(), f"personal/snow/roll/尘白禁区共鸣记录 - {now}.xlsx")
-    import shutil
-    shutil.copyfile(deffile, dst)
-    wb = load_workbook(dst)
-    fon2 = Font(name='宋体', size=12)
-    fon_three = Font(name='宋体', size=12, color="3374F8")
-    fon_four = Font(name='宋体', size=12, color="7E30FF", bold=True)
-    fon_five = Font(name='宋体', size=12, color="FFC332", bold=True)
-    al = Alignment(horizontal='center', vertical='center')
-    _count = []
-    for i in ["特选角色共鸣", "特选武器共鸣", "限定角色共鸣", "限定武器共鸣", "常守之誓", "中庭炉心", "新手池"]:
-        _sheet = wb[i]
 
-        _list = _dir[i]
-        n_row = 1
-        n_four = 0
-        n_five = 0
-        count = [0, 0, 0, 0, 0, [], []]
-        for _line in _list:
-            [r, t, col] = _line
-            n_row += 1
-            n_four += 1
-            n_five += 1
-            if "日王牌" in r:
-                r = "晴-旧日王牌"
-            elif "芬妮" in r:
-                if "冠" in r:
-                    r = "芬妮-咎冠"
-            elif "琴诺" in r:
-                if "悖" in r or "谬" in r:
-                    r = "琴诺-悖谬"
-            elif "不予显示" in r:
-                r = "安卡希雅-[不予显示]"
-            elif "热年代" in r:
-                r = "灸热年代"
-            elif "姐姐大人" in r:
-                r = "恩雅-姐姐大人"
-            elif "王权连" in r:
-                r = "王权连枷"
-            elif "瑞斯" in r and "刻" in r:
-                r = "瑟瑞斯-瞬刻"
-            elif "九夜之" in r:
-                r = "九夜之冕"
-            elif "龙舌兰" in r:
-                r = "薇蒂雅-龙舌兰"
+    # 准备Excel模板
+    _prepare_excel_template()
 
-            _a = _sheet[f"A{n_row}"]
-            _b = _sheet[f"B{n_row}"]
-            _c = _sheet[f"C{n_row}"]
-            _d = _sheet[f"D{n_row}"]
-            _sheet[f"A{n_row}"] = t
-            _sheet[f"B{n_row}"] = r
-            _sheet[f"C{n_row}"] = n_row - 1
-            _sheet[f"D{n_row}"] = n_five
-            _sheet[f"A{n_row}"].alignment = al
-            _sheet[f"B{n_row}"].alignment = al
-            _sheet[f"C{n_row}"].alignment = al
-            _sheet[f"D{n_row}"].alignment = al
-            if col == "blue":
-                _fon = fon_three
-                count[0] += 1
-            elif col == "purple":
-                _fon = fon_four
-                count[1] += 1
-                count[5] += [f"{r}({n_four})"]
-                n_four = 0
-            elif col == "orange":
-                _fon = fon_five
-                count[2] += 1
-                count[6] += [f"{r}({n_five})"]
-                n_five = 0
-            else:
-                print(r, t)
-                self.send(f"稀有度异常识别异常:{r}", 3)
-                return False
-            _sheet[f"A{n_row}"].font = _fon
-            _sheet[f"B{n_row}"].font = _fon
-            _sheet[f"C{n_row}"].font = fon2
-            _sheet[f"D{n_row}"].font = fon2
-            _sheet.row_dimensions[n_row].height = 18
-        count[3] = n_row - 1
-        count[4] = n_five
-        _count += [count]
-    sheet0 = wb["总览"]
-    sheet0["B3"] = _count[0][0]
-    sheet0["C3"] = _count[0][1]
-    sheet0["D3"] = _count[0][2]
-    sheet0["E3"] = _count[0][3]
-    sheet0["F3"] = _count[0][4]
+    # 创建Excel文件
+    excel_path = path.join(getcwd(), f"personal/snow/roll/尘白禁区共鸣记录 - {timestamp}.xlsx")
+    _create_gacha_excel(gacha_records, excel_path, timestamp)
 
-    _list = _count[0][5]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I2"] = _str
-    _list = _count[0][6]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I3"] = _str
-
-    sheet0["B6"] = _count[1][0]
-    sheet0["C6"] = _count[1][1]
-    sheet0["D6"] = _count[1][2]
-    sheet0["E6"] = _count[1][3]
-    sheet0["F6"] = _count[1][4]
-    _list = _count[1][5]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I5"] = _str
-
-    _list = _count[1][6]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I6"] = _str
-
-    sheet0["B9"] = _count[2][0]
-    sheet0["C9"] = _count[2][1]
-    sheet0["D9"] = _count[2][2]
-    sheet0["E9"] = _count[2][3]
-    sheet0["F9"] = _count[2][4]
-    _list = _count[2][5]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I8"] = _str
-
-    _list = _count[2][6]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I9"] = _str
-
-    sheet0["B12"] = _count[3][0]
-    sheet0["C12"] = _count[3][1]
-    sheet0["D12"] = _count[3][2]
-    sheet0["E12"] = _count[3][3]
-    sheet0["F12"] = _count[3][4]
-    _list = _count[3][5]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I11"] = _str
-
-    _list = _count[3][6]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I12"] = _str
-
-    sheet0["B15"] = _count[4][0]
-    sheet0["C15"] = _count[4][1]
-    sheet0["D15"] = _count[4][2]
-    sheet0["E15"] = _count[4][3]
-    sheet0["F15"] = _count[4][4]
-    _list = _count[4][5]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I14"] = _str
-
-    _list = _count[4][6]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I15"] = _str
-
-    sheet0["B18"] = _count[5][0]
-    sheet0["C18"] = _count[5][1]
-    sheet0["D18"] = _count[5][2]
-    sheet0["E18"] = _count[5][3]
-    sheet0["F18"] = _count[5][4]
-    _list = _count[5][5]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I17"] = _str
-
-    _list = _count[5][6]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I18"] = _str
-
-    sheet0["B21"] = _count[6][0]
-    sheet0["C21"] = _count[6][1]
-    sheet0["D21"] = _count[6][2]
-    sheet0["E21"] = _count[6][3]
-    sheet0["F21"] = _count[6][4]
-    _list = _count[6][5]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I20"] = _str
-
-    _list = _count[6][6]
-    _str = ""
-    for i in _list:
-        _str += i + " "
-    sheet0["I21"] = _str
-    wb.save(dst)
     self.send("共鸣记录已导出", 3)
+
+    # 可选：自动打开Excel文件
     if self.para["GachaOpenSheet"]:
-        startfile(path.join(info.workdir, dst))
-    
+        startfile(excel_path)
+
+
+def _prepare_excel_template():
+    """准备Excel模板文件"""
+    zip_path = path.join(getcwd(), "resources/snow/default.zip")
+    template_path = path.join(getcwd(), "resources/snow/default.xlsx")
+
+    if not path.exists(template_path):
+        from shutil import unpack_archive
+        unpack_archive(zip_path, path.join(getcwd(), "resources/snow"))
+
+
+def _create_gacha_excel(gacha_records, excel_path, timestamp):
+    """创建包含抽卡记录的Excel文件"""
+    # 复制模板文件
+    template_path = path.join(getcwd(), "resources/snow/default.xlsx")
+    shutil.copyfile(template_path, excel_path)
+
+    # 加载工作簿并设置样式
+    wb = load_workbook(excel_path)
+    _setup_excel_styles(wb, gacha_records)
+
+    # 保存文件
+    wb.save(excel_path)
+
+
+def _setup_excel_styles(wb, gacha_records):
+    """设置Excel样式并填充数据"""
+    # 定义字体样式
+    font_normal = Font(name='宋体', size=12)
+    font_blue = Font(name='宋体', size=12, color="3374F8")
+    font_purple = Font(name='宋体', size=12, color="7E30FF", bold=True)
+    font_orange = Font(name='宋体', size=12, color="FFC332", bold=True)
+
+    alignment_center = Alignment(horizontal='center', vertical='center')
+
+    # 各卡池的统计信息
+    pool_stats = []
+    pool_names = ["特选角色共鸣", "特选武器共鸣", "限定角色共鸣", "限定武器共鸣", "常守之誓", "中庭炉心", "新手池"]
+
+    for pool_name in pool_names:
+        records = gacha_records[pool_name]
+        sheet = wb[pool_name]
+
+        stats = _process_pool_records(sheet, records, font_normal, font_blue,
+                                      font_purple, font_orange, alignment_center)
+        pool_stats.append(stats)
+
+    # 更新总览表
+    _update_summary_sheet(wb, pool_stats, pool_names)
+
+
+def _process_pool_records(sheet, records, font_normal, font_blue, font_purple, font_orange, alignment):
+    """处理单个卡池的记录并返回统计信息"""
+    row_count = 1
+    purple_count_since_last_orange = 0
+    orange_count_since_last_orange = 0
+
+    stats = {
+        'blue_count': 0,
+        'purple_count': 0,
+        'orange_count': 0,
+        'total_count': 0,
+        'pity_count': 0,
+        'purple_history': [],
+        'orange_history': []
+    }
+
+    for record in records:
+        name, date, rarity = record
+        row_count += 1
+
+        # 标准化名称
+        normalized_name = _normalize_item_name(name)
+
+        # 更新计数
+        if rarity == "blue":
+            stats['blue_count'] += 1
+            font = font_blue
+        elif rarity == "purple":
+            stats['purple_count'] += 1
+            purple_count_since_last_orange += 1
+            stats['purple_history'].append(f"{normalized_name}({purple_count_since_last_orange})")
+            purple_count_since_last_orange = 0
+            font = font_purple
+        elif rarity == "orange":
+            stats['orange_count'] += 1
+            orange_count_since_last_orange += 1
+            stats['orange_history'].append(f"{normalized_name}({orange_count_since_last_orange})")
+            orange_count_since_last_orange = 0
+            purple_count_since_last_orange = 0  # 重置紫计数
+            font = font_orange
+        else:
+            font = font_normal
+
+        # 填充单元格
+        sheet[f"A{row_count}"] = date
+        sheet[f"B{row_count}"] = normalized_name
+        sheet[f"C{row_count}"] = row_count - 1  # 总序号
+        sheet[f"D{row_count}"] = orange_count_since_last_orange  # 当前保底计数
+
+        # 设置样式
+        for col in ['A', 'B', 'C', 'D']:
+            cell = sheet[f"{col}{row_count}"]
+            cell.alignment = alignment
+            cell.font = font if col in ['A', 'B'] else font_normal
+
+        sheet.row_dimensions[row_count].height = 18
+
+    # 最终统计
+    stats['total_count'] = row_count - 1
+    stats['pity_count'] = orange_count_since_last_orange
+
+    return stats
+
+
+def _update_summary_sheet(wb, pool_stats, pool_names):
+    """更新总览表的数据"""
+    sheet = wb["总览"]
+
+    # 定义各卡池在总览表中的起始行
+    pool_start_rows = [3, 6, 9, 12, 15, 18, 21]
+
+    for i, (stats, start_row) in enumerate(zip(pool_stats, pool_start_rows)):
+        if i >= len(pool_names):
+            break
+
+        # 更新基础统计
+        sheet[f"B{start_row}"] = stats['blue_count']
+        sheet[f"C{start_row}"] = stats['purple_count']
+        sheet[f"D{start_row}"] = stats['orange_count']
+        sheet[f"E{start_row}"] = stats['total_count']
+        sheet[f"F{start_row}"] = stats['pity_count']
+
+        # 更新历史记录
+        purple_history_row = start_row - 1
+        orange_history_row = start_row
+
+        sheet[f"I{purple_history_row}"] = " ".join(stats['purple_history'])
+        sheet[f"I{orange_history_row}"] = " ".join(stats['orange_history'])
