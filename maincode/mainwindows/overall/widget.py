@@ -42,3 +42,5 @@ class OverallWidget(QWidget):
         self.btgithub = TransPicButton(self, (500, 392, 30, 30), spr["GithubPic"], sizetp)
         self.btgitee = TransPicButton(self, (540, 392, 30, 30), spr["GiteePic"], sizetp)
         self.btbilibili = TransPicButton(self, (580, 392, 30, 30), spr["BilibiliPic"], sizetp)
+        self.btweb = TransPicButton(self, (0, 545, 30, 30), spr["HelpPic"], sizetp)
+        tips(self.btweb, "使用引导/反馈")

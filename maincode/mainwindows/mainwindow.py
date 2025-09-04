@@ -54,8 +54,7 @@ class SGAQMainWindow(QMainWindow):
         self.infoAdd = self.mainwidget.infoAdd
         self.infoEnd = self.mainwidget.infoEnd
 
-        if spr["ShowConsole"]:
-            self.mainwidget.btconsole.toggled.connect(self.mainwidget.changecs)
+        self.mainwidget.btconsole.toggled.connect(self.mainwidget.changecs)
         self.mainwidget.btsetting.toggled.connect(self.mainwidget.changeob)
 
         logs_dir = spr["LogsDir"]

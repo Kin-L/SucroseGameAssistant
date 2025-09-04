@@ -24,11 +24,12 @@ class MainWidget(Widget):
         # 全局/模块 设置按钮
         self.btsetting = OverallButton(self)
         self.console_window = None
-        if spr["ShowConsole"]:
-            try:
-                self.console_window = windll.kernel32.GetConsoleWindow()
-            except Exception as e:
-                logger.error(f"Failed to get console window: {e}")
+        try:
+            self.console_window = windll.kernel32.GetConsoleWindow()
+            windll.user32.ShowWindow(self.console_window, 0)
+            self.obconsole = False
+        except Exception as e:
+            logger.error(f"Failed to get console window: {e}")
         self.obstate = False
         self.obconsole = True
         self.support = Support()
@@ -38,9 +39,7 @@ class MainWidget(Widget):
         tips(self.btconfigsave, "手动保存并应用当前页面设置(快捷键：ctrl+s)")
         # 指示信息窗口
         self.infobox = InfoBox(self)
-        if spr["ShowConsole"]:
-            self.btconsole = ConsoleButton(self)
-            self.btconsole.setChecked(True)
+        self.btconsole = ConsoleButton(self)
 
     def changeob(self):
         if self.obstate:

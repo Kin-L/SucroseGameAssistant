@@ -15,9 +15,8 @@ from pkg_resources import PkgResourcesDeprecationWarning
 warnings.filterwarnings("ignore", category=PkgResourcesDeprecationWarning)
 
 
-def SGALoad(showconsole: bool = True):
+def SGALoad():
     try:
-        spr["ShowConsole"] = showconsole
 
         if not CheckAdmin():
             logger.warning("权限不足，SGA 启动失败")
@@ -39,7 +38,7 @@ def SGALoad(showconsole: bool = True):
                 logger.warning(f"唤醒屏幕失败: {e}")
 
             # 判断是否加载 UI
-            load_ui = not (showconsole and ("current" in sys.argv or "hideui" in sys.argv))
+            load_ui = not ("current" in sys.argv or "hideui" in sys.argv)
             spr["LoadUI"] = load_ui
 
             if load_ui:
