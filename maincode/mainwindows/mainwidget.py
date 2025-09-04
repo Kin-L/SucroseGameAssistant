@@ -27,6 +27,7 @@ class MainWidget(Widget):
         try:
             self.console_window = windll.kernel32.GetConsoleWindow()
             windll.user32.ShowWindow(self.console_window, int(scc.mc.ShowConsole))
+
         except Exception as e:
             logger.error(f"Failed to get console window: {e}")
         self.obstate = False
@@ -38,6 +39,7 @@ class MainWidget(Widget):
         # 指示信息窗口
         self.infobox = InfoBox(self)
         self.btconsole = ConsoleButton(self)
+        self.btconsole.setChecked(scc.mc.ShowConsole)
 
     def changeob(self):
         if self.obstate:

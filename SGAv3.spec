@@ -17,7 +17,7 @@ a = Analysis(
     noarchive=False,
 )
 b = Analysis(
-    ['SGAv3-c.py'],
+    ['SGAv3.py'],
     pathex=[],
     binaries=[],
     datas=[
