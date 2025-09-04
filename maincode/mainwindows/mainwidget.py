@@ -26,7 +26,7 @@ class MainWidget(Widget):
         self.console_window = None
         try:
             self.console_window = windll.kernel32.GetConsoleWindow()
-            windll.user32.ShowWindow(self.console_window, scc.mc.ShowConsole)
+            windll.user32.ShowWindow(self.console_window, int(scc.mc.ShowConsole))
         except Exception as e:
             logger.error(f"Failed to get console window: {e}")
         self.obstate = False
