@@ -39,6 +39,7 @@ class Logger:
         )
         self.console_handler.setFormatter(color_formatter)
         self.logger.addHandler(self.console_handler)
+        self.logger.new_handler = self.new_handler
 
     @staticmethod
     def _ensure_directory_exists(directory: str):
