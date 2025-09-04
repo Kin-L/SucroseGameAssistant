@@ -24,7 +24,7 @@ class SGAInfo:
     VBS_DST = "personal/script/start-SGA.vbs"
 
     def __init__(self):
-        self.Version: str = "v3.0.5.8"
+        self.Version: str = "v3.0.5.11"
         self.Window = GetWindow("砂糖代理")
         self.Monitors: list = []
         self.Platform: str = ""
