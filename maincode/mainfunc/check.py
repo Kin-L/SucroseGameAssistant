@@ -4,7 +4,6 @@ from maincode.tools.system.other import VersionsCompare
 from maincode.tools.system.notification import GetTracebackInfo
 from maincode.tools.core.logger import logger
 from time import localtime, strftime
-from maincode.tools.core.constant import spr
 
 
 def timercheck(self) -> None:
@@ -21,9 +20,8 @@ def timercheck(self) -> None:
             return
 
         # 打印定时检测日志
-        if spr["LoadUI"]:
-            time_str = strftime("%H:%M:%S", localtime())
-            print(f"{time_str} | INFO | SGA定时检测，SGA运行中...")
+        time_str = strftime("%H:%M:%S", localtime())
+        print(f"{time_str} | INFO | SGA定时检测，SGA运行中...")
 
         self.SaveConfig()
 

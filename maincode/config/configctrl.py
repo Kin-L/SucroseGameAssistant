@@ -1,4 +1,3 @@
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtBoundSignal
 from maincode.modules.main import ModuleClass
 from .subconfig import subconfig, SubConfigs
 from .mainconfig import MainConfig, checkmain
@@ -9,10 +8,7 @@ import json
 import random
 
 
-class SGAConfigController(QObject):
-    infoAdd: pyqtBoundSignal = pyqtSignal(str, bool)
-    infoHead: pyqtBoundSignal = pyqtSignal()
-    infoEnd: pyqtBoundSignal = pyqtSignal()
+class SGAConfigController:
     PersonalPath = "./personal"
     MainConfigPath = "./personal/mainconfig.json"
     MainConfigBackupPath = "./personal/mainconfigbackup.json"
@@ -24,6 +20,12 @@ class SGAConfigController(QObject):
         self.currentmainconfig: Optional[dict] = None
         self.sc: Optional[SubConfigs] = None
         self.info: Optional[SGAInfo] = None
+        self.loadstate = {"主配置异常，从备份恢复": False,
+                          "主配置异常，进行修复": False,
+                          "主配置损坏，进行初始化": False,
+                          "主配置初始化": False,
+                          "当前子设置损坏，进行初始化": False,
+                          "进行子设置初始化": False}
 
     def Load(self):
         self.modules = ModuleClass
@@ -66,22 +68,22 @@ class SGAConfigController(QObject):
                 with open(self.MainConfigBackupPath, 'r', encoding='utf-8') as c:
                     _mainconfig = json.load(c)
                 if checkmain(_mainconfig):
-                    self.infoAdd.emit("主配置异常，从备份恢复", False)
+                    self.loadstate["主配置异常，从备份恢复"] = True
                     return MainConfig(**_mainconfig)
                 else:
                     template = MainConfig().model_dump()
                     template.update(_mainconfig)
                     if checkmain(template):
-                        self.infoAdd.emit("主配置异常，进行修复", False)
+                        self.loadstate["主配置异常，进行修复"] = True
                         return MainConfig(**template)
             except (json.JSONDecodeError, Exception):
                 pass  # 备份配置损坏
 
         # 初始化配置
         if _mainconfig:
-            self.infoAdd.emit("主配置损坏，进行初始化", False)
+            self.loadstate["主配置损坏，进行初始化"] = True
         else:
-            self.infoAdd.emit("主配置初始化", False)
+            self.loadstate["主配置初始化"] = True
         return MainConfig()
 
     def RecognizeModules(self):
@@ -99,10 +101,10 @@ class SGAConfigController(QObject):
             if self.modules.CheckConfig(_current):
                 return
             else:
-                self.infoAdd.emit("当前子设置损坏，进行初始化", False)
+                self.loadstate["当前子设置损坏，进行初始化"] = True
                 self.mc.CurrentConfig = self.modules.GetConfig(0).model_dump()
         else:
-            self.infoAdd.emit("进行子设置初始化", False)
+            self.loadstate["进行子设置初始化"] = True
             self.mc.CurrentConfig = self.modules.GetConfig(0).model_dump()
 
     def _SaveConfig(self, config_path: str):

@@ -3,9 +3,9 @@ from maincode.tools.sgaqt.buttons import PicButton, OverallButton, ConsoleButton
 from maincode.tools.sgaqt.widgets import Widget, Stack, Support
 from ctypes import windll
 from maincode.tools.core.constant import spr
-
 from time import localtime, strftime
 from maincode.tools.core.logger import logger
+from maincode.config.configctrl import scc
 
 # 常量定义
 UI_WIDTH = 625
@@ -26,12 +26,10 @@ class MainWidget(Widget):
         self.console_window = None
         try:
             self.console_window = windll.kernel32.GetConsoleWindow()
-            windll.user32.ShowWindow(self.console_window, 0)
-            self.obconsole = False
+            windll.user32.ShowWindow(self.console_window, scc.mc.ShowConsole)
         except Exception as e:
             logger.error(f"Failed to get console window: {e}")
         self.obstate = False
-        self.obconsole = True
         self.support = Support()
         # 历史信息按钮
         self.bthistory = PicButton(self, HISTORY_BUTTON_POS, spr["HistoryPic"], BUTTON_SIZE_TP)
@@ -53,12 +51,12 @@ class MainWidget(Widget):
         if not self.console_window:
             return
         try:
-            if self.obconsole:
+            if scc.mc.ShowConsole:
                 windll.user32.ShowWindow(self.console_window, 0)
-                self.obconsole = False
+                scc.mc.ShowConsole = False
             else:
                 windll.user32.ShowWindow(self.console_window, 1)
-                self.obconsole = True
+                scc.mc.ShowConsole = True
         except Exception as e:
             logger.error(f"Failed to toggle console visibility: {e}")
 
@@ -71,24 +69,20 @@ class MainWidget(Widget):
             prefix = "\n  " if addtime else "\n"
             msg = prefix + msg.replace("\n", "\n  ")
         full_msg = timestr + msg
-        if spr["LoadUI"]:
-            self.infobox.append(full_msg)
-            self.infobox.ensureCursorVisible()
+        self.infobox.append(full_msg)
+        self.infobox.ensureCursorVisible()
         logger.info(msg)
 
     def infoHead(self):
         today = strftime("%Y-%m-%d", localtime())
         if today != logger.date:
             logger.new_handler(today)
-        if spr["LoadUI"]:
-            self.infobox.append(today)
+        self.infobox.append(today)
 
     def infoEnd(self):
-        if spr["LoadUI"]:
-            self.infobox.append(SEPARATOR_LINE)
-            self.infobox.ensureCursorVisible()
+        self.infobox.append(SEPARATOR_LINE)
+        self.infobox.ensureCursorVisible()
         logger.info(SEPARATOR_LINE)
 
     def infoClear(self):
-        if spr["LoadUI"]:
-            self.infobox.clear()
+        self.infobox.clear()

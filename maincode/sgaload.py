@@ -3,7 +3,6 @@ from maincode.tools.system.notification import SendMessageBox, GetTracebackInfo,
 from maincode.tools.system.window import GetWindow
 from PyQt5.QtCore import Qt
 from time import sleep
-from maincode.tools.core.constant import spr
 from maincode.sgamain import SGAMain
 from PyQt5.QtWidgets import QApplication
 import keyboard
@@ -38,25 +37,22 @@ def SGALoad():
                 logger.warning(f"唤醒屏幕失败: {e}")
 
             # 判断是否加载 UI
-            load_ui = not ("current" in sys.argv or "hideui" in sys.argv)
-            spr["LoadUI"] = load_ui
-
-            if load_ui:
-                QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
-                QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
-                QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
-                application = QApplication(sys.argv)
-
-                sqm = SGAMain()
-                if "current" in sys.argv:
-                    sqm.TaskStart(sqm.SMW, "current")
-                application.exec_()
+            hideui = "-hideui" in sys.argv
+            # hideui = True
+            QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+            QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+            QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
+            application = QApplication(sys.argv)
+            sqm = SGAMain()
+            if hideui:
+                sqm.hideui_connect()
             else:
-                sqm = SGAMain()
-                logger.info("SGA启动完成, SGA运行中...")
-                if "current" in sys.argv:
-                    sqm.TaskStart(sqm.SMW, "current")
-
+                sqm.load_ui()
+            if "-current" in sys.argv:
+                sqm.TaskStart("current")
+            elif "-subconfig" in sys.argv:  # ck为子配置文件识别码，为其文件名的前四位数字
+                sqm.TaskStart("subconfig", {"ck": sys.argv[sys.argv.index("-subconfig") + 1]})
+            application.exec_()
             logger.info("==================SGA关闭=================\n\n")
     except Exception as e:
         _str = GetTracebackInfo(e) + "SGA加载失败"

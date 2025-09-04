@@ -51,6 +51,30 @@ def TaskStart(self, tasktype: str, para: dict = None):
             self.infoHead()
             self.infoAdd("准备开始...")
             self.NewThread(tasktype, para)
+        elif tasktype == "subconfig":
+            _ck = para.get("ck", None)
+            _num = para.get("num", None)
+            if _num is None:
+                if _ck.isdigit() and (item := scc.sc.FindItem(int(_ck))):
+                    _num = item[-1]
+                else:
+                    self.infoAdd(f"输入的子设置无效：'ck'：{_ck}")
+                    return
+            _config = scc.ReadSubFile(_num)
+            print(_config)
+            self.mainwidget.infoClear()
+            self.infoHead()
+            self.SaveConfig()
+            para.update(dict(_config))
+            para["OtherConfig"] = scc.mc.OtherConfig
+            para["current_mute"] = GetMute()
+            self.NewThread(tasktype, para)
+            name = para["ConfigName"]
+            self.infoAdd(f"开始执行指定任务：{name}")
+            self.module.widget.btpause.setEnabled(True)
+            self.module.widget.btpause.show()
+            keyboard.add_hotkey(scc.mc.StopKeys, self.module.widget.btpause.click)
+
     except Exception as e:
         _str = GetTracebackInfo(e) + "准备开始流程异常"
         logger.error(_str)
@@ -68,13 +92,12 @@ def TaskStop(self, tasktype: str, para=None):
         self.module.widget.btstart.show()
         self.module.widget.btpause.setEnabled(True)
         self.module.widget.btpause.hide()
+        keyboard.remove_hotkey(scc.mc.StopKeys)
         if tasktype == "timed":
             sleeptime = 61 - localtime()[5]
             self.sleeptime = sleeptime if sleeptime > 0 else 0
-            keyboard.remove_hotkey(scc.mc.StopKeys)  # 仅移除特定热键
         elif tasktype == "update":
             self.overall.widget.btcheckupdate.setEnabled(True)
-            keyboard.remove_hotkey(scc.mc.StopKeys)
             return
         if para["Mute"] and (GetMute() != para["current_mute"]):
             keyboard.send('volume mute')

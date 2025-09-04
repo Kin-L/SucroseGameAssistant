@@ -21,6 +21,8 @@ class MainConfig(BaseModel):
     CurrentConfig: dict = Field(default_factory=dict)
     OtherConfig: dict = Field(default_factory=lambda: {"License": False})
     ModulesEnable: list = Field(default_factory=list)
+    StartMode: str = "Down"
+    ShowConsole: bool = False
 
 
 def checkmain(configdict: dict):

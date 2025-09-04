@@ -33,7 +33,7 @@ class SGAMainThread(QObject):
         if self.tasktype == "update":
             self.__class__.taskstart = update
             self.taskstart()
-        elif self.tasktype in ["current", "timed"]:
+        elif self.tasktype in ["current", "timed", "subconfig"]:
             if self.para["Mute"] and (not self.para["current_mute"]):
                 keyboard.send('volume mute')
             num = scc.modules.FindItem(self.para["ModuleKey"])[-1]

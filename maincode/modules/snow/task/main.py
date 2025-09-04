@@ -167,7 +167,7 @@ def SnowLaunch(self):
             _list = [["wailsWindow", "尘白禁区启动器"],
                      ["Qt5159QWindowIcon", "西山居启动器-尘白禁区"]]
             # print(_path)
-            hwnd = self.ctler.RunProg(f"start \"\" \"{_path}\"", _list, 2)
+            hwnd = self.ctler.RunProg(f"start \"\" \"{_path}\"", _list, (0.4, 10), 15)
             assert hwnd
         else:
             hwnd = [item for item in [h1, h2] if item][0]
@@ -175,7 +175,7 @@ def SnowLaunch(self):
         LauchPrepare(self)
     else:
         _path = "start steam://rungameid/2668080"
-        hwnd = self.ctler.RunProg(_path, glist, 5)
+        hwnd = self.ctler.RunProg(_path, glist, (0.4, 10), 20)
         assert hwnd
         self.ctler.ChooseWindow(hwnd, (1920, 1080))
         if self.ctler.ZoomW != self.ctler.ZoomH:

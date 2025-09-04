@@ -1,8 +1,6 @@
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QIcon, QMovie, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QShortcut
-
-import maincode.tools.system.window
 from maincode.tools.core.constant import spr
 from maincode.tools.sgaqt.widgets import palette
 from sys import argv
@@ -11,6 +9,7 @@ from maincode.config.configctrl import scc
 from maincode.tools.controller.ocr import OCR
 import os
 from pathlib import Path as libPath
+from maincode.tools.core.logger import logger
 
 
 class SGAQMainWindow(QMainWindow):
@@ -28,12 +27,11 @@ class SGAQMainWindow(QMainWindow):
         self.loading = None  # 防止未初始化访问
         self.timer = QTimer(self)
         self.quicksave = QShortcut("Ctrl+S", self)
-
-        if spr["LoadUI"]:
-            self._init_loading_ui()
-
         self.sleeptime = 0
         self.timerallow = True
+        self.infoHead = logger.infoHead
+        self.infoAdd = logger.infoAdd
+        self.infoEnd = logger.infoEnd
 
     def _init_loading_ui(self):
         self.loading = LoadWidget(self)
@@ -47,16 +45,15 @@ class SGAQMainWindow(QMainWindow):
         self.mainwidget = MainWidget()
         self.setCentralWidget(self.mainwidget)
 
-        self.SG.infoHead.connect(self.mainwidget.infoHead)
-        self.SG.infoAdd.connect(self.mainwidget.infoAdd)
-        self.SG.infoEnd.connect(self.mainwidget.infoEnd)
         self.infoHead = self.mainwidget.infoHead
         self.infoAdd = self.mainwidget.infoAdd
         self.infoEnd = self.mainwidget.infoEnd
 
         self.mainwidget.btconsole.toggled.connect(self.mainwidget.changecs)
         self.mainwidget.btsetting.toggled.connect(self.mainwidget.changeob)
-
+        for i in self.SG.loadstate.items():
+            if i[1]:
+                self.mainwidget.infoAdd(i[0], False)
         logs_dir = spr["LogsDir"]
         if os.path.exists(logs_dir):
             try:

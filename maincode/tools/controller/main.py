@@ -27,15 +27,24 @@ class Controller(Operate):
         self.ChangeOperate(self.window.rect)
         logger.info(f"当前窗口：{self.window.rect}")
 
-    def RunProg(self, _cmdline, _clsandtit, _wait):
-        for _ in range(3):
-            for _ in range(20):
+    def RunProg(self, _cmdline, _clsandtit, _wait=(0.2, 10), _retry: int = 10):
+        _interval, _fre = _wait
+        for _ in range(_retry):
+            for _ in range(_fre):
                 _list = [FindWindow(*item) for item in _clsandtit]
                 for i in _list:
                     if i:
-                        self.wait(_wait)
                         return i
                 else:
-                    CmdRun(_cmdline)
-                    self.wait(0.5)
-        return 0
+                    self.wait(_interval)
+            else:
+                CmdRun(_cmdline)
+        for _ in range(_fre):
+            _list = [FindWindow(*item) for item in _clsandtit]
+            for i in _list:
+                if i:
+                    return i
+            else:
+                self.wait(_interval)
+        else:
+            return 0

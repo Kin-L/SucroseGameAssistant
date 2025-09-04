@@ -1,4 +1,4 @@
-from maincode.tools.system.other import (CmdRun)
+from maincode.tools.system.other import CmdRun
 from maincode.tools.system.notification import GetTracebackInfo
 from maincode.tools.core.logger import logger
 from os import path, makedirs, remove

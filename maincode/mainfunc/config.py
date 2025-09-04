@@ -85,7 +85,7 @@ def SaveConfig(self):
     2. 保存当前配置和定时器配置
     3. 如果配置有变化，保存主配置和备份
     """
-    if not spr["LoadUI"]:
+    if not self.LoadUI:
         return  # UI未加载完成，直接返回
 
     # 保存当前模块配置
@@ -114,7 +114,7 @@ def ManualSaveConfig(self):
     4. 提供操作反馈信息
     """
     # 检查保存条件：UI已加载且定时器允许操作
-    if not (spr["LoadUI"] and self.timerallow):
+    if not (self.LoadUI and self.timerallow):
         return
 
     try:

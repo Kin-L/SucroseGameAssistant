@@ -1,7 +1,8 @@
-from maincode.tools.sgaqt.texts import SLineEdit
+from maincode.tools.sgaqt.texts import SLineEdit, tips
 from maincode.tools.sgaqt.buttons import Button, PicButton, Combobox
 from maincode.tools.sgaqt.widgets import Stack, StateSigh
 from PyQt5.QtWidgets import QWidget
+from maincode.tools.core.constant import spr
 
 
 # 模组设置窗口
@@ -34,7 +35,9 @@ class ModuleWidget(QWidget):
         self.btpause = Button(self, (340, 0, 55, 35), "停止")
         self.btpause.hide()
         self.btstart = Button(self, (340, 0, 55, 35), "开始")
-
+        tips(self.btstart, "点击箭头按钮切换运行模式")
+        self.btstartmode = PicButton(self, (400, 0, 35, 35), spr["ArrowDownPic"], sizetp)
+        tips(self.btstartmode, "点击切换运行模式\n箭头向下执行当前页面任务\n箭头向左执行栏目中任务")
         # 堆叠窗口
         self.skmodule = Stack(self, (0, 40, 625, 540))
         # 模块按钮

@@ -3,6 +3,7 @@ from os import path, makedirs, remove
 from time import strftime, localtime
 from colorlog import ColoredFormatter
 import glob
+SEPARATOR_LINE = "------------------------------"
 
 
 class Logger:
@@ -13,7 +14,8 @@ class Logger:
 
     def __init__(self):
         self.logger: PyLogger = getLogger('SGA')
-        self.logger.date = strftime("%Y-%m-%d", localtime())
+        self.date = strftime("%Y-%m-%d", localtime())
+        self.logger.date = self.date
         self.logger.propagate = False
         self.logger.setLevel("DEBUG")
 
@@ -21,7 +23,7 @@ class Logger:
         self._ensure_directory_exists(self.LOG_DIR)
 
         # 初始化文件处理器
-        self.file_handler = self._create_file_handler(self.logger.date)
+        self.file_handler = self._create_file_handler(self.date)
         self.logger.addHandler(self.file_handler)
 
         # 初始化控制台处理器
@@ -40,6 +42,9 @@ class Logger:
         self.console_handler.setFormatter(color_formatter)
         self.logger.addHandler(self.console_handler)
         self.logger.new_handler = self.new_handler
+        self.logger.infoHead = self.infoHead
+        self.logger.infoAdd = self.infoAdd
+        self.logger.infoEnd = self.infoEnd
 
     @staticmethod
     def _ensure_directory_exists(directory: str):
@@ -67,6 +72,7 @@ class Logger:
         self.logger.removeHandler(self.file_handler)
         self.file_handler.close()
         self.logger.date = date
+        self.date = date
         self.file_handler = self._create_file_handler(date)
         self.logger.addHandler(self.file_handler)
 
@@ -93,6 +99,21 @@ class Logger:
                     self.logger.warning(f"Failed to delete file {file_to_delete}: {e}")
         except Exception as e:
             self.logger.error(f"Error during cleanup of {directory}: {e}")
+
+    def infoAdd(self, msg: str = "", addtime=True):
+        msg = msg.strip("\n")  # 修复原逻辑错误
+        if "\n" in msg:
+            prefix = "\n  " if addtime else "\n"
+            msg = prefix + msg.replace("\n", "\n  ")
+        self.logger.info(msg)
+
+    def infoHead(self):
+        today = strftime("%Y-%m-%d", localtime())
+        if today != self.date:
+            self.new_handler(today)
+
+    def infoEnd(self):
+        self.logger.info(SEPARATOR_LINE)
 
 
 logger = Logger().getlogger()

@@ -4,6 +4,7 @@ from ...tools.system.notification import GetTracebackInfo
 from ...tools.core.logger import logger
 from os import path, remove, replace
 from maincode.mainwindows.mainwindow import SGAQMainWindow
+from maincode.tools.core.constant import spr
 import random
 _Range10 = range(10)
 _Range9 = range(1, 9)
@@ -20,6 +21,8 @@ class SGAModule:
             self.widget.skmodule.addWidget(widget)
 
         self._update_lock_ui(scc.mc.ConfigLock)
+        if scc.mc.StartMode == "Left":
+            self.widget.btstartmode.setIcon(spr["ArrowLeftPic"])
         self.widget.ecbconfig.addItems(scc.sc.GetFilesT()[1])
         self.widget.boxmodule.addItems(scc.modules.GetInfosT()[0])
 
@@ -39,6 +42,7 @@ class SGAModule:
         self.widget.btconfigadd.clicked.connect(self.configadd)
         self.widget.btconfigedit.clicked.connect(self.ReadyToRename)
         self.widget.btconfigfinish.clicked.connect(self.configrename)
+        self.widget.btstartmode.clicked.connect(self._change_startmode)
         self.widget.ecbconfig.currentIndexChanged.connect(self.configchange)
 
     def _update_lock_ui(self, locked: bool):
@@ -77,6 +81,14 @@ class SGAModule:
             _str = GetTracebackInfo(e) + "切换锁定流程异常"
             logger.error(_str)
             self.infoAdd(f"切换锁定流程异常")
+
+    def _change_startmode(self):
+        if scc.mc.StartMode == "Left":
+            scc.mc.StartMode = "Down"
+            self.widget.btstartmode.setIcon(spr["ArrowDownPic"])
+        else:
+            scc.mc.StartMode = "Left"
+            self.widget.btstartmode.setIcon(spr["ArrowLeftPic"])
 
     def configchange(self):
         try:
