@@ -103,7 +103,7 @@ class OCRControl:
                 return self.running.runBytes(image_bytes)
         except Exception as e:
             self.logger.error(e)
-            return r"{}"
+            return {"code": 102}
 
     def recognize_single_line(self, image, blacklist=None):
         results = self._convert_result(self.run(image))

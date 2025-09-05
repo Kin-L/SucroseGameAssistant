@@ -23,6 +23,7 @@ class Controller(Operate):
         else:
             raise ValueError("GetWindow 未获取到有效值")
         self.window.foreground()
+        self.window = GetWindow(para)
         self.ChangeReference(ref)
         self.ChangeOperate(self.window.rect)
         logger.info(f"当前窗口：{self.window.rect}")

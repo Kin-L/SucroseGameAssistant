@@ -39,6 +39,7 @@ class MainWidget(Widget):
         # 指示信息窗口
         self.infobox = InfoBox(self)
         self.btconsole = ConsoleButton(self)
+        tips(self.btconsole, "仅在使用\"SGA-c.exe\"启动时生效")
         self.btconsole.setChecked(scc.mc.ShowConsole)
 
     def changeob(self):

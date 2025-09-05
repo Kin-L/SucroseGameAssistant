@@ -158,19 +158,20 @@ def SnowLaunch(self):
     _path = _dict["Path"]
     _server = _dict["Server"]
     if _server != 2:
-        h1 = FindWindow("wailsWindow", "尘白禁区启动器")
-        h2 = FindWindow("Qt5159QWindowIcon", "西山居启动器-尘白禁区")
-        if not (h1 or h2):
-            if not (isinstance(_path, str) and path.isfile(_path) and
-                    path.split(_path)[1] in ["snow_launcher.exe", "SeasunGame.exe"]):
-                raise RuntimeError("启动器路径异常")
-            _list = [["wailsWindow", "尘白禁区启动器"],
-                     ["Qt5159QWindowIcon", "西山居启动器-尘白禁区"]]
-            # print(_path)
-            hwnd = self.ctler.RunProg(f"start \"\" \"{_path}\"", _list, (0.4, 10), 15)
-            assert hwnd
+        if not (isinstance(_path, str) and path.isfile(_path) and
+                path.split(_path)[1] in ["snow_launcher.exe", "SeasunGame.exe"]):
+            raise RuntimeError("启动器路径异常")
+        launchname = path.split(_path)[1]
+        if launchname == "snow_launcher.exe":
+            item = ["wailsWindow", "尘白禁区启动器"]
+        elif launchname == "SeasunGame.exe":
+            item = ["Qt5159QWindowIcon", "西山居启动器-尘白禁区"]
         else:
-            hwnd = [item for item in [h1, h2] if item][0]
+            raise RuntimeError("启动器路径异常")
+        hwnd = FindWindow(*item)
+        if not hwnd:
+            hwnd = self.ctler.RunProg(f"start \"\" \"{_path}\"", [item], (0.4, 10), 15)
+            assert hwnd
         self.ctler.ChooseWindow(hwnd, (1280, 748))
         LauchPrepare(self)
     else:
