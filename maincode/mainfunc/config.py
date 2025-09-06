@@ -3,7 +3,6 @@ from maincode.config.mainconfig import TimerConfigClass
 from maincode.tools.system.notification import GetTracebackInfo
 from maincode.tools.core.logger import logger
 from maincode.mainwindows.timer.function import ApplyTimer
-from maincode.tools.core.constant import spr
 
 
 def currentsave(self):
@@ -73,7 +72,7 @@ def subconfigsave(self):
     item_index = scc.sc.FindItem(config_key)[-1]  # 获取配置项索引
 
     if 0 <= item_index < len(scc.sc.filelist):
-        scc.sc.filelist[item_index][2] = current_config_copy['ModuleKey']
+        list(scc.sc.filelist[item_index])[2] = current_config_copy['ModuleKey']
 
 
 def SaveConfig(self):

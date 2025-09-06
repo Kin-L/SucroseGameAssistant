@@ -4,7 +4,7 @@ from maincode.tools.sgaqt.texts import Label, Picture, SLineEdit, Line, tips, Ti
 from maincode.tools.sgaqt.buttons import PicButton, Check, Combobox, SetButton
 from maincode.tools.sgaqt.widgets import Widget, SetStackPage, ModuleStackPage, TaskPanel
 from typing import Optional
-from os import path, startfile, getcwd
+from os import startfile, getcwd
 from PyQt5.QtWidgets import QFileDialog
 _path = "resources/main/button/fold.png"
 

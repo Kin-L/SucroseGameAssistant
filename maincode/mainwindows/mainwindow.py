@@ -10,6 +10,7 @@ from maincode.tools.controller.ocr import OCR
 import os
 from pathlib import Path as libPath
 from maincode.tools.core.logger import logger
+from maincode.tools.system.notification import GetTracebackInfo
 
 
 class SGAQMainWindow(QMainWindow):
@@ -54,17 +55,20 @@ class SGAQMainWindow(QMainWindow):
         for i in self.SG.loadstate.items():
             if i[1]:
                 self.mainwidget.infoAdd(i[0], False)
-        logs_dir = spr["LogsDir"]
-        if os.path.exists(logs_dir):
-            try:
-                latest_file = max(
-                    [f for f in libPath(logs_dir).iterdir() if f.is_file()],
-                    key=lambda f: f.stat().st_ctime
-                )
-                self.mainwidget.bthistory.clicked.connect(lambda: os.startfile(str(latest_file)))
-            except ValueError:
-                # 目录为空时忽略
-                pass
+        self.mainwidget.bthistory.clicked.connect(self._open_history)
+
+    def _open_history(self):
+        try:
+            latest_file = max(
+                [f for f in libPath(spr["LogsDir"]).iterdir() if f.is_file()],
+                key=lambda f: f.stat().st_ctime
+            )
+            os.startfile(str(latest_file))
+        except Exception as e:
+            self.infoHead()
+            self.infoAdd("打开历史日志异常")
+            self.infoEnd()
+            logger.error(GetTracebackInfo(e)+"打开历史日志异常")
 
 
 class LoadWidget(QWidget):

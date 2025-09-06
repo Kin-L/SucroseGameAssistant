@@ -22,3 +22,4 @@ pygetwindow~=0.0.9
 pypiwin32~=223
 packaging
 openpyxl
+playsound3

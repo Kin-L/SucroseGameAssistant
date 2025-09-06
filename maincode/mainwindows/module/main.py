@@ -6,8 +6,6 @@ from os import path, remove, replace
 from maincode.mainwindows.mainwindow import SGAQMainWindow
 from maincode.tools.core.constant import spr
 import random
-_Range10 = range(10)
-_Range9 = range(1, 9)
 
 
 class SGAModule:
@@ -153,12 +151,12 @@ class SGAModule:
             self.widget.ecbconfig.removeItem(num)
             remove(filepath)
             nn = num + 1
-            for i in _Range10:
-                getattr(self.wdtime, f"text{i}").removeItem(nn)
+            for i in self.wdtime.executes:
+                i.removeItem(nn)
             if scc.modules.WidgetsLoad[0]:
                 _wdlist = scc.modules.GetWidgets()[0].wdlist
-                for i in _Range9:
-                    getattr(_wdlist, f"task0{i}").removeItem(nn)
+                for i in self.wdtime.tasks:
+                    i.removeItem(nn)
             self.infoHead()
             self.infoAdd(f"删除配置：{ck}{name}")
             self.infoEnd()
@@ -179,12 +177,12 @@ class SGAModule:
             self.widget.ecbconfig.addItem("默认配置")
             scc.sc.filelist.append([key, "默认配置", 0])
             self.widget.ecbconfig.setCurrentIndex(len(scc.sc.filelist) - 1)
-            for i in _Range10:
-                getattr(self.wdtime, f"text{i}").addItem("默认配置")
+            for i in self.wdtime.texts:
+                i.addItem("默认配置")
             if scc.modules.WidgetsLoad[0]:
                 _wdlist = scc.modules.GetWidgets()[0].wdlist
-                for i in _Range9:
-                    getattr(_wdlist, f"task0{i}").addItem("默认配置")
+                for i in self.wdtime.tasks:
+                    i.addItem("默认配置")
             self.infoHead()
             self.infoAdd(f"新建配置")
             self.infoEnd()
@@ -229,12 +227,12 @@ class SGAModule:
                 replace(oldpath, newpath)
                 scc.sc.Save(_dict)
                 old_index = num + 1
-                for i in _Range10:
-                    getattr(self.wdtime, f"text{i}").setItemText(old_index, newname)
+                for i in self.wdtime.texts:
+                    i.setItemText(old_index, newname)
                 if scc.modules.WidgetsLoad[0]:
                     _wdlist = scc.modules.GetWidgets()[0].wdlist
-                    for i in _Range9:
-                        getattr(_wdlist, f"task0{i}").setItemText(old_index, newname)
+                    for i in self.wdtime.tasks:
+                        i.setItemText(old_index, newname)
                 self.infoHead()
                 self.infoAdd(f"重命名配置：{configkey}")
                 self.infoAdd(f"  {oldname} -> {newname}", False)
