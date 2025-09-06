@@ -151,11 +151,10 @@ class SGAModule:
             self.widget.ecbconfig.removeItem(num)
             remove(filepath)
             nn = num + 1
-            for i in self.wdtime.executes:
+            for i in self.wdtime.texts:
                 i.removeItem(nn)
             if scc.modules.WidgetsLoad[0]:
-                _wdlist = scc.modules.GetWidgets()[0].wdlist
-                for i in self.wdtime.tasks:
+                for i in scc.modules.GetWidgets()[0].wdlist.tasks:
                     i.removeItem(nn)
             self.infoHead()
             self.infoAdd(f"删除配置：{ck}{name}")
@@ -180,8 +179,7 @@ class SGAModule:
             for i in self.wdtime.texts:
                 i.addItem("默认配置")
             if scc.modules.WidgetsLoad[0]:
-                _wdlist = scc.modules.GetWidgets()[0].wdlist
-                for i in self.wdtime.tasks:
+                for i in scc.modules.GetWidgets()[0].wdlist.tasks:
                     i.addItem("默认配置")
             self.infoHead()
             self.infoAdd(f"新建配置")
@@ -217,7 +215,7 @@ class SGAModule:
                 _dict = scc.sc.Read(num)
                 self.widget.ecbconfig.setItemText(num, newname)
                 fl = scc.sc.GetFiles()
-                fl[num][1] = newname
+                list(fl[num])[1] = newname
                 scc.sc.filelist = fl
                 configkey = scc.mc.ConfigKey
                 oldpath = path.join(scc.info.Workdir, "personal/config", f"{configkey}{oldname}.json")
@@ -230,8 +228,7 @@ class SGAModule:
                 for i in self.wdtime.texts:
                     i.setItemText(old_index, newname)
                 if scc.modules.WidgetsLoad[0]:
-                    _wdlist = scc.modules.GetWidgets()[0].wdlist
-                    for i in self.wdtime.tasks:
+                    for i in scc.modules.GetWidgets()[0].wdlist.tasks:
                         i.setItemText(old_index, newname)
                 self.infoHead()
                 self.infoAdd(f"重命名配置：{configkey}")

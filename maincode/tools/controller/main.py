@@ -1,5 +1,4 @@
 import time
-import maincode.tools.system.window
 from maincode.tools.controller.operate import Operate
 from maincode.tools.core.logger import logger
 from maincode.tools.system.other import CmdRun
@@ -9,7 +8,7 @@ from win32gui import FindWindow
 
 class Controller(Operate):
     def __init__(self):
-        self.SetLocal()
+        # self.SetLocal()
         super().__init__()
         self.window = None
         self.DeviceMode()

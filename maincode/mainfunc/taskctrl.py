@@ -29,7 +29,7 @@ def TaskStart(self, tasktype: str, para: dict = None):
             self.SaveConfig()
             para.update(dict(scc.mc.CurrentConfig))
             para["OtherConfig"] = scc.mc.OtherConfig
-            para["current_mute"] = GetMute()
+            para["current_mute"] = GetMute() if para["Mute"] else None
             self.NewThread(tasktype, para)
             self.infoAdd("开始执行实时任务")
             self.module.widget.btpause.setEnabled(True)
@@ -40,7 +40,7 @@ def TaskStart(self, tasktype: str, para: dict = None):
             self.infoHead()
             self.infoAdd("准备开始...")
             para["OtherConfig"] = scc.mc.OtherConfig
-            para["current_mute"] = GetMute()
+            para["current_mute"] = GetMute() if para["Mute"] else None
             self.NewThread(tasktype, para)
             name = para["ConfigName"]
             self.infoAdd(f"开始执行定时任务：{name}")
@@ -67,7 +67,7 @@ def TaskStart(self, tasktype: str, para: dict = None):
             self.SaveConfig()
             para.update(dict(_config))
             para["OtherConfig"] = scc.mc.OtherConfig
-            para["current_mute"] = GetMute()
+            para["current_mute"] = GetMute() if para["Mute"] else None
             self.NewThread(tasktype, para)
             name = para["ConfigName"]
             self.infoAdd(f"开始执行指定任务：{name}")
