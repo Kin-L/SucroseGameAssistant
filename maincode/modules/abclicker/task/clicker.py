@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import time
-from PyQt5.QtCore import QThread, pyqtSignal
-from tools.environment import *
+
 import keyboard
+from PyQt5.QtCore import QThread, pyqtSignal
 from win32api import mouse_event, keybd_event
 
 # 鼠标按键映射
@@ -36,9 +36,9 @@ class Clicker(QThread):
     """点击器线程类，处理不同模式的点击操作"""
     send = pyqtSignal(str, int, bool, bool)
 
-    def __init__(self, task):
+    def __init__(self, para):
         super().__init__()
-        self.task = task
+        self.para = para
         self.interval = 0.01  # 默认间隔时间
         self.mode_clicker = ""
         self.clicker_list = []
@@ -48,8 +48,8 @@ class Clicker(QThread):
         """线程主方法，根据不同模式执行点击操作"""
         self.running = True
         try:
-            self.mode_clicker = self.task["ClickerMode"]
-            self.clicker_list = [key.strip().upper() for key in self.task["clickerkey"].split("+") if key.strip()]
+            self.mode_clicker = self.para["ClickerMode"]
+            self.clicker_list = [key.strip().upper() for key in self.para["ClickerKey"].split("+") if key.strip()]
 
             if self.mode_clicker == "连点模式":
                 self._handle_click_mode()
@@ -63,7 +63,8 @@ class Clicker(QThread):
     def _handle_click_mode(self):
         """处理连点模式"""
         try:
-            self.interval = float(self.task["interval"]) / 1000  # 转换为秒
+            self.interval = self.para.get("Interval", 1)  # 转换为秒
+            self.interval -= 0.01
             if self.interval <= 0:
                 self.interval = 0.01  # 最小间隔保护
         except (ValueError, TypeError):
@@ -87,14 +88,7 @@ class Clicker(QThread):
                 return
 
             while self.running:
-                # 按下所有键
-                for code in key_codes:
-                    keybd_event(code, 0, 0, 0)
-                time.sleep(0.01)  # 按键按下时间
-
-                # 释放所有键（反向释放避免冲突）
-                for code in reversed(key_codes):
-                    keybd_event(code, 0, 2, 0)
+                keyboard.send(self.para["ClickerKey"])
                 time.sleep(self.interval)
 
     def _handle_hold_mode(self):
@@ -126,8 +120,8 @@ class Clicker(QThread):
 
     def _handle_script_mode(self):
         """处理脚本模式"""
-        run_count = self.task.get("runnum", 0)
-        script = self.task.get("script", [])
+        run_count = self.para.get("RunNum", 0)
+        script = self.para.get("ScriptName", [])
 
         if not script:
             return
@@ -169,4 +163,4 @@ class Clicker(QThread):
     def stop(self):
         """停止点击器线程"""
         self.running = False
-        self.wait()  # 等待线程结束
+        self.wait()

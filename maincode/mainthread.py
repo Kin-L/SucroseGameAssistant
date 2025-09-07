@@ -34,7 +34,7 @@ class SGAMainThread(QObject):
             self.__class__.taskstart = update
             self.taskstart()
         elif self.tasktype in ["current", "timed", "subconfig"]:
-            if self.para["Mute"] and (not self.para["current_mute"]):
+            if self.para.get("Mute", False) and (not self.para["current_mute"]):
                 keyboard.send('volume mute')
             num = scc.modules.FindItem(self.para["ModuleKey"])[-1]
             _func = scc.modules.Tasks[num]
@@ -55,12 +55,12 @@ class SGAMainThread(QObject):
                 self.taskstart()
                 info.TaskError = False
                 self.ctler.OCR.disable()
-                if self.para["Finished"] == 1:
+                if self.para.get("Finished", 0) == 1:
                     WindowsNotify(_tit, "任务完成，20秒后熄屏")
                     self.send("任务完成,20s后熄屏")
                     self.send(f"可按快捷键\"{scc.mc.StopKeys}\"取消")
                     self.ctler.wait(20)
-                elif self.para["Finished"] == 2:
+                elif self.para.get("Finished", 0) == 2:
                     WindowsNotify(_tit, "任务完成，60秒后睡眠")
                     self.send("任务完成,60s后睡眠")
                     self.send(f"可按快捷键\"{scc.mc.StopKeys}\"取消")

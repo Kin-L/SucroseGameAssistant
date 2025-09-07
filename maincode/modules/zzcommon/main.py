@@ -1,12 +1,12 @@
-from .task.main import taskstart
-from .widget import CommonPage
-from ..main import ModuleClass
-from ..template import SubConfigTemplate
+from maincode.modules.zzcommon.task.main import taskstart
+from maincode.modules.zzcommon.widget import CommonPage
+from maincode.modules.main import ModuleClass
+from maincode.modules.template import SubConfigTemplate
 
 
 class CommonConfig(SubConfigTemplate):
     """Common模块配置类，统一管理配置项"""
-    ModuleKey: int = 1  # 模块唯一标识
+    ModuleKey: int = -1  # 模块唯一标识
     StartMode: int = 0
     CMDLine: str = ""
     WaitTimeBefore: int = 2         # 开始前等待时间
@@ -24,12 +24,14 @@ class CommonConfig(SubConfigTemplate):
 
 class CommonClass(ModuleClass):
     """Common模块主类，实现框架接口"""
+    ModuleNameCH = "通用模块"
+
     def __init__(self):
-        self.ModuleKey = 1
-        self.ModuleNameCH = "通用模块"
+        self.ModuleKey = -1
         self.ModuleNameEN = "common"
         self.IconPath = 'resources/main/SGA/default.png'
         self.Config = CommonConfig  # 配置类关联
         self.Widget = CommonPage()  # UI界面关联
         self.Task = taskstart  # 任务入口关联
+        self.LoadModule = False
         super().__init__()

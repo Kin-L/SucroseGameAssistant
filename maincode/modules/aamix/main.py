@@ -1,5 +1,5 @@
-from ..main import ModuleClass
-from .widget import MixPage
+from maincode.modules.main import ModuleClass
+from maincode.modules.aamix.widget import MixPage
 from maincode.modules.template import SubConfigTemplate
 from typing import List
 from maincode.config.subconfig import subconfig
@@ -72,12 +72,14 @@ def taskstart(self):
 
 
 class MixClass(ModuleClass):
+    ModuleNameCH = "连续任务"
+
     def __init__(self):
         self.ModuleKey = 0
-        self.ModuleNameCH = "连续任务"
         self.ModuleNameEN = "mix"
         self.IconPath = 'resources/main/SGA/default.png'
         self.Config = MixConfig
         self.Widget = MixPage()
         self.Task = taskstart
+        self.LoadModule = True
         super().__init__()

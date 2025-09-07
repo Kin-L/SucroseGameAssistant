@@ -7,36 +7,53 @@ from maincode.tools.core.logger import logger
 from maincode.tools.system.notification import GetTracebackInfo
 import os
 
+from maincode.tools.system.other import CmdRun
+from maincode.tools.system.window import find_window_by_title
+from maincode.tools.system.window import GetWindow
+
 
 def taskstart(self):
     """通用任务执行入口"""
-    _k = False
-    self.task = self.para
-    self.send("开始任务:通用执行")
-
     try:
 
         # 启动主程序
-        start_path = self.para.get("启动路径", "")
-        extra_cmd = self.para.get("附加命令", "")
-        if not start_path:
-            raise RuntimeError("未设置启动路径")
+        start_mode = self.para.get("StartMode", 0)
+        cmdline = self.para.get("CMDLine", "")
+        if not cmdline:
+            raise ValueError("未设置启动路径")
+        if start_mode == 0:
+            cmd_line = f"start \"\" \"{cmdline}\""
+        elif start_mode == 1:
+            cmd_line = cmdline
+        else:
+            raise ValueError("未知启动模式")
+        window_name = self.para.get("StartProcess", None)
+        if window_name:
+            for _ in range(10):
+                win = None
+                for _ in range(10):
+                    win = GetWindow(window_name)
+                    if win:
+                        break
 
-        _dir, _ = os.path.split(start_path)
-        proc = subprocess.Popen(
-            f"start \"\" \"{start_path}\" {extra_cmd}",
-            cwd=_dir,
-            shell=True
-        )
-        self.pid = proc.pid
-        self.proc = psutil.Process(self.pid)
-        self.send(f"已启动程序: {start_path}")
+                    else:
+                        self.ctler.wait(0.4)
+                else:
+                    CmdRun(cmd_line)
+                if win:
+                    break
+            else:
+                raise TimeoutError("启动程序超时")
+            self.start_hwnd = win.GetHwnd()
+            self.send(f"检测到窗口：{window_name} 句柄:{self.start_hwnd}")
 
-        # 前置等待
-        self._handle_pre_wait()
+        wait_time = self.para.get("WaitTimeBefore")
+        if wait_time:
+            self.send(f"开始前等待 {wait_time} 秒")
+            self.ctler.wait(wait_time)
 
-        # 启动操作执行
-        self._execute_start_operation()
+        if self.para.get("StartOperateMode"):
+            _execute_start_operation(self)
 
         # 后置等待
         self._handle_post_wait()
@@ -55,24 +72,18 @@ def taskstart(self):
         self.send("完成任务:通用执行")
 
 
-def _handle_pre_wait(self):
-    """处理开始前等待"""
-    wait_time = self.task.get("开始前等待时间")
-    if wait_time:
-        self.send(f"开始前等待 {wait_time} 秒")
-        self.ctler.wait(wait_time)
-
-
 def _execute_start_operation(self):
+
+    self.ctler.ChooseWindow(self.start_hwnd, (1920, 1080))
     """执行启动操作"""
-    op_type = self.task.get("启动操作类型", 0)
+    op_type = self.para.get("启动操作类型", 0)
 
     if op_type == 0:
         self.send("无启动操作")
         return
 
     # 获取目标进程ID
-    target_pid = self.task.get("启动判断进程名")
+    target_pid = self.para.get("启动判断进程名")
     if target_pid:
         target_pid = find_pid_from_name(target_pid)
         self.aproc = psutil.Process(target_pid) if target_pid else None
@@ -91,7 +102,7 @@ def _execute_start_operation(self):
     zone = self._get_operation_zone(fram, "启动判断指定区域")
 
     # 执行对应操作
-    op_content = self.task.get("启动操作内容", "")
+    op_content = self.para.get("启动操作内容", "")
     if op_type == 1:  # 文本点击
         self.send(f"等待文本: {op_content}")
         pos = self.ctler.wait_text(op_content, zone)
@@ -107,7 +118,7 @@ def _execute_start_operation(self):
 
 def _handle_post_wait(self):
     """处理开始后等待"""
-    wait_time = self.task.get("开始后等待时间")
+    wait_time = self.para.get("开始后等待时间")
     if wait_time:
         self.send(f"开始后等待 {wait_time} 秒")
         self.ctler.wait(wait_time)
@@ -116,7 +127,7 @@ def _handle_post_wait(self):
 def _monitor_finish_condition(self):
     """监控结束条件"""
     # 获取目标进程
-    target_pid = self.task.get("结束判断进程名")
+    target_pid = self.para.get("结束判断进程名")
     if target_pid:
         target_pid = find_pid_from_name(target_pid)
         self.eproc = psutil.Process(target_pid) if target_pid else None
@@ -127,8 +138,8 @@ def _monitor_finish_condition(self):
         raise RuntimeError("结束判断目标进程不存在")
 
     proc = psutil.Process(target_pid)
-    end_type = self.task.get("结束判断类型", 0)
-    loop_config = self.task.get("判断循环", (3, 5))  # 默认3次，间隔5秒
+    end_type = self.para.get("结束判断类型", 0)
+    loop_config = self.para.get("判断循环", (3, 5))  # 默认3次，间隔5秒
     num, sec = loop_config if isinstance(loop_config, (list, tuple)) else (3, 5)
 
     self.send(f"开始监控结束条件 (类型: {end_type})")
@@ -139,7 +150,7 @@ def _monitor_finish_condition(self):
 
     elif end_type == 3:  # CPU利用率
         n = 0
-        threshold = float(self.task.get("结束判断内容", 5.0))
+        threshold = float(self.para.get("结束判断内容", 5.0))
         while True:
             if proc.cpu_percent(0.1) > threshold:
                 self.ctler.wait(5)
@@ -153,7 +164,7 @@ def _monitor_finish_condition(self):
         hwnd = find_hwnd_from_pid(target_pid)
         fram = win32gui.GetWindowRect(hwnd) if hwnd else (0, 0, 0, 0)
         zone = self._get_operation_zone(fram, "结束判断指定区域")
-        content = self.task.get("结束判断内容", "")
+        content = self.para.get("结束判断内容", "")
         n = 0
 
         while True:
@@ -174,7 +185,7 @@ def _monitor_finish_condition(self):
 
 def _get_operation_zone(self, fram, config_key):
     """计算操作区域"""
-    zone_config = self.task.get(config_key)
+    zone_config = self.para.get(config_key)
     if zone_config:
         x1, y1, x2, y2 = zone_config
         return (
@@ -188,7 +199,7 @@ def _get_operation_zone(self, fram, config_key):
 
 def _cleanup_processes(self):
     """清理进程资源"""
-    if self.task.get("关闭软件", False):
+    if self.para.get("关闭软件", False):
         for p in [self.proc, self.aproc, self.eproc]:
             if p and p.is_running():
                 try:

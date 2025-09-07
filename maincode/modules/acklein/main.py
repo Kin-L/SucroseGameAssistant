@@ -1,5 +1,5 @@
-from ..main import ModuleClass
-from .widget import KleinPage
+from maincode.modules.main import ModuleClass
+from maincode.modules.acklein.widget import KleinPage
 from maincode.modules.template import SubConfigTemplate
 
 
@@ -30,18 +30,26 @@ class KleinConfig(SubConfigTemplate):
 
 
 class KleinClass(ModuleClass):
+    ModuleNameCH = "环行旅舍"
+
     def __init__(self):
         self.ModuleKey = 2
-        self.ModuleNameCH = "环行旅舍"
         self.ModuleNameEN = "klein"
         self.IconPath = 'resources/klein/kleinicon.png'
         self.Config = KleinConfig
         self.Widget = KleinPage()
         self.Task = taskstart
+        self.LoadModule = True
         super().__init__()
 
 
 def taskstart(self):
-    self.send("香火 +1")
-    self.send("功德 +1")
+    self.ctler.wait(1)
     self.send("扣1牢环复活")
+    self.ctler.wait(1)
+    self.send("香火 +1")
+    self.ctler.wait(1)
+    self.send("功德 +1")
+    self.ctler.wait(1)
+
+

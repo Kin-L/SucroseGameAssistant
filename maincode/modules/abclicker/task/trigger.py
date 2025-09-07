@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+import time
 import keyboard
+from maincode.config.info import info
 from .clicker import Clicker, CLICKER_MOUSE_LIST
 import pynput
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -34,26 +36,22 @@ class Trigger(QThread):
     """触发器线程类，处理触发键监听和点击器控制"""
     send = pyqtSignal(str, int, bool, bool)
 
-    def __init__(self, task):
+    def __init__(self, para):
         super().__init__()
-        self.task = task
-        self.mode_trigger = task.get("TriggerMode", "长按模式")
+        self.para = para
+        self.mode_trigger = self.para.get("TriggerMode", "长按模式")
         self.trigger_click = None  # 鼠标触发键
         self.trigger_modify = None  # 修饰键
         self.mouse_listener = None  # 鼠标监听器
         self.keyboard_listener = None  # 键盘监听器
-        self.clicker = Clicker(task)  # 点击器实例
+        self.clicker = Clicker(para)  # 点击器实例
         self.running = False  # 运行状态标记
 
     def run(self):
         """线程主方法，初始化监听器"""
         self.running = True
         try:
-            trigger_key = self.task.get("triggerkey", "").strip()
-            if not trigger_key:
-                self.send.emit("触发键不能为空", 0, False, False)
-                return
-
+            trigger_key = self.para.get("TriggerKey", "").strip()
             # 解析触发键
             trigger_list = [key.strip().upper() for key in trigger_key.split("+") if key.strip()]
             self._parse_trigger_keys(trigger_list)
@@ -93,8 +91,8 @@ class Trigger(QThread):
         self.mouse_listener.start()
 
         # 保持线程运行
-        while self.running and self.mouse_listener.is_alive():
-            self.msleep(100)
+        while self.running and self.mouse_listener.is_alive() and not info.StopFlag:
+            self.msleep(300)
 
     def _start_keyboard_listener(self, trigger_key):
         """启动键盘监听器"""
@@ -110,20 +108,19 @@ class Trigger(QThread):
 
             self.keyboard_listener = keyboard.on_press(on_press)
             keyboard.on_release_key(trigger_key.split("+")[-1], on_release)
+
         else:
             # 短按模式：切换点击器状态
-            def toggle_clicker():
+            def on_press(event):
                 if self.clicker.running:
                     self.clicker.stop()
                 else:
                     self.clicker.start()
 
-            # 循环等待按键触发
-            while self.running:
-                keyboard.wait(trigger_key)
-                toggle_clicker()
-                # 防止快速重复触发
-                time.sleep(0.1)
+            self.keyboard_listener = keyboard.on_press_key(trigger_key, on_press)
+        # 保持线程运行
+        while self.running and not info.StopFlag:
+            self.msleep(300)
 
     def _on_click_with_modifier(self, x, y, button, pressed):
         """带修饰键的鼠标点击回调"""

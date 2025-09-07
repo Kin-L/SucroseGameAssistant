@@ -83,7 +83,7 @@ class CommonPage(ModuleStackPage):
             "SGAClose": self.page00.taskpanel.ckkillsga.isChecked(),
             # 启动设置
             "WaitTimeBefore": self.page01.line_fwait.text(),
-            "StartProcess": self.page00.line_act_proc.text(),
+            "StartProcess": self.page01.line_act_proc.text(),
             "StartOperateMode": self.page01.choose_act.currentIndex(),
             "StartOperateContent": self.page01.line_act.text(),
             "StartRecogZone": self.page01.line_act_zone.text(),
@@ -101,24 +101,24 @@ class CommonPage(ModuleStackPage):
 class CommonList(Widget):
     def __init__(self):
         super().__init__()
-        self.lbitem01 = Label(self, (0, 5, 120, 22), "启动设置")
-        self.lbitem02 = Label(self, (0, 50, 120, 22), "结束设置")
-        self.pbset01 = SetButton(self, (175, 5, 25, 25), (25, 25))
-        self.pbset02 = SetButton(self, (175, 50, 25, 25), (25, 25))
+        self.lbitem01 = Label(self, (10, 5, 120, 22), "启动设置")
+        self.lbitem02 = Label(self, (10, 50, 120, 22), "结束设置")
+        self.pbset01 = SetButton(self, (180, 5, 25, 25), (25, 25))
+        self.pbset02 = SetButton(self, (180, 50, 25, 25), (25, 25))
 
 
 class CommonPage00Set(SetStackPage):
     def __init__(self):
         super().__init__("设置页面：运行方式")
         # 全局设置区域
-        Label(self, (10, 50, 120, 27), "全局设置：")
+        Label(self, (0, 50, 120, 27), "全局设置：")
 
-        Label(self, (10, 82, 80, 27), "启动模式：")
-        self.choose_mode = Combobox(self, (10, 115, 180, 30))
+        Label(self, (0, 82, 80, 27), "启动模式：")
+        self.choose_mode = Combobox(self, (0, 115, 200, 30))
         self.choose_mode.addItems(["文件路径启动", "命令行自定义命令启动"])
 
-        Label(self, (10, 147, 80, 27), "文件路径 / CMD命令：")
-        self.line_command = SLineEdit(self, (10, 180, 365, 33))
+        Label(self, (0, 147, 180, 27), "文件路径 / CMD命令：")
+        self.line_command = SLineEdit(self, (0, 180, 395, 33))
 
         Line(self, (0, 217, 395, 3))
 
@@ -129,46 +129,46 @@ class CommonPage01Set(SetStackPage):
     def __init__(self):
         super().__init__("设置页面：启动设置")
         # 启动前设置
-        Label(self, (10, 55, 150, 18), "开始前等待时间(秒)：")
+        Label(self, (0, 55, 150, 18), "开始前等待时间(秒)：")
         self.line_fwait = SLineEdit(self, (160, 50, 70, 30))
         self.line_fwait.setValidator(QIntValidator())
 
-        Label(self, (10, 85, 120, 27), "指定进程名：")
-        self.line_act_proc = SLineEdit(self, (10, 120, 365, 33))
+        Label(self, (0, 85, 120, 27), "指定进程名：")
+        self.line_act_proc = SLineEdit(self, (0, 120, 395, 33))
 
         # 启动操作设置
-        Label(self, (10, 160, 80, 27), "启动操作：")
-        self.choose_act = Combobox(self, (10, 190, 100, 30))
+        Label(self, (0, 160, 80, 27), "启动操作：")
+        self.choose_act = Combobox(self, (0, 190, 100, 30))
         self.choose_act.addItems(["无", "点击文本", "点击图像", "快捷键"])
 
         self.button_folder = Button(self, (115, 190, 130, 30), "图像储存文件夹")
-        self.line_act = SLineEdit(self, (10, 233, 365, 33))
+        self.line_act = SLineEdit(self, (0, 233, 395, 33))
 
         # 区域与等待设置
-        Label(self, (10, 280, 100, 27), "指定区域：")
-        self.line_act_zone = SLineEdit(self, (10, 315, 180, 33))
+        Label(self, (0, 280, 100, 27), "指定区域：")
+        self.line_act_zone = SLineEdit(self, (0, 315, 180, 33))
 
-        Label(self, (10, 365, 120, 18), "开始后等待时间(秒)：")
-        self.line_await = SLineEdit(self, (130, 360, 70, 30))
+        Label(self, (0, 365, 150, 18), "开始后等待时间(秒)：")
+        self.line_await = SLineEdit(self, (150, 360, 70, 30))
         self.line_await.setValidator(QIntValidator())
 
 
 class CommonPage02Set(SetStackPage):
     def __init__(self):
         super().__init__("设置页面：结束设置")
-        Label(self, (10, 50, 120, 27), "指定进程名：")
-        self.line_exit_proc = SLineEdit(self, (10, 85, 365, 33))
+        Label(self, (0, 50, 120, 27), "指定进程名：")
+        self.line_exit_proc = SLineEdit(self, (0, 85, 395, 33))
 
         # 结束判断设置
-        Label(self, (10, 125, 80, 27), "结束判断：")
-        self.choose_exit = Combobox(self, (10, 160, 120, 30))
+        Label(self, (0, 125, 80, 27), "结束判断：")
+        self.choose_exit = Combobox(self, (0, 160, 120, 30))
         self.choose_exit.addItems(["进程退出", "匹配到文本", "匹配到图像", "cpu利用率"])
 
-        self.line_exit = SLineEdit(self, (10, 205, 365, 33))
+        self.line_exit = SLineEdit(self, (0, 205, 395, 33))
 
         # 区域与循环设置
-        Label(self, (10, 240, 100, 27), "指定区域：")
-        self.line_exit_zone = SLineEdit(self, (10, 275, 180, 33))
+        Label(self, (0, 240, 100, 27), "指定区域：")
+        self.line_exit_zone = SLineEdit(self, (0, 275, 180, 33))
 
-        Label(self, (10, 310, 180, 27), "判断循环（间隔/次数）：")
-        self.line_interval = SLineEdit(self, (10, 345, 180, 33))
+        Label(self, (0, 310, 180, 27), "判断循环（间隔/次数）：")
+        self.line_interval = SLineEdit(self, (0, 345, 180, 33))

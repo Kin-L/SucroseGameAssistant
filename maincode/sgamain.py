@@ -91,10 +91,6 @@ class SGAMain(SGAQMainWindow):
                 self.OCR.disable()
             keyboard.unhook_all()
             if self.LoadUI:
-                self.SG.mc.ModulesEnable = [
-                    self.module.widget.boxmodule.itemText(i)
-                    for i in range(self.module.widget.boxmodule.count())
-                ]
                 self.SaveConfig()
             super().closeEvent(event)
         except Exception as e:

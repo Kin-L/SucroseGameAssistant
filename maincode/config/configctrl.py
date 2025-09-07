@@ -1,11 +1,14 @@
+from maincode.tools.classcheck import find_subclasses_of_base, instantiate_class
 from maincode.modules.main import ModuleClass
 from .subconfig import subconfig, SubConfigs
 from .mainconfig import MainConfig, checkmain
 from .info import SGAInfo, info
-from os import path, makedirs
+from os import path, makedirs, getcwd
 from typing import Optional
 import json
 import random
+import pkgutil
+import importlib
 
 
 class SGAConfigController:
@@ -87,13 +90,25 @@ class SGAConfigController:
         return MainConfig()
 
     def RecognizeModules(self):
+        packagelist = ["maincode", "modules"]
+        package = importlib.import_module(".".join(packagelist))
         _l = self.mc.ModulesEnable
-        if "连续任务" in _l or not _l:
-            from maincode.modules.mix.main import MixClass
-            MixClass()
-        if "尘白禁区" in _l or not _l:
-            from maincode.modules.snow.main import SnowClass
-            SnowClass()
+        for importer, modname, ispkg in pkgutil.iter_modules(package.__path__):
+            _list = list(packagelist)
+            if ispkg:
+                _list.append(modname)
+                modulepackage = importlib.import_module(".".join(_list))
+                for i, m, p in pkgutil.iter_modules(modulepackage.__path__):
+                    if not p and m == "main":
+                        _list.append(m)
+                        break
+                else:
+                    continue
+                _path = path.join(getcwd(), "/".join(_list)+".py")
+                if res := find_subclasses_of_base(_path, "ModuleClass"):
+                    class_obj = instantiate_class(_path, res)
+                    if class_obj.ModuleNameCH in _l or not _l:
+                        class_obj()
 
     def ReadCurrentConfig(self):
         _current = self.mc.CurrentConfig

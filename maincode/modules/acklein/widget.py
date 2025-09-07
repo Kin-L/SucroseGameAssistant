@@ -32,16 +32,31 @@ class KleinPage(ModuleStackPage):
         # 初始化设置页面
         self.page00 = KleinPage00Set()  # 基础配置
         self.page01 = KleinPage01Set()  # 作战相关
-        self.sksetting.addWidget(self.page00)
-        self.sksetting.addWidget(self.page01)
+        self.page02 = KleinPage02Set()
+        self.page03 = KleinPage03Set()
+        self.page04 = KleinPage04Set()
+        self.page05 = KleinPage05Set()
+        self.page06 = KleinPage06Set()
+        self.page07 = KleinPage07Set()
+        self.page08 = KleinPage08Set()
+        self.page09 = KleinPage09Set()
+        for i in range(10):
+            self.sksetting.addWidget(getattr(self, f"page0{i}"))
 
         # 分隔线
         Line(self, (215, 5, 3, 530), False)
 
         # 绑定页面切换事件
-        self.wdlist.set_klein.clicked.connect(lambda: self.sksetting.setCurrentIndex(0))
-        self.wdlist.set_fight.clicked.connect(lambda: self.sksetting.setCurrentIndex(1))
-        # 其他页面切换绑定...
+        self.pbset00.clicked.connect(lambda: self.sksetting.setCurrentIndex(0))
+        self.wdlist.pbset01.clicked.connect(lambda: self.sksetting.setCurrentIndex(1))
+        self.wdlist.pbset02.clicked.connect(lambda: self.sksetting.setCurrentIndex(2))
+        self.wdlist.pbset03.clicked.connect(lambda: self.sksetting.setCurrentIndex(3))
+        self.wdlist.pbset04.clicked.connect(lambda: self.sksetting.setCurrentIndex(4))
+        self.wdlist.pbset05.clicked.connect(lambda: self.sksetting.setCurrentIndex(5))
+        self.wdlist.pbset06.clicked.connect(lambda: self.sksetting.setCurrentIndex(6))
+        self.wdlist.pbset07.clicked.connect(lambda: self.sksetting.setCurrentIndex(7))
+        self.wdlist.pbset08.clicked.connect(lambda: self.sksetting.setCurrentIndex(8))
+        self.wdlist.pbset09.clicked.connect(lambda: self.sksetting.setCurrentIndex(9))
 
     def SetWidget(self, config: dict):
         ...
@@ -81,22 +96,22 @@ class KleinPage00Set(SetStackPage):
         super().__init__("设置页面：运行方式")
 
         # 全局设置区域
-        Label(self.page, (0, 50, 180, 27), "全局设置：")
-        Label(self.page, (0, 90, 80, 27), "服务器")
-        self.combo_server = Combobox(self.page, (80, 90, 100, 32))
+        Label(self, (0, 50, 180, 27), "全局设置：")
+        Label(self, (0, 90, 80, 27), "服务器")
+        self.combo_server = Combobox(self, (80, 90, 100, 32))
         self.combo_server.addItems(["官服", "B服"])
 
-        Label(self.page, (0, 130, 80, 27), "启动路径")
+        Label(self, (0, 130, 80, 27), "启动路径")
         self.lepath = SLineEdit(self, (0, 160, 385, 33))
-        Line(self.page, (0, 202, 395, 3))
+        Line(self, (0, 202, 395, 3))
 
         # 独立运行设置
         self.taskpanel = TaskPanel(self, 210)
 
         # 实用工具
-        Label(self.page, (0, 335, 220, 27), "实用工具：")
-        self.button_gift = Button(self.page, (0, 370, 100, 30), "认可度礼物")
-        self.button_wiki = Button(self.page, (110, 370, 85, 30), "舍友图鉴")
+        Label(self, (0, 335, 220, 27), "实用工具：")
+        self.button_gift = Button(self, (0, 370, 100, 30), "认可度礼物")
+        self.button_wiki = Button(self, (110, 370, 85, 30), "舍友图鉴")
 
 
 class KleinPage01Set(SetStackPage):
@@ -104,10 +119,10 @@ class KleinPage01Set(SetStackPage):
 
     def __init__(self):
         super().__init__("设置页面：作战/重游")
-        Label(self.page, (120, 50, 80, 18), "材料选择")
+        Label(self, (120, 50, 80, 18), "材料选择")
 
-        self.re_fight = Check(self.page, (0, 90, 180, 18), "再次重游")
-        self.mat = Combobox(self.page, (110, 80, 100, 40))
+        self.re_fight = Check(self, (0, 90, 180, 18), "再次重游")
+        self.mat = Combobox(self, (110, 80, 100, 40))
         self.mat.addItems(["格", "风物志", "节"])
 
 
@@ -116,22 +131,22 @@ class KleinPage02Set(SetStackPage):
 
     def __init__(self):
         super().__init__("设置页面：探索派遣")
-        self.check_redisp = Check(self.page, (0, 50, 180, 18), "再次采购")
+        self.check_redisp = Check(self, (0, 50, 180, 18), "再次采购")
 
         # 表头
-        Label(self.page, (25, 80, 80, 27), "材料选择")
-        Label(self.page, (130, 80, 80, 27), "资金选择")
-        Label(self.page, (260, 80, 80, 27), "方案选择")
+        Label(self, (25, 80, 80, 27), "材料选择")
+        Label(self, (130, 80, 80, 27), "资金选择")
+        Label(self, (260, 80, 80, 27), "方案选择")
 
         # 材料选择下拉框
         mat_list = ["食油", "黄油", "生抽", "食盐", "胡椒", "酱料", "糖类", "芥末", "香料粉", "西红柿醋"]
         self.mat_boxes = [
-            Combobox(self.page, (0, 110, 100, 32)),
-            Combobox(self.page, (0, 150, 100, 32)),
-            Combobox(self.page, (0, 190, 100, 32)),
-            Combobox(self.page, (0, 230, 100, 32)),
-            Combobox(self.page, (0, 270, 100, 32)),
-            Combobox(self.page, (0, 310, 100, 32)),
+            Combobox(self, (0, 110, 100, 32)),
+            Combobox(self, (0, 150, 100, 32)),
+            Combobox(self, (0, 190, 100, 32)),
+            Combobox(self, (0, 230, 100, 32)),
+            Combobox(self, (0, 270, 100, 32)),
+            Combobox(self, (0, 310, 100, 32)),
         ]
         for box in self.mat_boxes:
             box.addItems(mat_list)
@@ -139,12 +154,12 @@ class KleinPage02Set(SetStackPage):
         # 资金选择下拉框
         fund_list = ["零元购", "1000格", "2000格", "3000格"]
         self.fund_boxes = [
-            Combobox(self.page, (115, 110, 100, 32)),
-            Combobox(self.page, (115, 150, 100, 32)),
-            Combobox(self.page, (115, 190, 100, 32)),
-            Combobox(self.page, (115, 230, 100, 32)),
-            Combobox(self.page, (115, 270, 100, 32)),
-            Combobox(self.page, (115, 310, 100, 32)),
+            Combobox(self, (115, 110, 100, 32)),
+            Combobox(self, (115, 150, 100, 32)),
+            Combobox(self, (115, 190, 100, 32)),
+            Combobox(self, (115, 230, 100, 32)),
+            Combobox(self, (115, 270, 100, 32)),
+            Combobox(self, (115, 310, 100, 32)),
         ]
         for box in self.fund_boxes:
             box.addItems(fund_list)
@@ -152,12 +167,12 @@ class KleinPage02Set(SetStackPage):
         # 方案选择下拉框
         plan_list = ["更多固定物品", "更多额外物品", "减少采购时间"]
         self.plan_boxes = [
-            Combobox(self.page, (225, 110, 140, 32)),
-            Combobox(self.page, (225, 150, 140, 32)),
-            Combobox(self.page, (225, 190, 140, 32)),
-            Combobox(self.page, (225, 230, 140, 32)),
-            Combobox(self.page, (225, 270, 140, 32)),
-            Combobox(self.page, (225, 310, 140, 32)),
+            Combobox(self, (225, 110, 140, 32)),
+            Combobox(self, (225, 150, 140, 32)),
+            Combobox(self, (225, 190, 140, 32)),
+            Combobox(self, (225, 230, 140, 32)),
+            Combobox(self, (225, 270, 140, 32)),
+            Combobox(self, (225, 310, 140, 32)),
         ]
         for box in self.plan_boxes:
             box.addItems(plan_list)
@@ -168,9 +183,9 @@ class KleinPage03Set(SetStackPage):
 
     def __init__(self):
         super().__init__("设置页面：战术回顾")
-        Label(self.page, (0, 50, 100, 18), "战术回顾选择")
+        Label(self, (0, 50, 100, 18), "战术回顾选择")
 
-        self.num_box_review = DoubleSpinBox(self.page)
+        self.num_box_review = DoubleSpinBox(self)
         self.num_box_review.setGeometry(QtCore.QRect(0, 80, 160, 30))
 
 
@@ -179,9 +194,9 @@ class KleinPage04Set(SetStackPage):
 
     def __init__(self):
         super().__init__("设置页面：集市领取")
-        self.check_mconvert = Check(self.page, (0, 85, 100, 22), "援外兑换")
+        self.check_mconvert = Check(self, (0, 85, 100, 22), "援外兑换")
 
-        self.box_mconvert = Combobox(self.page, (105, 80, 180, 32))
+        self.box_mconvert = Combobox(self, (105, 80, 180, 32))
         self.box_mconvert.addItems([
             "须臾", "原液", "燧石矿物", "磁片", "翼片", "古语石",
             "固醇粒", "异态水", "甜品自助餐劵", "游戏机", "毛毯",
@@ -195,18 +210,18 @@ class KleinPage05Set(SetStackPage):
 
     def __init__(self):
         super().__init__("设置页面：舍友访募")
-        self.check_accelerate = Check(self.page, (0, 85, 80, 22), "加速")
+        self.check_accelerate = Check(self, (0, 85, 80, 22), "加速")
 
-        Label(self.page, (115, 50, 80, 18), "招募计划")
-        self.recruit_plan = Combobox(self.page, (105, 80, 100, 32))
+        Label(self, (115, 50, 80, 18), "招募计划")
+        self.recruit_plan = Combobox(self, (105, 80, 100, 32))
         self.recruit_plan.addItems([f"{i}00格" for i in range(8)])
 
         # 历史记录按钮
         self.button_history = TransPicButton(
-            self.page, (220, 45, 30, 30),
+            self, (220, 45, 30, 30),
             "assets/main_window/ui/history.png", (25, 25))
         self.button_directory = TransPicButton(
-            self.page, (220, 85, 30, 30),
+            self, (220, 85, 30, 30),
             "assets/main_window/ui/directory.png", (25, 25))
 
 
@@ -215,10 +230,10 @@ class KleinPage06Set(SetStackPage):
 
     def __init__(self):
         super().__init__("设置页面：今日工作")
-        self.check_weekly = Check(self.page, (0, 85, 120, 22), "兑换每周补给")
+        self.check_weekly = Check(self, (0, 85, 120, 22), "兑换每周补给")
 
-        self.box_weekly1 = Combobox(self.page, (0, 115, 180, 32))
-        self.box_weekly2 = Combobox(self.page, (0, 160, 180, 32))
+        self.box_weekly1 = Combobox(self, (0, 115, 180, 32))
+        self.box_weekly2 = Combobox(self, (0, 160, 180, 32))
         week_list = ["甜品自助餐劵", "游戏机", "毛毯", "遮阳伞",
                      "小哑铃", "爱之歌", "手握式小风扇", "演唱会门票",
                      "相机", "灯塔胶囊"]
@@ -231,7 +246,7 @@ class KleinPage07Set(SetStackPage):
 
     def __init__(self):
         super().__init__("设置页面：卡门商网")
-        Label(self.page, (90, 80, 220, 27), "卡门商网 暂无配置项目。")
+        Label(self, (90, 80, 220, 27), "卡门商网 暂无配置项目。")
 
 
 class KleinPage08Set(SetStackPage):
@@ -239,7 +254,7 @@ class KleinPage08Set(SetStackPage):
 
     def __init__(self):
         super().__init__("设置页面：领取邮件")
-        Label(self.page, (90, 80, 220, 27), "领取邮件 暂无配置项目。")
+        Label(self, (90, 80, 220, 27), "领取邮件 暂无配置项目。")
 
 
 class KleinPage09Set(SetStackPage):
@@ -247,8 +262,8 @@ class KleinPage09Set(SetStackPage):
 
     def __init__(self):
         super().__init__("设置页面：抽卡记录")
-        self.button_arrange = Button(self.page, (0, 45, 180, 30), "导出抽卡记录为Excel")
+        self.button_arrange = Button(self, (0, 45, 180, 30), "导出抽卡记录为Excel")
         self.button_open_roll = TransPicButton(
-            self.page, (185, 45, 30, 30),
+            self, (185, 45, 30, 30),
             "assets/main_window/ui/directory.png", (25, 25))
-        Label(self.page, (90, 100, 220, 27), "抽卡记录 暂无配置项目。")
+        Label(self, (90, 100, 220, 27), "抽卡记录 暂无配置项目。")

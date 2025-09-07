@@ -74,6 +74,6 @@ class SGAOverall:
             self.widget.boxmodules.removeItem(self.widget.boxmodules.currentIndex())
 
     def RefreshModules(self):
-        scc.mc.ModulesEnable = list(scc.modules.GetInfosT()[0])
+        scc.mc.ModulesEnable = []
         self.widget.boxmodules.clear()
-        self.widget.boxmodules.addItems(scc.mc.ModulesEnable)
+        self.widget.boxmodules.addItem("重启SGA生效")

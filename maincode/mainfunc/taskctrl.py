@@ -29,7 +29,7 @@ def TaskStart(self, tasktype: str, para: dict = None):
             self.SaveConfig()
             para.update(dict(scc.mc.CurrentConfig))
             para["OtherConfig"] = scc.mc.OtherConfig
-            para["current_mute"] = GetMute() if para["Mute"] else None
+            para["current_mute"] = GetMute() if para.get("Mute", False) else None
             self.NewThread(tasktype, para)
             self.infoAdd("开始执行实时任务")
             self.module.widget.btpause.setEnabled(True)
@@ -40,7 +40,7 @@ def TaskStart(self, tasktype: str, para: dict = None):
             self.infoHead()
             self.infoAdd("准备开始...")
             para["OtherConfig"] = scc.mc.OtherConfig
-            para["current_mute"] = GetMute() if para["Mute"] else None
+            para["current_mute"] = GetMute() if para.get("Mute", False) else None
             self.NewThread(tasktype, para)
             name = para["ConfigName"]
             self.infoAdd(f"开始执行定时任务：{name}")
@@ -67,7 +67,7 @@ def TaskStart(self, tasktype: str, para: dict = None):
             self.SaveConfig()
             para.update(dict(_config))
             para["OtherConfig"] = scc.mc.OtherConfig
-            para["current_mute"] = GetMute() if para["Mute"] else None
+            para["current_mute"] = GetMute() if para.get("Mute", False) else None
             self.NewThread(tasktype, para)
             name = para["ConfigName"]
             self.infoAdd(f"开始执行指定任务：{name}")
@@ -99,7 +99,7 @@ def TaskStop(self, tasktype: str, para=None):
         elif tasktype == "update":
             self.overall.widget.btcheckupdate.setEnabled(True)
             return
-        if para["Mute"] and (GetMute() != para["current_mute"]):
+        if para.get("Mute", False) and (GetMute() != para["current_mute"]):
             keyboard.send('volume mute')
         # 结束
         if scc.info.StopFlag:
@@ -119,8 +119,8 @@ def handle_finished_action(self, para):
         1: ("SGA关闭 电脑熄屏", "SGA等待 电脑熄屏", "screen_off.vbs"),
         2: ("SGA关闭 电脑睡眠", "SGA等待 电脑睡眠", "sleep.vbs"),
     }
-    finished = para["Finished"]
-    close = para["SGAClose"]
+    finished = para.get("Finished", 0)
+    close = para.get("SGAClose", False)
     if finished in action_map:
         close_msg, wait_msg, script = action_map[finished]
         if close:

@@ -49,7 +49,7 @@ class MixList(Widget):
         self.tasks = []
         namelist: list = ["<未选择>"] + [name for ck, name, mk in subconfig.filelist]
         for i in range(8):
-            _cb = Combobox(self, (5, 35 * i + 40, 210, 35))
+            _cb = Combobox(self, (0, 45 * i + 35, 210, 35))
             _cb.addItems(namelist)
             self.tasks.append(_cb)
 

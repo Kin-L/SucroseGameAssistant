@@ -1,6 +1,6 @@
-from ..main import ModuleClass
-from .widget import SnowPage
-from .task.main import taskstart
+from maincode.modules.main import ModuleClass
+from maincode.modules.adsnow.widget import SnowPage
+from maincode.modules.adsnow.task.main import taskstart
 from maincode.modules.template import SubConfigTemplate
 
 
@@ -42,12 +42,14 @@ class SnowConfig(SubConfigTemplate):
 
 
 class SnowClass(ModuleClass):
+    ModuleNameCH = "尘白禁区"
+
     def __init__(self):
         self.ModuleKey = 3
-        self.ModuleNameCH = "尘白禁区"
         self.ModuleNameEN = "snow"
         self.IconPath = 'resources/snow/snowicon.png'
         self.Config = SnowConfig
         self.Widget = SnowPage()
         self.Task = taskstart
+        self.LoadModule = True
         super().__init__()

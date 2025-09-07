@@ -25,6 +25,7 @@ class OverallWidget(QWidget):
         self.boxmodules = Combobox(self, (110, 340, 170, 35))
         self.boxmodules.setMaxVisibleItems(5)
         self.btmodulesdisable = TransPicButton(self, (290, 340, 35, 35), spr["ReducePic"], (25, 25))
+        tips(self.btmodulesdisable, "禁用后，重启SGA生效")
         self.btmodulesrefresh = TransPicButton(self, (330, 340, 35, 35), spr["RefreshPic"], (25, 25))
 
         self.line = Line(self, (0, 380, 620, 3))
