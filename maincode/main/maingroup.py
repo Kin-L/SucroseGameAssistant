@@ -83,7 +83,15 @@ class SGAConfigGroup(QObject):
         if "原神" in _l or not _l:
             from maincode.modules.genshin.main import GenshinClass
             GenshinClass()
-
+        if "崩坏：星穹铁道" in _l or not _l:
+            from maincode.modules.StarRail.main import StarRailClass
+            StarRailClass()
+        if "绝区零" in _l or not _l:
+            from maincode.modules.zzz.main import zzzClass
+            zzzClass()
+        if "鸣潮" in _l or not _l:
+            from maincode.modules.ww.main import wwClass
+            wwClass()
 
     def ReadCurrentConfig(self):
         _current = self.mainconfig.CurrentConfig
