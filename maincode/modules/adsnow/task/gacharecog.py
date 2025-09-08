@@ -4,6 +4,9 @@ import shutil
 from os import path, makedirs, startfile, getcwd
 from openpyxl import load_workbook
 from openpyxl.styles import Font, Alignment
+from maincode.tools.core.constant import spr
+
+HomePic = spr.snow.HomePic
 
 
 def snowGachaRecog(self):
@@ -20,7 +23,7 @@ def snowGachaRecog(self):
 
     # 进入抽卡记录界面
     self.ctler.clickChange((1655, 606), zone=(1525, 573, 1611, 624))
-    self.ctler.waitTo("resources/snow/picture/home.png", (1504, 0, 1771, 117))
+    self.ctler.waitTo(HomePic, (1504, 0, 1771, 117))
 
     # 初始化抽卡记录数据结构
     gacha_records = {
@@ -46,7 +49,7 @@ def snowGachaRecog(self):
         _process_gacha_pool(self, pool_name, gacha_records)
 
     # 返回主页并整理记录
-    self.ctler.clickChange(target="resources/snow/picture/home.png", zone=(1504, 0, 1771, 117))
+    self.ctler.clickChange(target=HomePic, zone=(1504, 0, 1771, 117))
     self.ctler.wait(0.5)
     self.send("获取抽卡记录完成")
 

@@ -5,6 +5,8 @@ from pyuac import isUserAdmin
 from win10toast import ToastNotifier
 from win32api import MessageBox
 from win32con import MB_OK
+
+from maincode.tools.core.constant import spr
 from maincode.tools.core.logger import logger
 
 
@@ -14,7 +16,7 @@ def WindowsNotify(title: str, massage: str):
         toaster = ToastNotifier()
         toaster.show_toast(title,
                            massage,
-                           icon_path="resources/main/SGA/title.ico",
+                           icon_path=spr.SGAICO,
                            duration=5,
                            threaded=True)
     except Exception as e:

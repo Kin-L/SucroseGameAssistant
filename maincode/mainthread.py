@@ -1,4 +1,4 @@
-from maincode.tools.controller.main import Controller
+from maincode.tools.controller.main import ctler
 from maincode.tools.core.logger import logger
 from maincode.tools.system.notification import WindowsNotify, GetTracebackInfo
 from maincode.tools.core.baseclass import SGAStop
@@ -40,7 +40,7 @@ class SGAMainThread(QObject):
             _func = scc.modules.Tasks[num]
             self.__class__.taskstart = _func
             try:
-                self.ctler = Controller()
+                self.ctler = ctler
                 self.ctler.checkrun = info.checkrun
             except FileExistsError:
                 self.send("未找到有效ocr-json.exe文件")
@@ -52,6 +52,7 @@ class SGAMainThread(QObject):
                     WindowsNotify("SGA定时任务", "10秒后开始")
                     self.ctler.wait(10)
                     _tit = "SGA定时任务"
+                self.ctler.send("开始执行任务test")
                 self.taskstart()
                 info.TaskError = False
                 self.ctler.OCR.disable()

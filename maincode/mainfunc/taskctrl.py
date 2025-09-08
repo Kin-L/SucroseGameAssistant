@@ -1,6 +1,7 @@
 import keyboard
 from time import localtime
 from maincode.config.configctrl import scc
+from maincode.tools.core.constant import spr
 from maincode.tools.system.other import CmdRun, GetMute, ScreenOff
 from maincode.tools.system.notification import GetTracebackInfo
 from maincode.tools.core.logger import logger
@@ -126,7 +127,7 @@ def handle_finished_action(self, para):
         if close:
             self.infoAdd(close_msg)
             self.infoEnd()
-            CmdRun(f"start \"\" /d \"resources/main/script\" {script}")
+            CmdRun(f"start \"\" /d \"{spr.SGAScriptDir}\" {script}")
             app = QApplication.instance()
             if app:
                 app.quit()
@@ -136,7 +137,7 @@ def handle_finished_action(self, para):
             if finished == 1:
                 ScreenOff()
             else:
-                CmdRun(f"start \"\" /d \"resources/main/script\" {script}")
+                CmdRun(f"start \"\" /d \"{spr.SGAScriptDir}\" {script}")
     else:
         if close:
             self.infoAdd("SGA关闭 电脑无操作")

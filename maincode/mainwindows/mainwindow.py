@@ -21,7 +21,7 @@ class SGAQMainWindow(QMainWindow):
         self.setWindowTitle("砂糖代理")
         self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
         self.setFixedSize(self.width(), self.height())
-        self.setWindowIcon(QIcon(spr["SGATitlePic"]))
+        self.setWindowIcon(QIcon(spr.SGATitlePic))
         self.setPalette(palette)
         self.SG = scc
         self.OCR = OCR
@@ -60,7 +60,7 @@ class SGAQMainWindow(QMainWindow):
     def _open_history(self):
         try:
             latest_file = max(
-                [f for f in libPath(spr["LogsDir"]).iterdir() if f.is_file()],
+                [f for f in libPath(spr.LogsDir).iterdir() if f.is_file()],
                 key=lambda f: f.stat().st_ctime
             )
             os.startfile(str(latest_file))
@@ -78,12 +78,12 @@ class LoadWidget(QWidget):
         self.setPalette(palette)
 
         self.loadbacklab = QLabel("", self)
-        self.loadbacklab.setPixmap(QPixmap(spr["LoadBackPic"]))
+        self.loadbacklab.setPixmap(QPixmap(spr.LoadBackPic))
         self.loadbacklab.setGeometry(0, 0, 910, 580)
         self.loadbacklab.setScaledContents(True)
 
         self.loadgiflab = QLabel("", self)
-        self.loadgifmov = QMovie(spr["LoadingGif"])
+        self.loadgifmov = QMovie(spr.LoadingGif)
         self.loadgiflab.setMovie(self.loadgifmov)
         self.loadgiflab.setGeometry(430, 440, 50, 50)
         self.loadgiflab.setScaledContents(True)

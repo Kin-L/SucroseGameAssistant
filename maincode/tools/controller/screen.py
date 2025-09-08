@@ -1,3 +1,4 @@
+from maincode.config.info import info
 from maincode.tools.core.baseclass import CtrlBase
 from maincode.tools.controller.adb import ADBController
 from typing import Union
@@ -155,15 +156,17 @@ class SGAScreen(CtrlBase, ADBController):
         logger.error(f"截图导出bef: {_path1}")
         logger.error(f"截图导出aft: {_path2}")
 
-    def SetLocal(self):
+    def SetLocal(self, monitor_num=0):
+        (w, h), (x, y) = info.Monitors[monitor_num]
+        self.InitLocal((x, y, w, h))
+
+    def SetScale(self):
         user32 = windll.user32
         user32.SetProcessDPIAware()
         now_wid = user32.GetSystemMetrics(0)
         if now_wid == 0:
             raise RuntimeError("获取屏幕宽度失败")
         ori_wid = user32.GetSystemMetrics(0)
-        ori_hig = user32.GetSystemMetrics(1)
-        self.InitLocal((0, 0, ori_wid, ori_hig))
         self.scaling = round(ori_wid / now_wid, 2)
 
     def DeviceMode(self, device="windows", exe_path=None):

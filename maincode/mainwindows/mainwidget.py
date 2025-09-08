@@ -33,8 +33,8 @@ class MainWidget(Widget):
         self.obstate = False
         self.support = Support()
         # 历史信息按钮
-        self.bthistory = PicButton(self, HISTORY_BUTTON_POS, spr["HistoryPic"], BUTTON_SIZE_TP)
-        self.btconfigsave = PicButton(self, SAVE_BUTTON_POS, spr["SavePic"], BUTTON_SIZE_TP)
+        self.bthistory = PicButton(self, HISTORY_BUTTON_POS, spr.HistoryPic, BUTTON_SIZE_TP)
+        self.btconfigsave = PicButton(self, SAVE_BUTTON_POS, spr.SavePic, BUTTON_SIZE_TP)
         tips(self.btconfigsave, "手动保存并应用当前页面设置(快捷键：ctrl+s)")
         # 指示信息窗口
         self.infobox = InfoBox(self)

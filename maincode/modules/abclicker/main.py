@@ -18,7 +18,7 @@ class ClickerConfig(SubConfigTemplate):
     Interval: float = 0.0  # 间隔时间(s)
 
     # 脚本配置
-    ScriptName: str = ""  # 脚本名称
+    ScriptName: list = ["", []]  # 脚本名称 脚本位置
     RunNum: int = 0  # 运行次数
 
 

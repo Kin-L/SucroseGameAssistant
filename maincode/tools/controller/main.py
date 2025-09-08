@@ -1,4 +1,5 @@
 import time
+from PyQt5.QtCore import QObject, pyqtBoundSignal, pyqtSignal
 from maincode.tools.controller.operate import Operate
 from maincode.tools.core.logger import logger
 from maincode.tools.system.other import CmdRun
@@ -6,9 +7,12 @@ from maincode.tools.system.window import GetWindow
 from win32gui import FindWindow
 
 
-class Controller(Operate):
+class Controller(QObject, Operate):
+    infoAdd: pyqtBoundSignal = pyqtSignal(str, bool)
+    infoHead: pyqtBoundSignal = pyqtSignal()
+    infoEnd: pyqtBoundSignal = pyqtSignal()
+
     def __init__(self):
-        # self.SetLocal()
         super().__init__()
         self.window = None
         self.DeviceMode()
@@ -48,3 +52,12 @@ class Controller(Operate):
                 self.wait(_interval)
         else:
             return 0
+
+    def send(self, msg: [str, int], addtime: bool = True):
+        if isinstance(msg, str):
+            self.infoAdd.emit(msg, addtime)
+        else:
+            self.infoEnd.emit() if msg else self.infoHead.emit()
+
+
+ctler = Controller()

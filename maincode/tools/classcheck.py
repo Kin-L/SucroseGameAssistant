@@ -1,6 +1,8 @@
 import ast
 import importlib.util
+import pkgutil
 import sys
+from os import path, getcwd
 from pathlib import Path
 from typing import Any
 
@@ -60,6 +62,61 @@ def instantiate_class(file_path: str, class_name: str) -> Any:
     spec.loader.exec_module(module)
     class_obj = getattr(module, class_name)
     return class_obj
+
+
+def collect_scripts() -> dict[str: list]:
+    packagelist = ["maincode", "script"]
+    package = importlib.import_module(".".join(packagelist))
+    script_dict = {}
+    for importer, scriptname, ispkg in pkgutil.iter_modules(package.__path__):
+        _list = list(packagelist)
+        if ispkg:
+            _list.append(scriptname)
+            modulepackage = importlib.import_module(".".join(_list))
+            for i, m, p in pkgutil.iter_modules(modulepackage.__path__):
+                if not p and m == "main":
+                    _list.append(m)
+                    break
+            else:
+                continue
+        else:
+            _list.append(scriptname)
+        script_dict[scriptname] = _list
+    _script_dict = {}
+    for (sname, slist) in script_dict.items():
+        script_path = path.join(getcwd(), "/".join(slist) + ".py")
+        file_path = Path(script_path).absolute()
+
+        # 生成模块名
+        module_name = file_path.stem
+
+        # 使用importlib加载模块
+        spec = importlib.util.spec_from_file_location(module_name, file_path)
+        if spec is None:
+            raise ImportError(f"无法从文件 {file_path} 创建spec")
+
+        module = importlib.util.module_from_spec(spec)
+
+        # 执行模块代码
+        try:
+            spec.loader.exec_module(module)
+        except Exception as e:
+            raise RuntimeError(f"执行模块时出错: {e}")
+
+        # 获取模块中的所有变量（过滤掉内置属性和私有属性）
+        script_run = False
+        script_name = ""
+        for name in dir(module):
+            # 跳过内置属性和私有属性
+            if not name.startswith('_'):
+                value = getattr(module, name)
+                if callable(value) and name == "script_run":
+                    script_run = True
+                elif name == "script_name":
+                    script_name = value
+        if script_name and script_run:
+            _script_dict[script_name] = slist
+    return _script_dict
 
 
 if __name__ == '__main__':

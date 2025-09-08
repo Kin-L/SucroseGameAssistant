@@ -1,3 +1,8 @@
+from maincode.tools.core.constant import spr
+
+HomePic = spr.snow.HomePic
+
+
 def snowOther(self):
     if self.para["DailyTaskReceive"]:
         self.ctler.clickChange(target="任务", zone=(1440, 311, 1555, 403))
@@ -5,7 +10,7 @@ def snowOther(self):
         pos = self.ctler.findtext("领取", (55, 973, 197, 1023))
         if pos:
             self.ctler.clickChange(pos, zone=(18, 952, 242, 1040))
-            self.ctler.clickTo(pos, "resources/snow/picture/home.png", (1504, 0, 1771, 117))
+            self.ctler.clickTo(pos, HomePic, (1504, 0, 1771, 117))
             self.send("完成:领取日常奖励")
             self.ctler.wait(0.5)
         self.ctler.click((101, 257))
@@ -13,7 +18,7 @@ def snowOther(self):
         pos = self.ctler.findtext("领取", (55, 973, 197, 1023))
         if pos:
             self.ctler.clickChange(pos, zone=(18, 952, 242, 1040))
-            self.ctler.clickTo(pos, "resources/snow/picture/home.png", (1504, 0, 1771, 117))
+            self.ctler.clickTo(pos, HomePic, (1504, 0, 1771, 117))
             self.send("完成:领取周常奖励")
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
     if self.para["ProofReceive"]:
@@ -35,7 +40,7 @@ def snowOther(self):
     if self.para["ActivityDaily"]:
         try:
             self.ctler.clickChange((1499, 538), zone=(1402, 463, 1499, 505))
-            self.ctler.waitTo("resources/snow/picture/home.png", (1633, 6, 1718, 91))
+            self.ctler.waitTo(HomePic, (1633, 6, 1718, 91))
         except TimeoutError:
             self.send(f"活动未开启")
         else:

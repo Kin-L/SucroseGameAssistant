@@ -1,4 +1,5 @@
 from maincode.config.configctrl import scc
+from maincode.tools.controller.main import ctler
 from maincode.tools.system.notification import GetTracebackInfo
 from maincode.tools.core.logger import logger
 from maincode.mainwindows.mainwindow import SGAQMainWindow
@@ -23,6 +24,10 @@ class SGAMain(SGAQMainWindow):
         self.overall: Optional[SGAOverall] = None
         self.module: Optional[SGAModule] = None
         self.LoadUI = False
+        self.ctler = ctler
+        self.ctler.infoAdd.connect(self.infoAdd)
+        self.ctler.infoHead.connect(self.infoHead)
+        self.ctler.infoEnd.connect(self.infoEnd)
 
     def load_ui(self):
         self.LoadUI = True

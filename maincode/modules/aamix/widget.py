@@ -1,3 +1,4 @@
+from maincode.tools.core.constant import spr
 from maincode.tools.sgaqt.texts import Label, Picture, Line
 from maincode.tools.sgaqt.buttons import Combobox
 from maincode.tools.sgaqt.widgets import Widget, SetStackPage, ModuleStackPage, TaskPanel
@@ -10,8 +11,7 @@ class MixPage(ModuleStackPage):
         super().__init__()
         self.wdlist: Optional[MixList] = None
         self.page01: Optional[MixPage00Set] = None
-        pic = 'resources/main/SGA/title.png'
-        self.picbt = Picture(self, (175, 5, 35, 35), pic)
+        self.picbt = Picture(self, (175, 5, 35, 35), spr.SGATitlePic)
 
     def LoadWidget(self):
         self.wdlist = MixList()

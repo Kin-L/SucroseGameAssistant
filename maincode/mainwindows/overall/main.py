@@ -32,12 +32,12 @@ class SGAOverall:
         self.widget.btmodulesdisable.clicked.connect(self.DisableModules)
         self.widget.btmodulesrefresh.clicked.connect(self.RefreshModules)
 
-        self.widget.btgithub.clicked.connect(lambda: weopen(spr["GithubURL"]))
-        self.widget.btgitee.clicked.connect(lambda: weopen(spr["GiteeURL"]))
-        self.widget.btbilibili.clicked.connect(lambda: weopen(spr["BilibiliURL"]))
-        self.widget.btweb.clicked.connect(lambda: weopen(spr["SGAWebURL"]))
+        self.widget.btgithub.clicked.connect(lambda: weopen(spr.GithubURL))
+        self.widget.btgitee.clicked.connect(lambda: weopen(spr.GiteeURL))
+        self.widget.btbilibili.clicked.connect(lambda: weopen(spr.BilibiliURL))
+        self.widget.btweb.clicked.connect(lambda: weopen(spr.SGAWebURL))
 
-        logs_dir = os.path.join(os.getcwd(), spr["LogsDir"])
+        logs_dir = os.path.join(os.getcwd(), spr.LogsDir)
         self.widget.btrunhistory.clicked.connect(lambda: os.startfile(logs_dir))
         update_file = os.path.join(os.getcwd(), "update.txt")
         self.widget.btupdatehistory.clicked.connect(lambda: os.startfile(update_file))

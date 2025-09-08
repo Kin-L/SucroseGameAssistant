@@ -7,21 +7,22 @@ import platform
 from screeninfo import get_monitors
 from pathlib import Path
 from maincode.tools.core.baseclass import SGAStop
+from maincode.tools.core.constant import spr
 from maincode.tools.system.window import GetWindow
 
 
 class SGAInfo:
     # 路径常量
-    CACHE_DIR = "cache"
-    SCRIPT_DIR = "personal/script"
-    SCHTASKS_SRC = "resources/main/schtasks.json"
-    SCHTASKS_DST = "personal/schtasks.json"
-    BAT_SRC = "resources/main/script/start-SGA.bat"
-    BAT_DST = "personal/script/start-SGA.bat"
-    MAA_BAT_SRC = "resources/main/script/maacreate.bat"
-    MAA_BAT_DST = "personal/script/maacreate.bat"
-    VBS_SRC = "resources/main/script/start-SGA.vbs"
-    VBS_DST = "personal/script/start-SGA.vbs"
+    CACHE_DIR = spr.CACHE_DIR
+    SCRIPT_DIR = spr.SCRIPT_DIR
+    SCHTASKS_SRC = spr.SCHTASKS_SRC
+    SCHTASKS_DST = spr.SCHTASKS_DST
+    BAT_SRC = spr.BAT_SRC
+    BAT_DST = spr.BAT_DST
+    MAA_BAT_SRC = spr.MAA_BAT_SRC
+    MAA_BAT_DST = spr.MAA_BAT_DST
+    VBS_SRC = spr.VBS_SRC
+    VBS_DST = spr.VBS_DST
 
     def __init__(self):
         self.Version: str = "v3.0.5.16"

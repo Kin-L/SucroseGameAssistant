@@ -3,6 +3,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QFrame
 from qfluentwidgets import SmoothScrollArea
+
+from maincode.tools.core.constant import spr
 from maincode.tools.sgaqt.texts import Label, Picture, Line, TipsButton
 from maincode.tools.sgaqt.buttons import Check, Combobox
 
@@ -37,9 +39,9 @@ class StateSigh(QWidget):
         super().__init__(widget)
         self.setGeometry(*location)
         self.setPalette(palette)
-        self.rightpic = QPixmap("resources/main/state/right.png")
-        self.stoppic = QPixmap("resources/main/state/stop.png")
-        self.errorpic = QPixmap("resources/main/state/error.png")
+        self.rightpic = QPixmap(spr.RightPic)
+        self.stoppic = QPixmap(spr.StopPic)
+        self.errorpic = QPixmap(spr.ErrorPic)
         self.righttext = "正常运行"
         self.stoptext = "手动终止"
         self.errortext = "运行异常"
@@ -89,9 +91,9 @@ class Support(QWidget):
         super().__init__()
         self.setWindowTitle("砂糖代理")
         self.setWindowFlags(Qt.WindowCloseButtonHint)
-        self.setWindowIcon(QIcon("resources/main/SGA/title.png"))
+        self.setWindowIcon(QIcon(spr.SGATitlePic))
         self.resize(643, 419)
-        Picture(self, (0, 0, 643, 419), "resources/main/SGA/hxh.png")
+        Picture(self, (0, 0, 643, 419), spr.SGASupportPic)
 
 
 class TaskPanel(QWidget):

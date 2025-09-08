@@ -20,7 +20,7 @@ class SGAModule:
 
         self._update_lock_ui(scc.mc.ConfigLock)
         if scc.mc.StartMode == "Left":
-            self.widget.btstartmode.setIcon(spr["ArrowLeftPic"])
+            self.widget.btstartmode.setIcon(spr.ArrowLeftPic)
         self.widget.ecbconfig.addItems(scc.sc.GetFilesT()[1])
         self.widget.boxmodule.addItems(scc.modules.GetInfosT()[0])
 
@@ -83,10 +83,10 @@ class SGAModule:
     def _change_startmode(self):
         if scc.mc.StartMode == "Left":
             scc.mc.StartMode = "Down"
-            self.widget.btstartmode.setIcon(spr["ArrowDownPic"])
+            self.widget.btstartmode.setIcon(spr.ArrowDownPic)
         else:
             scc.mc.StartMode = "Left"
-            self.widget.btstartmode.setIcon(spr["ArrowLeftPic"])
+            self.widget.btstartmode.setIcon(spr.ArrowLeftPic)
 
     def configchange(self):
         try:
