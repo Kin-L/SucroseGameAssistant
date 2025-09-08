@@ -8,8 +8,9 @@ a = Analysis(
     binaries=[],
     datas=[
             ("venv\Lib\site-packages\win32comext\shell\shellcon.py", "win32com\shell"),
+            ("maincode\script", "maincode\script"),
             ],
-    hiddenimports=[],
+    hiddenimports=["playsound3"],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -22,8 +23,9 @@ b = Analysis(
     binaries=[],
     datas=[
             ("venv\Lib\site-packages\win32comext\shell\shellcon.py", "win32com\shell"),
+            ("maincode\script", "maincode\script"),
             ],
-    hiddenimports=[],
+    hiddenimports=["playsound3"],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

@@ -60,7 +60,7 @@ class DIYPage(ModuleStackPage):
             "ScriptName": [name, self.script_dict[name]],
         }
 
-    def SetWindow(self, config: dict, *args):
+    def SetWidget(self, config: dict, *args):
         name = config["ScriptName"][0]
         if name in self.choose_clicker_mode.items:
             self.choose_clicker_mode.setCurrentText(name)

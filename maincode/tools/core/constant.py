@@ -12,12 +12,14 @@ class SnowConstants:
 
 class SGAConstants:
     IS_FROZEN = hasattr(sys, '_MEIPASS') or getattr(sys, 'frozen', False)
-    ResourcesDir = "resources"
-    PersonalDir = "personal"
+    ResourcesDir = "./resources"
+    PersonalDir = "./personal"
     CodeDir = "maincode" if not IS_FROZEN else "_internal/maincode"
     WorkDir = os.getcwd()
     
     # 文件/目录路径
+    MainConfigPath = f"{PersonalDir}/mainconfig.json"
+    MainConfigBackupPath = f"{PersonalDir}/mainconfigbackup.json"
     SGAScriptDir = f"{ResourcesDir}/main/script"
     ScriptsDir = f"{CodeDir}/script"
     LogsDir = f"{PersonalDir}/logs"

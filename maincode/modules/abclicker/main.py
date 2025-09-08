@@ -24,7 +24,7 @@ class ClickerConfig(SubConfigTemplate):
 
 class ClickerClass(ModuleClass):
     """Clicker模块主类，实现框架接口"""
-    ModuleNameCH = "连点器模块"
+    ModuleNameCH = "连点器"
 
     def __init__(self):
         self.ModuleKey = 1

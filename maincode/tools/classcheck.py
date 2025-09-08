@@ -6,6 +6,8 @@ from os import path, getcwd
 from pathlib import Path
 from typing import Any
 
+from maincode.tools.core.constant import spr
+
 
 def get_base_name(base_node):
     """获取基类名称"""
@@ -84,6 +86,8 @@ def collect_scripts() -> dict[str: list]:
         script_dict[scriptname] = _list
     _script_dict = {}
     for (sname, slist) in script_dict.items():
+        if spr.IS_FROZEN:
+            slist = ["_internal"] + slist
         script_path = path.join(getcwd(), "/".join(slist) + ".py")
         file_path = Path(script_path).absolute()
 

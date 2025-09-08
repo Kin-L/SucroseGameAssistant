@@ -1,4 +1,3 @@
-from maincode.tools.controller.main import ctler
 from maincode.tools.core.logger import logger
 from maincode.tools.system.notification import WindowsNotify, GetTracebackInfo
 from maincode.tools.core.baseclass import SGAStop
@@ -40,6 +39,7 @@ class SGAMainThread(QObject):
             _func = scc.modules.Tasks[num]
             self.__class__.taskstart = _func
             try:
+                from maincode.tools.controller.main import ctler
                 self.ctler = ctler
                 self.ctler.checkrun = info.checkrun
             except FileExistsError:
