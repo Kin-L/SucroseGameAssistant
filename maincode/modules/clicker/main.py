@@ -1,7 +1,8 @@
-from maincode.modules.abclicker.task.main import taskstart
-from maincode.modules.abclicker.widget import ClickerPage
+from maincode.modules.clicker.task.main import taskstart
+from maincode.modules.clicker.widget import ClickerPage
 from maincode.modules.main import ModuleClass
 from maincode.modules.template import SubConfigTemplate
+from maincode.tools.core.constant import spr
 
 
 class ClickerConfig(SubConfigTemplate):
@@ -29,7 +30,7 @@ class ClickerClass(ModuleClass):
     def __init__(self):
         self.ModuleKey = 1
         self.ModuleNameEN = "clicker"
-        self.IconPath = 'resources/main/SGA/default.png'
+        self.IconPath = spr.SGAdefaultPic
         self.Config = ClickerConfig  # 配置类关联
         self.Widget = ClickerPage()  # UI界面关联
         self.Task = taskstart  # 任务入口关联

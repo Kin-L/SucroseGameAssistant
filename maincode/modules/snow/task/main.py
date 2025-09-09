@@ -180,8 +180,17 @@ def SnowLaunch(self):
         assert hwnd
         self.ctler.ChooseWindow(hwnd, (1920, 1080))
         if self.ctler.ZoomW != self.ctler.ZoomH:
-            self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
             self.send(f"当前窗口: {self.ctler.window.rect}")
+            self.send("游戏窗口分辨率不适配, 请将窗口模式分辨率设置为16：9")
+            self.send("尝试切换")
+            self.ctler.press('alt+enter')
+            self.ctler.wait(1)
+            self.ctler.ChooseWindow(hwnd, (1920, 1080))
+            if self.ctler.ZoomW != self.ctler.ZoomH:
+                self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
+                self.send(f"当前窗口: {self.ctler.window.rect}")
+            else:
+                self.send(f"切换后成功，当前窗口: {self.ctler.window.rect}")
 
 
 def LauchPrepare(self):
@@ -208,9 +217,18 @@ def LauchPrepare(self):
                 hwnd += 1
                 if self.ctler.ZoomW != self.ctler.ZoomH:
                     if hwndNum == 3:
-                        self.send(
-                            "游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
                         self.send(f"当前窗口: {self.ctler.window.rect}")
+                        self.send("游戏窗口分辨率不适配, 请将窗口模式分辨率设置为16：9")
+                        self.send("尝试切换")
+                        self.ctler.press('alt+enter')
+                        self.ctler.wait(1)
+                        self.ctler.ChooseWindow(hwnd, (1920, 1080))
+                        if self.ctler.ZoomW != self.ctler.ZoomH:
+                            self.send(
+                                "游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
+                            self.send(f"当前窗口: {self.ctler.window.rect}")
+                        else:
+                            self.send(f"切换后成功，当前窗口: {self.ctler.window.rect}")
                     else:
                         sleep(2)
                         continue
@@ -260,8 +278,18 @@ def LauchPrepare(self):
                 hwnd += 1
                 if self.ctler.ZoomW != self.ctler.ZoomH:
                     if hwndNum == 3:
-                        self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
                         self.send(f"当前窗口: {self.ctler.window.rect}")
+                        self.send("游戏窗口分辨率不适配, 请将窗口模式分辨率设置为16：9")
+                        self.send("尝试切换")
+                        self.ctler.press('alt+enter')
+                        self.ctler.wait(1)
+                        self.ctler.ChooseWindow(hwnd, (1920, 1080))
+                        if self.ctler.ZoomW != self.ctler.ZoomH:
+                            self.send(
+                                "游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
+                            self.send(f"当前窗口: {self.ctler.window.rect}")
+                        else:
+                            self.send(f"切换后成功，当前窗口: {self.ctler.window.rect}")
                     else:
                         sleep(2)
                         continue

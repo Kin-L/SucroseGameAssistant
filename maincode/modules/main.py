@@ -1,5 +1,7 @@
 from maincode.modules.template import SubConfigTemplate, ModuleStackPage
 from typing import List, Tuple, Callable, Optional
+
+from maincode.tools.core.constant import spr
 from maincode.tools.core.logger import logger
 
 
@@ -18,7 +20,7 @@ class ModuleClass:
     ModuleNameCH: str = "未知"  # 模组中文名（用于界面显示和提示信息）
     ModuleNameEN: str = "none"  # 模组英文名（用于路径，关键字，函数名等，避免特殊字符）
     ModuleKey: int = -1  # 识别ID
-    IconPath: str = 'resources/main/SGA/default.png'  # 图标路径
+    IconPath: str = spr.SGAdefaultPic  # 图标路径
     Config: type(SubConfigTemplate)
     Widget: type(ModuleStackPage)
     Task: Callable = defaulttask

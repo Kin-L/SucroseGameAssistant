@@ -2,6 +2,7 @@ from maincode.tools.core.logger import logger
 from maincode.tools.core.constant import spr
 
 HomePic = spr.snow.HomePic
+SupplyPic = f"{spr.snow.SnowDir}/picture/supply.png"
 
 
 def FightCommon(self, common):
@@ -131,7 +132,7 @@ def snowEnergy(self):
         self.ctler.pressTo("esc", "任务", (1455, 324, 1533, 380))
     if self.para["DailyEnergyPack"]:
         self.ctler.clickChange((147, 556), zone=(151, 560, 217, 592))
-        pos, sim = self.ctler.findpic("resources/snow/picture/supply.png", zone=(0, 170, 93, 714))
+        pos, sim = self.ctler.findpic(SupplyPic, zone=(0, 170, 93, 714))
         if sim:
             self.ctler.clickChange(pos, zone=(303, 62, 374, 94))
         else:
@@ -195,10 +196,11 @@ def snowEnergy(self):
                 break
             if self.ctler.ocr((1378, 420, 1460, 457))[0]:
                 try:
-                    self.ctler.clickChange((1499, 538), zone=(1402, 463, 1499, 505))
+                    self.ctler.clickChange((1462, 481), zone=(1402, 463, 1499, 505))
                     self.ctler.waitTo(HomePic, (1633, 6, 1718, 91))
                 except TimeoutError:
                     self.send(f"活动未开启")
+                    self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
                     break
                 self.ctler.wait(0.3)
                 pos = self.ctler.findtext("材料")

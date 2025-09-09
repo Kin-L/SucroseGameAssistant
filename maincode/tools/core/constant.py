@@ -2,18 +2,10 @@ import os
 import sys
 
 
-class SnowConstants:
-    SnowDir = None
-    HomePic = f"{SnowDir}/picture/home.png"
-
-    def __init__(self, ResourcesDir):
-        self.SnowDir = f"{ResourcesDir}/snow"
-
-
 class SGAConstants:
     IS_FROZEN = hasattr(sys, '_MEIPASS') or getattr(sys, 'frozen', False)
-    ResourcesDir = "./resources"
-    PersonalDir = "./personal"
+    ResourcesDir = "resources"
+    PersonalDir = "personal"
     CodeDir = "maincode" if not IS_FROZEN else "_internal/maincode"
     WorkDir = os.getcwd()
     
@@ -38,6 +30,7 @@ class SGAConstants:
     SGAdefaultPic = f"{ResourcesDir}/main/SGA/default.png"
     SGASupportPic = f"{ResourcesDir}/main/SGA/hxh.png"
     SGAICO = f"{ResourcesDir}/main/SGA/title.ico"
+    KleinIcon = f"{ResourcesDir}/klein/kleinicon.png"
 
     # 按钮图片
     HistoryPic = f"{ResourcesDir}/main/button/history.png"
@@ -63,6 +56,9 @@ class SGAConstants:
     RightPic = f"{ResourcesDir}/main/state/right.png"
     StopPic = f"{ResourcesDir}/main/state/stop.png"
     ErrorPic = f"{ResourcesDir}/main/state/error.png"
+    SetPic = f'{ResourcesDir}/main/button/set.png'
+    Command = f"{ResourcesDir}/main/button/command.png"
+
     CACHE_DIR = "cache"
     SCRIPT_DIR = f"{PersonalDir}/script"
     SCHTASKS_SRC = f"{ResourcesDir}/main/schtasks.json"
@@ -74,8 +70,13 @@ class SGAConstants:
     VBS_SRC = f"{ResourcesDir}/main/script/start-SGA.vbs"
     VBS_DST = f"{PersonalDir}/script/start-SGA.vbs"
 
-    # 尘白禁区
-    snow = SnowConstants(ResourcesDir)
-
 
 spr = SGAConstants()
+
+
+class SnowConstants:
+    SnowDir = f"{spr.ResourcesDir}/snow"
+    HomePic = f"{SnowDir}/picture/home.png"
+
+
+spr.snow = SnowConstants()

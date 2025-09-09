@@ -39,10 +39,11 @@ def snowOther(self):
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
     if self.para["ActivityDaily"]:
         try:
-            self.ctler.clickChange((1499, 538), zone=(1402, 463, 1499, 505))
+            self.ctler.clickChange((1462, 481), zone=(1402, 463, 1499, 505))
             self.ctler.waitTo(HomePic, (1633, 6, 1718, 91))
         except TimeoutError:
             self.send(f"活动未开启")
+            self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
         else:
             self.ctler.wait(0.3)
             pos = self.ctler.findtext("任务")

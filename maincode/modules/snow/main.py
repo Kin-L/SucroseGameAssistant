@@ -1,6 +1,6 @@
 from maincode.modules.main import ModuleClass
-from maincode.modules.adsnow.widget import SnowPage
-from maincode.modules.adsnow.task.main import taskstart
+from maincode.modules.snow.widget import SnowPage
+from maincode.modules.snow.task.main import taskstart
 from maincode.modules.template import SubConfigTemplate
 
 

@@ -1,9 +1,10 @@
 from maincode.modules.main import ModuleClass
-from maincode.modules.aamix.widget import MixPage
+from maincode.modules.mix.widget import MixPage
 from maincode.modules.template import SubConfigTemplate
 from typing import List
 from maincode.config.subconfig import subconfig
 from maincode.config.info import info
+from maincode.tools.core.constant import spr
 
 # 常量定义
 TASK_COUNT = 8
@@ -77,7 +78,7 @@ class MixClass(ModuleClass):
     def __init__(self):
         self.ModuleKey = 0
         self.ModuleNameEN = "mix"
-        self.IconPath = 'resources/main/SGA/default.png'
+        self.IconPath = spr.SGAdefaultPic
         self.Config = MixConfig
         self.Widget = MixPage()
         self.Task = taskstart

@@ -1,6 +1,7 @@
 from maincode.modules.main import ModuleClass
-from maincode.modules.acklein.widget import KleinPage
+from maincode.modules.klein.widget import KleinPage
 from maincode.modules.template import SubConfigTemplate
+from maincode.tools.core.constant import spr
 
 
 class KleinConfig(SubConfigTemplate):
@@ -35,7 +36,7 @@ class KleinClass(ModuleClass):
     def __init__(self):
         self.ModuleKey = 2
         self.ModuleNameEN = "klein"
-        self.IconPath = 'resources/klein/kleinicon.png'
+        self.IconPath = spr.KleinIcon
         self.Config = KleinConfig
         self.Widget = KleinPage()
         self.Task = taskstart

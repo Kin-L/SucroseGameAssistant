@@ -62,7 +62,6 @@ def TaskStart(self, tasktype: str, para: dict = None):
                     self.infoAdd(f"输入的子设置无效：'ck'：{_ck}")
                     return
             _config = scc.ReadSubFile(_num)
-            print(_config)
             self.mainwidget.infoClear()
             self.infoHead()
             self.SaveConfig()

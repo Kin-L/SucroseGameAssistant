@@ -7,6 +7,10 @@ from openpyxl.styles import Font, Alignment
 from maincode.tools.core.constant import spr
 
 HomePic = spr.snow.HomePic
+XlsxZip = f"{spr.snow.SnowDir}/default.zip"
+XlsxFile = f"{spr.snow.SnowDir}/default.xlsx"
+SnowDir = spr.snow.SnowDir
+RollCheck = f"{spr.snow.SnowDir}/picture/rollcheck.png"
 
 
 def snowGachaRecog(self):
@@ -149,7 +153,7 @@ def _wait_for_records_loaded(self):
         self.ctler.wait(0.1)
 
         # 检查记录加载完成的图片标识
-        if self.ctler.findpic("resources/snow/picture/rollcheck.png")[1]:
+        if self.ctler.findpic(RollCheck)[1]:
             check_count = 0  # 重置计数
         else:
             check_count += 1
@@ -289,18 +293,18 @@ def export_gacha_records(self, gacha_records):
 
 def _prepare_excel_template():
     """准备Excel模板文件"""
-    zip_path = path.join(getcwd(), "resources/snow/default.zip")
-    template_path = path.join(getcwd(), "resources/snow/default.xlsx")
+    zip_path = path.join(getcwd(), XlsxZip)
+    template_path = path.join(getcwd(), XlsxFile)
 
     if not path.exists(template_path):
         from shutil import unpack_archive
-        unpack_archive(zip_path, path.join(getcwd(), "resources/snow"))
+        unpack_archive(zip_path, path.join(getcwd(), SnowDir))
 
 
 def _create_gacha_excel(gacha_records, excel_path, timestamp):
     """创建包含抽卡记录的Excel文件"""
     # 复制模板文件
-    template_path = path.join(getcwd(), "resources/snow/default.xlsx")
+    template_path = path.join(getcwd(), XlsxFile)
     shutil.copyfile(template_path, excel_path)
 
     # 加载工作簿并设置样式

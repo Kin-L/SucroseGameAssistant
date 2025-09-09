@@ -1,5 +1,5 @@
-from maincode.modules.zzcommon.task.main import taskstart
-from maincode.modules.zzcommon.widget import CommonPage
+from maincode.modules.common.task.main import taskstart
+from maincode.modules.common.widget import CommonPage
 from maincode.modules.main import ModuleClass
 from maincode.modules.template import SubConfigTemplate
 

@@ -7,27 +7,19 @@ from maincode.sgamain import SGAMain
 from PyQt5.QtWidgets import QApplication
 import keyboard
 import sys
-import warnings
-from pkg_resources import PkgResourcesDeprecationWarning
-
-# 过滤特定的弃用警告
-warnings.filterwarnings("ignore", category=PkgResourcesDeprecationWarning)
 
 
 def SGALoad():
     try:
-
         if not CheckAdmin():
             logger.warning("权限不足，SGA 启动失败")
             return
-
         window = GetWindow("砂糖代理", True)
         if window is not None:
             window.foreground()
         else:
             print("")
             logger.info("================SGA开始启动================")
-
             # 唤醒屏幕
             try:
                 keyboard.send("numlock")
@@ -35,7 +27,6 @@ def SGALoad():
                 keyboard.send("numlock")
             except Exception as e:
                 logger.warning(f"唤醒屏幕失败: {e}")
-
             # 判断是否加载 UI
             hideui = "-hideui" in sys.argv
             # hideui = True
