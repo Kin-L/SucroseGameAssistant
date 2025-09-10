@@ -65,7 +65,7 @@ def FightCommon(self, common):
             pos = self.ctler.waitTo("小", (38, 890, 154, 1025))
             self.ctler.clickChange(pos, zone=(829, 12, 1101, 130))
             self.ctler.waitTo("小", (825, 10, 1111, 129))
-            print(self.para["ActivityLogistics"][:-2])
+            # print(self.para["ActivityLogistics"][:-2])
             pos = self.ctler.findtext(self.para["ActivityLogistics"][:-2], (158, 174, 903, 941))
             if not pos:
                 self.ctler.roll((679, 494), 20000)

@@ -1,14 +1,11 @@
-from maincode.tools.classcheck import find_subclasses_of_base, instantiate_class
 from maincode.modules.main import ModuleClass
 from .subconfig import subconfig, SubConfigs
 from .mainconfig import MainConfig, checkmain
 from .info import SGAInfo, info
-from os import path, makedirs, getcwd
+from os import path, makedirs
 from typing import Optional
 import json
 import random
-import pkgutil
-import importlib
 from ..tools.core.constant import spr
 
 
@@ -92,19 +89,19 @@ class SGAConfigController:
 
     def RecognizeModules(self):
         _l = self.mc.ModulesDisable
-        if "连续任务" in _l:
+        if "连续任务" not in _l:
             from maincode.modules.mix.main import MixClass
             MixClass()
-        if "自定义脚本" in _l:
+        if "自定义脚本" not in _l:
             from maincode.modules.diy.main import DIYClass
             DIYClass()
-        if "连点器" in _l:
+        if "连点器" not in _l:
             from maincode.modules.clicker.main import ClickerClass
             ClickerClass()
-        if "环行旅舍" in _l:
+        if "环行旅舍" not in _l:
             from maincode.modules.klein.main import KleinClass
             KleinClass()
-        if "尘白禁区" in _l:
+        if "尘白禁区" not in _l:
             from maincode.modules.snow.main import SnowClass
             SnowClass()
 

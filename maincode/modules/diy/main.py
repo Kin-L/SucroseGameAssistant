@@ -52,7 +52,6 @@ class DIYPage(ModuleStackPage):
         self.btjf = PicButton(self, (285, 50, 33, 33), spr.FoldPic, (25, 25))
         self.btrefresh.clicked.connect(self._loadscript)
         self.btjf.clicked.connect(lambda: startfile(f"{spr.WorkDir}/{spr.ScriptsDir}"))
-        print(f"{spr.WorkDir}/{spr.ScriptsDir}")
 
     def CollectConfig(self) -> dict:
         name = self.choose_clicker_mode.currentText()

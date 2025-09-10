@@ -57,7 +57,7 @@ if lis2:
         makedirs(f"release/SGAv3-{version}-replace")
     else:
         shutil.rmtree(f"release/SGAv3-{version}-replace")
-    print(lis2)
+    # print(lis2)
     for src, drc in lis2:
         drc = drc.replace("/SGAv3/", _str)
         drcdir = path.split(drc)[0]
