@@ -20,13 +20,7 @@ class SGAOverall:
         self.widget.leocrpath.setText(scc.mc.OcrPath)
         self.widget.lekeyboard.setText(scc.mc.StopKeys)
         self.widget.ckautoupdate.setChecked(scc.mc.AutoUpdate)
-
-        if scc.mc.ModulesEnable:
-            enabled_modules = scc.mc.ModulesEnable
-        else:
-            enabled_modules = list(scc.modules.GetInfosT()[0])
-            scc.mc.ModulesEnable = enabled_modules
-        self.widget.boxmodules.addItems(enabled_modules)
+        self.widget.boxmodules.addItems(scc.modules.GetInfosT()[0])
 
     def _bind_signals(self):
         self.widget.btmodulesdisable.clicked.connect(self.DisableModules)
@@ -69,11 +63,10 @@ class SGAOverall:
 
     def DisableModules(self):
         current_text = self.widget.boxmodules.currentText()
-        if current_text in scc.mc.ModulesEnable:
-            scc.mc.ModulesEnable.remove(current_text)
-            self.widget.boxmodules.removeItem(self.widget.boxmodules.currentIndex())
+        scc.mc.ModulesDisable.append(current_text)
+        self.widget.boxmodules.removeItem(self.widget.boxmodules.currentIndex())
 
     def RefreshModules(self):
-        scc.mc.ModulesEnable = []
+        scc.mc.ModulesDisable = []
         self.widget.boxmodules.clear()
         self.widget.boxmodules.addItem("重启SGA生效")

@@ -91,20 +91,20 @@ class SGAConfigController:
         return MainConfig()
 
     def RecognizeModules(self):
-        _l = self.mc.ModulesEnable
-        if "连续任务" in _l or not _l:
+        _l = self.mc.ModulesDisable
+        if "连续任务" in _l:
             from maincode.modules.mix.main import MixClass
             MixClass()
-        if "自定义脚本" in _l or not _l:
+        if "自定义脚本" in _l:
             from maincode.modules.diy.main import DIYClass
             DIYClass()
-        if "连点器" in _l or not _l:
+        if "连点器" in _l:
             from maincode.modules.clicker.main import ClickerClass
             ClickerClass()
-        if "环行旅舍" in _l or not _l:
+        if "环行旅舍" in _l:
             from maincode.modules.klein.main import KleinClass
             KleinClass()
-        if "尘白禁区" in _l or not _l:
+        if "尘白禁区" in _l:
             from maincode.modules.snow.main import SnowClass
             SnowClass()
 

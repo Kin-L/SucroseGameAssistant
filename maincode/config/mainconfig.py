@@ -20,7 +20,7 @@ class MainConfig(BaseModel):
     ConfigLock: bool = True
     CurrentConfig: dict = Field(default_factory=dict)
     OtherConfig: dict = Field(default_factory=lambda: {"License": False})
-    ModulesEnable: list = Field(default_factory=list)
+    ModulesDisable: list = Field(default_factory=list)
     StartMode: str = "Down"
     ShowConsole: bool = False
 
