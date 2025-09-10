@@ -1,85 +1,106 @@
-from ..timer.main import SGAMain4
 from .widget import ModuleWidget
-from maincode.main.maingroup import sg
-from maincode.tools.main import logger, GetTracebackInfo
+from maincode.config.configctrl import scc
+from ...tools.system.notification import GetTracebackInfo
+from ...tools.core.logger import logger
 from os import path, remove, replace
+from maincode.mainwindows.mainwindow import SGAQMainWindow
+from maincode.tools.core.constant import spr
+import random
 
 
-class SGAMain5(SGAMain4):
-    def __init__(self, userui):
-        super().__init__(userui)
-        if self.loadui:
-            self.module = ModuleWidget()
-            self.mainwidget.sksetting.addWidget(self.module)
-            self.mainwidget.sksetting.setCurrentIndex(1)
-            for widget in sg.modules.GetWidgets():
-                self.module.skmodule.addWidget(widget)
+class SGAModule:
+    def __init__(self, SQMW: SGAQMainWindow):
+        self.infoHead = SQMW.infoHead
+        self.infoAdd = SQMW.infoAdd
+        self.infoEnd = SQMW.infoEnd
+        self.wdtime = SQMW.overall.widget.timer.widgets.wdtime
+        self.widget = ModuleWidget()
+        for widget in scc.modules.GetWidgets():
+            self.widget.skmodule.addWidget(widget)
 
-            if sg.mainconfig.ConfigLock:
-                self.module.btconfiglock.show()
-                self.module.btconfigunlock.hide()
-                self.module.btconfigdelete.hide()
-                self.module.btconfigadd.show()
-            else:
-                self.module.btconfiglock.hide()
-                self.module.btconfigunlock.show()
-                self.module.btconfigdelete.show()
-                self.module.btconfigadd.hide()
-            self.module.ecbconfig.addItems(sg.subconfig.GetFilesT()[1])
-            self.module.boxmodule.addItems(sg.modules.GetInfosT()[0])
+        self._update_lock_ui(scc.mc.ConfigLock)
+        if scc.mc.StartMode == "Left":
+            self.widget.btstartmode.setIcon(spr.ArrowLeftPic)
+        self.widget.ecbconfig.addItems(scc.sc.GetFilesT()[1])
+        self.widget.boxmodule.addItems(scc.modules.GetInfosT()[0])
 
-            item = sg.subconfig.FindItem(sg.mainconfig.ConfigKey)
-            if item:
-                seq = item[-1]
-            else:
-                seq = 0
-                sg.mainconfig.ConfigKey = str(sg.subconfig.filelist[0][0])
-            self.module.ecbconfig.setCurrentIndex(seq)
-            self.module.boxmodule.currentIndexChanged.connect(self.ChangePage)
-            self.LoadSet(sg.mainconfig.CurrentConfig)
+        item = scc.sc.FindItem(scc.mc.ConfigKey)
+        if item:
+            seq = item[-1]
+        else:
+            seq = 0
+            scc.mc.ConfigKey = str(scc.sc.filelist[0][0])
+        self.widget.ecbconfig.setCurrentIndex(seq)
+        self.widget.boxmodule.currentIndexChanged.connect(self.ChangePage)
+        self.LoadSet(scc.mc.CurrentConfig)
 
-            self.module.btconfiglock.clicked.connect(lambda: self.setlock(False))
-            self.module.btconfigunlock.clicked.connect(lambda: self.setlock(True))
-            self.module.btconfigdelete.clicked.connect(self.configdelete)
-            self.module.btconfigadd.clicked.connect(self.configadd)
-            self.module.btconfigedit.clicked.connect(self.ReadyToRename)
-            self.module.btconfigfinish.clicked.connect(self.configrename)
-            self.module.ecbconfig.currentIndexChanged.connect(self.configchange)
+        self.widget.btconfiglock.clicked.connect(lambda: self.setlock(False))
+        self.widget.btconfigunlock.clicked.connect(lambda: self.setlock(True))
+        self.widget.btconfigdelete.clicked.connect(self.configdelete)
+        self.widget.btconfigadd.clicked.connect(self.configadd)
+        self.widget.btconfigedit.clicked.connect(self.ReadyToRename)
+        self.widget.btconfigfinish.clicked.connect(self.configrename)
+        self.widget.btstartmode.clicked.connect(self._change_startmode)
+        self.widget.ecbconfig.currentIndexChanged.connect(self.configchange)
+
+    def _update_lock_ui(self, locked: bool):
+        """更新锁定状态下的UI显示"""
+        if locked:
+            self.widget.btconfiglock.show()
+            self.widget.btconfigunlock.hide()
+            self.widget.btconfigdelete.hide()
+            self.widget.btconfigadd.show()
+        else:
+            self.widget.btconfiglock.hide()
+            self.widget.btconfigunlock.show()
+            self.widget.btconfigdelete.show()
+            self.widget.btconfigadd.hide()
+
+    def _disable_buttons(self, disable: bool):
+        """统一控制按钮启用/禁用"""
+        buttons = [
+            self.widget.btconfigunlock,
+            self.widget.btconfiglock,
+            self.widget.btstart,
+            self.widget.btpause,
+            self.widget.btconfigadd,
+            self.widget.btconfigdelete,
+        ]
+        for btn in buttons:
+            btn.setDisabled(disable)
 
     def setlock(self, lock: bool):
         try:
+            self._update_lock_ui(lock)
+            scc.mc.ConfigLock = lock
             if lock:
-                self.module.btconfiglock.show()
-                self.module.btconfigunlock.hide()
-                self.module.btconfigdelete.hide()
-                self.module.btconfigadd.show()
-                sg.mainconfig.ConfigLock = True
                 self.configchange()
-            else:
-                self.module.btconfiglock.hide()
-                self.module.btconfigunlock.show()
-                self.module.btconfigdelete.show()
-                self.module.btconfigadd.hide()
-                sg.mainconfig.ConfigLock = False
-            sg.mainconfig.ConfigLock = lock
         except Exception as e:
             _str = GetTracebackInfo(e) + "切换锁定流程异常"
             logger.error(_str)
             self.infoAdd(f"切换锁定流程异常")
 
+    def _change_startmode(self):
+        if scc.mc.StartMode == "Left":
+            scc.mc.StartMode = "Down"
+            self.widget.btstartmode.setIcon(spr.ArrowDownPic)
+        else:
+            scc.mc.StartMode = "Left"
+            self.widget.btstartmode.setIcon(spr.ArrowLeftPic)
+
     def configchange(self):
         try:
-            num = self.module.ecbconfig.currentIndex()
-            if sg.mainconfig.ConfigLock:
-                _config = sg.subconfig.Read(num)
-                if sg.modules.CheckConfig(_config):
+            num = self.widget.ecbconfig.currentIndex()
+            if scc.mc.ConfigLock:
+                _config = scc.sc.Read(num)
+                if scc.modules.CheckConfig(_config):
                     name = _config["ConfigName"]
                     configkey = _config["ConfigKey"]
                     self.infoHead()
                     self.infoAdd(f"载入配置：{configkey}{name}")
                     self.infoEnd()
                     self.LoadSet(_config)
-            sg.mainconfig.ConfigKey = sg.subconfig.filelist[num][0]
+            scc.mc.ConfigKey = scc.sc.filelist[num][0]
         except Exception as e:
             _str = GetTracebackInfo(e) + "子配置变换流程异常"
             logger.error(_str)
@@ -87,13 +108,13 @@ class SGAMain5(SGAMain4):
 
     def ChangePage(self):
         try:
-            seq = self.module.boxmodule.currentIndex()
-            self.module.skmodule.setCurrentIndex(seq)
-            _path = sg.modules.GetInfosT()[-1][seq]
-            self.module.picicon.setIcon(_path)
-            if not sg.modules.WidgetsLoad[seq]:
-                sg.modules.GetWidgets()[seq].LoadWidget()
-                sg.modules.WidgetsLoad[seq] = True
+            seq = self.widget.boxmodule.currentIndex()
+            self.widget.skmodule.setCurrentIndex(seq)
+            _path = scc.modules.GetInfosT()[-1][seq]
+            self.widget.picicon.setIcon(_path)
+            if not scc.modules.WidgetsLoad[seq]:
+                scc.modules.GetWidgets()[seq].LoadWidget()
+                scc.modules.WidgetsLoad[seq] = True
         except Exception as e:
             _str = GetTracebackInfo(e) + "切换模块子页面流程异常"
             logger.error(_str)
@@ -102,21 +123,20 @@ class SGAMain5(SGAMain4):
     def LoadSet(self, subconfig: dict):
         try:
             modulekey = subconfig["ModuleKey"]
-            subconfig.update(sg.mainconfig.OtherConfig)
-            seq = sg.modules.FindItem(modulekey)[-1]
-            self.module.boxmodule.setDisabled(True)
-            self.module.boxmodule.setCurrentIndex(seq)
-            self.module.skmodule.setCurrentIndex(seq)
-            if not sg.modules.WidgetsLoad[seq]:
-                sg.modules.GetWidgets()[seq].LoadWidget()
-                sg.modules.WidgetsLoad[seq] = True
-            self.module.boxmodule.setDisabled(False)
-            sg.info.OtherConfig = sg.mainconfig.OtherConfig
-            sg.modules.GetWidgets()[seq].SetWidget(subconfig)
-            _path = sg.modules.GetInfosT()[-1][seq]
-            self.module.picicon.setIcon(_path)
-            self.module.boxmodule.setCurrentIndex(seq)
-            # self.module.skmodule.setCurrentIndex(seq)
+            subconfig.update(scc.mc.OtherConfig)
+            seq = scc.modules.FindItem(modulekey)[-1]
+            self.widget.boxmodule.setDisabled(True)
+            self.widget.boxmodule.setCurrentIndex(seq)
+            self.widget.skmodule.setCurrentIndex(seq)
+            if not scc.modules.WidgetsLoad[seq]:
+                scc.modules.GetWidgets()[seq].LoadWidget()
+                scc.modules.WidgetsLoad[seq] = True
+            self.widget.boxmodule.setDisabled(False)
+            scc.info.OtherConfig = scc.mc.OtherConfig
+            scc.modules.GetWidgets()[seq].SetWidget(subconfig)
+            _path = scc.modules.GetInfosT()[-1][seq]
+            self.widget.picicon.setIcon(_path)
+            self.widget.boxmodule.setCurrentIndex(seq)
         except Exception as e:
             _str = GetTracebackInfo(e) + "载入子配置流程异常"
             logger.error(_str)
@@ -124,20 +144,18 @@ class SGAMain5(SGAMain4):
 
     def configdelete(self):
         try:
-            num = self.module.ecbconfig.currentIndex()
-            ck, name, mk = sg.subconfig.GetFiles()[num]
-            filepath = f"personal/config/{ck}{name}.json"
-            del sg.subconfig.filelist[num]
-            self.module.ecbconfig.removeItem(num)
+            num = self.widget.ecbconfig.currentIndex()
+            ck, name, mk = scc.sc.GetFiles()[num]
+            filepath = path.join("personal/config", f"{ck}{name}.json")
+            del scc.sc.filelist[num]
+            self.widget.ecbconfig.removeItem(num)
             remove(filepath)
-            _tw = self.overall.timer.wdtime
-            nn = num+1
-            for i in range(10):
-                getattr(_tw, f"text{i}").removeItem(nn)
-            if sg.modules.WidgetsLoad[0]:
-                _wdlist = sg.modules.GetWidgets()[0].wdlist
-                for i in range(1, 9):
-                    getattr(_wdlist, f"task0{i}").removeItem(nn)
+            nn = num + 1
+            for i in self.wdtime.texts:
+                i.removeItem(nn)
+            if scc.modules.WidgetsLoad[0]:
+                for i in scc.modules.GetWidgets()[0].wdlist.tasks:
+                    i.removeItem(nn)
             self.infoHead()
             self.infoAdd(f"删除配置：{ck}{name}")
             self.infoEnd()
@@ -148,26 +166,21 @@ class SGAMain5(SGAMain4):
 
     def configadd(self):
         try:
-            import random
-            default = sg.modules.GetConfig(0).model_dump()
-            while 1:
+            default = scc.modules.GetConfig(0).model_dump()
+            while True:
                 key = f"{random.randint(0, 9999):04d}"
-                if key in sg.subconfig.GetFilesT()[0]:
-                    continue
-                else:
+                if key not in scc.sc.GetFilesT()[0]:
                     break
             default['ConfigKey'] = key
-            sg.subconfig.Save(default)
-            self.module.ecbconfig.addItem("默认配置")
-            sg.subconfig.filelist.append([key, "默认配置", 0])
-            self.module.ecbconfig.setCurrentIndex(len(sg.subconfig.filelist)-1)
-            _tw = self.overall.timer.wdtime
-            for i in range(10):
-                getattr(_tw, f"text{i}").addItem("默认配置")
-            if sg.modules.WidgetsLoad[0]:
-                _wdlist = sg.modules.GetWidgets()[0].wdlist
-                for i in range(1, 9):
-                    getattr(_wdlist, f"task0{i}").addItem("默认配置")
+            scc.sc.Save(default)
+            self.widget.ecbconfig.addItem("默认配置")
+            scc.sc.filelist.append([key, "默认配置", 0])
+            self.widget.ecbconfig.setCurrentIndex(len(scc.sc.filelist) - 1)
+            for i in self.wdtime.texts:
+                i.addItem("默认配置")
+            if scc.modules.WidgetsLoad[0]:
+                for i in scc.modules.GetWidgets()[0].wdlist.tasks:
+                    i.addItem("默认配置")
             self.infoHead()
             self.infoAdd(f"新建配置")
             self.infoEnd()
@@ -178,18 +191,13 @@ class SGAMain5(SGAMain4):
 
     def ReadyToRename(self):
         try:
-            _text = self.module.ecbconfig.currentText()
-            self.module.ecbconfig.hide()
-            self.module.edlconfig.setText(_text)
-            self.module.edlconfig.show()
-            self.module.btconfigfinish.show()
-            self.module.btconfigedit.hide()
-            self.module.btconfigunlock.setDisabled(True)
-            self.module.btconfiglock.setDisabled(True)
-            self.module.btstart.setDisabled(True)
-            self.module.btpause.setDisabled(True)
-            self.module.btconfigadd.setDisabled(True)
-            self.module.btconfigdelete.setDisabled(True)
+            _text = self.widget.ecbconfig.currentText()
+            self.widget.ecbconfig.hide()
+            self.widget.edlconfig.setText(_text)
+            self.widget.edlconfig.show()
+            self.widget.btconfigfinish.show()
+            self.widget.btconfigedit.hide()
+            self._disable_buttons(True)
         except Exception as e:
             _str = GetTracebackInfo(e) + "子配置准备更名流程异常"
             logger.error(_str)
@@ -197,45 +205,42 @@ class SGAMain5(SGAMain4):
 
     def configrename(self):
         try:
-            num = self.module.ecbconfig.currentIndex()
-            oldname = self.module.ecbconfig.currentText()
-            newname = self.module.edlconfig.text()
+            num = self.widget.ecbconfig.currentIndex()
+            oldname = self.widget.ecbconfig.currentText()
+            newname = self.widget.edlconfig.text()
+            if not newname.strip():
+                self.infoAdd("配置名称不能为空")
+                return
             if newname != oldname:
-                _dict = sg.subconfig.Read(num)
-                self.module.ecbconfig.setItemText(num, newname)
-                fl = sg.subconfig.GetFiles()
-                fl[num][1] = newname
-                sg.subconfig.filelist = fl
-                configkey = sg.mainconfig.ConfigKey
-                oldpath = path.join(sg.info.Workdir, f"personal/config/{configkey}{oldname}.json")
-                newpath = path.join(sg.info.Workdir, f"personal/config/{configkey}{newname}.json")
+                _dict = scc.sc.Read(num)
+                self.widget.ecbconfig.setItemText(num, newname)
+                fl = scc.sc.GetFiles()
+                list(fl[num])[1] = newname
+                scc.sc.filelist = fl
+                configkey = scc.mc.ConfigKey
+                oldpath = path.join(scc.info.Workdir, "personal/config", f"{configkey}{oldname}.json")
+                newpath = path.join(scc.info.Workdir, "personal/config", f"{configkey}{newname}.json")
 
                 _dict["ConfigName"] = newname
                 replace(oldpath, newpath)
-                sg.subconfig.Save(_dict)
-                _tw = self.overall.timer.wdtime
+                scc.sc.Save(_dict)
                 old_index = num + 1
-                for i in range(10):
-                    getattr(_tw, f"text{i}").setItemText(old_index, newname)
-                if sg.modules.WidgetsLoad[0]:
-                    _wdlist = sg.modules.GetWidgets()[0].wdlist
-                    for i in range(1, 9):
-                        getattr(_wdlist, f"task0{i}").setItemText(old_index, newname)
+                for i in self.wdtime.texts:
+                    i.setItemText(old_index, newname)
+                if scc.modules.WidgetsLoad[0]:
+                    for i in scc.modules.GetWidgets()[0].wdlist.tasks:
+                        i.setItemText(old_index, newname)
                 self.infoHead()
                 self.infoAdd(f"重命名配置：{configkey}")
                 self.infoAdd(f"  {oldname} -> {newname}", False)
                 self.infoEnd()
-            self.module.edlconfig.hide()
-            self.module.ecbconfig.show()
-            self.module.btconfigfinish.hide()
-            self.module.btconfigedit.show()
-            self.module.btconfigunlock.setEnabled(True)
-            self.module.btconfiglock.setEnabled(True)
-            self.module.btstart.setEnabled(True)
-            self.module.btpause.setEnabled(True)
-            self.module.btconfigadd.setEnabled(True)
-            self.module.btconfigdelete.setEnabled(True)
+            self.widget.edlconfig.hide()
+            self.widget.ecbconfig.show()
+            self.widget.btconfigfinish.hide()
+            self.widget.btconfigedit.show()
+            self._disable_buttons(False)
         except Exception as e:
             _str = GetTracebackInfo(e) + "子配置确认更名流程异常"
             logger.error(_str)
             self.infoAdd(f"子配置确认更名流程异常")
+            self._disable_buttons(False)

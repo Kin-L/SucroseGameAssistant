@@ -1,14 +1,18 @@
 from .image import SGAImage
-from time import sleep, time
-from maincode.tools.main import logger
+from time import sleep
+from .keymouse import SGAKeyMouse
 from os import path
 import cv2
 import numpy as np
+from maincode.tools.controller.screen import SGAScreen
 
 
-class Operate(SGAImage):
+class Operate(SGAKeyMouse, SGAScreen, SGAImage):
     WaitTime = (0.4, 10)
     MinSim = 0.9
+
+    def __init__(self):
+        super().__init__()
 
     def clickChange(self, pos=None, target=None, zone=None, wait=WaitTime, minsim=MinSim, errsc=True):
         zone = self.convert(zone)
@@ -18,6 +22,7 @@ class Operate(SGAImage):
         if target is None:
             scbef = self.screenshot(zone)
             bef = cv2.cvtColor(np.asarray(scbef), cv2.COLOR_BGR2GRAY)
+            aft = None
             self.click(pos)
             while num > 0:
                 sleep(sec)
@@ -35,10 +40,7 @@ class Operate(SGAImage):
                     self.click(pos)
                     num -= 1
             if errsc:
-                _path1 = self.SaveShot(scbef, "bef")
-                _path2 = self.SaveShot(scaft, "aft")
-                logger.error(f"截图导出bef: {_path1}")
-                logger.error(f"截图导出aft: {_path2}")
+                self.SaveShotBA(bef, aft)
         elif isinstance(target, str):
             if path.isfile(target) and path.exists(target):
 
@@ -73,6 +75,7 @@ class Operate(SGAImage):
         flag = False
         if target is None:
             bef = cv2.cvtColor(np.asarray(self.screenshot(zone)), cv2.COLOR_RGB2BGR)
+            aft = None
             while num > 0:
                 self.press(key)
                 sleep(sec)
@@ -84,11 +87,8 @@ class Operate(SGAImage):
                     if flag:
                         return True
                     num -= 1
-        if errsc:
-            _path1 = self.SaveShot(bef, "bef")
-            _path2 = self.SaveShot(aft, "aft")
-            logger.error(f"截图导出bef: {_path1}")
-            logger.error(f"截图导出aft: {_path2}")
+            if errsc:
+                self.SaveShotBA(bef, aft)
         elif isinstance(target, str):
             if path.isfile(target) and path.exists(target):
                 while num > 0:
@@ -202,6 +202,7 @@ class Operate(SGAImage):
         flag = False
         if target is None:
             bef = cv2.cvtColor(np.asarray(self.screenshot(zone)), cv2.COLOR_BGR2GRAY)
+            aft = None
             self.tap(para)
             while num > 0:
                 sleep(sec)
@@ -218,10 +219,7 @@ class Operate(SGAImage):
                     self.tap(para)
                     num -= 1
             if errsc:
-                _path1 = self.SaveShot(bef, "bef")
-                _path2 = self.SaveShot(aft, "aft")
-                logger.error(f"截图导出bef: {_path1}")
-                logger.error(f"截图导出aft: {_path2}")
+                self.SaveShotBA(bef, aft)
         elif isinstance(target, str):
             if path.isfile(target) and path.exists(target):
                 while num > 0:

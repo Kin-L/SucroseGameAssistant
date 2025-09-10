@@ -1,4 +1,4 @@
-from maincode.tools.controls import palette, ScrollArea, Stack
+from maincode.tools.sgaqt.widgets import palette, ScrollArea, Stack
 from PyQt5.QtWidgets import QWidget, QFrame
 from pydantic import BaseModel
 

@@ -1,6 +1,18 @@
-from maincode.tools.controls import (Button, Widget, Label,
-                                     Combobox, Check, tips,
-                                     ScrollArea, Timepicker)
+from maincode.tools.sgaqt.texts import Label, tips
+from maincode.tools.sgaqt.buttons import Button, Check, Combobox, Timepicker
+from maincode.tools.sgaqt.widgets import Widget, ScrollArea
+
+# 常量定义
+EXECUTE_COMBO_WIDTH = 90
+EXECUTE_COMBO_HEIGHT = 30
+TIMER_PICKER_WIDTH = 50
+TIMER_PICKER_HEIGHT = 30
+TEXT_COMBO_WIDTH = 210
+TEXT_COMBO_HEIGHT = 30
+CHECK_WIDTH = 30
+CHECK_HEIGHT = 30
+
+ITEM_COUNT = 10  # 可配置项数
 
 
 class TimerWidgets(Widget):
@@ -20,67 +32,43 @@ class TimerWidgets(Widget):
         self.sratime = ScrollArea(self, (0, 65, 620, 120))
         self.wdtime = TimerWidget(self, (0, 0, 620, 120))
         self.sratime.setWidget(self.wdtime)
-        # self.wdtime.SetConfig(self.TimerConfig.model_dump())
 
 
 class TimerWidget(Widget):
     def __init__(self, widget: Widget, loc):
         super().__init__(widget, loc)
         self.setFixedHeight(400)
-        # self.scroll_time_item.setFrameShape(QtWidgets.QFrame.Shape(0))
-        # 时间条目按钮
-        self.execute0 = Combobox(self, (5, 5, 90, 30))
-        self.execute1 = Combobox(self, (5, 45, 90, 30))
-        self.execute2 = Combobox(self, (5, 85, 90, 30))
-        self.execute3 = Combobox(self, (5, 125, 90, 30))
-        self.execute4 = Combobox(self, (5, 165, 90, 30))
-        self.execute5 = Combobox(self, (5, 205, 90, 30))
-        self.execute6 = Combobox(self, (5, 245, 90, 30))
-        self.execute7 = Combobox(self, (5, 285, 90, 30))
-        self.execute8 = Combobox(self, (5, 325, 90, 30))
-        self.execute9 = Combobox(self, (5, 365, 90, 30))
-        _list = ["禁用", "每日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"]
-        self.execute0.addItems(_list)
-        self.execute1.addItems(_list)
-        self.execute2.addItems(_list)
-        self.execute3.addItems(_list)
-        self.execute4.addItems(_list)
-        self.execute5.addItems(_list)
-        self.execute6.addItems(_list)
-        self.execute7.addItems(_list)
-        self.execute8.addItems(_list)
-        self.execute9.addItems(_list)
 
-        self.timer0 = Timepicker(self, (100, 5, 50, 30))
-        self.timer1 = Timepicker(self, (100, 45, 50, 30))
-        self.timer2 = Timepicker(self, (100, 85, 50, 30))
-        self.timer3 = Timepicker(self, (100, 125, 50, 30))
-        self.timer4 = Timepicker(self, (100, 165, 50, 30))
-        self.timer5 = Timepicker(self, (100, 205, 50, 30))
-        self.timer6 = Timepicker(self, (100, 245, 50, 30))
-        self.timer7 = Timepicker(self, (100, 285, 50, 30))
-        self.timer8 = Timepicker(self, (100, 320, 50, 30))
-        self.timer9 = Timepicker(self, (100, 360, 50, 30))
+        # 初始化控件容器
+        self.executes = []
+        self.timers = []
+        self.texts = []
+        self.awakes = []
 
-        self.text0 = Combobox(self, (345, 5, 210, 30))
-        self.text1 = Combobox(self, (345, 45, 210, 30))
-        self.text2 = Combobox(self, (345, 85, 210, 30))
-        self.text3 = Combobox(self, (345, 125, 210, 30))
-        self.text4 = Combobox(self, (345, 165, 210, 30))
-        self.text5 = Combobox(self, (345, 205, 210, 30))
-        self.text6 = Combobox(self, (345, 245, 210, 30))
-        self.text7 = Combobox(self, (345, 285, 210, 30))
-        self.text8 = Combobox(self, (345, 325, 210, 30))
-        self.text9 = Combobox(self, (345, 365, 210, 30))
+        # 创建控件
+        self._create_controls()
 
-        _str = " "
-        self.awake0 = Check(self, (570, 5, 30, 30), _str)
-        self.awake1 = Check(self, (570, 45, 30, 30), _str)
-        self.awake2 = Check(self, (570, 85, 30, 30), _str)
-        self.awake3 = Check(self, (570, 125, 30, 30), _str)
-        self.awake4 = Check(self, (570, 165, 30, 30), _str)
-        self.awake5 = Check(self, (570, 205, 30, 30), _str)
-        self.awake6 = Check(self, (570, 245, 30, 30), _str)
-        self.awake7 = Check(self, (570, 285, 30, 30), _str)
-        self.awake8 = Check(self, (570, 325, 30, 30), _str)
-        self.awake9 = Check(self, (570, 365, 30, 30), _str)
+    def _create_controls(self):
+        execute_list = ["禁用", "每日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+        y_offset = 5
+        y_step = 40
+
+        for i in range(ITEM_COUNT):
+            y_pos = y_offset + i * y_step
+
+            # 执行下拉框
+            execute = Combobox(self, (5, y_pos, EXECUTE_COMBO_WIDTH, EXECUTE_COMBO_HEIGHT))
+            execute.addItems(execute_list)
+            self.executes.append(execute)
+
+            # 时间选择器
+            timer = Timepicker(self, (100, y_pos, TIMER_PICKER_WIDTH, TIMER_PICKER_HEIGHT))
+            self.timers.append(timer)
+
+            # 配置选择下拉框
+            text = Combobox(self, (345, y_pos, TEXT_COMBO_WIDTH, TEXT_COMBO_HEIGHT))
+            self.texts.append(text)
+
+            # 唤醒复选框
+            awake = Check(self, (570, y_pos, CHECK_WIDTH, CHECK_HEIGHT), " ")
+            self.awakes.append(awake)

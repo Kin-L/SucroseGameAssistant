@@ -1,24 +1,18 @@
-from maincode.tools.main import (CheckAdmin, GetWindow, logger,
-                                 GetTracebackInfo, SendMessageBox)
-from PyQt5.QtWidgets import QApplication
+from maincode.tools.core.logger import logger
+from maincode.tools.system.notification import SendMessageBox, GetTracebackInfo, CheckAdmin
+from maincode.tools.system.window import GetWindow
 from PyQt5.QtCore import Qt
 from time import sleep
-from maincode.tools.main import killprocess, GetPid
+from maincode.sgamain import SGAMain
+from PyQt5.QtWidgets import QApplication
 import keyboard
 import sys
 
 
-def excepthook(exc_type, exc_value, exc_tb):
-    logger.critical("全局异常", exc_info=(exc_type, exc_value, exc_tb))
-    # SendMessageBox(f"崩溃: {exc_value}")
-
-
-sys.excepthook = excepthook
-
-
-def SGALoad(showconsole: bool = True):
+def SGALoad():
     try:
         if not CheckAdmin():
+            logger.warning("权限不足，SGA 启动失败")
             return
         window = GetWindow("砂糖代理", True)
         if window is not None:
@@ -27,27 +21,28 @@ def SGALoad(showconsole: bool = True):
             print("")
             logger.info("================SGA开始启动================")
             # 唤醒屏幕
-            keyboard.send("numlock")
-            sleep(0.01)
-            keyboard.send("numlock")
-            while v := GetPid("PaddleOCR-json.exe"):
-                killprocess(v)
-            # SGA窗口初始化
+            try:
+                keyboard.send("numlock")
+                sleep(0.01)
+                keyboard.send("numlock")
+            except Exception as e:
+                logger.warning(f"唤醒屏幕失败: {e}")
+            # 判断是否加载 UI
+            hideui = "-hideui" in sys.argv
+            # hideui = True
             QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
             QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
             QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
             application = QApplication(sys.argv)
-            from maincode.thread.updatecheck import SGAMain8
-            loadui = True
-            if showconsole:
-                sys.argv.append("showconsole")
-                if "current" in sys.argv or "hideui" in sys.argv:
-                    loadui = False
-            sqmw = SGAMain8(loadui)
-            if not loadui:
-                logger.info("SGA启动完成, SGA运行中...")
-                if "current" in sys.argv:
-                    sqmw.TaskStart("current")
+            sqm = SGAMain()
+            if hideui:
+                sqm.hideui_connect()
+            else:
+                sqm.load_ui()
+            if "-current" in sys.argv:
+                sqm.TaskStart("current")
+            elif "-subconfig" in sys.argv:  # ck为子配置文件识别码，为其文件名的前四位数字
+                sqm.TaskStart("subconfig", {"ck": sys.argv[sys.argv.index("-subconfig") + 1]})
             application.exec_()
             logger.info("==================SGA关闭=================\n\n")
     except Exception as e:

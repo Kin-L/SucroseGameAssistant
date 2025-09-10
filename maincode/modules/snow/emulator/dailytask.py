@@ -1,4 +1,4 @@
-from maincode.tools.main import logger
+from maincode.tools.core.logger import logger
 
 
 def snowDailyTask(self):
@@ -31,7 +31,7 @@ def snowDailyTask(self):
                     pos = self.ctler.findtext(_r, (0, 731, 1417, 858))
                     if pos:
                         (_x, _y) = self.ctler.convertR(pos)
-                        _str = self.ctler.ocr((_x+247, 177,  _x+447, 233))[0]
+                        _str = self.ctler.ocr((_x + 247, 177, _x + 447, 233))[0]
                         if _str[-3] == "0":
                             self.send(f"今日已完成：角色 {i}")
                             _f = True

@@ -1,13 +1,13 @@
 import json
-from maincode.main.info import info
-from maincode.tools.controls import (Combobox, SetStackPage, Check,
-                                     ModuleStackPage, Widget, Line,
-                                     Picture, TaskPanel, Label, tips,
-                                     SLineEdit, PicButton, SetButton, TipsButton)
+from maincode.config.info import info
+from maincode.tools.core.constant import spr
+from maincode.tools.sgaqt.texts import Label, Picture, SLineEdit, Line, tips, TipsButton
+from maincode.tools.sgaqt.buttons import PicButton, Check, Combobox, SetButton
+from maincode.tools.sgaqt.widgets import Widget, SetStackPage, ModuleStackPage, TaskPanel
 from typing import Optional
-from os import path, startfile, getcwd
+from os import startfile, getcwd
 from PyQt5.QtWidgets import QFileDialog
-_path = "resources/main/button/fold.png"
+_path = spr.FoldPic
 
 
 class SnowPage(ModuleStackPage):
@@ -46,9 +46,9 @@ class SnowPage(ModuleStackPage):
         self.wdlist.pbset03.clicked.connect(lambda: self.sksetting.setCurrentIndex(3))
         self.wdlist.pbset04.clicked.connect(lambda: self.sksetting.setCurrentIndex(4))
         self.wdlist.pbset05.clicked.connect(lambda: self.sksetting.setCurrentIndex(5))
-        self.page01.btsnowlist.clicked.connect(lambda: startfile(f"{getcwd()}/resources/snow/list.json"))
-        self.page02.btsnowlist.clicked.connect(lambda: startfile(f"{getcwd()}/resources/snow/list.json"))
-        self.page04.btopenroll.clicked.connect(lambda: startfile(f"{getcwd()}/personal/snow/roll"))
+        self.page01.btsnowlist.clicked.connect(lambda: startfile(f"{spr.WorkDir}/{spr.SnowJson}"))
+        self.page02.btsnowlist.clicked.connect(lambda: startfile(f"{spr.WorkDir}/{spr.SnowJson}"))
+        self.page04.btopenroll.clicked.connect(lambda: startfile(f"{spr.WorkDir}/{spr.SnowRollDir}"))
         self.page00.btselect.clicked.connect(self.SelectPath)
 
     def SelectPath(self):

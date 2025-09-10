@@ -1,7 +1,9 @@
-from maincode.tools.myclass import SGAStop
-from maincode.tools.main import GetWindow, GetTracebackInfo, logger
+from maincode.tools.core.baseclass import SGAStop
+from maincode.tools.system.notification import GetTracebackInfo
+from maincode.tools.core.logger import logger
+from maincode.tools.system.window import GetWindow
 from time import sleep
-from maincode.main.maingroup import sg
+from maincode.config.configctrl import scc
 from win32gui import FindWindow
 from os import path
 from .energy import snowEnergy
@@ -15,13 +17,16 @@ from .guess import snowGuess
 
 def CloseSnow(self):
     for _ in range(20):
-        win = GetWindow("尘白禁区")
-        if win is None:
-            self.send(f"尘白禁区已关闭")
-            self.para["startwait"] = True
-            return True
-        else:
-            win.close()
+        try:
+            win = GetWindow("尘白禁区")
+            if win is None:
+                self.send(f"尘白禁区已关闭")
+                self.para["startwait"] = True
+                return True
+            else:
+                win.close()
+        except Exception as e:
+            logger.error(f"关闭窗口时发生异常: {e}")
         sleep(0.5)
     self.send(f"尘白禁区关闭超时")
     return False
@@ -32,12 +37,14 @@ def SnowHome(self):
     flag = False
     while num > 0:
         sc = self.ctler.screenshot()
-        if "任务" in self.ctler.ocr((1458, 330, 1529, 379), sc)[0]:
+        task_ocr_result = self.ctler.ocr((1458, 330, 1529, 379), sc)[0]
+        exit_ocr_result = self.ctler.ocr((1617, 23, 1701, 70), sc)[0]
+        if "任务" in task_ocr_result:
             if flag:
                 return True
             else:
                 flag = True
-        elif "退出" in self.ctler.ocr((1617, 23, 1701, 70), sc)[0]:
+        elif "退出" in exit_ocr_result:
             self.ctler.clickChange(target="退出", zone=(1617, 23, 1701, 70))
             self.ctler.waitTo("任务", (1458, 330, 1529, 379), (0.4, 30))
             return True
@@ -126,7 +133,7 @@ def taskstart(self):
             else:
                 CloseSnow(self)
                 self.send(f"尘白禁区:执行异常,跳过流程")
-                sg.info.TaskError = True
+                scc.info.TaskError = True
                 break
         else:
             self.send(f"任务完成:尘白禁区")
@@ -151,29 +158,39 @@ def SnowLaunch(self):
     _path = _dict["Path"]
     _server = _dict["Server"]
     if _server != 2:
-        h1 = FindWindow("wailsWindow", "尘白禁区启动器")
-        h2 = FindWindow("Qt5159QWindowIcon", "西山居启动器-尘白禁区")
-        if not (h1 or h2):
-            if not (isinstance(_path, str) and path.isfile(_path) and
-                    path.split(_path)[1] in ["snow_launcher.exe", "SeasunGame.exe"]):
-                raise RuntimeError("启动器路径异常")
-            _list = [["wailsWindow", "尘白禁区启动器"],
-                     ["Qt5159QWindowIcon", "西山居启动器-尘白禁区"]]
-            # print(_path)
-            hwnd = self.ctler.RunProg(f"start \"\" \"{_path}\"", _list, 2)
-            assert hwnd
+        if not (isinstance(_path, str) and path.isfile(_path) and
+                path.split(_path)[1] in ["snow_launcher.exe", "SeasunGame.exe"]):
+            raise RuntimeError("启动器路径异常")
+        launchname = path.split(_path)[1]
+        if launchname == "snow_launcher.exe":
+            item = ["wailsWindow", "尘白禁区启动器"]
+        elif launchname == "SeasunGame.exe":
+            item = ["Qt5159QWindowIcon", "西山居启动器-尘白禁区"]
         else:
-            hwnd = [item for item in [h1, h2] if item][0]
+            raise RuntimeError("启动器路径异常")
+        hwnd = FindWindow(*item)
+        if not hwnd:
+            hwnd = self.ctler.RunProg(f"start \"\" \"{_path}\"", [item], (0.4, 10), 15)
+            assert hwnd
         self.ctler.ChooseWindow(hwnd, (1280, 748))
         LauchPrepare(self)
     else:
         _path = "start steam://rungameid/2668080"
-        hwnd = self.ctler.RunProg(_path, glist, 5)
+        hwnd = self.ctler.RunProg(_path, glist, (0.4, 10), 20)
         assert hwnd
         self.ctler.ChooseWindow(hwnd, (1920, 1080))
         if self.ctler.ZoomW != self.ctler.ZoomH:
-            self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
             self.send(f"当前窗口: {self.ctler.window.rect}")
+            self.send("游戏窗口分辨率不适配, 请将窗口模式分辨率设置为16：9")
+            self.send("尝试切换")
+            self.ctler.press('alt+enter')
+            self.ctler.wait(1)
+            self.ctler.ChooseWindow(hwnd, (1920, 1080))
+            if self.ctler.ZoomW != self.ctler.ZoomH:
+                self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
+                self.send(f"当前窗口: {self.ctler.window.rect}")
+            else:
+                self.send(f"切换后成功，当前窗口: {self.ctler.window.rect}")
 
 
 def LauchPrepare(self):
@@ -200,9 +217,18 @@ def LauchPrepare(self):
                 hwnd += 1
                 if self.ctler.ZoomW != self.ctler.ZoomH:
                     if hwndNum == 3:
-                        self.send(
-                            "游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
                         self.send(f"当前窗口: {self.ctler.window.rect}")
+                        self.send("游戏窗口分辨率不适配, 请将窗口模式分辨率设置为16：9")
+                        self.send("尝试切换")
+                        self.ctler.press('alt+enter')
+                        self.ctler.wait(1)
+                        self.ctler.ChooseWindow(hwnd, (1920, 1080))
+                        if self.ctler.ZoomW != self.ctler.ZoomH:
+                            self.send(
+                                "游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
+                            self.send(f"当前窗口: {self.ctler.window.rect}")
+                        else:
+                            self.send(f"切换后成功，当前窗口: {self.ctler.window.rect}")
                     else:
                         sleep(2)
                         continue
@@ -252,8 +278,18 @@ def LauchPrepare(self):
                 hwnd += 1
                 if self.ctler.ZoomW != self.ctler.ZoomH:
                     if hwndNum == 3:
-                        self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
                         self.send(f"当前窗口: {self.ctler.window.rect}")
+                        self.send("游戏窗口分辨率不适配, 请将窗口模式分辨率设置为16：9")
+                        self.send("尝试切换")
+                        self.ctler.press('alt+enter')
+                        self.ctler.wait(1)
+                        self.ctler.ChooseWindow(hwnd, (1920, 1080))
+                        if self.ctler.ZoomW != self.ctler.ZoomH:
+                            self.send(
+                                "游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
+                            self.send(f"当前窗口: {self.ctler.window.rect}")
+                        else:
+                            self.send(f"切换后成功，当前窗口: {self.ctler.window.rect}")
                     else:
                         sleep(2)
                         continue

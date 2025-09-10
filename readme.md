@@ -5,6 +5,7 @@
 目前SGA已适配尘白禁区，原神，MAA，三月七助手等游戏，并支持使用通用执行模块启用其他第三方自动化软件。
 
 ####  SGA开源免费，源代码将同时更新于: [github](https://github.com/Kin-L/SucroseGameAssistant) / [gitee](https://gitee.com/huixinghen/SucroseGameAssistant)
+####  SGA介绍 [readme网页版](https://kin-l.github.io/sga-instructions/)
 
 ####  目前作者只更新尘白禁区模块和SGA主体，欢迎新的合作者参与对其他模块进行更新适配  
 ### 联系方式

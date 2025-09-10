@@ -1,6 +1,8 @@
-from maincode.tools.controls import (Button, Stack, Combobox,
-                                     PicButton, StateSigh, SLineEdit)
+from maincode.tools.sgaqt.texts import SLineEdit, tips
+from maincode.tools.sgaqt.buttons import Button, PicButton, Combobox
+from maincode.tools.sgaqt.widgets import Stack, StateSigh
 from PyQt5.QtWidgets import QWidget
+from maincode.tools.core.constant import spr
 
 
 # 模组设置窗口
@@ -12,35 +14,30 @@ class ModuleWidget(QWidget):
         self.edlconfig = SLineEdit(self, (40, 0, 215, 35))
         self.edlconfig.hide()
         # 开始暂停按钮
-        deletepath = r"resources/main/button/delete.png"
-        unlockpath = r"resources/main/button/unlock.png"
-        lockpath = r"resources/main/button/lock.png"
-        addpath = r"resources/main/button/add.png"
-        finish = r"resources/main/button/finish.png"
-        rename = r"resources/main/button/rename.png"
         sizetp = (25, 25)
-        self.btconfigdelete = PicButton(self, (0, 0, 35, 35), deletepath, sizetp)
+        self.btconfigdelete = PicButton(self, (0, 0, 35, 35), spr.DeletePic, sizetp)
         self.btconfigdelete.hide()
-        self.btconfigadd = PicButton(self, (0, 0, 35, 35), addpath, sizetp)
-        self.btconfigunlock = PicButton(self, (260, 0, 35, 35), unlockpath, sizetp)
+        self.btconfigadd = PicButton(self, (0, 0, 35, 35), spr.AddPic, sizetp)
+        self.btconfigunlock = PicButton(self, (260, 0, 35, 35), spr.UnlockPic, sizetp)
         self.btconfigunlock.hide()
-        self.btconfiglock = PicButton(self, (260, 0, 35, 35), lockpath, sizetp)
+        self.btconfiglock = PicButton(self, (260, 0, 35, 35), spr.LockPic, sizetp)
 
-        self.btconfigedit = PicButton(self, (300, 0, 35, 35), rename, sizetp)
-        self.btconfigfinish = PicButton(self, (300, 0, 35, 35), finish, sizetp)
+        self.btconfigedit = PicButton(self, (300, 0, 35, 35), spr.RenamePic, sizetp)
+        self.btconfigfinish = PicButton(self, (300, 0, 35, 35), spr.FinishPic, sizetp)
         self.btconfigfinish.hide()
 
         self.btpause = Button(self, (340, 0, 55, 35), "停止")
         self.btpause.hide()
         self.btstart = Button(self, (340, 0, 55, 35), "开始")
-
+        tips(self.btstart, "点击箭头按钮切换运行模式")
+        self.btstartmode = PicButton(self, (400, 0, 35, 35), spr.ArrowDownPic, sizetp)
+        tips(self.btstartmode, "点击切换运行模式\n箭头向下执行当前页面任务\n箭头向左执行栏目中任务")
         # 堆叠窗口
         self.skmodule = Stack(self, (0, 40, 625, 540))
         # 模块按钮
         self.boxmodule = Combobox(self, (0, 45, 170, 35))
         # self.boxmodule.addItems(sg.subconfig.GetSignListT()[0])
         # 图标标签
-        defaultpath = "resources/main/SGA/default.png"
-        self.picicon = PicButton(self, (525, 475, 100, 100), defaultpath, (98, 98))
+        self.picicon = PicButton(self, (525, 475, 100, 100), spr.SGAdefaultPic, (98, 98))
         # 状态指示
         self.statesigh = StateSigh(self, (526, 440, 100, 40))

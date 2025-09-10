@@ -1,4 +1,3 @@
-
 def snowGuess(self):
     if "同玩" not in self.ctler.ocr((43, 19, 327, 115))[0]:
         self.send("请先进入猜心对局界面，选择好模式并邀请少女完成")

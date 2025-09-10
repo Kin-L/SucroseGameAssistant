@@ -1,5 +1,8 @@
-from maincode.tools.main import logger
-from maincode.main.maingroup import sg
+from maincode.tools.core.logger import logger
+from maincode.config.configctrl import scc
+from maincode.tools.core.constant import spr
+
+HomePic = spr.snow.HomePic
 
 
 def snowDailyTask(self):
@@ -36,7 +39,7 @@ def snowDailyTask(self):
                     pos = self.ctler.StrFind(_r, res)
                     if pos:
                         (_x, _y) = self.ctler.convertR(pos)
-                        _str = self.ctler.ocr((_x+247, 177,  _x+447, 233))[0]
+                        _str = self.ctler.ocr((_x + 247, 177, _x + 447, 233))[0]
                         # print(_str, i)
                         if _str[-3] == "0":
                             self.send(f"今日已完成：角色 {i}")
@@ -52,7 +55,7 @@ def snowDailyTask(self):
                         _f = True
                         self.send(f"未识别到角色: {i}")
                         logger.debug(f"{cah}")
-                        sg.info.TaskError = True
+                        scc.info.TaskError = True
                     else:
                         self.ctler.roll((1002, 581), -5620, True)
                         self.ctler.wait(0.8)
@@ -92,7 +95,7 @@ def snowDailyTask(self):
                     self.ctler.clickChange((1168, 718), zone=(875, 685, 945, 749))
                 self.ctler.clickChange(target="开始", zone=(858, 801, 1072, 875))
                 self.send(f"完成:个人故事 {i}")
-                self.ctler.pressTo("esc", "resources/snow/picture/home.png", (1504, 0, 1771, 117))
+                self.ctler.pressTo("esc", HomePic, (1504, 0, 1771, 117))
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
         self.ctler.wait(0.5)
 

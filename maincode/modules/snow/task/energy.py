@@ -1,4 +1,8 @@
-from maincode.tools.main import logger
+from maincode.tools.core.logger import logger
+from maincode.tools.core.constant import spr
+
+HomePic = spr.snow.HomePic
+SupplyPic = f"{spr.snow.SnowDir}/picture/supply.png"
 
 
 def FightCommon(self, common):
@@ -74,7 +78,7 @@ def FightCommon(self, common):
                     self.ctler.wait(0.5)
                 else:
                     self.send("未找到目标后勤")
-                    self.ctler.pressTo("esc", "resources/snow/picture/home.png", (1504, 0, 1771, 117))
+                    self.ctler.pressTo("esc", HomePic, (1504, 0, 1771, 117))
                     return 0
             self.ctler.clickChange(pos, zone=(1488, 193, 1619, 237))
             self.ctler.clickChange((1823, 52), zone=(1811, 40, 1846, 79))
@@ -128,7 +132,7 @@ def snowEnergy(self):
         self.ctler.pressTo("esc", "任务", (1455, 324, 1533, 380))
     if self.para["DailyEnergyPack"]:
         self.ctler.clickChange((147, 556), zone=(151, 560, 217, 592))
-        pos, sim = self.ctler.findpic("resources/snow/picture/supply.png", zone=(0, 170, 93, 714))
+        pos, sim = self.ctler.findpic(SupplyPic, zone=(0, 170, 93, 714))
         if sim:
             self.ctler.clickChange(pos, zone=(303, 62, 374, 94))
         else:
@@ -192,10 +196,11 @@ def snowEnergy(self):
                 break
             if self.ctler.ocr((1378, 420, 1460, 457))[0]:
                 try:
-                    self.ctler.clickChange((1499, 538), zone=(1402, 463, 1499, 505))
-                    self.ctler.waitTo("resources/snow/picture/home.png", (1633, 6, 1718, 91))
+                    self.ctler.clickChange((1462, 481), zone=(1402, 463, 1499, 505))
+                    self.ctler.waitTo(HomePic, (1633, 6, 1718, 91))
                 except TimeoutError:
                     self.send(f"活动未开启")
+                    self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
                     break
                 self.ctler.wait(0.3)
                 pos = self.ctler.findtext("材料")
@@ -208,7 +213,7 @@ def snowEnergy(self):
                     self.send(f"未识别到：材料，尝试备用点位：{vername}")
                     self.ctler.click(cpos)
                     self.ctler.wait(0.5)
-                self.ctler.waitTo("resources/snow/picture/home.png", (1633, 6, 1718, 91))
+                self.ctler.waitTo(HomePic, (1633, 6, 1718, 91))
                 self.ctler.wait(0.5)
                 pos = self.ctler.findtext("深渊")
                 cpos = (936, 696)  # 备用点位
@@ -223,7 +228,7 @@ def snowEnergy(self):
                         pass
                     else:
                         self.send("未找到“深渊”, 版本未适配")
-                        self.ctler.clickChange(target="resources/snow/picture/home.png", zone=(1504, 0, 1771, 117))
+                        self.ctler.clickChange(target=HomePic, zone=(1504, 0, 1771, 117))
                         self.ctler.wait(0.5)
                         self.send("检查完成：感知扫荡")
                         return True

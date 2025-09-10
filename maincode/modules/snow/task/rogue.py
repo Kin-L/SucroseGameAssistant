@@ -1,7 +1,6 @@
 import time
 import keyboard
 from PyQt5.QtCore import QThread
-from maincode.tools.myclass import SGAStop
 
 
 def snowRogue(self):
