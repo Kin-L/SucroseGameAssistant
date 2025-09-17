@@ -38,7 +38,7 @@
 ### 视频教程
 [SGAv3介绍](https://www.bilibili.com/video/BV1tSGnzXEdg)  
 [SGAv3快速上手指南](https://www.bilibili.com/video/BV13kGuzfERf)  
-1.  从网盘下载带"full"后缀的最新安装包。蓝奏云有最大包体限制，需要额外下载OCR组件（大多数电脑使用“PaddleOCR-json”），需全部下载才能解压  
+1.  从网盘下载带"full"后缀的最新安装包。蓝奏云有最大包体限制，需要额外下载OCR组件（大多数电脑使用“PaddleOCR-json”），请参考快速上手教程放置OCR组件  
     1.  SGA-full包体  
         1.  [蓝奏云下载](https://wwrv.lanzouu.com/b002v5cgdg) 密码:faml  
         2.  [123云盘下载](https://www.123pan.com/s/PjLbVv-9kEuA.html) 提取码:stdl  

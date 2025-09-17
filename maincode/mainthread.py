@@ -42,8 +42,10 @@ class SGAMainThread(QObject):
                 from maincode.tools.controller.main import ctler
                 self.ctler = ctler
                 self.ctler.checkrun = info.checkrun
+                self.ctler.OCR.check()
             except FileExistsError:
                 self.send("未找到有效ocr-json.exe文件")
+                self.send("请自行指定OCR-json文件路径，或参考以下视频进行添加：https://www.bilibili.com/BV13kGuzfERf/?t=19")
                 self.finished.emit()
                 return
             try:

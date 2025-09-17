@@ -10,6 +10,7 @@ from .energy import snowEnergy
 from .dailytask import snowDailyTask
 from .receive import snowOther
 from .gacharecog import snowGachaRecog
+from .xxkt import snowXXKT
 from ..emulator.main import emulatorstart
 from .rogue import snowRogue
 from .guess import snowGuess
@@ -78,6 +79,10 @@ def taskstart(self):
                 elif self.para.get("guess", False):
                     snowGuess(self)
                     self.para["guess"] = False
+                    return
+                elif self.para.get("XXKT", False):
+                    snowXXKT(self)
+                    self.para["XXKT"] = False
                     return
                 LogSnow(self, 180)
                 num = 3
@@ -160,6 +165,7 @@ def SnowLaunch(self):
     if _server != 2:
         if not (isinstance(_path, str) and path.isfile(_path) and
                 path.split(_path)[1] in ["snow_launcher.exe", "SeasunGame.exe"]):
+            self.send("启动器路径异常")
             raise RuntimeError("启动器路径异常")
         launchname = path.split(_path)[1]
         if launchname == "snow_launcher.exe":
@@ -167,6 +173,7 @@ def SnowLaunch(self):
         elif launchname == "SeasunGame.exe":
             item = ["Qt5159QWindowIcon", "西山居启动器-尘白禁区"]
         else:
+            self.send("启动器路径异常")
             raise RuntimeError("启动器路径异常")
         hwnd = FindWindow(*item)
         if not hwnd:

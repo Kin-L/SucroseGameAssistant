@@ -1,13 +1,22 @@
 import json
+import os.path
+from webbrowser import open as weopen
 from maincode.config.info import info
 from maincode.tools.core.constant import spr
+from maincode.tools.core.logger import logger
 from maincode.tools.sgaqt.texts import Label, Picture, SLineEdit, Line, tips, TipsButton
-from maincode.tools.sgaqt.buttons import PicButton, Check, Combobox, SetButton
+from maincode.tools.sgaqt.buttons import (PicButton, Check, Combobox,
+                                          SetButton, Swicher)
 from maincode.tools.sgaqt.widgets import Widget, SetStackPage, ModuleStackPage, TaskPanel
 from typing import Optional
 from os import startfile, getcwd
 from PyQt5.QtWidgets import QFileDialog
+
+from maincode.tools.system.notification import GetTracebackInfo
+
 _path = spr.FoldPic
+
+
 
 
 class SnowPage(ModuleStackPage):
@@ -22,6 +31,7 @@ class SnowPage(ModuleStackPage):
         self.page05: Optional[SnowPage04Set] = None
         self.picbt: Optional[Picture] = None
         self.pbset00 = SetButton(self, (180, 10, 25, 25), (25, 25))
+        self.SwicherPath = ""
 
     def LoadWidget(self):
         self.wdlist = SnowList()
@@ -50,9 +60,59 @@ class SnowPage(ModuleStackPage):
         self.page02.btsnowlist.clicked.connect(lambda: startfile(f"{spr.WorkDir}/{spr.SnowJson}"))
         self.page04.btopenroll.clicked.connect(lambda: startfile(f"{spr.WorkDir}/{spr.SnowRollDir}"))
         self.page00.btselect.clicked.connect(self.SelectPath)
+        self.wdlist.btselect.clicked.connect(self.SelectSwicher)
+        self.wdlist.swhexie.checkedChanged.connect(self.ChangeSwitcher)
+        self.wdlist.tips.clicked.connect(lambda: weopen(spr.SwitcherURL))
 
     def SelectPath(self):
-        self.page00.lepath.setText(QFileDialog.getOpenFileName(self, "选择启动路径")[0])
+        try:
+            select_path = QFileDialog.getOpenFileName(self, "选择启动路径")[0]
+        except Exception as e:
+            logger.debug(GetTracebackInfo(e))
+            select_path = ""
+        if select_path:
+            self.page00.lepath.setText(select_path)
+
+    def SelectSwicher(self):
+        try:
+            select_path = QFileDialog.getOpenFileName(self, "选择启动路径")[0]
+        except Exception as e:
+            logger.debug(GetTracebackInfo(e))
+            select_path = ""
+        swbool = self._SetSwicher(select_path)
+        if swbool is not None:
+            self.wdlist.swhexie.setDisabled(False)
+            self.wdlist.swhexie.setChecked(swbool)
+            self.SwicherPath = select_path
+
+    def _SetSwicher(self, select_path: str):
+        if (select_path
+                and os.path.isfile(select_path)
+                and os.path.split(select_path)[-1].lower() == "localization.txt"):
+            with open(select_path, "r", encoding="utf-8") as f:
+                _text = f.readline()
+            if "localization" in _text and "=" in _text:
+                ...
+            else:
+                logger.debug(f"小开关文件识别异常：\npath:{select_path}")
+                return
+            sw_str = _text.split("=")[-1].strip()
+            if sw_str == "1":
+                return True
+            elif sw_str == "0":
+                return False
+            else:
+                logger.debug(f"小开关文件识别异常：\npath:{select_path}\nvalue:{_text}")
+                return
+        else:
+            logger.debug(f"小开关文件识别异常：\npath:{select_path}")
+
+    def ChangeSwitcher(self):
+        swbool = self.wdlist.swhexie.isChecked()
+        select_path = self.SwicherPath
+        if self._SetSwicher(select_path) is not None:
+            with open(select_path, "w", encoding="utf-8") as f:
+                f.write(f"localization={1 if swbool else 0}")
 
     def SetWidget(self, config: dict):
         self.page00.ckpreload.setChecked(config["PreLoad"])
@@ -109,6 +169,13 @@ class SnowPage(ModuleStackPage):
         self.page00.taskpanel.ckmute.setChecked(config["Mute"])
         self.page00.taskpanel.ckkillprog.setChecked(config["SoftClose"])
         self.page00.taskpanel.cbafter.setCurrentIndex(config["Finished"])
+
+        select_path = config.get("Snow", {}).get("SwicherPath", "")
+        swbool = self._SetSwicher(select_path)
+        if swbool is not None:
+            self.SwicherPath = select_path
+            self.wdlist.swhexie.setChecked(swbool)
+            self.wdlist.swhexie.setDisabled(False)
 
     def CollectConfig(self) -> dict:
         _dict = dict()
@@ -168,6 +235,9 @@ class SnowPage(ModuleStackPage):
         _dict["rogue"] = self.page05.ckrogue.isChecked()
         _dict["roguediff"] = self.page05.cbrogue.currentIndex()
         _dict["guess"] = self.page05.ckguess.isChecked()
+        _dict["XXKT"] = self.page05.ckxxkt.isChecked()
+        _dict["OtherConfig"] = info.OtherConfig
+        _dict["OtherConfig"]["Snow"]["SwicherPath"] = self.SwicherPath
         return _dict
 
 
@@ -187,6 +257,14 @@ class SnowList(Widget):
         self.pbset03 = SetButton(self, (175,  95, 25, 25), (25, 25))
         self.pbset04 = SetButton(self, (175, 140, 25, 25), (25, 25))
         self.pbset05 = SetButton(self, (175, 185, 25, 25), (25, 25))
+        self.swhexie = Swicher(self, (0, 450, 100, 35))
+        self.swhexie.setOffText("小开关未开启")
+        self.swhexie.setOnText("小开关已开启")
+        tips(self.swhexie, "切换后重启游戏生效")
+        self.swhexie.setDisabled(True)
+        self.btselect = PicButton(self, (150, 445, 35, 33), _path, (30, 30))
+        tips(self.btselect, "指定小开关文件可使用")
+        self.tips = TipsButton(self, (190, 450), "点我查看教程：如何找到文件")
 
 
 class SnowPage00Set(SetStackPage):
@@ -332,12 +410,15 @@ class SnowPage04Set(SetStackPage):
 class SnowPage05Set(SetStackPage):
     def __init__(self):
         super().__init__("设置页面：临时功能")
-        self.ckrogue = Check(self, (0, 55, 150, 30), "验证战场")
+        Label(self, (0, 35, 350, 70), "该页面功能在勾选后，将优先执行并无限循环执行，\n"
+                                      "直到手动停止，本页面设置不会保存")
+        self.ckrogue = Check(self, (0, 100, 150, 30), "验证战场")
         tips(self.ckrogue, "需要提前进入验证战场难度选择页面，\n自行配置好队伍和buff，\n辰星放一号位，选够三个队友，\n推荐辰星豹豹")
-        self.cbrogue = Combobox(self, (100, 50, 120, 40))
+        self.cbrogue = Combobox(self, (105, 90, 120, 40))
         self.cbrogue.addItems(["简单", "普通", "困难", "险恶"])
         self.cbrogue.setCurrentIndex(3)
 
-        self.ckguess = Check(self, (0, 95, 150, 30), "猜心对局")
+        self.ckguess = Check(self, (0, 140, 150, 30), "猜心对局")
         tips(self.ckguess,
              "需要提前先进入猜心对局界面，\n选择好模式并邀请少女完成")
+        self.ckxxkt = Check(self, (0, 180, 150, 30), "新星开拓")

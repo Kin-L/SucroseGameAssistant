@@ -10,7 +10,6 @@ from maincode.tools.controller.ocr import OCR
 class SGAImage(CtrlBase):
     def __init__(self):
         self.OCR = OCR
-        self.OCR.check()
 
     def screenshot(self, zone="FULL", save=False):
         ...
