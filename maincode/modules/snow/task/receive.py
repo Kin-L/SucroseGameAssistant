@@ -47,8 +47,8 @@ def snowOther(self):
         else:
             self.ctler.wait(0.3)
             pos = self.ctler.findtext("任务")
-            cpos = (1781, 1025)  #
-            vername = "逆光怒放"
+            cpos = (655, 1007)  #
+            vername = "灿海假日"
             if pos:
                 self.send("识别到：任务")
                 x, y = self.ctler.convertR(pos)

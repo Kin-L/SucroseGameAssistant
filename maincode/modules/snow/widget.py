@@ -1,6 +1,8 @@
 import json
 import os.path
 from webbrowser import open as weopen
+
+from maincode.config.configctrl import scc
 from maincode.config.info import info
 from maincode.tools.core.constant import spr
 from maincode.tools.core.logger import logger
@@ -15,8 +17,6 @@ from PyQt5.QtWidgets import QFileDialog
 from maincode.tools.system.notification import GetTracebackInfo
 
 _path = spr.FoldPic
-
-
 
 
 class SnowPage(ModuleStackPage):
@@ -118,10 +118,17 @@ class SnowPage(ModuleStackPage):
         self.page00.ckpreload.setChecked(config["PreLoad"])
         self.page00.ckupdate.setChecked(config["Update"])
         self.page00.leaccount.setText(config["AccountChoose"])
-        _snow = info.OtherConfig.get("Snow", {})
+        _snow = scc.mc.OtherConfig.get("Snow", {})
         if _snow:
-            self.page00.lepath.setText(_snow["Path"])
-            self.page00.cbserver.setCurrentIndex(_snow["Server"])
+            self.page00.lepath.setText(_snow.get("Path", ""))
+            self.page00.cbserver.setCurrentIndex(_snow.get("Server", 0))
+
+            select_path = _snow.get("SwicherPath", "")
+            swbool = self._SetSwicher(select_path)
+            if swbool is not None:
+                self.SwicherPath = select_path
+                self.wdlist.swhexie.setChecked(swbool)
+                self.wdlist.swhexie.setDisabled(False)
 
         self.wdlist.ckitem01.setChecked(config["Energy"])
         self.wdlist.ckitem02.setChecked(config["DailyTask"])
@@ -164,18 +171,11 @@ class SnowPage(ModuleStackPage):
         self.page04.ckroll5.setChecked(_list[5])
         self.page04.ckroll6.setChecked(_list[6])
         self.page04.ckopensheet.setChecked(config["GachaOpenSheet"])
-        
+
         self.page00.taskpanel.ckkillsga.setChecked(config["SGAClose"])
         self.page00.taskpanel.ckmute.setChecked(config["Mute"])
         self.page00.taskpanel.ckkillprog.setChecked(config["SoftClose"])
         self.page00.taskpanel.cbafter.setCurrentIndex(config["Finished"])
-
-        select_path = config.get("Snow", {}).get("SwicherPath", "")
-        swbool = self._SetSwicher(select_path)
-        if swbool is not None:
-            self.SwicherPath = select_path
-            self.wdlist.swhexie.setChecked(swbool)
-            self.wdlist.swhexie.setDisabled(False)
 
     def CollectConfig(self) -> dict:
         _dict = dict()
@@ -183,10 +183,12 @@ class SnowPage(ModuleStackPage):
         _dict["PreLoad"] = self.page00.ckpreload.isChecked()
         _dict["Update"] = self.page00.ckupdate.isChecked()
         _dict["AccountChoose"] = self.page00.leaccount.text()
-        _otherdict = dict()
-        _otherdict["Path"] = self.page00.lepath.text()
-        _otherdict["Server"] = self.page00.cbserver.currentIndex()
-        _dict["OtherConfig"] = {"Snow": _otherdict}
+        _oc = dict(scc.mc.OtherConfig)
+        _oc["Snow"] = {
+            "Path": self.page00.lepath.text(),
+            "Server": self.page00.cbserver.currentIndex(),
+            "SwicherPath": self.SwicherPath, }
+        scc.mc.OtherConfig = _oc
 
         _dict["Energy"] = self.wdlist.ckitem01.isChecked()
         _dict["DailyTask"] = self.wdlist.ckitem02.isChecked()
@@ -236,25 +238,24 @@ class SnowPage(ModuleStackPage):
         _dict["roguediff"] = self.page05.cbrogue.currentIndex()
         _dict["guess"] = self.page05.ckguess.isChecked()
         _dict["XXKT"] = self.page05.ckxxkt.isChecked()
-        _dict["OtherConfig"] = info.OtherConfig
-        _dict["OtherConfig"]["Snow"]["SwicherPath"] = self.SwicherPath
+
         return _dict
 
 
 class SnowList(Widget):
     def __init__(self):
         super().__init__()
-        self.ckitem01 = Check(self, (0,   5, 120, 22), "感知扫荡")
-        self.ckitem02 = Check(self, (0,  50, 120, 22), "日常任务")
-        self.ckitem03 = Check(self, (0,  95, 120, 22), "领取奖励")
+        self.ckitem01 = Check(self, (0, 5, 120, 22), "感知扫荡")
+        self.ckitem02 = Check(self, (0, 50, 120, 22), "日常任务")
+        self.ckitem03 = Check(self, (0, 95, 120, 22), "领取奖励")
         self.ckitem04 = Check(self, (0, 140, 120, 22), "共鸣记录")
         self.lbitem05 = Check(self, (0, 185, 120, 22), "临时功能")
         self.lbitem05.setChecked(True)
         self.lbitem05.setDisabled(True)
 
-        self.pbset01 = SetButton(self, (175,   5, 25, 25), (25, 25))
-        self.pbset02 = SetButton(self, (175,  50, 25, 25), (25, 25))
-        self.pbset03 = SetButton(self, (175,  95, 25, 25), (25, 25))
+        self.pbset01 = SetButton(self, (175, 5, 25, 25), (25, 25))
+        self.pbset02 = SetButton(self, (175, 50, 25, 25), (25, 25))
+        self.pbset03 = SetButton(self, (175, 95, 25, 25), (25, 25))
         self.pbset04 = SetButton(self, (175, 140, 25, 25), (25, 25))
         self.pbset05 = SetButton(self, (175, 185, 25, 25), (25, 25))
         self.swhexie = Swicher(self, (0, 450, 100, 35))
@@ -341,9 +342,9 @@ class SnowPage02Set(SetStackPage):
         self.btsnowlist = PicButton(self, (110, 55, 30, 30), _path, (25, 25))
         tips(self.btsnowlist, "角色选择自定义添加")
         self.cksupplement = Check(self, (15, 85, 250, 22), "嵌片为0时,启用2个补嵌包")
-        self.character1 = Combobox(self, (15,  120, 120, 40))
+        self.character1 = Combobox(self, (15, 120, 120, 40))
         self.character2 = Combobox(self, (145, 120, 120, 40))
-        self.character3 = Combobox(self, (15,  165, 120, 40))
+        self.character3 = Combobox(self, (15, 165, 120, 40))
         self.character4 = Combobox(self, (145, 165, 120, 40))
         self.character1.setMaxVisibleItems(8)
         self.character2.setMaxVisibleItems(8)
@@ -360,7 +361,7 @@ class SnowPage02Set(SetStackPage):
 
         self.ckmarket = Check(self, (15, 220, 220, 22), "通过商店购物一次完成每日")
         self.shoptips = TipsButton(self, (200, 260), "常规物资商店并不划算，建议在通用银溢出后再用来置换资源")
-        self.cbmarket1 = Combobox(self, (15,  250, 160, 40))
+        self.cbmarket1 = Combobox(self, (15, 250, 160, 40))
         self.cbmarket2 = Combobox(self, (180, 250, 160, 40))
         _list = ["光纤轴突", "光纤轴突×5",
                  "合成颗粒", "合成颗粒×5",
@@ -413,7 +414,8 @@ class SnowPage05Set(SetStackPage):
         Label(self, (0, 35, 350, 70), "该页面功能在勾选后，将优先执行并无限循环执行，\n"
                                       "直到手动停止，本页面设置不会保存")
         self.ckrogue = Check(self, (0, 100, 150, 30), "验证战场")
-        tips(self.ckrogue, "需要提前进入验证战场难度选择页面，\n自行配置好队伍和buff，\n辰星放一号位，选够三个队友，\n推荐辰星豹豹")
+        tips(self.ckrogue,
+             "需要提前进入验证战场难度选择页面，\n自行配置好队伍和buff，\n辰星放一号位，选够三个队友，\n推荐辰星豹豹")
         self.cbrogue = Combobox(self, (105, 90, 120, 40))
         self.cbrogue.addItems(["简单", "普通", "困难", "险恶"])
         self.cbrogue.setCurrentIndex(3)

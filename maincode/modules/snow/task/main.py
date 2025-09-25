@@ -203,16 +203,30 @@ def SnowLaunch(self):
 def LauchPrepare(self):
     _path = self.para["OtherConfig"]["Snow"]["Path"]
     _name = path.split(_path)[1]
-    if self.para["PreLoad"] and _name == "snow_launcher.exe":
-        _pos = self.ctler.findtext("下", (781, 585, 950, 734))
-        if _pos:
-            self.ctler.clickChange(zone=(559, 317, 713, 391), pos=_pos)
-            self.ctler.wait(0.5)
-            self.ctler.clickChange("确定")
-            self.send("开始预下载")
-            self.ctler.wait(0.5)
+    if self.para["PreLoad"]:
+        if _name == "SeasunGame.exe":
+            _pos = self.ctler.findpic(r"resources\snow\picture\pre-load2.png",
+                                      (889, 638, 971, 708))
+            if _pos:
+                self.ctler.clickChange(zone=(889, 638, 971, 708), pos=_pos)
+                self.ctler.wait(0.5)
+                self.ctler.clickChange("确定")
+                self.send("开始预下载")
+                self.ctler.wait(0.5)
+            else:
+                self.send("暂无预下载")
+        elif _name == "snow_launcher.exe":
+            _pos = self.ctler.findtext("下", (781, 585, 950, 734))
+            if _pos:
+                self.ctler.clickChange(zone=(559, 317, 713, 391), pos=_pos)
+                self.ctler.wait(0.5)
+                self.ctler.clickChange("确定")
+                self.send("开始预下载")
+                self.ctler.wait(0.5)
+            else:
+                self.send("暂无预下载")
         else:
-            self.send("暂无预下载")
+            raise ValueError("启动器路径异常")
     if _name == "snow_launcher.exe":
         self.ctler.ChangeReference((1280, 748))
         error = 0
@@ -400,6 +414,6 @@ def LogSnow(self, second: int):
         # if self.ctler.StrFind("等级提升", _list):
         #     self.ctler.click((788, 1007))
         #     self.ctler.wait(8)
-        self.ctler.press("esc")
+        self.ctler.click((979, 955))
         self.ctler.wait(1.5)
     raise ValueError("尘白禁区:登录超时")
