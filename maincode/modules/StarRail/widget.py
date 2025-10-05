@@ -1,8 +1,7 @@
-from maincode.main.info import info
-from maincode.tools.controls import (Combobox, SetStackPage, Check,
-                                     ModuleStackPage, Widget, Line,
-                                     Picture, TaskPanel, Label, tips,Button,
-                                     SLineEdit, PicButton, SetButton, TipsButton)
+from maincode.tools.sgaqt.texts import Label, Picture, SLineEdit, Line, tips, TipsButton
+from maincode.tools.sgaqt.buttons import (PicButton, Button,
+                                          SetButton, Swicher)
+from maincode.tools.sgaqt.widgets import Widget, SetStackPage, ModuleStackPage, TaskPanel
 from typing import Optional
 from os import path, startfile, getcwd
 from PyQt5.QtWidgets import QFileDialog

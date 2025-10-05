@@ -1,9 +1,9 @@
-from maincode.tools.myclass import SGAStop
-from maincode.tools.main import GetWindow, logger, CmdRun
 
 from time import sleep ,time
 from win32gui import FindWindow
 from os import path
+from maincode.tools.system.other import CmdRun
+from maincode.tools.system.window import GetWindow
 
 
 def Bgi_check(self):

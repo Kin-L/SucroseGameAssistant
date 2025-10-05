@@ -19,6 +19,7 @@ class zzzClass(ModuleClass):
         self.ModuleNameEN = "ZenlessZoneZero"
         self.IconPath = 'resources/zzz/zzz-icon.png'
         self.Config = zzzConfig
-        self.Widget = GenshinPage()
+        self.Widget = zzzPage()
         self.Task = taskstart
+        self.LoadModule = True
         super().__init__()

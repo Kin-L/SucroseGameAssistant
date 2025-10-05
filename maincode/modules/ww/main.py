@@ -21,4 +21,5 @@ class wwClass(ModuleClass):
         self.Config = wwConfig
         self.Widget = wwPage()
         self.Task = taskstart
+        self.LoadModule = True
         super().__init__()

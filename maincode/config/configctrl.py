@@ -104,6 +104,18 @@ class SGAConfigController:
         if "尘白禁区" not in _l:
             from maincode.modules.snow.main import SnowClass
             SnowClass()
+        if "原神" not in _l:
+            from maincode.modules.genshin.main import GenshinClass
+            GenshinClass()
+        if "崩坏：星穹铁道" not in _l:
+            from maincode.modules.StarRail.main import StarRailClass
+            StarRailClass()
+        if "绝区零" not in _l:
+            from maincode.modules.zzz.main import zzzClass
+            zzzClass()
+        if "鸣潮" not in _l:
+            from maincode.modules.ww.main import wwClass
+            wwClass()
 
     def ReadCurrentConfig(self):
         _current = self.mc.CurrentConfig

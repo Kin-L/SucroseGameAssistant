@@ -13,12 +13,13 @@ class GenshinConfig(SubConfigTemplate):
 
 
 class GenshinClass(ModuleClass):
+    ModuleNameCH = "原神"
     def __init__(self):
         self.ModuleKey = 4
-        self.ModuleNameCH = "原神"
         self.ModuleNameEN = "Genshin"
         self.IconPath = 'resources/genshin/genshin-icon.png'
         self.Config = GenshinConfig
         self.Widget = GenshinPage()
         self.Task = taskstart
+        self.LoadModule = True
         super().__init__()

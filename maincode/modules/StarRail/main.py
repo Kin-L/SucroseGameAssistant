@@ -21,4 +21,5 @@ class StarRailClass(ModuleClass):
         self.Config = StarRailConfig
         self.Widget = StarRailPage()
         self.Task = taskstart
+        self.LoadModule = True
         super().__init__()
