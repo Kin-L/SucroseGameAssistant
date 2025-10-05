@@ -57,6 +57,7 @@ class SnowPage(ModuleStackPage):
         self.wdlist.pbset04.clicked.connect(lambda: self.sksetting.setCurrentIndex(4))
         self.wdlist.pbset05.clicked.connect(lambda: self.sksetting.setCurrentIndex(5))
         self.page01.btsnowlist.clicked.connect(lambda: startfile(f"{spr.WorkDir}/{spr.SnowJson}"))
+        self.page01.btsnowlistweb.clicked.connect(lambda: weopen(spr.SnowListURL))
         self.page02.btsnowlist.clicked.connect(lambda: startfile(f"{spr.WorkDir}/{spr.SnowJson}"))
         self.page04.btopenroll.clicked.connect(lambda: startfile(f"{spr.WorkDir}/{spr.SnowRollDir}"))
         self.page00.btselect.clicked.connect(self.SelectPath)
@@ -332,7 +333,9 @@ class SnowPage01Set(SetStackPage):
             _dir["活动后勤"])
 
         self.btsnowlist = PicButton(self, (100, 260, 30, 30), _path, (25, 25))
-        tips(self.btsnowlist, "活动后勤自定义添加")
+        tips(self.btsnowlist, "活动后勤自定义添加，版本活动坐标自定义")
+        self.btsnowlistweb = PicButton(self, (140, 260, 30, 30), spr.GiteePic, (25, 25))
+        tips(self.btsnowlistweb, "活动后勤自定义添加，版本活动坐标自定义(网页处的更改将分享至其他使用者)")
 
 
 class SnowPage02Set(SetStackPage):

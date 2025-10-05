@@ -98,20 +98,24 @@ def taskstart(self):
     # print(self.para)
     self.send("开始任务:尘白禁区", True)
     num = 3
-    try:
-        content = get_gitee_file("resources/snow/list.json", "master-v3")
-        repo_dict = json.loads(content)
-        with open("resources/snow/list.json", 'r', encoding='utf-8') as g:
-            local_dict = json.load(g)
-        if repo_dict["LIST版本"] > local_dict["LIST版本"]:
-            with open("resources/snow/list.json", 'w', encoding='utf-8') as g:
-                json.dump(repo_dict, g, ensure_ascii=False, indent=1)
-            self.game_dict = repo_dict["限时活动"]
-        else:
+    with open("resources/snow/list.json", 'r', encoding='utf-8') as g:
+        local_dict = json.load(g)
+    if local_dict["LIST版本"] != 0:
+        try:
+            content = get_gitee_file("resources/snow/list.json", "master-v3")
+            repo_dict = json.loads(content)
+
+            if repo_dict["LIST版本"] > local_dict["LIST版本"]:
+                with open("resources/snow/list.json", 'w', encoding='utf-8') as g:
+                    json.dump(repo_dict, g, ensure_ascii=False, indent=1)
+                self.game_dict = repo_dict["限时活动"]
+            else:
+                self.game_dict = local_dict["限时活动"]
+        except Exception as e:
+            _str = GetTracebackInfo(e)
+            logger.error(_str + "SNOW_LIST文件获取异常, 沿用本地文件")
             self.game_dict = local_dict["限时活动"]
-    except Exception as e:
-        _str = GetTracebackInfo(e)
-        logger.error(_str + "SNOW_LIST文件获取异常, 沿用本地文件")
+    else:
         self.game_dict = local_dict["限时活动"]
     while num > 0:
         try:

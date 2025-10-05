@@ -23,6 +23,7 @@ class SGAConstants:
     BilibiliURL = "https://space.bilibili.com/406315493"
     SGAWebURL = "https://kin-l.github.io/sga-instructions/index.html#guide"
     SwitcherURL = "https://www.bilibili.com/video/BV1XU411m7TT"
+    SnowListURL = "https://gitee.com/huixinghen/SucroseGameAssistant/edit/master-v3/resources/snow/list.json"
     
     # SGA图标
     SGATitlePic = f"{ResourcesDir}/main/SGA/title.png"
