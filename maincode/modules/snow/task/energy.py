@@ -204,8 +204,8 @@ def snowEnergy(self):
                     break
                 self.ctler.wait(0.3)
                 pos = self.ctler.findtext("材料")
-                cpos = (179, 342)  # 备用点位
-                vername = "灿海假日"
+                cpos = self.game_dict["坐标"]["材料"]  # 备用点位
+                vername = self.game_dict["游戏版本名"]
                 if pos:
                     self.send("识别到：材料")
                     self.ctler.clickChange(pos, zone=(1732, 920, 1829, 1013))
@@ -216,7 +216,7 @@ def snowEnergy(self):
                 self.ctler.waitTo(HomePic, (1633, 6, 1718, 91))
                 self.ctler.wait(0.5)
                 pos = self.ctler.findtext("深渊")
-                cpos = (1477, 340)  # 备用点位
+                cpos = self.game_dict["坐标"]["深渊"]  # 备用点位
                 if pos:
                     self.send("识别到：深渊")
                     self.ctler.clickChange(pos, zone=(1387, 945, 1599, 1075))

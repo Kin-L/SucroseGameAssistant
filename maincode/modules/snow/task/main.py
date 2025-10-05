@@ -1,3 +1,7 @@
+import json
+
+import requests
+
 from maincode.tools.core.baseclass import SGAStop
 from maincode.tools.system.notification import GetTracebackInfo
 from maincode.tools.core.logger import logger
@@ -14,7 +18,34 @@ from .xxkt import snowXXKT
 from ..emulator.main import emulatorstart
 from .rogue import snowRogue
 from .guess import snowGuess
+def get_gitee_file(file_path, branch="master"):
+    """
+    获取Gitee仓库文件内容
+    owner: 仓库所有者
+    repo: 仓库名
+    file_path: 文件路径
+    branch: 分支名，默认为master
+    """
+    url = f"https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/contents/{file_path}?ref={branch}"
 
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+
+        data = response.json()
+
+        # 如果是文件，内容在content字段中（base64编码）
+        if 'content' in data:
+            import base64
+            content = base64.b64decode(data['content']).decode('utf-8')
+            return content
+        else:
+            return "未找到文件内容"
+
+    except requests.exceptions.RequestException as e:
+        return f"请求失败: {e}"
+    except Exception as e:
+        return f"处理失败: {e}"
 
 def CloseSnow(self):
     for _ in range(20):
@@ -67,6 +98,21 @@ def taskstart(self):
     # print(self.para)
     self.send("开始任务:尘白禁区", True)
     num = 3
+    try:
+        content = get_gitee_file("resources/snow/list.json", "master-v3")
+        repo_dict = json.loads(content)
+        with open("resources/snow/list.json", 'r', encoding='utf-8') as g:
+            local_dict = json.load(g)
+        if repo_dict["LIST版本"] > local_dict["LIST版本"]:
+            with open("resources/snow/list.json", 'w', encoding='utf-8') as g:
+                json.dump(repo_dict, g, ensure_ascii=False, indent=1)
+            self.game_dict = repo_dict["限时活动"]
+        else:
+            self.game_dict = local_dict["限时活动"]
+    except Exception as e:
+        _str = GetTracebackInfo(e)
+        logger.error(_str + "SNOW_LIST文件获取异常, 沿用本地文件")
+        self.game_dict = local_dict["限时活动"]
     while num > 0:
         try:
             # print("startwait", self.para.get("startwait", True))
@@ -163,25 +209,35 @@ def SnowLaunch(self):
     _path = _dict["Path"]
     _server = _dict["Server"]
     if _server != 2:
-        if not (isinstance(_path, str) and path.isfile(_path) and
-                path.split(_path)[1] in ["snow_launcher.exe", "SeasunGame.exe"]):
-            self.send("启动器路径异常")
-            raise RuntimeError("启动器路径异常")
-        launchname = path.split(_path)[1]
-        if launchname == "snow_launcher.exe":
-            item = ["wailsWindow", "尘白禁区启动器"]
-        elif launchname == "SeasunGame.exe":
-            item = ["Qt5159QWindowIcon", "西山居启动器-尘白禁区"]
+        h1 = FindWindow("wailsWindow", "尘白禁区启动器")
+        h2 = FindWindow("Qt5159QWindowIcon", "西山居启动器-尘白禁区")
+        if h1:
+            hwnd = h1
+            self.launcher_mode = "snow_launcher.exe"
+        elif h2:
+            hwnd = h2
+            self.launcher_mode = "SeasunGame.exe"
         else:
-            self.send("启动器路径异常")
-            raise RuntimeError("启动器路径异常")
-        hwnd = FindWindow(*item)
-        if not hwnd:
-            hwnd = self.ctler.RunProg(f"start \"\" \"{_path}\"", [item], (0.4, 10), 15)
-            assert hwnd
+            if not (isinstance(_path, str) and path.isfile(_path) and
+                    path.split(_path)[1] in ["snow_launcher.exe", "SeasunGame.exe"]):
+                self.send("启动器路径异常")
+                raise RuntimeError("启动器路径异常")
+            self.launcher_mode = path.split(_path)[1]
+            if self.launcher_mode == "snow_launcher.exe":
+                item = ["wailsWindow", "尘白禁区启动器"]
+            elif self.launcher_mode == "SeasunGame.exe":
+                item = ["Qt5159QWindowIcon", "西山居启动器-尘白禁区"]
+            else:
+                self.send("启动器路径异常")
+                raise RuntimeError("启动器路径异常")
+            hwnd = FindWindow(*item)
+            if not hwnd:
+                hwnd = self.ctler.RunProg(f"start \"\" \"{_path}\"", [item], (0.4, 10), 15)
+                assert hwnd
         self.ctler.ChooseWindow(hwnd, (1280, 748))
         LauchPrepare(self)
     else:
+        self.launcher_mode = "steam"
         _path = "start steam://rungameid/2668080"
         hwnd = self.ctler.RunProg(_path, glist, (0.4, 10), 20)
         assert hwnd
@@ -201,13 +257,11 @@ def SnowLaunch(self):
 
 
 def LauchPrepare(self):
-    _path = self.para["OtherConfig"]["Snow"]["Path"]
-    _name = path.split(_path)[1]
     if self.para["PreLoad"]:
-        if _name == "SeasunGame.exe":
-            _pos = self.ctler.findpic(r"resources\snow\picture\pre-load2.png",
-                                      (889, 638, 971, 708))
-            if _pos:
+        if self.launcher_mode == "SeasunGame.exe":
+            _pos, _sim = self.ctler.findpic(r"resources\snow\picture\pre-load2.png",
+                                            (889, 638, 971, 708))
+            if _sim:
                 self.ctler.clickChange(zone=(889, 638, 971, 708), pos=_pos)
                 self.ctler.wait(0.5)
                 self.ctler.clickChange("确定")
@@ -215,7 +269,7 @@ def LauchPrepare(self):
                 self.ctler.wait(0.5)
             else:
                 self.send("暂无预下载")
-        elif _name == "snow_launcher.exe":
+        elif self.launcher_mode == "snow_launcher.exe":
             _pos = self.ctler.findtext("下", (781, 585, 950, 734))
             if _pos:
                 self.ctler.clickChange(zone=(559, 317, 713, 391), pos=_pos)
@@ -227,7 +281,7 @@ def LauchPrepare(self):
                 self.send("暂无预下载")
         else:
             raise ValueError("启动器路径异常")
-    if _name == "snow_launcher.exe":
+    if self.launcher_mode == "snow_launcher.exe":
         self.ctler.ChangeReference((1280, 748))
         error = 0
         num = 120
@@ -288,7 +342,7 @@ def LauchPrepare(self):
                 self.ctler.wait(2)
             num -= 1
         return False
-    elif _name == "SeasunGame.exe":
+    elif self.launcher_mode == "SeasunGame.exe":
         self.ctler.ChangeReference((1280, 748))
         error = 0
         num = 120
