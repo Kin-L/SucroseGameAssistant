@@ -28,11 +28,7 @@ class DIYClass(ModuleClass):
 
 def taskstart(self):
     self.ctler.wait(1)
-    self.send("扣1牢环复活")
-    self.ctler.wait(1)
-    self.send("香火 +1")
-    self.ctler.wait(1)
-    self.send("功德 +1")
+    self.send("DIY功能未完工")
     self.ctler.wait(1)
 
 

@@ -5,7 +5,7 @@ from maincode.modules.template import SubConfigTemplate
 
 
 class GenshinConfig(SubConfigTemplate):
-    ModuleKey: int = 4
+    ModuleKey: int = 8
     bgipath: str = "D:\BetterGI\BetterGI.exe"
     timeout: int = 0  # 超时关闭时间，单位分钟
 
@@ -15,7 +15,7 @@ class GenshinConfig(SubConfigTemplate):
 class GenshinClass(ModuleClass):
     ModuleNameCH = "原神"
     def __init__(self):
-        self.ModuleKey = 4
+        self.ModuleKey = 8
         self.ModuleNameEN = "Genshin"
         self.IconPath = 'resources/genshin/genshin-icon.png'
         self.Config = GenshinConfig
