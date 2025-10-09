@@ -18,18 +18,22 @@ def timercheck(self) -> None:
 
         if not self.timerallow:
             return
+        current_time = localtime()
 
         # 打印定时检测日志
-        time_str = strftime("%H:%M:%S", localtime())
+        time_str = strftime("%H:%M:%S", current_time)
         print(f"{time_str} | INFO | SGA定时检测，SGA运行中...")
 
         self.SaveConfig()
 
         # 获取当前时间
-        current_time = localtime()
-        y, M, d, h, m, _, w = current_time[:7]
-        date = (y, M, d)
 
+        y, M, d, h, m, _, w = current_time[:7]
+
+        if scc.info.StartTime[:3] != current_time[:3]:
+            logger.info(f"SGA自动重启")
+            self.restart()
+        date = (y, M, d)
         # 自动更新检查
         if scc.mc.AutoUpdate and (date != scc.info.CurrentDate):
             if self.updatecheck():

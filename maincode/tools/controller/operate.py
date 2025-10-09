@@ -22,7 +22,7 @@ class Operate(SGAKeyMouse, SGAScreen, SGAImage):
         if target is None:
             scbef = self.screenshot(zone)
             bef = cv2.cvtColor(np.asarray(scbef), cv2.COLOR_BGR2GRAY)
-            aft = None
+            scaft = None
             self.click(pos)
             while num > 0:
                 sleep(sec)
@@ -40,7 +40,7 @@ class Operate(SGAKeyMouse, SGAScreen, SGAImage):
                     self.click(pos)
                     num -= 1
             if errsc:
-                self.SaveShotBA(bef, aft)
+                self.SaveShotBA(scbef, scaft)
         elif isinstance(target, str):
             if path.isfile(target) and path.exists(target):
 
@@ -74,12 +74,14 @@ class Operate(SGAKeyMouse, SGAScreen, SGAImage):
         sec, num = wait
         flag = False
         if target is None:
-            bef = cv2.cvtColor(np.asarray(self.screenshot(zone)), cv2.COLOR_RGB2BGR)
-            aft = None
+            scbef = self.screenshot(zone)
+            bef = cv2.cvtColor(np.asarray(scbef), cv2.COLOR_RGB2BGR)
+            scaft = None
             while num > 0:
                 self.press(key)
                 sleep(sec)
-                aft = cv2.cvtColor(np.asarray(self.screenshot(zone)), cv2.COLOR_RGB2BGR)
+                scaft = self.screenshot(zone)
+                aft = cv2.cvtColor(np.asarray(scaft), cv2.COLOR_RGB2BGR)
                 sim = cv2.minMaxLoc(cv2.matchTemplate(aft, bef, cv2.TM_CCOEFF_NORMED))[1]
                 if sim < minsim:
                     flag = True
@@ -88,7 +90,7 @@ class Operate(SGAKeyMouse, SGAScreen, SGAImage):
                         return True
                     num -= 1
             if errsc:
-                self.SaveShotBA(bef, aft)
+                self.SaveShotBA(scbef, scaft)
         elif isinstance(target, str):
             if path.isfile(target) and path.exists(target):
                 while num > 0:
