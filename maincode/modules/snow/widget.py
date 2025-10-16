@@ -419,8 +419,8 @@ class SnowPage05Set(SetStackPage):
         self.ckrogue = Check(self, (0, 100, 150, 30), "验证战场")
         tips(self.ckrogue,
              "需要提前进入验证战场难度选择页面，\n自行配置好队伍和buff，\n辰星放一号位，选够三个队友，\n推荐辰星豹豹")
-        self.cbrogue = Combobox(self, (105, 90, 120, 40))
-        self.cbrogue.addItems(["简单", "普通", "困难", "险恶"])
+        self.cbrogue = Combobox(self, (105, 90, 160, 40))
+        self.cbrogue.addItems(["简单", "普通", "困难", "险恶", "增益试炼·渊底", "增益试炼·幽馆", "增益试炼·异城"])
         self.cbrogue.setCurrentIndex(3)
 
         self.ckguess = Check(self, (0, 140, 150, 30), "猜心对局")

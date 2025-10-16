@@ -5,16 +5,19 @@ from PyQt5.QtCore import QThread
 
 def snowRogue(self):
     _list = self.ctler.ocr(mode=1)
-    result = self.ctler.StrFind("难度选择", _list)
-    if not result:
+    result1 = self.ctler.StrFind("难度选择", _list)
+    result2 = self.ctler.StrFind("模式选择", _list)
+    result3 = self.ctler.StrFind("开始作战", _list)
+    if result1 or result2 or result3:
+        self.send("开始验证战场")
+    else:
         self.send("请先进入验证战场界面")
         return
-    else:
-        self.send("开始验证战场")
+
     self.trigger = TemTrigger()
     try:
         while 1:
-            xy_list = [(383, 400), (767, 404), (1161, 427), (1541, 443)]
+            xy_list = [(383, 400), (767, 404), (1161, 427), (1541, 443), (570, 440), (956, 434), (1369, 439)]
             try:
                 self.ctler.clickChange(xy_list[self.para["roguediff"]], zone=(102, 22, 301, 84))
             except TimeoutError:
@@ -35,6 +38,15 @@ def snowRogue(self):
                       (804, 799, 1113, 850),
                       (1428, 800, 1745, 852)]
             _list2 = [(329, 829), (972, 822), (1561, 826)]
+            if self.para["roguediff"] == 4:
+                self.ctler.waitTo(target="波", zone=(33, 65, 146, 122), wait=(1, 30))
+                self.ctler.keydown("d")
+                self.ctler.wait(0.8)
+                self.ctler.keyup("d")
+                self.ctler.wait(0.2)
+                self.ctler.keydown("w")
+                self.ctler.wait(1.5)
+                self.ctler.keyup("w")
             while 1:
                 _sc = self.ctler.screenshot()
                 _t1 = self.ctler.ocr((33, 65, 146, 122), _sc)[0]
@@ -76,7 +88,7 @@ def snowRogue(self):
                             break
                 elif "退出" in _t2:
                     self.trigger.Stop = True
-                    self.trigger.quit()
+                    # self.trigger.quit()
                     self.trigger.wait()
                     self.ctler.clickChange(target="退出", zone=(896, 946, 1004, 1018))
                     self.ctler.waitTo(target="选", zone=(73, 8, 328, 92), wait=(1, 30))
@@ -85,10 +97,8 @@ def snowRogue(self):
                     self.ctler.wait(0.5)
     except Exception:
         if self.trigger.isRunning():
-            self.trigger.Stop = True
-            self.trigger.quit()
+            self.Stop = True
             self.trigger.wait()
-            self.trigger.deleteLater()
         raise
 
 
@@ -102,3 +112,5 @@ class TemTrigger(QThread):
         while not self.Stop:
             keyboard.send("e")
             time.sleep(0.8)
+            keyboard.send("q")
+            time.sleep(0.1)
