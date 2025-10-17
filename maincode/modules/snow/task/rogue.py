@@ -4,22 +4,17 @@ from PyQt5.QtCore import QThread
 
 
 def snowRogue(self):
-    _list = self.ctler.ocr(mode=1)
-    result1 = self.ctler.StrFind("难度选择", _list)
-    result2 = self.ctler.StrFind("模式选择", _list)
-    result3 = self.ctler.StrFind("开始作战", _list)
-    if result1 or result2 or result3:
-        self.send("开始验证战场")
-    else:
-        self.send("请先进入验证战场界面")
-        return
+    self.send("开始验证战场")
+    self.send("需要提前进入验证战场难度选择页面，\n自行配置好队伍和buff，\n辰星放一号位，选够三个队友，\n推荐辰星豹豹")
 
     self.trigger = TemTrigger()
     try:
+        num = 0
         while 1:
             xy_list = [(383, 400), (767, 404), (1161, 427), (1541, 443), (570, 440), (956, 434), (1369, 439)]
             try:
                 self.ctler.clickChange(xy_list[self.para["roguediff"]], zone=(102, 22, 301, 84))
+
             except TimeoutError:
                 _list = self.ctler.ocr(mode=1)
                 if self.ctler.StrFind("难度选择", _list):
@@ -28,6 +23,10 @@ def snowRogue(self):
                     return
                 else:
                     raise TimeoutError
+            self.ctler.wait(1)
+            _list = self.ctler.ocr(mode=1)
+            if self.ctler.StrFind("确定", _list):
+                self.ctler.clickChange(target="确定", zone=(1365, 719, 1580, 816))
             self.ctler.clickChange(target="开始", zone=(1694, 944, 1885, 1051))
             self.ctler.wait(1)
             _list = self.ctler.ocr(mode=1)
@@ -87,6 +86,7 @@ def snowRogue(self):
                         else:
                             break
                 elif "退出" in _t2:
+                    self.send(f"完成执行{num}次")
                     self.trigger.Stop = True
                     # self.trigger.quit()
                     self.trigger.wait()
