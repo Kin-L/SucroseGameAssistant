@@ -86,6 +86,7 @@ def snowRogue(self):
                         else:
                             break
                 elif "退出" in _t2:
+                    num += 1
                     self.send(f"完成执行{num}次")
                     self.trigger.Stop = True
                     # self.trigger.quit()

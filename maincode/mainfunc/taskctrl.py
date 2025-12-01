@@ -56,7 +56,7 @@ def TaskStart(self, tasktype: str, para: dict = None):
             _ck = para.get("ck", None)
             _num = para.get("num", None)
             if _num is None:
-                if _ck.isdigit() and (item := scc.sc.FindItem(int(_ck))):
+                if _ck.isdigit() and (item := scc.sc.FindItem(_ck)):
                     _num = item[-1]
                 else:
                     self.infoAdd(f"输入的子设置无效：'ck'：{_ck}")
