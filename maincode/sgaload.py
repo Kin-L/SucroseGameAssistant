@@ -7,6 +7,7 @@ from maincode.sgamain import SGAMain
 from PyQt5.QtWidgets import QApplication
 import keyboard
 import sys
+import comtypes.client
 
 
 def SGALoad():
@@ -30,6 +31,9 @@ def SGALoad():
             # 判断是否加载 UI
             hideui = "-hideui" in sys.argv
             # hideui = True
+            # 关键：初始化COM线程模型为STA（单线程单元），解决线程不兼容问题
+            # COINIT_APARTMENTTHREADED 对应 STA 模型，值为 0x2
+            comtypes.CoInitializeEx(comtypes.COINIT_APARTMENTTHREADED)
             QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
             QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
             QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
@@ -43,8 +47,11 @@ def SGALoad():
                 sqm.TaskStart("current")
             elif "-subconfig" in sys.argv:  # ck为子配置文件识别码，为其文件名的前四位数字
                 sqm.TaskStart("subconfig", {"ck": sys.argv[sys.argv.index("-subconfig") + 1]})
-            application.exec_()
+            exit_code = application.exec_()
             logger.info("==================SGA关闭=================\n\n")
+            comtypes.CoUninitialize()
+            sys.exit(exit_code)
+
     except Exception as e:
         _str = GetTracebackInfo(e) + "SGA加载失败"
         logger.critical(_str)

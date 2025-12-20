@@ -1,3 +1,5 @@
+import sys
+
 import keyboard
 from time import localtime
 from maincode.config.configctrl import scc
@@ -20,12 +22,13 @@ def TaskStart(self, tasktype: str, para: dict = None):
         scc.info.TaskError = False
         scc.info.StopFlag = False
         self.timerallow = False
-        self.module.widget.statesigh.SetState(0)
         scc.info.OcrPath = scc.mc.OcrPath
-        self.module.widget.btstart.setDisabled(True)
-        self.module.widget.btstart.hide()
-        if tasktype == "current":
+        if "-hideui" not in sys.argv:
+            self.module.widget.statesigh.SetState(0)
+            self.module.widget.btstart.setDisabled(True)
+            self.module.widget.btstart.hide()
             self.mainwidget.infoClear()
+        if tasktype == "current":
             self.infoHead()
             self.SaveConfig()
             para.update(dict(scc.mc.CurrentConfig))
@@ -33,11 +36,11 @@ def TaskStart(self, tasktype: str, para: dict = None):
             para["current_mute"] = GetMute() if para.get("Mute", False) else None
             self.NewThread(tasktype, para)
             self.infoAdd("开始执行实时任务")
-            self.module.widget.btpause.setEnabled(True)
-            self.module.widget.btpause.show()
-            keyboard.add_hotkey(scc.mc.StopKeys, self.module.widget.btpause.click)
+            if "-hideui" not in sys.argv:
+                self.module.widget.btpause.setEnabled(True)
+                self.module.widget.btpause.show()
+            keyboard.add_hotkey(scc.mc.StopKeys, self.ManualStop)
         elif tasktype == "timed":
-            self.mainwidget.infoClear()
             self.infoHead()
             self.infoAdd("准备开始...")
             para["OtherConfig"] = scc.mc.OtherConfig
@@ -45,9 +48,10 @@ def TaskStart(self, tasktype: str, para: dict = None):
             self.NewThread(tasktype, para)
             name = para["ConfigName"]
             self.infoAdd(f"开始执行定时任务：{name}")
-            self.module.widget.btpause.setEnabled(True)
-            self.module.widget.btpause.show()
-            keyboard.add_hotkey(scc.mc.StopKeys, self.module.widget.btpause.click)
+            if "-hideui" not in sys.argv:
+                self.module.widget.btpause.setEnabled(True)
+                self.module.widget.btpause.show()
+            keyboard.add_hotkey(scc.mc.StopKeys, self.ManualStop)
         elif tasktype == "update":
             self.infoHead()
             self.infoAdd("准备开始...")
@@ -62,7 +66,6 @@ def TaskStart(self, tasktype: str, para: dict = None):
                     self.infoAdd(f"输入的子设置无效：'ck'：{_ck}")
                     return
             _config = scc.ReadSubFile(_num)
-            self.mainwidget.infoClear()
             self.infoHead()
             self.SaveConfig()
             para.update(dict(_config))
@@ -71,9 +74,10 @@ def TaskStart(self, tasktype: str, para: dict = None):
             self.NewThread(tasktype, para)
             name = para["ConfigName"]
             self.infoAdd(f"开始执行指定任务：{name}")
-            self.module.widget.btpause.setEnabled(True)
-            self.module.widget.btpause.show()
-            keyboard.add_hotkey(scc.mc.StopKeys, self.module.widget.btpause.click)
+            if "-hideui" not in sys.argv:
+                self.module.widget.btpause.setEnabled(True)
+                self.module.widget.btpause.show()
+            keyboard.add_hotkey(scc.mc.StopKeys, self.ManualStop)
 
     except Exception as e:
         _str = GetTracebackInfo(e) + "准备开始流程异常"
@@ -83,21 +87,23 @@ def TaskStart(self, tasktype: str, para: dict = None):
 
 def TaskStop(self, tasktype: str, para=None):
     try:
-        self.window.foreground()
-        if scc.info.TaskError:
+        if scc.info.TaskError and ("-hideui" not in sys.argv):
+            self.window.foreground()
             self.module.widget.statesigh.SetState(2)
         self.infoEnd()
         self.timerallow = True
-        self.module.widget.btstart.setEnabled(True)
-        self.module.widget.btstart.show()
-        self.module.widget.btpause.setEnabled(True)
-        self.module.widget.btpause.hide()
+        if "-hideui" not in sys.argv:
+            self.module.widget.btstart.setEnabled(True)
+            self.module.widget.btstart.show()
+            self.module.widget.btpause.setEnabled(True)
+            self.module.widget.btpause.hide()
         keyboard.remove_hotkey(scc.mc.StopKeys)
         if tasktype == "timed":
             sleeptime = 61 - localtime()[5]
             self.sleeptime = sleeptime if sleeptime > 0 else 0
         elif tasktype == "update":
-            self.overall.widget.btcheckupdate.setEnabled(True)
+            if "-hideui" not in sys.argv:
+                self.overall.widget.btcheckupdate.setEnabled(True)
             return
         if para.get("Mute", False) and (GetMute() != para["current_mute"]):
             keyboard.send('volume mute')
@@ -152,12 +158,14 @@ def handle_finished_action(self, para):
 def ManualStop(self):
     try:
         if not self.timerallow:
-            self.module.widget.btpause.setDisabled(True)
+
             self.infoAdd("手动终止,等待结束...")
             self.timerallow = True
             scc.info.StopFlag = True
-            self.module.widget.statesigh.SetState(1)
-            self.module.widget.btpause.hide()
+            if "-hideui" not in sys.argv:
+                self.module.widget.btpause.setDisabled(True)
+                self.module.widget.statesigh.SetState(1)
+                self.module.widget.btpause.hide()
             try:
                 if hasattr(self, 'threadpool'):
                     self.threadpool.quit()

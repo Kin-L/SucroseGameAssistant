@@ -13,8 +13,39 @@ from maincode.tools.sgaqt.widgets import Widget, SetStackPage, ModuleStackPage, 
 from typing import Optional
 from os import startfile, getcwd
 from PyQt5.QtWidgets import QFileDialog
-
+import requests
 from maincode.tools.system.notification import GetTracebackInfo
+
+
+def get_gitee_file(file_path, branch="master"):
+    """
+    获取Gitee仓库文件内容
+    owner: 仓库所有者
+    repo: 仓库名
+    file_path: 文件路径
+    branch: 分支名，默认为master
+    """
+    url = f"https://gitee.com/api/v5/repos/huixinghen/SucroseGameAssistant/contents/{file_path}?ref={branch}"
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+
+        data = response.json()
+
+        # 如果是文件，内容在content字段中（base64编码）
+        if 'content' in data:
+            import base64
+            content = base64.b64decode(data['content']).decode('utf-8')
+            return content
+        else:
+            return "未找到文件内容"
+
+    except requests.exceptions.RequestException as e:
+        return f"请求失败: {e}"
+    except Exception as e:
+        return f"处理失败: {e}"
+
 
 _path = spr.FoldPic
 
@@ -34,6 +65,27 @@ class SnowPage(ModuleStackPage):
         self.SwicherPath = ""
 
     def LoadWidget(self):
+        # 查询更新
+        with open("resources/snow/list.json", 'r', encoding='utf-8') as g:
+            local_dict = json.load(g)
+        if local_dict["LIST版本"] != 0:
+            logger.info("开始检测SNOW_LIST文件是否存在新版本")
+            try:
+                content = get_gitee_file("resources/snow/list.json", "master-v3")
+                repo_dict = json.loads(content)
+
+                if repo_dict["LIST版本"] > local_dict["LIST版本"]:
+                    logger.info("SNOW_LIST文件存在新版本，尝试更新")
+                    with open("resources/snow/list.json", 'w', encoding='utf-8') as g:
+                        json.dump(repo_dict, g, ensure_ascii=False, indent=1)
+                    logger.info("SNOW_LIST文件更新完成")
+                else:
+                    logger.info("SNOW_LIST文件已为最新")
+            except Exception as e:
+                _str = GetTracebackInfo(e)
+                logger.error(_str + "SNOW_LIST文件获取异常, 沿用本地文件")
+        else:
+            logger.info("SNOW_LIST文件新版本检测功能已关闭，如需开启请将\"resources/snow/list.json\"文件中的\"LIST版本\"字段的值改为1")
         self.wdlist = SnowList()
         self.srlist.setWidget(self.wdlist)
         self.page00 = SnowPage00Set()

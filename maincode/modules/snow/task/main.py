@@ -1,7 +1,6 @@
 import json
-
+import sys
 import requests
-
 from maincode.tools.core.baseclass import SGAStop
 from maincode.tools.system.notification import GetTracebackInfo
 from maincode.tools.core.logger import logger
@@ -18,6 +17,8 @@ from .xxkt import snowXXKT
 from ..emulator.main import emulatorstart
 from .rogue import snowRogue
 from .guess import snowGuess
+
+
 def get_gitee_file(file_path, branch="master"):
     """
     获取Gitee仓库文件内容
@@ -46,6 +47,7 @@ def get_gitee_file(file_path, branch="master"):
         return f"请求失败: {e}"
     except Exception as e:
         return f"处理失败: {e}"
+
 
 def CloseSnow(self):
     for _ in range(20):
@@ -100,11 +102,10 @@ def taskstart(self):
     num = 3
     with open("resources/snow/list.json", 'r', encoding='utf-8') as g:
         local_dict = json.load(g)
-    if local_dict["LIST版本"] != 0:
+    if ("-hideui" in sys.argv) and (local_dict["LIST版本"] != 0):
         try:
             content = get_gitee_file("resources/snow/list.json", "master-v3")
             repo_dict = json.loads(content)
-
             if repo_dict["LIST版本"] > local_dict["LIST版本"]:
                 with open("resources/snow/list.json", 'w', encoding='utf-8') as g:
                     json.dump(repo_dict, g, ensure_ascii=False, indent=1)

@@ -40,7 +40,7 @@ class SGAQMainWindow(QMainWindow):
 
         from maincode.tools.system.window import GetWindow
         self.window = GetWindow("砂糖代理")
-        if "back" not in argv:
+        if ("-back" not in argv) and ("-hideui" not in argv):
             self.window.foreground()
 
         self.mainwidget = MainWidget()
