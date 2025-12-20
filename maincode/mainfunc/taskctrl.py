@@ -87,9 +87,10 @@ def TaskStart(self, tasktype: str, para: dict = None):
 
 def TaskStop(self, tasktype: str, para=None):
     try:
-        if scc.info.TaskError and ("-hideui" not in sys.argv):
+        if "-hideui" not in sys.argv:
             self.window.foreground()
-            self.module.widget.statesigh.SetState(2)
+            if scc.info.TaskError:
+                self.module.widget.statesigh.SetState(2)
         self.infoEnd()
         self.timerallow = True
         if "-hideui" not in sys.argv:
