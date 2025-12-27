@@ -95,7 +95,7 @@ def snowDailyTask(self):
                     self.ctler.clickChange((1168, 718), zone=(875, 685, 945, 749))
                 self.ctler.clickChange(target="开始", zone=(858, 801, 1072, 875))
                 self.send(f"完成:个人故事 {i}")
-                self.ctler.pressTo("esc", HomePic, (1504, 0, 1771, 117))
+                self.ctler.pressTo("esc", "行动", (357, 1000, 474, 1051))
         self.ctler.pressTo("esc", "任务", (1458, 330, 1529, 379))
         self.ctler.wait(0.5)
 

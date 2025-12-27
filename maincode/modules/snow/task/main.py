@@ -52,13 +52,16 @@ def get_gitee_file(file_path, branch="master"):
 def CloseSnow(self):
     for _ in range(20):
         try:
-            win = GetWindow("尘白禁区")
-            if win is None:
+            win1 = GetWindow("尘白禁区")
+            win2 = GetWindow("Snowbreak: Containment Zone")
+            if win1:
+                win1.close()
+            elif win2:
+                win2.close()
+            else:
                 self.send(f"尘白禁区已关闭")
                 self.para["startwait"] = True
                 return True
-            else:
-                win.close()
         except Exception as e:
             logger.error(f"关闭窗口时发生异常: {e}")
         sleep(0.5)
@@ -212,58 +215,46 @@ def SnowLaunch(self):
         return
     _dict = self.para["OtherConfig"]["Snow"]
     _path = _dict["Path"]
-    _server = _dict["Server"]
-    if _server != 2:
-        h1 = FindWindow("wailsWindow", "尘白禁区启动器")
-        h2 = FindWindow("Qt5159QWindowIcon", "西山居启动器-尘白禁区")
-        if h1:
-            hwnd = h1
-            self.launcher_mode = "snow_launcher.exe"
-        elif h2:
-            hwnd = h2
-            self.launcher_mode = "SeasunGame.exe"
-        else:
-            if not (isinstance(_path, str) and path.isfile(_path) and
-                    path.split(_path)[1] in ["snow_launcher.exe", "SeasunGame.exe"]):
-                self.send("启动器路径异常")
-                raise RuntimeError("启动器路径异常")
-            self.launcher_mode = path.split(_path)[1]
-            if self.launcher_mode == "snow_launcher.exe":
-                item = ["wailsWindow", "尘白禁区启动器"]
-            elif self.launcher_mode == "SeasunGame.exe":
-                item = ["Qt5159QWindowIcon", "西山居启动器-尘白禁区"]
-            else:
-                self.send("启动器路径异常")
-                raise RuntimeError("启动器路径异常")
-            hwnd = FindWindow(*item)
-            if not hwnd:
-                hwnd = self.ctler.RunProg(f"start \"\" \"{_path}\"", [item], (0.4, 10), 15)
-                assert hwnd
-        self.ctler.ChooseWindow(hwnd, (1280, 748))
-        LauchPrepare(self)
-    else:
+    h1 = FindWindow("wailsWindow", "尘白禁区启动器")
+    h2 = FindWindow("Qt5159QWindowIcon", "西山居启动器-尘白禁区")
+    h3 = FindWindow("Qt5159QWindowIcon", "SnowBreak")
+    if h1:
+        hwnd = h1
+        self.launcher_mode = "snow_launcher.exe"
+    elif h2:
+        hwnd = h2
+        self.launcher_mode = "SeasunGame.exe"
+    elif h3:
+        hwnd = h3
         self.launcher_mode = "steam"
-        _path = "start steam://rungameid/2668080"
-        hwnd = self.ctler.RunProg(_path, glist, (0.4, 10), 20)
-        assert hwnd
-        self.ctler.ChooseWindow(hwnd, (1920, 1080))
-        if self.ctler.ZoomW != self.ctler.ZoomH:
-            self.send(f"当前窗口: {self.ctler.window.rect}")
-            self.send("游戏窗口分辨率不适配, 请将窗口模式分辨率设置为16：9")
-            self.send("尝试切换")
-            self.ctler.press('alt+enter')
-            self.ctler.wait(1)
-            self.ctler.ChooseWindow(hwnd, (1920, 1080))
-            if self.ctler.ZoomW != self.ctler.ZoomH:
-                self.send("游戏窗口分辨率不适配，可能出现运行异常。建议使用16：9分辨率如：1920*1080，1600*900，2560*1440")
-                self.send(f"当前窗口: {self.ctler.window.rect}")
-            else:
-                self.send(f"切换后成功，当前窗口: {self.ctler.window.rect}")
+    else:
+        if not (isinstance(_path, str) and path.isfile(_path) and
+                path.split(_path)[1] in ["snow_launcher.exe", "SeasunGame.exe"]):
+            self.send("启动器路径异常")
+            raise RuntimeError("启动器路径异常")
+        self.launcher_mode = path.split(_path)[1]
+        if _dict["Server"] == 2:
+            self.launcher_mode = "steam"
+        if self.launcher_mode == "snow_launcher.exe":
+            item = ["wailsWindow", "尘白禁区启动器"]
+        elif self.launcher_mode == "SeasunGame.exe":
+            item = ["Qt5159QWindowIcon", "西山居启动器-尘白禁区"]
+        elif self.launcher_mode == "steam":
+            item = ["Qt5159QWindowIcon", "SnowBreak"]
+        else:
+            self.send("启动器路径异常")
+            raise RuntimeError("启动器路径异常")
+        hwnd = FindWindow(*item)
+        if not hwnd:
+            hwnd = self.ctler.RunProg(f"start \"\" \"{_path}\"", [item], (0.4, 10), 15)
+            assert hwnd
+    self.ctler.ChooseWindow(hwnd, (1280, 748))
+    LauchPrepare(self)
 
 
 def LauchPrepare(self):
     if self.para["PreLoad"]:
-        if self.launcher_mode == "SeasunGame.exe":
+        if self.launcher_mode in ["SeasunGame.exe", "steam"]:
             _pos, _sim = self.ctler.findpic(r"resources\snow\picture\pre-load2.png",
                                             (889, 638, 971, 708))
             if _sim:
@@ -347,13 +338,19 @@ def LauchPrepare(self):
                 self.ctler.wait(2)
             num -= 1
         return False
-    elif self.launcher_mode == "SeasunGame.exe":
+    elif self.launcher_mode in ["SeasunGame.exe", "steam"]:
         self.ctler.ChangeReference((1280, 748))
         error = 0
         num = 120
         hwndNum = 0
+        if self.launcher_mode == "SeasunGame.exe":
+            item = ["UnrealWindow", "尘白禁区"]
+        elif self.launcher_mode == "steam":
+            item = ["UnrealWindow", "Snowbreak: Containment Zone"]
+        else:
+            return
         while num > 0:
-            if hwnd := FindWindow("UnrealWindow", "尘白禁区"):
+            if hwnd := FindWindow(*item):
                 self.ctler.ChooseWindow(hwnd, (1920, 1080))
                 hwnd += 1
                 if self.ctler.ZoomW != self.ctler.ZoomH:
@@ -376,22 +373,24 @@ def LauchPrepare(self):
                 return True
             _value = self.ctler.ocr((966, 693, 1200, 750))[0]
             if "开始游戏" in _value:
-                self.ctler.clickChange(pos=(1087, 720), zone=(966, 693, 1200, 750))
-                self.ctler.wait(5)
-                error = -5
+                self.ctler.click((1087, 720))
+                self.ctler.wait(2)
+                error = -2
                 continue
             elif "更新" in _value:
                 if self.para["Update"]:
-                    self.ctler.clickChange(pos=(1087, 720), zone=(966, 693, 1200, 750))
                     for t in range(180):
                         _v = self.ctler.ocr((966, 693, 1200, 750))[0]
-                        if "正在更新" in _v:
+                        if "更新" == _v:
+                            self.ctler.click((1087, 720))
+                        elif "开始游戏" in _value:
+                            self.ctler.click((1087, 720))
                             self.ctler.wait(2)
-                        else:
+                            error = -2
                             break
+                        self.ctler.wait(2)
                     else:
                         raise ValueError("尘白禁区:更新超时")
-
                 else:
                     self.send("尘白禁区:需要更新,当前未勾选自动更新,终止任务")
                     raise RuntimeError("尘白禁区:需要更新,当前未勾选自动更新,终止任务")
