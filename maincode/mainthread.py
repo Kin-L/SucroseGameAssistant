@@ -54,7 +54,7 @@ class SGAMainThread(QObject):
                     WindowsNotify("SGA定时任务", "10秒后开始")
                     self.ctler.wait(10)
                     _tit = "SGA定时任务"
-                self.ctler.send("开始执行任务test")
+                self.ctler.send("开始执行任务")
                 self.taskstart()
                 info.TaskError = False
                 self.ctler.OCR.disable()

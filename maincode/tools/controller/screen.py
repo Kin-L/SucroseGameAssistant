@@ -10,9 +10,12 @@ from os import path, makedirs
 import numpy as np
 from maincode.tools.core.logger import logger
 from ctypes import windll
+import mss
+import mss.tools
 
 
 class SGAScreen(CtrlBase, ADBController):
+
     def screenshot_win(self, zone="FULL", save=False) -> Union[Image.Image, str]:
         """
         Windows平台截图方法
@@ -27,14 +30,31 @@ class SGAScreen(CtrlBase, ADBController):
         self.checkrun()
         try:
             if zone == "WINDOW":
-                shot = ImageGrab.grab(self.Operate.zone)
+                zone = self.Operate.zone
             elif isinstance(zone, tuple):
-                shot = ImageGrab.grab(zone)  # 截取屏幕指定区域的图像
+                ...
             elif zone == "FULL":
-                shot = ImageGrab.grab()
+                zone = None
             else:
                 raise ValueError(f"zone参数异常： {zone}")
-
+            try:
+                shot = ImageGrab.grab(zone)
+            except OSError:
+                with mss.mss() as sct:
+                    if zone is None:
+                        monitor = sct.monitors[0]
+                    else:
+                        left, top, width, height = zone
+                        monitor = {
+                            "left": left,
+                            "top": top,
+                            "width": width,
+                            "height": height
+                        }
+                    sct_img = sct.grab(monitor)
+                    shot = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
+            except Exception:
+                raise
             return self._save_screenshot(shot, save)
         except Exception as e:
             logger.error(f"Windows截图失败: {str(e)}")
