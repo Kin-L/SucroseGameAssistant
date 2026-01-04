@@ -383,7 +383,7 @@ def LauchPrepare(self):
                         _v = self.ctler.ocr((966, 693, 1200, 750))[0]
                         if "更新" == _v:
                             self.ctler.click((1087, 720))
-                        elif "开始游戏" in _value:
+                        elif "开始游戏" in _v:
                             self.ctler.click((1087, 720))
                             self.ctler.wait(2)
                             error = -2
