@@ -47,6 +47,8 @@ def SnowHomeEmulator(self):
 
 
 def emulatorstart(self):
+    self.send(f"模拟器模式未开发完成")
+    return
     self.SnowHome = SnowHomeEmulator
 
     self.ctler.DeviceMode("emulator", self.para["OtherConfig"]["Snow"]["Path"])

@@ -327,12 +327,14 @@ class SnowPage00Set(SetStackPage):
         self.lbsnowoverall = Label(self, (0, 55, 180, 27), "全局设置：")
         self.lbserver = Label(self, (0, 95, 80, 27), "服务器:")
         self.cbserver = Combobox(self, (80, 95, 100, 32))
-        self.cbserver.addItems(["官服", "B服", "国际服", "模拟器"])
-        tips(self.cbserver, '国际服需要提前手动开启加速器，模拟器只支持官服')
+        self.cbserver.addItems(["启动器端", "B服", "steam端",
+                                # "模拟器"
+                                ])
+        tips(self.cbserver, '国际服需要提前手动开启加速器，使用简体中文')
 
         self.lbpath = Label(self, (0, 135, 80, 27), "启动路径:")
         self.lepath = SLineEdit(self, (80, 135, 275, 33))
-        tips(self.lepath, '官/B服填写启动器绝对路径，国际服填写游戏主目录‘SNOWBREAK’,模拟器填模拟器路径')
+        tips(self.lepath, '启动器端/B服填写启动器绝对路径，steam端无需填写')
         self.btselect = PicButton(self, (360, 135, 35, 33), _path, (30, 30))
         Line(self, (0, 172, 395, 3))
 
