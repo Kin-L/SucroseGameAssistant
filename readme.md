@@ -20,19 +20,16 @@
 
 - SGA推荐环境为win10 专业版
 - 游戏窗口最佳分辨率1920×1080(最低1600×900)
-- 尘白禁区模块的推荐启动器为[尘白禁区启动器](https://wwrv.lanzouu.com/iSGYZ30gqnpe?pwd=gfhg#gfhg "前往下载尘白禁区启动器")    
+
 ## 已有功能模块
-### v2已支持所有模块，v3版本将陆续增加相关适配  
-- 环行旅舍(功能停止更新)  
+- 环行旅舍(已关服)  
 - 原神  
 - MAA（明日方舟）  
 - 三月七助手  
-- 尘白禁区(推荐使用“尘白禁区启动器”)  
-- 通用执行  
+- 尘白禁区  
 - 连点器  
 - 绝区零助手  
 - 鸣潮助手  
-- 琴音小助手  
 
 ## 下载、安装与更新指南
 ### 视频教程
@@ -51,7 +48,9 @@
 3.  更新方案(每个更新包有最低适用版本的限制，无法在低于版本限制的版本上应用该更新包)：  
     1.  在全局设置页面可选自动更新，和立即检查更新。  
     2.  手动更新，在gitee的[release](https://gitee.com/huixinghen/SucroseGameAssistant/releases)中找到对应版本号，下载带有"replace"后缀的压缩包，解压后将SGA文件夹与原SGA文件夹中同名文件夹进行合并并替换。   
-  
+### 尘白禁区可尝试自主适配新版本：
+ - 在SGA文件夹下list.json文件中，根据指示修改对应信息：resources\snow\list.json  
+ - [将新版本适配分享给其他人](https://gitee.com/huixinghen/SucroseGameAssistant/edit/master-v3/resources/snow/list.json)
 ## 快速上手
 1.  使用管理员权限打开SGA.exe文件
 2.  点击左侧“连续任务”下拉选框，选择要执行的模块  
